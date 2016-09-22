@@ -6,8 +6,9 @@ int simulate_cargo()
     // Hybrid fixed time step / gillespie with stochastic steppers
 
     // Setup
-    if (verboseTF>2)
+    #if (verboseTF>2)
         printf("Performing setup step\n");
+    #endif
 
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
@@ -21,14 +22,13 @@ int simulate_cargo()
         //sets bound and head
 
         // set initial nucleotide status
-        if(NucleotideBehavior){
+        #if(NucleotideBehavior)
             initialnucleotide();
-        }
-        else{ //if NucleotideBehavior is 0, always be ready (removes effect)
+        #else //if NucleotideBehavior is 0, always be ready (removes effect)
             for(n=0;n<N[m];n++){
                 nuc_ready[m][n]=1;
             }
-        }
+        #endif
         //sets nuc_ready
 
     } //end of looping over motor types for inital settings ()()()()()()()()()()
@@ -41,8 +41,9 @@ int simulate_cargo()
 
     //simulate forward in time
 
-    if (verboseTF>2)
+    #if (verboseTF>2)
         printf("Beginning Simulation\n");
+    #endif
 
     //set initial values
     step   = 1;
@@ -153,9 +154,9 @@ int simulate_cargo()
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
-        if(need_steric){
+        #if(need_steric)
             dt_max=dt_max_Steric;
-        }
+        #endif
 
         if (gillespie_dt<dt_max) //someone beat the max time step and gets to go
         {
@@ -255,12 +256,13 @@ int simulate_cargo()
         //record data
         inLoopDataCollection();
 
-        if (verboseTF>3)
+        #if (verboseTF>3)
             printf("Time t_inst = %lf, timestep step = %ld\n", t_inst, step);
+        #endif
 
         //find if we've hit any of the end conditions
 
-        if (Requirebound){ // check if there are no motors bound
+        #if (Requirebound) // check if there are no motors bound
             prematureReturn = 1;
             Foundbound=0;
             for(m=0;m<2 && !Foundbound;m++){
@@ -271,19 +273,19 @@ int simulate_cargo()
                     }
                 }
             }
-        }
+        #endif
 
         //for the experiment where we want to stop once the second motor attaches
         //check if second motor is bound
-        if(StopOnMotor2Attach){
+        #if(StopOnMotor2Attach)
             if(bound[0][1]){
                 prematureReturn=2;
             }
-        }
+        #endif
 
         //for the mean first passage time test where we wait until all motors
         //attach
-        if (StopOnAllbound){ // check if there are motors not bound
+        #if (StopOnAllbound) // check if there are motors not bound
             prematureReturn = 3;
             FoundNotbound=0;
             for(m=0;m<2 && !FoundNotbound;m++){
@@ -295,19 +297,19 @@ int simulate_cargo()
                     }
                 }
             }
-        }
+        #endif
 
-        if(StopOnStep){
+        #if(StopOnStep)
             if(step>StopOnStep){
                 prematureReturn=4;
             }
-        }
+        #endif
 
-        if(StopOnTime){
+        #if(StopOnTime)
             if(t_inst>StopOnTime){
                 prematureReturn=5;
             }
-        }
+        #endif
 
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -315,7 +317,7 @@ int simulate_cargo()
     // End of sim
     //--------------------------------------------------------------------------
 
-    if(verboseTF>1){
+    #if(verboseTF>1)
         switch (prematureReturn) {
             case 1:
                 printf("stopped at t=%g / step %ld by detachment\n",t_inst,step);
@@ -334,8 +336,8 @@ int simulate_cargo()
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");
-            }
         }
+    #endif
 
     finalizeDataCollection();
 

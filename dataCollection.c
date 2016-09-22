@@ -6,7 +6,7 @@ void finalizeDataCollection();
 void initializeDataCollection()
 {
 
-    if (ReturnDetails){
+    #if (ReturnDetails)
 
         //create the different file names
         //name of file for center location and locations of motors
@@ -74,13 +74,12 @@ void initializeDataCollection()
             }
         }
         fprintf(fHead, "\n");
-    }
+    #endif
 }
 
 void inLoopDataCollection()
 {
-    if (ReturnDetails)
-    {
+    #if (ReturnDetails)
         // output results to file
         // fCenterLocs = fopen(centerlocsName, "a");
         fprintf(fCenterLocs, "%ld %1.16E %E %E %E ",
@@ -115,30 +114,29 @@ void inLoopDataCollection()
         }
         fprintf(fHead, "\n");
 
-    }
+    #endif
 }
 
 void finalizeDataCollection()
 {
-    if(ReturnDetails){
+    #if(ReturnDetails)
         fclose(fCenterLocs);
         fclose(fHead);
-    }
+    #endif
 
     strcpy(summaryName,runName);
     strcat(summaryName,"_Summary");
     strcat(summaryName,".txt");
 
-    if(runningInLoop==1){
+    #if(runningInLoop==1)
         fSummary = fopen(summaryName, "a");
-    }
-    else{
+    #else
         fSummary = fopen(summaryName, "w");
         fprintf(fSummary, "step time exit_cond D exp_0 pi_0\n");
         if(runningInLoop!=0){
             printf("Bad input for running in loop, default to 0\n");
         }
-    }
+    #endif
 
     fprintf(fSummary, "%ld %1.16E %d %g %g %g\n",step,t_inst,prematureReturn,D_m[0],eps_0[0],pi_0[0]);
 
