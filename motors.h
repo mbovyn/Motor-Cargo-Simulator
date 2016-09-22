@@ -6,6 +6,15 @@
 #define INF 1e14
 #define pi 3.14159265359
 
+/* -------------------------------------------------------------------
+Driving function variables
+*/
+
+int repeats;
+int verboseTF;
+int result;
+int successes=0;
+int j;
 
 // Simulation end options
 int Requirebound;
@@ -207,7 +216,6 @@ double du, dv;
  */
 
 //variables
-int verboseTF;
 int runningInLoop;
 double trash;
 

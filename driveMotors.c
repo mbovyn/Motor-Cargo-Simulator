@@ -28,18 +28,24 @@
 // arguments: parameter_file_name run_name verboseness_number
 int main( int argc, char *argv[] )
 {
-    if(argv[1]) // parameter file suffix
+    // parameter file
+    if(argv[1])
         strcpy(paramFileName, argv[1]);
 
     // output runName
     if(argv[2]) // runName for output files
         strcpy(runName, argv[2]);
 
+    //number of repeats
+    repeats=1;
+    if(argv[3])
+        repeats=atoi(argv[3]);
+
     // IF verboseTF = 0,
     // IF verboseTF = 1,
     verboseTF = 0;
-    if(argv[3]) // Verbose Output
-        verboseTF = atoi(argv[3]);
+    if(argv[4]) // Verbose Output
+        verboseTF = atoi(argv[4]);
 
     // Intialize random number generator (twister.c)
     RanInit(0);
@@ -51,17 +57,17 @@ int main( int argc, char *argv[] )
     //can bring D_m[0] and eps_0[0] in from the command line here
     //if they are not input they are read from the parameter file
     D_m[0]=NAN;
-    if(argc>4){
+    if(argc>5){
         D_m[0]=atof(argv[4]);
     }
 
     eps_0[0]=NAN;
-    if(argc>5){
+    if(argc>6){
         eps_0[0]=atof(argv[5]);
     }
 
     pi_0[0]=NAN;
-    if(argc>6){
+    if(argc>7){
         pi_0[0]=atof(argv[6]);
     }
 
@@ -79,7 +85,16 @@ int main( int argc, char *argv[] )
     }
 
     //call simulation function
-    simulate_cargo();
+    for(j=0;j<repeats;j++){
+        result=simulate_cargo();
+        if(result==2){
+            successes++;
+        }
+    }
+
+    if(verboseTF>0){
+        printf("%d\n",successes );
+    }
 
     do_linalg();
 
