@@ -1,4 +1,4 @@
-/*** Jun Allard jun.allard@uci.edu                   ***/
+/*** Matt Bovyn mbovyn@uci.edu  ***/
 
 //Basic librarys and functions to include
 #include <math.h>
@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "twister.c"
+//GNU scientific library
 #include <gsl/gsl_linalg.h>
 
 /*******************************************************************************/
