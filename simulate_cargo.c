@@ -206,7 +206,7 @@ int simulate_cargo()
                 head[hit_m][hit_n][2]=z_MT;
 
                 if(verboseTF>2){
-                    printf("on binding,t was %g, MT_dist was %g microns\n",
+                    printf("on binding, t was %g, MT_dist was %g microns\n",
                         t_inst,MT_dist[hit_m][hit_n]);
                 }
             }
@@ -314,6 +314,9 @@ int simulate_cargo()
     //--------------------------------------------------------------------------
     // End of sim
     //--------------------------------------------------------------------------
+
+    if (verboseTF>2)
+        printf("Simulation Ended\n");
 
     if(verboseTF>1){
         switch (prematureReturn) {

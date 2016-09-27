@@ -42,15 +42,18 @@ int main( int argc, char *argv[] )
     if(argv[3])
         repeats=atoi(argv[3]);
 
-    // IF verboseTF = 0,
-    // IF verboseTF = 1,
+    // IF verboseTF = 0, will not output anything
+    // IF verboseTF = 1, will output important input parameters and number of successes
+    // if =2, will additionally output test rand and stop condition
+    // if =3, will output a bunch of error checking things and important events
+    // if =4, will output every time step
     verboseTF = 0;
     if(argv[4]) // Verbose Output
         verboseTF = atoi(argv[4]);
 
     // Intialize random number generator (twister.c)
     RanInit(0);
-    if(verboseTF>0){
+    if(verboseTF>1){
         //if ever see two that are the same, know iSEED wasn't updated
         printf("The test rand is %f, ",RAND);
     }
@@ -94,7 +97,7 @@ int main( int argc, char *argv[] )
     }
 
     if(verboseTF>0){
-        printf("%d\n",successes );
+        printf("There were %d successes in %d trials\n",successes,repeats );
     }
 
     do_linalg();
