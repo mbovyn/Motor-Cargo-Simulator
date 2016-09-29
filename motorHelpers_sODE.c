@@ -1,12 +1,14 @@
 // Prototypes
-
 void diffusion();
 void cargobehavior();
 //helper helpers
 void generate_rand_normal();
 void convert_loc_sph_to_cart();
+void convert_vec_to_sph();
 void diffuse_sph_one_motor();
 void convert_vec_to_cart(double az,double el,double v_az,double v_el,double v_r);
+void setup_solve();
+void calculate_forces();
 
 void generate_rand_normal(){
     //generate random normal number by Box-Muller transform
@@ -29,9 +31,15 @@ void convert_loc_sph_to_cart(){
 
 void convert_vec_to_cart(double az,double el,double v_az,double v_el,double v_r){
     //http://www.mathworks.com/help/phased/ref/sph2cartvec.html
-    v_cart[0]=-sin(az)*v_az-sin(el)*cos(az)*v_el+cos(el)*cos(az)*v_r;
-    v_cart[1]=cos(az)*v_az-sin(el)*sin(az)*v_el+cos(el)*sin(az)*v_r;
-    v_cart[2]=cos(el)*v_el+sin(el)*v_r;
+    v_cart[0]=-sin(az)*v_az-sin(el)*cos(az)*v_el+cos(el)*cos(az)*v_r; //x
+    v_cart[1]=cos(az)*v_az-sin(el)*sin(az)*v_el+cos(el)*sin(az)*v_r; //y
+    v_cart[2]=cos(el)*v_el+sin(el)*v_r; //z
+}
+
+void convert_vec_to_sph(double az,double el,double v_x,double v_y,double v_z){
+    v_sph[0]=-sin(az)*v_x+cos(az)*v_y; //az
+    v_sph[1]=-sin(el)*cos(az)*v_x - sin(el)*sin(az)*v_y + cos(el)*v_z; //el
+    v_sph[2]=cos(el)*cos(az)*v_x + cos(el)*sin(az)*v_y + sin(el)*v_z; //r
 }
 
 void diffuse_sph_one_motor(){
@@ -171,4 +179,86 @@ void diffusion()
 
 void cargobehavior()
 {
-} // finished
+} // finished cargobehavior
+
+void setup_solve()
+{
+    //Need to give values to c, a, xiAnchor
+
+    nn=0; //counter for how many motors are bound
+    //loop over all motors and find the bound ones
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(bound[m][n]){
+                //set anchor location of solver syntax (a) from syntax in rest
+                //of program (locs)
+                convert_loc_to_spherical();
+
+                for(i=0;i<3;i++){
+                    a[nn][i]=locs[m][n][i];
+                    a_sph[nn][i]=locs_sph[m][n][i];
+                }
+                //set the drag coefficient according to motor identity
+                xiAnchor[nn]=kBT/D_m[m];
+                nn++;
+            }
+        }
+    }
+
+    //current value of nn is the total number of pulling motors
+    total_pulling_motors=nn;
+
+    //transfer center to c
+    for(i=0;i<3;i++){
+        c[i]=center[i];
+    }
+}
+
+void calculate_forces()
+{
+    //set value of external force
+    switch(external_force){
+        case 0:
+            for(i=0;i<3;i++){
+                Ftrap[i]=0;
+            }
+        case 1:
+            //implment something here for a constant force
+        case 2:
+            //implement something here for an optical trap
+        default:
+            printf("bad value for external_force\n");
+    }
+
+    //set value of steric force
+    if(need_steric){
+        //implement the steric force
+    }
+    else{
+        for(i=0;i<3;i++){
+            Fsteric[i]=0;
+        }
+    }
+
+    //transform force vectors to spherical and split into radial and tangential
+    nn=0;
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(bound[m][n]){
+
+                convert_loc_to_spherical();
+                convert_vec_to_sph(locs_sph[m][n][0],locs_sph[m][n][1],F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+
+                convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],0,0,v_sph[2]);
+                for(i=0;i<3;i++){
+                    FmRadial[nn][i]=v_cart[i];
+                }
+                convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],v_sph[0],v_sph[1],0);
+                for(i=0;i<3;i++){
+                    FmTangential[nn][i]=v_cart[i];
+                }
+                nn++;
+            }
+        }
+    }
+}

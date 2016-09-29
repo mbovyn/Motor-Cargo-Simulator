@@ -75,9 +75,10 @@ double kcMT; //steric spring to keep cargo out of MT (pN/micron) 400
 //Calculated Parameters
 
 double z_MT; //z location of MT
-double mu_c; //6*pi*eta*R
+double xiCargoTranslation; //6*pi*eta*R
+double xiCargoRotation; //8*pi*eta*R^3
 double mu_m[2];
-double D_c; //kBt/mu_c
+double D_c; //kBT/xiCargoTranslation
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
 
@@ -203,6 +204,7 @@ double locs_sph [2][NMOTORSMAX][2];
 double rand1, rand2, randn1, randn2;
 double lim;
 double v_cart[3];
+double v_sph[3];
 double u_hat[3], v_hat[3];
 double du, dv;
 
@@ -216,8 +218,7 @@ Variables for forward equations
 
 //parameters (for now, should change to inputs)
 double xiAnchor[NMOTORSMAX];
-double xiCargoTranslation;
-double xiCargoRotation;
+int external_force=0;
 
 //next step
 double c1[3];
@@ -227,6 +228,7 @@ double omega[3];
 //previous step
 double c[3];
 double a[NMOTORSMAX][3];
+double a_sph[NMOTORSMAX][3];
 double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
@@ -234,6 +236,7 @@ double Fsteric[3];
 
 //setup
 long total_pulling_motors;
+long nn;
 
 /* -------------------------------------------------------------------
  // Stuff for input/output

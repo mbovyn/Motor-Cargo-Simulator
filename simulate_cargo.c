@@ -180,8 +180,11 @@ int simulate_cargo()
         } //part repeated for each motor type _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 
         //cargo movement -------------------------------------------------------
-        //not implemented yet
-        //cargobehavior();
+        setup_solve(); //sets total_pulling_motors, forward equation variables
+        calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
+        compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
+
+        cargobehavior(); //updates locations (not written yet)
 
         //Once the step is complete, set the new status after any changes
         //that happened during the step
