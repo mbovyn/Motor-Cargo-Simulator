@@ -61,7 +61,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Kunwar
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf %lf", blah,&a[0], &a[1]);
+    sscanf(tmpString,"%s %lf %lf", blah,&a_param[0], &a_param[1]);
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&b[0], &b[1]);
     fgets(tmpString, 100, fParams);

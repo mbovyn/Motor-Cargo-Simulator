@@ -127,11 +127,11 @@ void unbinding_rates()
                 else{
                     //kinesins above stall unbind linearly
                     if(m==0){
-                        unbind_rate[m][n]=a[m]+b[m]*F_m_mag[m][n];
+                        unbind_rate[m][n]=a_param[m]+b[m]*F_m_mag[m][n];
                     }
                     //dyneins above stall unbind with catch bond
                     else{
-                        unbind_rate[m][n]=1/(a[m]*(1-exp(-F_m_mag[m][n]/b[m])));
+                        unbind_rate[m][n]=1/(a_param[m]*(1-exp(-F_m_mag[m][n]/b[m])));
                     }
                 }
             }

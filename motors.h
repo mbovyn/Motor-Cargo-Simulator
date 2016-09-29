@@ -47,7 +47,7 @@ double v_f[2]; //unloaded forward velocity (microns/s) 1
 double v_b[2]; //max backward velocity (microns/s) .006
 
 //Kunwar Sim
-double a[2]; //superstall parameter 1.07
+double a_param[2]; //superstall parameter 1.07
 double b[2]; //superstall parameter .186
 double w[2]; //force-velocity curve exponent 2
 
@@ -210,6 +210,30 @@ double du, dv;
 // Data collection //Recording variables
 */
 
+/* -------------------------------------------------------------------
+Variables for forward equations
+*/
+
+//parameters (for now, should change to inputs)
+double xiAnchor[NMOTORSMAX];
+double xiCargoTranslation;
+double xiCargoRotation;
+
+//next step
+double c1[3];
+double a1[NMOTORSMAX][3];
+double omega[3];
+
+//previous step
+double c[3];
+double a[NMOTORSMAX][3];
+double FmTangential[NMOTORSMAX][3];
+double FmRadial[NMOTORSMAX][3];
+double Ftrap[3];
+double Fsteric[3];
+
+//setup
+long total_pulling_motors;
 
 /* -------------------------------------------------------------------
  // Stuff for input/output
