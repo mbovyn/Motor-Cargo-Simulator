@@ -1,5 +1,5 @@
 all:
-	gcc -O3 driveMotors.c -o motors.x -I /usr/local/include -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lgsl -lgslcblas -lm
+	gcc -O3 driveMotors.c -o motors.x -lm
 
 mult:
 	gcc -O3 driveMotors_mult.c -o motors_mult.x -lm
