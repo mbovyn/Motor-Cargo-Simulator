@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "twister.c"
+//GNU scientific library
+#include <gsl/gsl_linalg.h>
 
 /*******************************************************************************/
 //  INCLUDES
@@ -97,6 +99,8 @@ int main( int argc, char *argv[] )
     if(verboseTF>0){
         printf("There were %d successes in %d trials\n",successes,repeats );
     }
+
+    do_linalg();
 
     return 0;
 
