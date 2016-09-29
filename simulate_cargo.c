@@ -184,7 +184,7 @@ int simulate_cargo()
         calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
-        cargobehavior(); //updates locations (not written yet)
+        cargobehavior(); //updates locations
 
         //Once the step is complete, set the new status after any changes
         //that happened during the step

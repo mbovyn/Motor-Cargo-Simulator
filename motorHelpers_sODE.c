@@ -179,6 +179,26 @@ void diffusion()
 
 void cargobehavior()
 {
+    //set next locations from solver to current locations
+    nn=0;
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(bound[m][n]){
+                //set anchor location of solver syntax (a) from syntax in rest
+                //of program (locs)
+
+                for(i=0;i<3;i++){
+                    locs[m][n][i]=a1[nn][i];
+                }
+                nn++;
+            }
+        }
+    }
+
+    //transfer cargo center
+    for(i=0;i<3;i++){
+        center[i]=c1[i];
+    }
 } // finished cargobehavior
 
 void setup_solve()
@@ -192,11 +212,9 @@ void setup_solve()
             if(bound[m][n]){
                 //set anchor location of solver syntax (a) from syntax in rest
                 //of program (locs)
-                convert_loc_to_spherical();
 
                 for(i=0;i<3;i++){
                     a[nn][i]=locs[m][n][i];
-                    a_sph[nn][i]=locs_sph[m][n][i];
                 }
                 //set the drag coefficient according to motor identity
                 xiAnchor[nn]=kBT/D_m[m];
