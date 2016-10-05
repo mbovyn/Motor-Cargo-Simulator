@@ -98,13 +98,24 @@ void stepping_rates()
 
             break;
 
-        case 3:
+        case 3: //motors don't step
 
             for(n=0;n<N[m];n++){
                 if (bound[m][n]){
                     step_possible[m][n]=0;
                 }
             }
+            break;
+
+        case 4: //step at input rate
+
+            for(n=0;n<N[m];n++){
+                if (bound[m][n]){
+                    step_possible[m][n]=1;
+                    step_rate[m][n]=input_step_rate;
+                }
+            }
+
             break;
 
         default:

@@ -228,12 +228,13 @@ void getInputParams( void )
     //Stepping
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&Stepping);
+    sscanf(tmpString,"%s %d %lf",blah,&Stepping,&input_step_rate);
 
     for(int n_lines=1;n_lines<=13;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //initial nucleotide Behavior
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&InitialNucleotideBehavior);
 

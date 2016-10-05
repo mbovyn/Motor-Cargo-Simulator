@@ -236,14 +236,17 @@ void calculate_forces()
 {
     //set value of external force
     switch(external_force){
-        case 0:
+        case 1:
             for(i=0;i<3;i++){
                 Ftrap[i]=0;
             }
-        case 1:
-            //implment something here for a constant force
+            break;
         case 2:
+            //implment something here for a constant force
+            break;
+        case 3:
             //implement something here for an optical trap
+            break;
         default:
             printf("bad value for external_force\n");
     }
@@ -275,6 +278,9 @@ void calculate_forces()
                 for(i=0;i<3;i++){
                     FmTangential[nn][i]=v_cart[i];
                 }
+                printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+                printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+                printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
                 nn++;
             }
         }

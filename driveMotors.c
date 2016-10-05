@@ -25,7 +25,7 @@
 //  MAIN
 /*******************************************************************************/
 
-// arguments: parameter_file_name run_name verboseness_number
+// arguments: parameter_file_name run_name repeats verboseness_number
 int main( int argc, char *argv[] )
 {
     // parameter file

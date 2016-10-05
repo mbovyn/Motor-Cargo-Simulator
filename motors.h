@@ -178,6 +178,7 @@ Stepping
 */
 
 double unloaded_step_rate[2];
+double input_step_rate;
 
 /* -------------------------------------------------------------------
 Binding
@@ -218,7 +219,7 @@ Variables for forward equations
 
 //parameters (for now, should change to inputs)
 double xiAnchor[NMOTORSMAX];
-int external_force=0;
+int external_force=1;
 
 //next step
 double c1[3];
