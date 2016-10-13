@@ -24,9 +24,9 @@ void generate_rand_normal(){
 void convert_loc_sph_to_cart(){
     //http://www.mathworks.com/help/matlab/ref/sph2cart.html
 
-    locs[m][n][0]=R*cos(locs_sph[m][n][1])*cos(locs_sph[m][n][0]);
-    locs[m][n][1]=R*cos(locs_sph[m][n][1])*sin(locs_sph[m][n][0]);
-    locs[m][n][2]=R*sin(locs_sph[m][n][1]);
+    locs[m][n][0]=R*cos(locs_sph[m][n][1])*cos(locs_sph[m][n][0])+center[0];
+    locs[m][n][1]=R*cos(locs_sph[m][n][1])*sin(locs_sph[m][n][0])+center[1];
+    locs[m][n][2]=R*sin(locs_sph[m][n][1])+center[2];
 }
 
 void convert_vec_to_cart(double az,double el,double v_az,double v_el,double v_r){
@@ -190,7 +190,9 @@ void cargobehavior()
                 for(i=0;i<3;i++){
                     locs[m][n][i]=a1[nn][i];
                 }
-                printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                if(verboseTF>4){
+                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
                 nn++;
             }
         }
@@ -200,6 +202,10 @@ void cargobehavior()
     for(i=0;i<3;i++){
         center[i]=c1[i];
     }
+
+    //force anchor back onto cargo surface
+    convert_loc_to_spherical();
+    convert_loc_sph_to_cart();
 } // finished cargobehavior
 
 void setup_solve()

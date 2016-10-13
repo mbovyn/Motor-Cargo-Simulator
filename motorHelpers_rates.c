@@ -186,8 +186,8 @@ void convert_loc_to_spherical(){
 
     //reference:
     //http://www.mathworks.com/help/matlab/ref/cart2sph.html
-    locs_sph[m][n][0]=atan2(locs[m][n][1],locs[m][n][0]);
-    locs_sph[m][n][1]=atan2(locs[m][n][2],hypot(locs[m][n][0],locs[m][n][1]));
+    locs_sph[m][n][0]=atan2(locs[m][n][1]-center[1],locs[m][n][0]-center[0]);
+    locs_sph[m][n][1]=atan2(locs[m][n][2]-center[2],hypot(locs[m][n][0]-center[0],locs[m][n][1]-center[1]));
 }
 
 void binding_rates() //sets bind_possible and bind_rate
