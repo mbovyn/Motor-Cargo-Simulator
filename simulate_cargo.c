@@ -106,7 +106,7 @@ int simulate_cargo()
                         gillespie_dt = dtHere;
                         hit_m      = m;
                         hit_n      = n;
-                        hit_action = 1; // steppping
+                        hit_action = 1; // stepping
                     }
                 }
 
@@ -178,8 +178,7 @@ int simulate_cargo()
             // diffusion -------------------------------------------------------
             diffusion();
         } //part repeated for each motor type _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-printf("force before solve is %g\n",F_m_mag[1][1]);
-printf("force vector before solve is (%g,%g,%g)\n",F_m_vec[1][1][1],F_m_vec[1][1][1],F_m_vec[1][1][1]);
+
         //cargo movement -------------------------------------------------------
         setup_solve(); //sets total_pulling_motors, forward equation variables
         calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
@@ -260,7 +259,7 @@ printf("force vector before solve is (%g,%g,%g)\n",F_m_vec[1][1][1],F_m_vec[1][1
         inLoopDataCollection();
 
         if (verboseTF>3)
-            printf("Time t_inst = %lf, timestep step = %ld\n", t_inst, step);
+            printf("Time t_inst = %g, timestep step = %ld\n", t_inst, step);
 
         //find if we've hit any of the end conditions
 
