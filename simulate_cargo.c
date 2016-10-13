@@ -179,6 +179,7 @@ int simulate_cargo()
             diffusion();
         } //part repeated for each motor type _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 printf("force before solve is %g\n",F_m_mag[1][1]);
+printf("force vector before solve is (%g,%g,%g)\n",F_m_vec[1][1][1],F_m_vec[1][1][1],F_m_vec[1][1][1]);
         //cargo movement -------------------------------------------------------
         setup_solve(); //sets total_pulling_motors, forward equation variables
         calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
