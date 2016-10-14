@@ -29,7 +29,7 @@ void initializeDataCollection()
         //Write center and anchor location to file
         fCenterLocs = fopen(centerlocsName, "w");
         //return header line
-        fprintf(fCenterLocs, "step time center_x center_y center_z ");
+        fprintf(fCenterLocs, "step time                center_x     center_y     center_z     ");
         for(m = 0; m<2; m++){
             for(n=0;n<N[m];n++){
                 fprintf(fCenterLocs,"type%dmotor%d_x ",m,n);
@@ -45,7 +45,7 @@ void initializeDataCollection()
         //write head locations to file
         fHead=fopen(headName,"w");
         //write header line
-        fprintf(fHead, "step time ");
+        fprintf(fHead, "step time                 ");
         for(m = 0; m<2; m++){
             for(n=0;n<N[m];n++){
                 fprintf(fHead,"type%dmotor%d_x ",m,n);
@@ -62,7 +62,7 @@ void initializeDataCollection()
         //Write center and anchor location to file
         fForces = fopen(forcesName, "w");
         //return header line
-        fprintf(fForces, "step time external_x external_y external_z ");
+        fprintf(fForces, "step time                  external_x external_y external_z ");
         fprintf(fForces, "steric_x steric_y steric_z ");
         for(m = 0; m<2; m++){
             for(n=0;n<N[m];n++){
@@ -92,7 +92,7 @@ void writeCenterLocs(){
             );
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fCenterLocs, "%E %E %E ",
+            fprintf(fCenterLocs, "%+E %+E %+E ",
                 locs[m][n][0],
                 locs[m][n][1],
                 locs[m][n][2]

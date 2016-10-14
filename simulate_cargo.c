@@ -9,6 +9,10 @@ int simulate_cargo()
     if (verboseTF>2)
         printf("Performing setup step\n");
 
+    //set current center to center that was passed in
+    for(i=0;i<3;i++)
+        center[i]=center_initial[i];
+
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
 
@@ -33,9 +37,10 @@ int simulate_cargo()
 
         //calculate initial forces
         motorloading();
-        calculate_forces();
 
     } //end of looping over motor types for inital settings ()()()()()()()()()()
+
+    calculate_forces();
 
     // -------------------------------------------------------------------------
     // ---------------------&&&&&&&&&&&&&&&&&&&&&&&&&---------------------------

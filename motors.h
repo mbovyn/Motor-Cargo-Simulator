@@ -95,8 +95,6 @@ int Stepping;
 int InitialNucleotideBehavior;
 int NucleotideBehavior;
 int MotorLoading;
-int CargoBehavior;
-int CargoMovement;
 int ReturnDetails;
 int ReturnFinalState;
 int ReturnForces;
@@ -219,7 +217,8 @@ Variables for forward equations
 
 //parameters (for now, should change to inputs)
 double xiAnchor[NMOTORSMAX];
-int external_force=1;
+int external_force;
+int external_torque;
 
 //next step
 double c1[3];
@@ -234,9 +233,10 @@ double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
 double Fsteric[3];
+double TorqeExt[3];
 
 //setup
-long total_pulling_motors;
+long total_motors;
 long nn;
 
 /* -------------------------------------------------------------------

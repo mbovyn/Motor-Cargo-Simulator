@@ -260,18 +260,18 @@ void getInputParams( void )
     for(int n_lines=1;n_lines<=7;n_lines++)
       fgets(tmpString, 100, fParams);
 
-    //CargoBehavior
+    //External Force
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&CargoBehavior);
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
 
     for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
-    //CargoMovement
+    //ExternalTorque
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&CargoMovement);
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_torque,&TorqeExt[0],&TorqeExt[1],&TorqeExt[2]);
 
     for(int n_lines=1;n_lines<=8;n_lines++)
       fgets(tmpString, 100, fParams);

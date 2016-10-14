@@ -84,6 +84,7 @@ int main( int argc, char *argv[] )
     }
 
     if(verboseTF>0){
+        printf("Running with %ld kinesins and %ld dyneins\n",N[0],N[1]);
         printf("Running D = %g, eps_0 = %g, pi_0 = %g\n",D_m[0],eps_0[0],pi_0[0]);
     }
 

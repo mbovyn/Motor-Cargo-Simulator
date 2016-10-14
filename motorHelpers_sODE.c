@@ -216,26 +216,24 @@ void setup_solve()
 {
     //Need to give values to c, a, xiAnchor
 
-    nn=0; //counter for how many motors are bound
+    nn=0; //counter for how many motors there are total
     //loop over all motors and find the bound ones
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
-            if(bound[m][n]){
-                //set anchor location of solver syntax (a) from syntax in rest
-                //of program (locs)
+            //set anchor location of solver syntax (a) from syntax in rest
+            //of program (locs)
 
-                for(i=0;i<3;i++){
-                    a[nn][i]=locs[m][n][i];
-                }
-                //set the drag coefficient according to motor identity
-                xiAnchor[nn]=kBT/D_m[m];
-                nn++;
+            for(i=0;i<3;i++){
+                a[nn][i]=locs[m][n][i];
             }
+            //set the drag coefficient according to motor identity
+            xiAnchor[nn]=kBT/D_m[m];
+            nn++;
         }
     }
 
     //current value of nn is the total number of pulling motors
-    total_pulling_motors=nn;
+    total_motors=nn;
 
     //transfer center to c
     for(i=0;i<3;i++){
@@ -253,10 +251,26 @@ void calculate_forces()
             }
             break;
         case 2:
-            //implment something here for a constant force
+            //external force given as input
+            //values for Ftrap set when input, don't change them
             break;
         case 3:
             //implement something here for an optical trap
+            break;
+        default:
+            printf("bad value for external_force\n");
+    }
+
+    //deal with external torque
+    switch(external_torque){
+        case 1:
+            for(i=0;i<3;i++){
+                TorqeExt[i]=0;
+            }
+            break;
+        case 2:
+            //external force given as input
+            //values for Ftrap set when input, don't change them
             break;
         default:
             printf("bad value for external_force\n");
@@ -298,6 +312,12 @@ void calculate_forces()
                     printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
                 }
                 nn++;
+            }
+            else{
+                for(i=0;i<3;i++){
+                    FmRadial[nn][i]=0;
+                    FmTangential[nn][i]=0;
+                }
             }
         }
     }
