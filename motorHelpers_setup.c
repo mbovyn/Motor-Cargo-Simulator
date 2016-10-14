@@ -180,9 +180,11 @@ void initialbinding(){
                     }
                 }
 
-                //warn if binding failed
+                //if none availiable, teleport one over
                 if(done==0){
-                    printf("Tried to attach kin but none were possible\n");
+                    locs[0][0][2]=-R;
+                    bound[0][0]=1;
+                    printf("Teleported kin to attach\n");
                 }
             }
 
@@ -223,9 +225,11 @@ void initialbinding(){
                     }
                 }
 
-                //warn if binding failed
+                //if none availiable, teleport one over
                 if(done==0){
-                    printf("Tried to attach dyn but none were possible\n");
+                    locs[1][0][2]=-R;
+                    bound[1][0]=1;
+                    printf("Teleported dyn to attach\n");
                 }
             }
 

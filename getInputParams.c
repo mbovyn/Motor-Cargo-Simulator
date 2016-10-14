@@ -173,7 +173,8 @@ void getInputParams( void )
         }
     }
 
-    dt_max_base=.0000001;
+    //overrule time step manually
+    dt_max_base=.000001;
 
     //all of this may not have been necessay since dt_max_Motor is also a
     //function of D_m. May always be lower at measured k_m of 320 pN/micron

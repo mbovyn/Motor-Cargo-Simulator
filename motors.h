@@ -249,11 +249,11 @@ double trash;
 
 //strings to use for filnames and lines read in
 char paramFileName[100], tmpString[100], runName[100], blah[100];
-char centerlocsName[100], headName[100], summaryName[100];
+char centerlocsName[100], headName[100], summaryName[100], forcesName[100];
 
 // input/output files
 //optional output files
-FILE *fCenterLocs, *fHead;
+FILE *fCenterLocs, *fHead, *fForces;
 //input parameters file
 FILE *fParams;
 //basic summary output file

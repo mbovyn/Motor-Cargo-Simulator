@@ -204,8 +204,12 @@ void cargobehavior()
     }
 
     //force anchor back onto cargo surface
-    convert_loc_to_spherical();
-    convert_loc_sph_to_cart();
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            convert_loc_to_spherical();
+            convert_loc_sph_to_cart();
+        }
+    }
 } // finished cargobehavior
 
 void setup_solve()

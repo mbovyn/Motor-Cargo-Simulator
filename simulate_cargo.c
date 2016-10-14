@@ -31,6 +31,10 @@ int simulate_cargo()
         }
         //sets nuc_ready
 
+        //calculate initial forces
+        motorloading();
+        calculate_forces();
+
     } //end of looping over motor types for inital settings ()()()()()()()()()()
 
     // -------------------------------------------------------------------------
