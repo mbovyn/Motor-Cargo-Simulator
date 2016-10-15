@@ -75,8 +75,8 @@ double kcMT; //steric spring to keep cargo out of MT (pN/micron) 400
 //Calculated Parameters
 
 double z_MT; //z location of MT
-double xiCargoTranslation; //6*pi*eta*R
-double xiCargoRotation; //8*pi*eta*R^3
+double muCargoTranslation; //1/6*pi*eta*R
+double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
 double D_c; //kBT/xiCargoTranslation
 
@@ -216,7 +216,7 @@ Variables for forward equations
 */
 
 //parameters (for now, should change to inputs)
-double xiAnchor[NMOTORSMAX];
+double muAnchor[NMOTORSMAX];
 int external_force;
 int external_torque;
 

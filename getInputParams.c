@@ -121,12 +121,12 @@ void getInputParams( void )
 
     // Consequent parameters
 
-    xiCargoTranslation=6*pi*eta*R;    //Sphere mobility from Stokes-Einstein-Southerland
-    xiCargoRotation=8*pi*eta*pow(R,3);
+    muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
+    muCargoRotation=1/(8*pi*eta*pow(R,3));
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
-    D_c=kBT/xiCargoTranslation; 			//Einstein relation
+    D_c=kBT*muCargoTranslation; 			//Einstein relation
 
     z_MT=-R-z_MT_offset; //z location of the MT R-.05
 
@@ -144,7 +144,7 @@ void getInputParams( void )
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
-    dt_max_Steric=.9*1/(kcMT*xiCargoTranslation);
+    dt_max_Steric=.9*muCargoTranslation*1/(kcMT);
 
     //find max time step for just diffusion
     //set to satisfy sqrt(D*dt)<<R

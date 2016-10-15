@@ -183,18 +183,16 @@ void cargobehavior()
     nn=0;
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
-            if(bound[m][n]){
-                //set anchor location of solver syntax (a) from syntax in rest
-                //of program (locs)
+            //set anchor location of solver syntax (a) from syntax in rest
+            //of program (locs)
 
-                for(i=0;i<3;i++){
-                    locs[m][n][i]=a1[nn][i];
-                }
-                if(verboseTF>4){
-                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                }
-                nn++;
+            for(i=0;i<3;i++){
+                locs[m][n][i]=a1[nn][i];
             }
+            if(verboseTF>4){
+                printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+            }
+            nn++;
         }
     }
 
@@ -227,7 +225,7 @@ void setup_solve()
                 a[nn][i]=locs[m][n][i];
             }
             //set the drag coefficient according to motor identity
-            xiAnchor[nn]=kBT/D_m[m];
+            muAnchor[nn]=mu_m[m];
             nn++;
         }
     }
