@@ -162,19 +162,23 @@ void getInputParams( void )
     //the default max is the smaller of the two maximum dt's
     if(dt_max_Diffusion<dt_max_Motor){
         dt_max_base=dt_max_Diffusion;
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("Choosing max time step based on diffusion, dt=%g\n",dt_max_base);
         }
     }
     else{
         dt_max_base=dt_max_Motor;
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
         }
     }
 
-    //overrule time step manually
-    //dt_max_base=.000001;
+    //overrule time step manually if too large
+    if(dt_max_base>.00001){
+        dt_max_base=.00001;
+        printf("Time step too large, overruling. dt=%f\n",dt_max_base);
+    }
+
 
     //all of this may not have been necessay since dt_max_Motor is also a
     //function of D_m. May always be lower at measured k_m of 320 pN/micron
