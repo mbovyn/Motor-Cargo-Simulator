@@ -98,6 +98,7 @@ int MotorLoading;
 int ReturnDetails;
 int ReturnFinalState;
 int ReturnForces;
+int UseSteric;
 
 /* -------------------------------------------------------------------
 Simulation dynamic variables
@@ -109,6 +110,7 @@ long step; //2
 
 //Cargo dynamic properties
 double center[3];
+double center_MT_dist;
 
 // motor dynamic properties
 // vectors

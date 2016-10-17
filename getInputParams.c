@@ -277,8 +277,16 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_torque,&TorqeExt[0],&TorqeExt[1],&TorqeExt[2]);
 
-    for(int n_lines=1;n_lines<=8;n_lines++)
+    for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
+
+    //ExternalTorque
+
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&UseSteric);
+
+    for(int n_lines=1;n_lines<=9;n_lines++)
+    fgets(tmpString, 100, fParams);
 
     //ReturnDetails
 

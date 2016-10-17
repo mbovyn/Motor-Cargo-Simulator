@@ -239,6 +239,13 @@ void setup_solve()
     }
 }
 
+void evaluate_steric(){
+    center_MT_dist=hypot(center[1]-y_MT,center[2]-z_MT);
+    if(center_MT_dist<R){
+        need_steric=1;
+    }
+}
+
 void calculate_forces()
 {
     //set value of external force
@@ -277,6 +284,9 @@ void calculate_forces()
     //set value of steric force
     if(need_steric){
         //implement the steric force
+        Fsteric[0]=0;
+        Fsteric[1]=-kcMT*(R-center_MT_dist)*(y_MT-center[1]);
+        Fsteric[2]=-kcMT*(R-center_MT_dist)*(z_MT-center[2]);
     }
     else{
         for(i=0;i<3;i++){

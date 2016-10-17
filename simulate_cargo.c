@@ -162,7 +162,10 @@ int simulate_cargo()
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
-        if(need_steric){
+        if(UseSteric)
+            evaluate_steric();
+        
+        if(need_steric && dt_max>dt_max_Steric){
             dt_max=dt_max_Steric;
         }
 
