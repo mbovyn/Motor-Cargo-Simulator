@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    104177,       2715]
-NotebookOptionsPosition[    100199,       2583]
-NotebookOutlinePosition[    100559,       2599]
-CellTagsIndexPosition[    100516,       2596]
+NotebookDataLength[    104275,       2717]
+NotebookOptionsPosition[    100296,       2585]
+NotebookOutlinePosition[    100656,       2601]
+CellTagsIndexPosition[    100613,       2598]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2539,7 +2539,10 @@ Cell[BoxData[
   RowBox[{
    RowBox[{
     RowBox[{
-     RowBox[{"a", "[", "0", "]"}], "[", "0", "]"}], "\[Equal]", 
+     RowBox[{"dt", " ", "muCargoTranslation", " ", 
+      RowBox[{"Ftrap", "[", "0", "]"}]}], "+", 
+     RowBox[{
+      RowBox[{"a", "[", "0", "]"}], "[", "0", "]"}]}], "\[Equal]", 
     RowBox[{
      RowBox[{"a1", "[", "0", "]"}], "[", "0", "]"}]}], ",", 
    RowBox[{
@@ -2570,14 +2573,13 @@ Cell[BoxData[
     RowBox[{"omega", "[", "1", "]"}], "\[Equal]", "0"}], ",", 
    RowBox[{
     RowBox[{"omega", "[", "2", "]"}], "\[Equal]", "0"}]}], "}"}]], "Output",
- CellChangeTimes->{3.68547014800445*^9, 3.685472340124744*^9}]
+ CellChangeTimes->{3.68547014800445*^9, 3.685472340124744*^9, 
+  3.685480113331581*^9}]
 }, Open  ]],
 
-Cell["\<\
-This makes sense, tells me that we forgot a term that would drag the motors \
-along with the membrane\
-\>", "Text",
- CellChangeTimes->{{3.685478911548401*^9, 3.68547893713652*^9}}]
+Cell["Now this works!", "Text",
+ CellChangeTimes->{{3.685478911548401*^9, 3.68547893713652*^9}, {
+  3.685480183579756*^9, 3.685480185930278*^9}}]
 }, Open  ]]
 }, Open  ]]
 },
@@ -2712,9 +2714,9 @@ Cell[97184, 2491, 129, 1, 30, "Text"],
 Cell[97316, 2494, 228, 5, 32, "Input"],
 Cell[CellGroupData[{
 Cell[97569, 2503, 1139, 31, 54, "Input"],
-Cell[98711, 2536, 1255, 36, 54, "Output"]
+Cell[98711, 2536, 1397, 40, 54, "Output"]
 }, Open  ]],
-Cell[99981, 2575, 190, 4, 30, "Text"]
+Cell[100123, 2579, 145, 2, 30, "Text"]
 }, Open  ]]
 }, Open  ]]
 }
