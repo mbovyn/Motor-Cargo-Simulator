@@ -164,7 +164,7 @@ int simulate_cargo()
         //need_steric initially set to 0
         if(UseSteric)
             evaluate_steric();
-        
+
         if(need_steric && dt_max>dt_max_Steric){
             dt_max=dt_max_Steric;
         }
@@ -182,18 +182,11 @@ int simulate_cargo()
         }
 
         // time step now determined, can do forward euler
-        // to move anchors and cargo
-
-        // for each motor type, 0=kin and 1=dyn
-        for (m=0;m<2;m++)  //_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-        {
-            // diffusion -------------------------------------------------------
-            diffusion();
-        } //part repeated for each motor type _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-
-        //cargo movement -------------------------------------------------------
-        setup_solve(); //sets total_pulling_motors, forward equation variables
-        calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
+        // to move anchors and cargo--------------------------------------------
+        if(MotorDiffusion>2){
+            setup_solve(); //sets total_pulling_motors, forward equation variables
+            calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
+        }
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
         cargobehavior(); //updates locations

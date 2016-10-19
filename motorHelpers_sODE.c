@@ -63,8 +63,8 @@ void generate_brownian_displacement_anchor(){
     //first need 2 normally distributed random variables
     generate_rand_normal();
     //then find distance moved in u and v directions
-    du=sqrt(2*D_m[m]*dt)*randn1;
-    dv=sqrt(2*D_m[m]*dt)*randn2;
+    du=randn1;
+    dv=randn2;
     //cartesian displacement vector is sum of two unit vectors weighted by
     //gaussian random variable
     for(i=0;i<3;i++){
@@ -78,11 +78,11 @@ void generate_brownian_displacement_cargo(){
     //make 2 gaussian random variables
     generate_rand_normal();
     //use them to find dx and dy
-    dx=sqrt(2*D_c*dt)*randn1;
-    dy=sqrt(2*D_c*dt)*randn2;
+    dx=randn1;
+    dy=randn2;
     //make two more and use the first to find dz (other is wasted)
     generate_rand_normal();
-    dz=sqrt(2*D_c*dt)*randn1;
+    dz=randn1;
     //set the output
     brownian_displacement[0]=dx;
     brownian_displacement[1]=dy;
@@ -95,11 +95,11 @@ void generate_brownian_displacement_rotation(){
     //make 2 gaussian random variables
     generate_rand_normal();
     //use them to find dx and dy
-    dx=sqrt(2*D_cRotation*dt)*randn1;
-    dy=sqrt(2*D_cRotation*dt)*randn2;
+    dx=randn1;
+    dy=randn2;
     //make two more and use the first to find dz (other is wasted)
     generate_rand_normal();
-    dz=sqrt(2*D_cRotation*dt)*randn1;
+    dz=randn1;
     //set the output
     brownian_displacement[0]=dx;
     brownian_displacement[1]=dy;
@@ -113,7 +113,7 @@ void diffuse_sph_one_motor(){
 
     //move anchor by generated vector (will go off sphere surface)
     for(i=0;i<3;i++){
-        locs[m][n][i]+=brownian_displacement[i];
+        locs[m][n][i]+=sqrt(2*D_m[m]*dt)*brownian_displacement[i];
     }
 
     //bring back to sphere surface by converting to spherical and back (fix R)
@@ -198,26 +198,30 @@ void diffusion()
 
 void cargobehavior()
 {
-    //set next locations from solver to current locations
-    nn=0;
-    for(m=0;m<2;m++){
-        for(n=0;n<N[m];n++){
-            //set anchor location of solver syntax (a) from syntax in rest
-            //of program (locs)
 
-            for(i=0;i<3;i++){
-                locs[m][n][i]=a1[nn][i];
+    if(MotorDiffusion>2){
+        //set next locations from solver to current locations
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                //set anchor location of solver syntax (a) from syntax in rest
+                //of program (locs)
+
+                for(i=0;i<3;i++){
+                    locs[m][n][i]=a1[nn][i];
+                }
+                if(verboseTF>4){
+                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
+                nn++;
             }
-            if(verboseTF>4){
-                printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-            }
-            nn++;
         }
-    }
 
-    //transfer cargo center
-    for(i=0;i<3;i++){
-        center[i]=c1[i];
+        //transfer cargo center
+        for(i=0;i<3;i++){
+            center[i]=c1[i];
+        }
+
     }
 
     //force anchor back onto cargo surface
@@ -244,6 +248,7 @@ void setup_solve()
             }
             //set the drag coefficient according to motor identity
             muAnchor[nn]=mu_m[m];
+            DAnchor[nn]=D_m[m];
             nn++;
         }
     }
@@ -374,7 +379,7 @@ void compute_next_locations(){
 
             break;
 
-        case 3: //don't diffuse anything
+        case 3: //don't diffuse anything, use deterministic equations
 
             //call deterministic equations
             deterministic_equations();
@@ -406,7 +411,83 @@ void compute_next_locations(){
             stochastic_equations();
             break;
 
-        case 5: //
+        case 5: //anchors diffuse, cargo translation and rotation set to 0
+
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
+                    }
+                    nn++;
+                }
+            }
+
+            //generate_brownian_displacement_cargo();
+            for(i=0;i<3;i++){
+                Dbc[i]=0;
+            }
+
+            //generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=0;
+            }
+
+            stochastic_equations();
+            break;
+
+        case 6: //only cargo translational diffusion
+
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    //generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=0;
+                    }
+                    nn++;
+                }
+            }
+
+            generate_brownian_displacement_cargo();
+            for(i=0;i<3;i++){
+                Dbc[i]=brownian_displacement[i];
+            }
+
+            //generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=0;
+            }
+
+            stochastic_equations();
+            break;
+
+        case 7: //only cargo rotational diffusion
+
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    //generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=0;
+                    }
+                    nn++;
+                }
+            }
+
+            //generate_brownian_displacement_cargo();
+            for(i=0;i<3;i++){
+                Dbc[i]=0;
+            }
+
+            generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=brownian_displacement[i];
+            }
+
+            stochastic_equations();
+            break;
 
         default:
             printf("Bad Motor Diffusion type\n");

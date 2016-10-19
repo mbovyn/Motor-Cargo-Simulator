@@ -247,6 +247,9 @@ long nn;
 double Dba[NMOTORSMAX][3];
 double Dbc[3];
 double Rbc[3];
+double DAnchor[NMOTORSMAX];
+double DCargoTranslation;
+double DCargoRotation;
 
 /* -------------------------------------------------------------------
  // Stuff for input/output
