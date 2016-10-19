@@ -193,38 +193,7 @@ void diffuse_sph_one_motor(){
 
 void diffusion()
 {
-    switch (MotorDiffusion) {
-        case 1: //diffuse all motors
 
-            for(n=0;n<N[m];n++){
-                diffuse_sph_one_motor();
-            }
-
-            break;
-
-        case 2: //diffuse only motors that aren't bound
-
-            for(n=0;n<N[m];n++){
-                if(bound[m][n]==0){
-                    diffuse_sph_one_motor();
-                }
-            }
-
-            break;
-
-        case 3: //don't diffuse motors
-
-            //can just sit and do nothing
-            break;
-
-        case 4: //diffusion handled by full treatment with drag
-            //don't do anything here
-            break;
-
-        default:
-            printf("Bad Motor Diffusion type\n");
-
-    }
 } // finished
 
 void cargobehavior()
@@ -382,34 +351,66 @@ void calculate_forces()
 }
 
 void compute_next_locations(){
-    if(MotorDiffusion==4){
-        //find brownian displacements and call stochastic equations
+    switch (MotorDiffusion) {
+        case 1: //diffuse all motors by legacy function
 
-        nn=0;
-        for(m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                generate_brownian_displacement_anchor();
-                for(i=0;i<3;i++){
-                    Dba[nn][i]=brownian_displacement[i];
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    diffuse_sph_one_motor();
                 }
-                nn++;
             }
-        }
 
-        generate_brownian_displacement_cargo();
-        for(i=0;i<3;i++){
-            Dbc[i]=brownian_displacement[i];
-        }
+            break;
 
-        generate_brownian_displacement_rotation();
-        for(i=0;i<3;i++){
-            Rbc[i]=brownian_displacement[i];
-        }
+        case 2: //diffuse only motors that aren't bound by legacy function
 
-        stochastic_equations();
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    if(bound[m][n]==0){
+                        diffuse_sph_one_motor();
+                    }
+                }
+            }
+
+            break;
+
+        case 3: //don't diffuse anything
+
+            //call deterministic equations
+            deterministic_equations();
+            break;
+
+        case 4: //diffusion handled by full treatment with drag
+
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
+                    }
+                    nn++;
+                }
+            }
+
+            generate_brownian_displacement_cargo();
+            for(i=0;i<3;i++){
+                Dbc[i]=brownian_displacement[i];
+            }
+
+            generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=brownian_displacement[i];
+            }
+
+            stochastic_equations();
+            break;
+
+        case 5: //
+
+        default:
+            printf("Bad Motor Diffusion type\n");
+
     }
-    else{
-        //call deterministic equations
-        deterministic_equations();
-    }
+
 }

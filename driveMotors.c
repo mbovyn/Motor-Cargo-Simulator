@@ -43,7 +43,7 @@ int main( int argc, char *argv[] )
         repeats=atoi(argv[3]);
 
     // IF verboseTF = 0, will not output anything
-    // IF verboseTF = 1, will output important input parameters and number of successes
+    // IF verboseTF = 1, will output input parameters and number of successes
     // if =2, will additionally output test rand and stop condition
     // if =3, will output a bunch of error checking things and important events
     // if =4, will output every time step
