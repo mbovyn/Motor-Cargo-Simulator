@@ -126,7 +126,8 @@ void getInputParams( void )
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
-    D_c=kBT*muCargoTranslation; 			//Einstein relation
+    D_c=kBT*muCargoTranslation; 			
+    D_cRotation=kBT*muCargoRotation;
 
     z_MT=-R-z_MT_offset; //z location of the MT R-.05
 

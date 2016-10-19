@@ -79,6 +79,7 @@ double muCargoTranslation; //1/6*pi*eta*R
 double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
 double D_c; //kBT/xiCargoTranslation
+double D_cRotation;
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
 
@@ -207,7 +208,8 @@ double lim;
 double v_cart[3];
 double v_sph[3];
 double u_hat[3], v_hat[3];
-double du, dv;
+double du, dv, dx, dy, dz;
+double brownian_displacement[3];
 
 /* -------------------------------------------------------------------
 // Data collection //Recording variables
@@ -240,6 +242,11 @@ double TorqeExt[3];
 //setup
 long total_motors;
 long nn;
+
+//stochastics
+double Dba[NMOTORSMAX][3];
+double Dbc[3];
+double Rbc[3];
 
 /* -------------------------------------------------------------------
  // Stuff for input/output

@@ -42,7 +42,7 @@ void convert_vec_to_sph(double az,double el,double v_x,double v_y,double v_z){
     v_sph[2]=cos(el)*cos(az)*v_x + cos(el)*sin(az)*v_y + sin(el)*v_z; //r
 }
 
-void diffuse_sph_one_motor(){
+void generate_brownian_displacement_anchor(){
     //convert motor locations to spherical
     convert_loc_to_spherical();
 
@@ -65,9 +65,55 @@ void diffuse_sph_one_motor(){
     //then find distance moved in u and v directions
     du=sqrt(2*D_m[m]*dt)*randn1;
     dv=sqrt(2*D_m[m]*dt)*randn2;
-    //convert move anchor by this vector (will go off sphere surface)
+    //cartesian displacement vector is sum of two unit vectors weighted by
+    //gaussian random variable
     for(i=0;i<3;i++){
-        locs[m][n][i]+=du*u_hat[i]+dv*v_hat[i];
+        brownian_displacement[i]=du*u_hat[i]+dv*v_hat[i];
+    }
+}
+
+void generate_brownian_displacement_cargo(){
+
+    //generate random vector in x, y, z
+    //make 2 gaussian random variables
+    generate_rand_normal();
+    //use them to find dx and dy
+    dx=sqrt(2*D_c*dt)*randn1;
+    dy=sqrt(2*D_c*dt)*randn2;
+    //make two more and use the first to find dz (other is wasted)
+    generate_rand_normal();
+    dz=sqrt(2*D_c*dt)*randn1;
+    //set the output
+    brownian_displacement[0]=dx;
+    brownian_displacement[1]=dy;
+    brownian_displacement[2]=dz;
+}
+
+void generate_brownian_displacement_rotation(){
+
+    //generate random vector in x, y, z
+    //make 2 gaussian random variables
+    generate_rand_normal();
+    //use them to find dx and dy
+    dx=sqrt(2*D_cRotation*dt)*randn1;
+    dy=sqrt(2*D_cRotation*dt)*randn2;
+    //make two more and use the first to find dz (other is wasted)
+    generate_rand_normal();
+    dz=sqrt(2*D_cRotation*dt)*randn1;
+    //set the output
+    brownian_displacement[0]=dx;
+    brownian_displacement[1]=dy;
+    brownian_displacement[2]=dz;
+}
+
+void diffuse_sph_one_motor(){
+
+    //generate brownian displacement vector
+    generate_brownian_displacement_anchor();
+
+    //move anchor by generated vector (will go off sphere surface)
+    for(i=0;i<3;i++){
+        locs[m][n][i]+=brownian_displacement[i];
     }
 
     //bring back to sphere surface by converting to spherical and back (fix R)
@@ -171,6 +217,10 @@ void diffusion()
             //can just sit and do nothing
             break;
 
+        case 4: //diffusion handled by full treatment with drag
+            //don't do anything here
+            break;
+
         default:
             printf("Bad Motor Diffusion type\n");
 
@@ -215,7 +265,6 @@ void setup_solve()
     //Need to give values to c, a, xiAnchor
 
     nn=0; //counter for how many motors there are total
-    //loop over all motors and find the bound ones
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             //set anchor location of solver syntax (a) from syntax in rest
@@ -230,7 +279,7 @@ void setup_solve()
         }
     }
 
-    //current value of nn is the total number of pulling motors
+    //current value of nn is the total number of motors
     total_motors=nn;
 
     //transfer center to c
@@ -319,7 +368,7 @@ void calculate_forces()
                     printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
                     printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
                 }
-                nn++;
+
             }
             else{
                 for(i=0;i<3;i++){
@@ -327,6 +376,40 @@ void calculate_forces()
                     FmTangential[nn][i]=0;
                 }
             }
+            nn++;
         }
+    }
+}
+
+void compute_next_locations(){
+    if(MotorDiffusion==4){
+        //find brownian displacements and call stochastic equations
+
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                generate_brownian_displacement_anchor();
+                for(i=0;i<3;i++){
+                    Dba[nn][i]=brownian_displacement[i];
+                }
+                nn++;
+            }
+        }
+
+        generate_brownian_displacement_cargo();
+        for(i=0;i<3;i++){
+            Dbc[i]=brownian_displacement[i];
+        }
+
+        generate_brownian_displacement_rotation();
+        for(i=0;i<3;i++){
+            Rbc[i]=brownian_displacement[i];
+        }
+
+        stochastic_equations();
+    }
+    else{
+        //call deterministic equations
+        deterministic_equations();
     }
 }
