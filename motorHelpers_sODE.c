@@ -72,48 +72,31 @@ void generate_brownian_displacement_anchor(){
     //generate random vector in plane defined by u_hat and v_hat
     //first need 2 normally distributed random variables
     generate_rand_normal();
-    //then find distance moved in u and v directions
-    du=randn1;
-    dv=randn2;
     //cartesian displacement vector is sum of two unit vectors weighted by
     //gaussian random variable
     for(i=0;i<3;i++){
-        brownian_displacement[i]=du*u_hat[i]+dv*v_hat[i];
+        brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
     }
 }
 
 void generate_brownian_displacement_cargo(){
 
-    //generate random vector in x, y, z
-    //make 2 gaussian random variables
     generate_rand_normal();
-    //use them to find dx and dy
-    dx=randn1;
-    dy=randn2;
-    //make two more and use the first to find dz (other is wasted)
+    brownian_displacement[0]=randn1;
+    brownian_displacement[1]=randn2;
     generate_rand_normal();
-    dz=randn1;
-    //set the output
-    brownian_displacement[0]=dx;
-    brownian_displacement[1]=dy;
-    brownian_displacement[2]=dz;
+    brownian_displacement[2]=randn1;
 }
 
 void generate_brownian_displacement_rotation(){
 
-    //generate random vector in x, y, z
-    //make 2 gaussian random variables
+    //make gaussian random variables
     generate_rand_normal();
-    //use them to find dx and dy
-    dx=randn1;
-    dy=randn2;
+    brownian_displacement[0]=randn1;
+    brownian_displacement[1]=randn2;
     //make two more and use the first to find dz (other is wasted)
     generate_rand_normal();
-    dz=randn1;
-    //set the output
-    brownian_displacement[0]=dx;
-    brownian_displacement[1]=dy;
-    brownian_displacement[2]=dz;
+    brownian_displacement[2]=randn1;
 }
 
 void diffuse_sph_one_motor(){

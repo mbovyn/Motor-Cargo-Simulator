@@ -17,7 +17,7 @@
 #include "dataCollection.c" //writes data to file
 #include "motorHelpers_setup.c" //file with functions to compute motor actions
 #include "motorHelpers_rates.c"
-#include "forwardequations.c" //genearated by mathematica
+//#include "forwardequations.c" //genearated by mathematica
 #include "stochasticequations.c"
 #include "motorHelpers_sODE.c"
 #include "simulate_cargo.c" //main simulation
