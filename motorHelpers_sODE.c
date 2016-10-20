@@ -1,14 +1,24 @@
 // Prototypes
-void diffusion();
-void cargobehavior();
-//helper helpers
+
 void generate_rand_normal();
 void convert_loc_sph_to_cart();
-void convert_vec_to_sph();
-void diffuse_sph_one_motor();
 void convert_vec_to_cart(double az,double el,double v_az,double v_el,double v_r);
+void convert_vec_to_sph(double az,double el,double v_x,double v_y,double v_z);
+
+void generate_brownian_displacement_anchor();
+void generate_brownian_displacement_cargo();
+void generate_brownian_displacement_rotation();
+
+void diffuse_sph_one_motor();
+
+void cargobehavior();
+
 void setup_solve();
+void evaluate_steric();
 void calculate_forces();
+void set_brownian_forces_to_0();
+void compute_next_locations();
+
 
 void generate_rand_normal(){
     //generate random normal number by Box-Muller transform
@@ -113,7 +123,7 @@ void diffuse_sph_one_motor(){
 
     //move anchor by generated vector (will go off sphere surface)
     for(i=0;i<3;i++){
-        locs[m][n][i]+=sqrt(2*D_m[m]*dt)*brownian_displacement[i];
+        locs[m][n][i]+=sqrt(4*D_m[m]*dt)*brownian_displacement[i];
     }
 
     //bring back to sphere surface by converting to spherical and back (fix R)
@@ -190,11 +200,6 @@ void diffuse_sph_one_motor(){
 //
 //     convert_loc_sph_to_cart();
 // }
-
-void diffusion()
-{
-
-} // finished
 
 void cargobehavior()
 {
@@ -355,6 +360,27 @@ void calculate_forces()
     }
 }
 
+void set_brownian_forces_to_0(){
+
+
+    for(nn=0;nn<N[0]+N[1];nn++){
+        //generate_brownian_displacement_anchor();
+        for(i=0;i<3;i++){
+            Dba[nn][i]=0;
+        }
+    }
+
+    //generate_brownian_displacement_cargo();
+    for(i=0;i<3;i++){
+        Dbc[i]=0;
+    }
+
+    //generate_brownian_displacement_rotation();
+    for(i=0;i<3;i++){
+        Rbc[i]=0;
+    }
+}
+
 void compute_next_locations(){
     switch (MotorDiffusion) {
         case 1: //diffuse all motors by legacy function
@@ -381,20 +407,16 @@ void compute_next_locations(){
 
         case 3: //don't diffuse anything, use deterministic equations
 
-            //call deterministic equations
-            deterministic_equations();
+            //leave brownian forces set at 0, call stochastic equations
+            stochastic_equations();
             break;
 
         case 4: //diffusion handled by full treatment with drag
 
-            nn=0;
-            for(m=0;m<2;m++){
-                for(n=0;n<N[m];n++){
-                    generate_brownian_displacement_anchor();
-                    for(i=0;i<3;i++){
-                        Dba[nn][i]=brownian_displacement[i];
-                    }
-                    nn++;
+            for(nn=0;nn<N[0]+N[1];nn++){
+                generate_brownian_displacement_anchor();
+                for(i=0;i<3;i++){
+                    Dba[nn][i]=brownian_displacement[i];
                 }
             }
 
@@ -413,25 +435,11 @@ void compute_next_locations(){
 
         case 5: //anchors diffuse, cargo translation and rotation set to 0
 
-            nn=0;
-            for(m=0;m<2;m++){
-                for(n=0;n<N[m];n++){
-                    generate_brownian_displacement_anchor();
-                    for(i=0;i<3;i++){
-                        Dba[nn][i]=brownian_displacement[i];
-                    }
-                    nn++;
+            for(nn=0;nn<N[0]+N[1];nn++){
+                generate_brownian_displacement_anchor();
+                for(i=0;i<3;i++){
+                    Dba[nn][i]=brownian_displacement[i];
                 }
-            }
-
-            //generate_brownian_displacement_cargo();
-            for(i=0;i<3;i++){
-                Dbc[i]=0;
-            }
-
-            //generate_brownian_displacement_rotation();
-            for(i=0;i<3;i++){
-                Rbc[i]=0;
             }
 
             stochastic_equations();
@@ -439,47 +447,15 @@ void compute_next_locations(){
 
         case 6: //only cargo translational diffusion
 
-            nn=0;
-            for(m=0;m<2;m++){
-                for(n=0;n<N[m];n++){
-                    //generate_brownian_displacement_anchor();
-                    for(i=0;i<3;i++){
-                        Dba[nn][i]=0;
-                    }
-                    nn++;
-                }
-            }
-
             generate_brownian_displacement_cargo();
             for(i=0;i<3;i++){
                 Dbc[i]=brownian_displacement[i];
-            }
-
-            //generate_brownian_displacement_rotation();
-            for(i=0;i<3;i++){
-                Rbc[i]=0;
             }
 
             stochastic_equations();
             break;
 
         case 7: //only cargo rotational diffusion
-
-            nn=0;
-            for(m=0;m<2;m++){
-                for(n=0;n<N[m];n++){
-                    //generate_brownian_displacement_anchor();
-                    for(i=0;i<3;i++){
-                        Dba[nn][i]=0;
-                    }
-                    nn++;
-                }
-            }
-
-            //generate_brownian_displacement_cargo();
-            for(i=0;i<3;i++){
-                Dbc[i]=0;
-            }
 
             generate_brownian_displacement_rotation();
             for(i=0;i<3;i++){

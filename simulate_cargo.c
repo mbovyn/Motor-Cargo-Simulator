@@ -41,6 +41,7 @@ int simulate_cargo()
     } //end of looping over motor types for inital settings ()()()()()()()()()()
 
     calculate_forces();
+    set_brownian_forces_to_0();
 
     // -------------------------------------------------------------------------
     // ---------------------&&&&&&&&&&&&&&&&&&&&&&&&&---------------------------
