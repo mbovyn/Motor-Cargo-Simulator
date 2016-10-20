@@ -47,7 +47,7 @@ double v_f[2]; //unloaded forward velocity (microns/s) 1
 double v_b[2]; //max backward velocity (microns/s) .006
 
 //Kunwar Sim
-double a[2]; //superstall parameter 1.07
+double a_param[2]; //superstall parameter 1.07
 double b[2]; //superstall parameter .186
 double w[2]; //force-velocity curve exponent 2
 
@@ -75,9 +75,11 @@ double kcMT; //steric spring to keep cargo out of MT (pN/micron) 400
 //Calculated Parameters
 
 double z_MT; //z location of MT
-double mu_c; //6*pi*eta*R
+double muCargoTranslation; //1/6*pi*eta*R
+double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
-double D_c; //kBt/mu_c
+double D_c; //kBT/xiCargoTranslation
+double D_cRotation;
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
 
@@ -94,11 +96,10 @@ int Stepping;
 int InitialNucleotideBehavior;
 int NucleotideBehavior;
 int MotorLoading;
-int CargoBehavior;
-int CargoMovement;
 int ReturnDetails;
 int ReturnFinalState;
 int ReturnForces;
+int UseSteric;
 
 /* -------------------------------------------------------------------
 Simulation dynamic variables
@@ -110,6 +111,7 @@ long step; //2
 
 //Cargo dynamic properties
 double center[3];
+double center_MT_dist;
 
 // motor dynamic properties
 // vectors
@@ -177,6 +179,7 @@ Stepping
 */
 
 double unloaded_step_rate[2];
+double input_step_rate;
 
 /* -------------------------------------------------------------------
 Binding
@@ -203,13 +206,50 @@ double locs_sph [2][NMOTORSMAX][2];
 double rand1, rand2, randn1, randn2;
 double lim;
 double v_cart[3];
+double v_sph[3];
 double u_hat[3], v_hat[3];
-double du, dv;
+double du, dv, dx, dy, dz;
+double brownian_displacement[3];
 
 /* -------------------------------------------------------------------
 // Data collection //Recording variables
 */
 
+/* -------------------------------------------------------------------
+Variables for forward equations
+*/
+
+//parameters (for now, should change to inputs)
+double muAnchor[NMOTORSMAX];
+int external_force;
+int external_torque;
+
+//next step
+double c1[3];
+double a1[NMOTORSMAX][3];
+double omega[3];
+
+//previous step
+double c[3];
+double a[NMOTORSMAX][3];
+double a_sph[NMOTORSMAX][3];
+double FmTangential[NMOTORSMAX][3];
+double FmRadial[NMOTORSMAX][3];
+double Ftrap[3];
+double Fsteric[3];
+double TorqeExt[3];
+
+//setup
+long total_motors;
+long nn;
+
+//stochastics
+double Dba[NMOTORSMAX][3];
+double Dbc[3];
+double Rbc[3];
+double DAnchor[NMOTORSMAX];
+double DCargoTranslation;
+double DCargoRotation;
 
 /* -------------------------------------------------------------------
  // Stuff for input/output
@@ -221,11 +261,11 @@ double trash;
 
 //strings to use for filnames and lines read in
 char paramFileName[100], tmpString[100], runName[100], blah[100];
-char centerlocsName[100], headName[100], summaryName[100];
+char centerlocsName[100], headName[100], summaryName[100], forcesName[100];
 
 // input/output files
 //optional output files
-FILE *fCenterLocs, *fHead;
+FILE *fCenterLocs, *fHead, *fForces;
 //input parameters file
 FILE *fParams;
 //basic summary output file

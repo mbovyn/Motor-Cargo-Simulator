@@ -15,33 +15,34 @@
 #include "motors.h" //header which intializes all variables
 #include "getInputParams.c" //reads parameter file
 #include "dataCollection.c" //writes data to file
-#include "motorHelpers_setup.c" //file with functions to compute motor actions
-#include "motorHelpers_rates.c"
-#include "motorHelpers_sODE.c"
+#include "motorHelpers_setup.c" //file with functions for setup
+#include "motorHelpers_rates.c" //functions for finding stepping rates
+#include "stochasticequations.c" //genearated by mathematica
+#include "motorHelpers_sODE.c" //functions for setting up the solve
 #include "simulate_cargo.c" //main simulation
 
 /*******************************************************************************/
 //  MAIN
 /*******************************************************************************/
 
-// arguments: parameter_file_name run_name verboseness_number
+// arguments: parameter_file_name run_name repeats verboseness_number
 int main( int argc, char *argv[] )
 {
-    // parameter file
+    // parameter file name
     if(argv[1])
         strcpy(paramFileName, argv[1]);
 
-    // output runName
-    if(argv[2]) // runName for output files
+    // runName string, to label output files
+    if(argv[2])
         strcpy(runName, argv[2]);
 
-    //number of repeats
+    //number of times to repeat simulation - default to 1
     repeats=1;
     if(argv[3])
         repeats=atoi(argv[3]);
 
     // IF verboseTF = 0, will not output anything
-    // IF verboseTF = 1, will output important input parameters and number of successes
+    // IF verboseTF = 1, will output input parameters and number of successes
     // if =2, will additionally output test rand and stop condition
     // if =3, will output a bunch of error checking things and important events
     // if =4, will output every time step
@@ -81,19 +82,22 @@ int main( int argc, char *argv[] )
     if(verboseTF>2){
         printf("Read in StopOnTime as %g\n",StopOnTime);
     }
-
+    //print number of motors and parameters we're running
     if(verboseTF>0){
+        printf("Running with %ld kinesins and %ld dyneins\n",N[0],N[1]);
         printf("Running D = %g, eps_0 = %g, pi_0 = %g\n",D_m[0],eps_0[0],pi_0[0]);
     }
 
-    //call simulation function
+    //call simulation function in loop
     for(j=0;j<repeats;j++){
         result=simulate_cargo();
+        //count up number of results we've labeled as success for this trial
         if(result==2){
             successes++;
         }
     }
 
+    //print the final score
     if(verboseTF>0){
         printf("There were %d successes in %d trials\n",successes,repeats );
     }

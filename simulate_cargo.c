@@ -9,6 +9,10 @@ int simulate_cargo()
     if (verboseTF>2)
         printf("Performing setup step\n");
 
+    //set current center to center that was passed in
+    for(i=0;i<3;i++)
+        center[i]=center_initial[i];
+
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
 
@@ -31,7 +35,13 @@ int simulate_cargo()
         }
         //sets nuc_ready
 
+        //calculate initial forces
+        motorloading();
+
     } //end of looping over motor types for inital settings ()()()()()()()()()()
+
+    calculate_forces();
+    set_brownian_forces_to_0();
 
     // -------------------------------------------------------------------------
     // ---------------------&&&&&&&&&&&&&&&&&&&&&&&&&---------------------------
@@ -106,7 +116,7 @@ int simulate_cargo()
                         gillespie_dt = dtHere;
                         hit_m      = m;
                         hit_n      = n;
-                        hit_action = 1; // steppping
+                        hit_action = 1; // stepping
                     }
                 }
 
@@ -153,7 +163,10 @@ int simulate_cargo()
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
-        if(need_steric){
+        if(UseSteric)
+            evaluate_steric();
+
+        if(need_steric && dt_max>dt_max_Steric){
             dt_max=dt_max_Steric;
         }
 
@@ -170,18 +183,14 @@ int simulate_cargo()
         }
 
         // time step now determined, can do forward euler
-        // to move anchors and cargo
+        // to move anchors and cargo--------------------------------------------
+        if(MotorDiffusion>2){
+            setup_solve(); //sets total_pulling_motors, forward equation variables
+            calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
+        }
+        compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
-        // for each motor type, 0=kin and 1=dyn
-        for (m=0;m<2;m++)  //_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-        {
-            // diffusion -------------------------------------------------------
-            diffusion();
-        } //part repeated for each motor type _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
-
-        //cargo movement -------------------------------------------------------
-        //not implemented yet
-        //cargobehavior();
+        cargobehavior(); //updates locations
 
         //Once the step is complete, set the new status after any changes
         //that happened during the step
@@ -256,7 +265,7 @@ int simulate_cargo()
         inLoopDataCollection();
 
         if (verboseTF>3)
-            printf("Time t_inst = %lf, timestep step = %ld\n", t_inst, step);
+            printf("Time t_inst = %g, timestep step = %ld\n", t_inst, step);
 
         //find if we've hit any of the end conditions
 

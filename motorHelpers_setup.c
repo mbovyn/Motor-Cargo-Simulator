@@ -39,10 +39,6 @@ void pickpointsphere(){
 
 void initiallocations(){
 
-    //set current center to center that was passed in
-    for(i=0;i<3;i++)
-        center[i]=center_initial[i];
-
     //uses only parameters to generate initial locations
     //sets locs
     switch(InitialLocations){
@@ -94,7 +90,7 @@ void initiallocations(){
     // end
         default:
             printf("Not a valid initial location type\n");
-    }
+    }//switch
 
     //if passed the setting to have one of the motors on the bottom
     if(SetAtBottom){
@@ -105,10 +101,11 @@ void initiallocations(){
             init_locs[0][1]=0;
             init_locs[0][2]=-R;
         }
-    }
+    }//set at bottom
 
     //set the generated initial locations to the current location
     for(n=0;n<N[m];n++){
+        //printf("%d %f %f %f\n",m,init_locs[n][0],init_locs[n][1],init_locs[n][2]);
         for(i=0;i<3;i++){
             locs[m][n][i]=init_locs[n][i];
         }
@@ -180,9 +177,11 @@ void initialbinding(){
                     }
                 }
 
-                //warn if binding failed
+                //if none availiable, teleport one over
                 if(done==0){
-                    printf("Tried to attach kin but none were possible\n");
+                    locs[0][0][2]=-R;
+                    bound[0][0]=1;
+                    printf("Teleported kin to attach\n");
                 }
             }
 
@@ -223,9 +222,11 @@ void initialbinding(){
                     }
                 }
 
-                //warn if binding failed
+                //if none availiable, teleport one over
                 if(done==0){
-                    printf("Tried to attach dyn but none were possible\n");
+                    locs[1][0][2]=-R;
+                    bound[1][0]=1;
+                    printf("Teleported dyn to attach\n");
                 }
             }
 

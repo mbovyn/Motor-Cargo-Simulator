@@ -98,13 +98,24 @@ void stepping_rates()
 
             break;
 
-        case 3:
+        case 3: //motors don't step
 
             for(n=0;n<N[m];n++){
                 if (bound[m][n]){
                     step_possible[m][n]=0;
                 }
             }
+            break;
+
+        case 4: //step at input rate
+
+            for(n=0;n<N[m];n++){
+                if (bound[m][n]){
+                    step_possible[m][n]=1;
+                    step_rate[m][n]=input_step_rate;
+                }
+            }
+
             break;
 
         default:
@@ -127,11 +138,11 @@ void unbinding_rates()
                 else{
                     //kinesins above stall unbind linearly
                     if(m==0){
-                        unbind_rate[m][n]=a[m]+b[m]*F_m_mag[m][n];
+                        unbind_rate[m][n]=a_param[m]+b[m]*F_m_mag[m][n];
                     }
                     //dyneins above stall unbind with catch bond
                     else{
-                        unbind_rate[m][n]=1/(a[m]*(1-exp(-F_m_mag[m][n]/b[m])));
+                        unbind_rate[m][n]=1/(a_param[m]*(1-exp(-F_m_mag[m][n]/b[m])));
                     }
                 }
             }
@@ -175,8 +186,8 @@ void convert_loc_to_spherical(){
 
     //reference:
     //http://www.mathworks.com/help/matlab/ref/cart2sph.html
-    locs_sph[m][n][0]=atan2(locs[m][n][1],locs[m][n][0]);
-    locs_sph[m][n][1]=atan2(locs[m][n][2],hypot(locs[m][n][0],locs[m][n][1]));
+    locs_sph[m][n][0]=atan2(locs[m][n][1]-center[1],locs[m][n][0]-center[0]);
+    locs_sph[m][n][1]=atan2(locs[m][n][2]-center[2],hypot(locs[m][n][0]-center[0],locs[m][n][1]-center[1]));
 }
 
 void binding_rates() //sets bind_possible and bind_rate

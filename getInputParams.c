@@ -61,7 +61,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Kunwar
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf %lf", blah,&a[0], &a[1]);
+    sscanf(tmpString,"%s %lf %lf", blah,&a_param[0], &a_param[1]);
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&b[0], &b[1]);
     fgets(tmpString, 100, fParams);
@@ -121,11 +121,16 @@ void getInputParams( void )
 
     // Consequent parameters
 
-    mu_c=6*pi*eta*R;    //Sphere mobility from Stokes-Einstein-Southerland
+    muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
+    muCargoRotation=1/(8*pi*eta*pow(R,3));
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
-    D_c=kBT/mu_c; 			//Einstein relation
+    D_c=kBT*muCargoTranslation;
+    D_cRotation=kBT*muCargoRotation;
+    DCargoRotation=D_cRotation;
+    DCargoTranslation=D_c;
+
     z_MT=-R-z_MT_offset; //z location of the MT R-.05
 
     //find maximum time step for attached motors
@@ -142,7 +147,7 @@ void getInputParams( void )
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
-    dt_max_Steric=.9*1/(kcMT*mu_c);
+    dt_max_Steric=.9*muCargoTranslation*1/(kcMT);
 
     //find max time step for just diffusion
     //set to satisfy sqrt(D*dt)<<R
@@ -160,16 +165,23 @@ void getInputParams( void )
     //the default max is the smaller of the two maximum dt's
     if(dt_max_Diffusion<dt_max_Motor){
         dt_max_base=dt_max_Diffusion;
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("Choosing max time step based on diffusion, dt=%g\n",dt_max_base);
         }
     }
     else{
         dt_max_base=dt_max_Motor;
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
         }
     }
+
+    //overrule time step manually if too large
+    if(dt_max_base>.00001){
+        dt_max_base=.00001;
+        printf("Time step too large, overruling. dt=%f\n",dt_max_base);
+    }
+
 
     //all of this may not have been necessay since dt_max_Motor is also a
     //function of D_m. May always be lower at measured k_m of 320 pN/micron
@@ -226,12 +238,13 @@ void getInputParams( void )
     //Stepping
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&Stepping);
+    sscanf(tmpString,"%s %d %lf",blah,&Stepping,&input_step_rate);
 
     for(int n_lines=1;n_lines<=13;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //initial nucleotide Behavior
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&InitialNucleotideBehavior);
 
@@ -254,21 +267,29 @@ void getInputParams( void )
     for(int n_lines=1;n_lines<=7;n_lines++)
       fgets(tmpString, 100, fParams);
 
-    //CargoBehavior
+    //External Force
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&CargoBehavior);
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
 
     for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
-    //CargoMovement
+    //ExternalTorque
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&CargoMovement);
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_torque,&TorqeExt[0],&TorqeExt[1],&TorqeExt[2]);
 
-    for(int n_lines=1;n_lines<=8;n_lines++)
+    for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
+
+    //ExternalTorque
+
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&UseSteric);
+
+    for(int n_lines=1;n_lines<=9;n_lines++)
+    fgets(tmpString, 100, fParams);
 
     //ReturnDetails
 
