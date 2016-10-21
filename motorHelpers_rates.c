@@ -118,23 +118,6 @@ void stepping_rates()
 
             break;
 
-        case 5: //linear force velocity relationship
-
-            for(n=0;n<N[m];n++){
-                if (bound[m][n]){
-                    if(F_m_mag[m][n]/F_s[m]<1){
-                        step_possible[m][n]=1;
-                        step_rate[m][n]=unloaded_step_rate[m]*(1-F_m_mag[m][n]/F_s[m]);
-                    }
-                    else{
-                        step_possible[m][n]=0;
-                    }
-                }
-                else{
-                    step_possible[m][n]=0;
-                }
-            }
-
         default:
             printf("Invalid stepping rate type\n");
     }
