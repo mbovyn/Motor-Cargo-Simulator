@@ -2,9 +2,63 @@
 void initializeDataCollection();
 void inLoopDataCollection();
 void finalizeDataCollection();
+
+void writeBaseHeader();
+void writeCenterLocsHeader();
+void writeHeadHeader();
+void writeForcesHeader();
+void writeSummaryHeader();
+
+void writeBase();
 void writeCenterLocs();
 void writeHead();
 void writeForces();
+void writeSummary();
+
+
+void writeBaseHeader(){
+    fprintf(fInUse, "step       time                   ");
+}
+
+void writeCenterLocsHeader(){
+    fprintf(fInUse, "center_x      center_y      center_z      ");
+    for(m = 0; m<2; m++){
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"type%dmotor%d_x ",m,n);
+            fprintf(fInUse,"type%dmotor%d_y ",m,n);
+            fprintf(fInUse,"type%dmotor%d_z ",m,n);
+        }
+    }
+}
+
+void writeHeadHeader(){
+    for(m = 0; m<2; m++){
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"type%dmotor%d_x ",m,n);
+            fprintf(fInUse,"type%dmotor%d_y ",m,n);
+            fprintf(fInUse,"type%dmotor%d_z ",m,n);
+        }
+    }
+}
+
+void writeForcesHeader(){
+    fprintf(fInUse, "external_x    external_y    external_z    ");
+    fprintf(fInUse, "steric_x      steric_y      steric_z      ");
+    for(m = 0; m<2; m++){
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"Radial_%d_%d_x  ",m,n);
+            fprintf(fInUse,"Radial_%d_%d_y  ",m,n);
+            fprintf(fInUse,"Radial_%d_%d_z  ",m,n);
+            fprintf(fInUse,"Tangent_%d_%d_x ",m,n);
+            fprintf(fInUse,"Tangent_%d_%d_y ",m,n);
+            fprintf(fInUse,"Tangent_%d_%d_z ",m,n);
+        }
+    }
+}
+
+void writeSummaryHeader(){
+    fprintf(fInUse, "exit_cond D eps_0 pi_0 ");
+}
 
 void initializeDataCollection()
 {
@@ -13,114 +67,103 @@ void initializeDataCollection()
 
         //create the different file names
         //name of file for center location and locations of motors
+
+        sprintf(repeat_number,"%d",j);
+
         strcpy(centerlocsName,runName);
+        strcat(centerlocsName,repeat_number);
         strcat(centerlocsName,"_Center_and_Anchors");
         strcat(centerlocsName,".txt");
         //file with motor head locations
         strcpy(headName,runName);
+        strcat(headName,repeat_number);
         strcat(headName,"_Heads");
         strcat(headName,".txt");
-        //file with force values
-        strcpy(forcesName,runName);
-        strcat(forcesName,"_Forces");
-        strcat(forcesName,".txt");
-
 
         //Write center and anchor location to file
         fCenterLocs = fopen(centerlocsName, "w");
         //return header line
-        fprintf(fCenterLocs, "step time                center_x     center_y     center_z     ");
-        for(m = 0; m<2; m++){
-            for(n=0;n<N[m];n++){
-                fprintf(fCenterLocs,"type%dmotor%d_x ",m,n);
-                fprintf(fCenterLocs,"type%dmotor%d_y ",m,n);
-                fprintf(fCenterLocs,"type%dmotor%d_z ",m,n);
-            }
-        }
+        fInUse=fCenterLocs;
+        writeBaseHeader();
+        writeCenterLocsHeader();
         fprintf(fCenterLocs, "\n");
         //write initial values
+        writeBase();
         writeCenterLocs();
-
+        fprintf(fCenterLocs, "\n");
 
         //write head locations to file
         fHead=fopen(headName,"w");
+        fInUse=fHead;
         //write header line
-        fprintf(fHead, "step time                 ");
-        for(m = 0; m<2; m++){
-            for(n=0;n<N[m];n++){
-                fprintf(fHead,"type%dmotor%d_x ",m,n);
-                fprintf(fHead,"type%dmotor%d_y ",m,n);
-                fprintf(fHead,"type%dmotor%d_z ",m,n);
-            }
-        }
+        writeBaseHeader();
+        writeHeadHeader();
         fprintf(fHead, "\n");
         //write the inital values
+        writeBase();
         writeHead();
+        fprintf(fHead, "\n");
     }//ReturnDetails
 
     if(ReturnForces){
+        //file with force values
+        strcpy(forcesName,runName);
+        strcat(forcesName,repeat_number);
+        strcat(forcesName,"_Forces");
+        strcat(forcesName,".txt");
+
         //Write center and anchor location to file
         fForces = fopen(forcesName, "w");
         //return header line
-        fprintf(fForces, "step time                  external_x external_y external_z ");
-        fprintf(fForces, "steric_x steric_y steric_z ");
-        for(m = 0; m<2; m++){
-            for(n=0;n<N[m];n++){
-                fprintf(fForces,"type%dmotor%d_xRadial ",m,n);
-                fprintf(fForces,"type%dmotor%d_yRadial ",m,n);
-                fprintf(fForces,"type%dmotor%d_zRadial ",m,n);
-                fprintf(fForces,"type%dmotor%d_xTangential ",m,n);
-                fprintf(fForces,"type%dmotor%d_yTangential ",m,n);
-                fprintf(fForces,"type%dmotor%d_zTangential ",m,n);
-            }
-        }
+        fInUse=fForces;
+        writeBaseHeader();
+        writeForcesHeader();
         fprintf(fForces, "\n");
         //write initial values
+        writeBase();
         writeForces();
+        fprintf(fForces, "\n");
     }//ReturnForces
 
 } //initializeDataCollection
 
+void writeBase(){
+    fprintf(fInUse, "%10ld %1.16E ",step,t_inst);
+}
+
 void writeCenterLocs(){
     //write cargo center and anchor locations
-    fprintf(fCenterLocs, "%ld %1.16E %E %E %E ",
-            step,
-            t_inst,
+    fprintf(fInUse, "%+E %+E %+E ",
             center[0],
             center[1],
             center[2]
             );
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fCenterLocs, "%+E %+E %+E ",
+            fprintf(fInUse, "%+E %+E %+E ",
                 locs[m][n][0],
                 locs[m][n][1],
                 locs[m][n][2]
                 );
         }
     }
-    fprintf(fCenterLocs, "\n");
 }//writeCenterLocs
 
 void writeHead(){
     //write line of head locations
-    fprintf(fHead, "%ld %E ",step,t_inst);
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fHead,"%E %E %E ",
+            fprintf(fInUse,"%+E %+E %+E ",
                 head[m][n][0],
                 head[m][n][1],
                 head[m][n][2]
                 );
         }
     }
-    fprintf(fHead, "\n");
 }//writeHead
 
 void writeForces(){
-    fprintf(fForces, "%ld %1.16E %E %E %E %E %E %E ",
-            step,
-            t_inst,
+    fprintf(fInUse, "%+E %+E %+E %+E %+E %+E ",
             Ftrap[0],
             Ftrap[1],
             Ftrap[2],
@@ -133,7 +176,7 @@ void writeForces(){
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
             if(bound[m][n]){
-                fprintf(fForces, "%E %E %E %E %E %E ",
+                fprintf(fInUse, "%+E %+E %+E %+E %+E %+E ",
                     FmRadial[nn][0],
                     FmRadial[nn][1],
                     FmRadial[nn][2],
@@ -144,7 +187,7 @@ void writeForces(){
                 nn++;
             }
             else{
-                fprintf(fForces, "%d %d %d %d %d %d ",
+                fprintf(fInUse, "%d %d %d %d %d %d ",
                     0,
                     0,
                     0,
@@ -154,19 +197,31 @@ void writeForces(){
             }
         }
     }
-    fprintf(fForces, "\n");
 }//writeForces
+
+void writeSummary(){
+    fprintf(fInUse, "%d         %g %g     %g    ",prematureReturn,D_m[0],eps_0[0],pi_0[0]);
+}
 
 void inLoopDataCollection()
 {
     if (ReturnDetails)
     {
+        fInUse=fCenterLocs;
+        writeBase();
         writeCenterLocs();
+        fprintf(fCenterLocs, "\n");
+        fInUse=fHead;
+        writeBase();
         writeHead();
+        fprintf(fHead, "\n");
     }
 
     if(ReturnForces){
+        fInUse=fForces;
+        writeBase();
         writeForces();
+        fprintf(fForces, "\n");
     }
 }//inLoopDataCollection
 
@@ -178,26 +233,37 @@ void finalizeDataCollection()
     }
     if(ReturnForces){
         fclose(fForces);
+        fprintf(fForces, "\n");
     }
 
     strcpy(summaryName,runName);
     strcat(summaryName,"_Summary");
     strcat(summaryName,".txt");
 
+    //if not the first run, want to simply append to summary file
+    //if first run, create file and write header
     if(runningInLoop==1){
         fSummary = fopen(summaryName, "a");
     }
     else{
         fSummary = fopen(summaryName, "w");
-        fprintf(fSummary, "step time exit_cond D exp_0 pi_0\n");
+        fInUse=fSummary;
+        writeBaseHeader();
+        writeSummaryHeader();
+        writeCenterLocsHeader();
+        fprintf(fSummary, "\n");
+
         if(runningInLoop!=0){
             printf("Bad input for running in loop, default to 0\n");
         }
     }
 
-    fprintf(fSummary, "%ld %1.16E %d %g %g %g\n",step,t_inst,prematureReturn,D_m[0],eps_0[0],pi_0[0]);
+    //write the information at the end of the simulation
+    writeBase();
+    writeSummary();
+    writeCenterLocs();
+    fprintf(fSummary, "\n");
+
 
     fclose(fSummary);
-
-
 }

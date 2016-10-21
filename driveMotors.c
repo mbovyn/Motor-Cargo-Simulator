@@ -42,8 +42,8 @@ int main( int argc, char *argv[] )
         repeats=atoi(argv[3]);
 
     // IF verboseTF = 0, will not output anything
-    // IF verboseTF = 1, will output input parameters and number of successes
-    // if =2, will additionally output test rand and stop condition
+    // IF verboseTF = 1, will echo input parameters and say number of successes
+    // if =2, will additionally every simulation - stop condition
     // if =3, will output a bunch of error checking things and important events
     // if =4, will output every time step
     verboseTF = 0;
@@ -52,9 +52,9 @@ int main( int argc, char *argv[] )
 
     // Intialize random number generator (twister.c)
     RanInit(0);
-    if(verboseTF>1){
+    if(verboseTF>0){
         //if ever see two that are the same, know iSEED wasn't updated
-        printf("The test rand is %f, ",RAND);
+        printf("The test rand is %f\n",RAND);
     }
 
     //can bring D_m[0] and eps_0[0] in from the command line here
@@ -86,6 +86,7 @@ int main( int argc, char *argv[] )
     if(verboseTF>0){
         printf("Running with %ld kinesins and %ld dyneins\n",N[0],N[1]);
         printf("Running D = %g, eps_0 = %g, pi_0 = %g\n",D_m[0],eps_0[0],pi_0[0]);
+        printf("Running %d repeats\n",repeats );
     }
 
     //call simulation function in loop

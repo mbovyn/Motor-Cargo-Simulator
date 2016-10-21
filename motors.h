@@ -257,6 +257,7 @@ double DCargoRotation;
 
 //variables
 int runningInLoop;
+char repeat_number[100];
 double trash;
 
 //strings to use for filnames and lines read in
@@ -270,3 +271,5 @@ FILE *fCenterLocs, *fHead, *fForces;
 FILE *fParams;
 //basic summary output file
 FILE *fSummary;
+//variable
+FILE *fInUse;
