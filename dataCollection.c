@@ -57,7 +57,7 @@ void writeForcesHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond D eps_0 pi_0 ");
+    fprintf(fInUse, "exit_cond D_anchor eps_0 pi_0 ");
 }
 
 void initializeDataCollection()
@@ -200,7 +200,7 @@ void writeForces(){
 }//writeForces
 
 void writeSummary(){
-    fprintf(fInUse, "%d         %g %g     %g    ",prematureReturn,D_m[0],eps_0[0],pi_0[0]);
+    fprintf(fInUse, "%d         %8g %g     %g    ",prematureReturn,D_m[0],eps_0[0],pi_0[0]);
 }
 
 void inLoopDataCollection()

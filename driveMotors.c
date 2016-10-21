@@ -26,7 +26,7 @@
 //  MAIN
 /*******************************************************************************/
 
-// arguments: parameter_file_name run_name repeats verboseness_number
+// arguments: parameter_file_name run_name repeats verboseness_number D eps_0 pi_0
 int main( int argc, char *argv[] )
 {
     // parameter file name
@@ -62,25 +62,26 @@ int main( int argc, char *argv[] )
     //if they are not input they are read from the parameter file
     D_m[0]=NAN;
     if(argc>5){
-        D_m[0]=atof(argv[4]);
+        D_m[0]=atof(argv[5]);
+
     }
 
     eps_0[0]=NAN;
     if(argc>6){
-        eps_0[0]=atof(argv[5]);
+        eps_0[0]=atof(argv[6]);
     }
 
     pi_0[0]=NAN;
     if(argc>7){
-        pi_0[0]=atof(argv[6]);
+        pi_0[0]=atof(argv[7]);
     }
 
     // load parameters
     getInputParams();
     //Print out last thing we read in
     //this makes sure everything was read in correctly
-    //(if any are off they last will be too as they are sequential)
-    if(verboseTF>2){
+    //(if any are incorrectly read in the last will be too as they are sequential)
+    if(verboseTF>0){
         printf("Read in StopOnTime as %g\n",StopOnTime);
     }
     //print number of motors and parameters we're running
