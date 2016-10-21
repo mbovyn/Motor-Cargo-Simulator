@@ -328,21 +328,22 @@ int simulate_cargo()
         printf("Simulation Ended\n");
 
     if(verboseTF>1){
+        printf("repeat %d stopped at t=%g / step %ld by ",j+1,t_inst,step);
         switch (prematureReturn) {
             case 1:
-                printf("stopped at t=%g / step %ld by detachment\n",t_inst,step);
+                printf("detachment\n");
                 break;
             case 2:
-                printf("stopped at t=%g / step %ld by motor 2 attach\n",t_inst,step);
+                printf("motor 2 attach\n");
                 break;
             case 3:
-                printf("stopped at t=%g / step %ld by all bound\n",t_inst,step);
+                printf("all bound\n");
                 break;
             case 4:
-                printf("stopped at t=%g / step %ld by step limit\n",t_inst,step);
+                printf("step limit\n");
                 break;
             case 5:
-                printf("stopped at t=%g / step %ld by time limit\n",t_inst,step);
+                printf("time limit\n");
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");

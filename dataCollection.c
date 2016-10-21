@@ -227,43 +227,20 @@ void inLoopDataCollection()
 
 void finalizeDataCollection()
 {
+    //close any open files
     if(ReturnDetails){
         fclose(fCenterLocs);
         fclose(fHead);
     }
     if(ReturnForces){
         fclose(fForces);
-        fprintf(fForces, "\n");
-    }
-
-    strcpy(summaryName,runName);
-    strcat(summaryName,"_Summary");
-    strcat(summaryName,".txt");
-
-    //if not the first run, want to simply append to summary file
-    //if first run, create file and write header
-    if(runningInLoop==1){
-        fSummary = fopen(summaryName, "a");
-    }
-    else{
-        fSummary = fopen(summaryName, "w");
-        fInUse=fSummary;
-        writeBaseHeader();
-        writeSummaryHeader();
-        writeCenterLocsHeader();
-        fprintf(fSummary, "\n");
-
-        if(runningInLoop!=0){
-            printf("Bad input for running in loop, default to 0\n");
-        }
     }
 
     //write the information at the end of the simulation
+    fInUse=fSummary;
     writeBase();
     writeSummary();
     writeCenterLocs();
     fprintf(fSummary, "\n");
 
-
-    fclose(fSummary);
 }

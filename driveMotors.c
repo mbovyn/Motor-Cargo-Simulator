@@ -6,6 +6,7 @@
 //#include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "twister.c"
 
 /*******************************************************************************/
@@ -89,24 +90,37 @@ int main( int argc, char *argv[] )
         printf("Running %d repeats\n",repeats );
     }
 
+    //open summary file
+    strcpy(summaryName,runName);
+    strcat(summaryName,"_Summary");
+    strcat(summaryName,".txt");
+
+    //if summary file exists from another call, open it
+    //otherwise, create it and write the header
+    if( access( summaryName, F_OK ) != -1 ) {
+        //file exists
+        fSummary = fopen(summaryName, "a");
+    } else {
+        // file doesn't exist
+        fSummary = fopen(summaryName, "w");
+        fInUse=fSummary;
+        writeBaseHeader();
+        writeSummaryHeader();
+        writeCenterLocsHeader();
+        fprintf(fSummary, "\n");
+    }
+
     //call simulation function in loop
-    runningInLoop=1;
 
     for(j=0;j<repeats;j++){
-        if(j==0){
-            runningInLoop=0;
-            result=simulate_cargo();
-            runningInLoop=1;
-        }
-        else{
-            result=simulate_cargo();
-        }
-
+        result=simulate_cargo();
         //count up number of results we've labeled as success for this trial
         if(result==2){
             successes++;
         }
     }
+
+    fclose(fSummary);
 
     //print the final score
     if(verboseTF>0){
