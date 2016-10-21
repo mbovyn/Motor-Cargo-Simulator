@@ -89,8 +89,18 @@ int main( int argc, char *argv[] )
     }
 
     //call simulation function in loop
+    runningInLoop=1;
+
     for(j=0;j<repeats;j++){
-        result=simulate_cargo();
+        if(j==0){
+            runningInLoop=0;
+            result=simulate_cargo();
+            runningInLoop=1;
+        }
+        else{
+            result=simulate_cargo();
+        }
+
         //count up number of results we've labeled as success for this trial
         if(result==2){
             successes++;

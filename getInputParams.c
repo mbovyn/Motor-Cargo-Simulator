@@ -312,16 +312,8 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&ReturnForces);
 
-    for(int n_lines=1;n_lines<=5;n_lines++)
-      fgets(tmpString, 100, fParams);
-
-    //Running in Loop
-
-    fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&runningInLoop);
-
     for(int n_lines=1;n_lines<=6;n_lines++)
-        fgets(tmpString, 100, fParams);
+      fgets(tmpString, 100, fParams);
 
     //End conditions
 
