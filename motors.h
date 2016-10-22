@@ -100,6 +100,7 @@ int ReturnDetails;
 int ReturnFinalState;
 int ReturnForces;
 int UseSteric;
+int CargoBehavior;
 
 /* -------------------------------------------------------------------
 Simulation dynamic variables

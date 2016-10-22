@@ -40,14 +40,14 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Can input eps_0[0] from command line
     //only read if its still set to default nan value
-    if(isnan(eps_0[0])){
+    if(isnan(eps_0[0]) || eps_0[0]==0){
         sscanf(tmpString,"%s %lf %lf", blah,&eps_0[0], &eps_0[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %lf %lf", blah,&trash, &eps_0[1]);
     }
     fgets(tmpString, 100, fParams);
-    if(isnan(pi_0[0])){
+    if(isnan(pi_0[0]) || pi_0[0]==0){
         sscanf(tmpString,"%s %lf %lf", blah,&pi_0[0], &pi_0[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
@@ -78,7 +78,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Can input D_m[0] from command line
     //only read if its still set to default nan value
-    if(isnan(D_m[0])){
+    if(isnan(D_m[0]) || D_m[0]==0){
         sscanf(tmpString,"%s %lf %lf", blah,&D_m[0], &D_m[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
@@ -104,8 +104,15 @@ void getInputParams( void )
 
     //Microtubule Parameters
 
+    //Can input from command line
+    //only read if its still set to default nan value
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf", blah,&z_MT_offset);
+    if(isnan(z_MT_offset) || z_MT_offset==0){
+        sscanf(tmpString,"%s %lf", blah,&z_MT_offset);
+    }
+    else{//if not NAN, the value was set in command line so trash it
+        sscanf(tmpString,"%s %lf", blah,&trash);
+    }
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf", blah,&y_MT);
     fgets(tmpString, 100, fParams);
@@ -268,6 +275,14 @@ void getInputParams( void )
 
     for(int n_lines=1;n_lines<=7;n_lines++)
       fgets(tmpString, 100, fParams);
+
+    //CargoBehavior
+
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&CargoBehavior);
+
+    for(int n_lines=1;n_lines<=13;n_lines++)
+    fgets(tmpString, 100, fParams);
 
     //External Force
 

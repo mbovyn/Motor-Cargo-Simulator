@@ -76,6 +76,11 @@ int main( int argc, char *argv[] )
         pi_0[0]=atof(argv[7]);
     }
 
+    z_MT_offset=NAN;
+    if(argc>8){
+        z_MT_offset=atof(argv[8]);
+    }
+
     // load parameters
     getInputParams();
     //Print out last thing we read in

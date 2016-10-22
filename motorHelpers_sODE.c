@@ -184,41 +184,75 @@ void diffuse_sph_one_motor(){
 //     convert_loc_sph_to_cart();
 // }
 
-void cargobehavior()
-{
-
-    if(MotorDiffusion>2){
-        //set next locations from solver to current locations
-        nn=0;
-        for(m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                //set anchor location of solver syntax (a) from syntax in rest
-                //of program (locs)
-
-                for(i=0;i<3;i++){
-                    locs[m][n][i]=a1[nn][i];
-                }
-                if(verboseTF>4){
-                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                }
-                nn++;
-            }
-        }
-
-        //transfer cargo center
-        for(i=0;i<3;i++){
-            center[i]=c1[i];
-        }
-
-    }
-
-    //force anchor back onto cargo surface
+void update_motor_locations(){
+    //set next locations from solver to current locations
+    nn=0;
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
-            convert_loc_to_spherical();
-            convert_loc_sph_to_cart();
+            //set anchor location of solver syntax (a) from syntax in rest
+            //of program (locs)
+
+            for(i=0;i<3;i++){
+                locs[m][n][i]=a1[nn][i];
+            }
+            if(verboseTF>4){
+                printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+            }
+            nn++;
         }
     }
+}
+
+void cargobehavior()
+{
+    switch(CargoBehavior){
+
+        case 1: //transfer all values
+
+            update_motor_locations();
+
+            //transfer cargo center
+            for(i=0;i<3;i++){
+                center[i]=c1[i];
+            }
+
+            break;
+
+        case 2: //on rails - cargo can't move in z direction
+
+            update_motor_locations();
+
+            //transfer cargo center
+            center[0]=c1[0];
+            center[1]=c1[1];
+            //center[2]=c1[2];
+
+            break;
+
+        case 3: //stuck - cargo can't move at all
+
+            update_motor_locations();
+
+            //transfer cargo center
+            //center[0]=c1[0];
+            //center[1]=c1[1];
+            //center[2]=c1[2];
+
+            break;
+
+        default:
+            printf("bad value for CargoBehavior\n" );
+
+        //force anchor back onto cargo surface
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                convert_loc_to_spherical();
+                convert_loc_sph_to_cart();
+            }
+        }
+    }
+
+
 } // finished cargobehavior
 
 void setup_solve()

@@ -181,7 +181,9 @@ void initialbinding(){
                 if(done==0){
                     locs[0][0][2]=-R;
                     bound[0][0]=1;
-                    printf("Teleported kin to attach\n");
+                    if(verboseTF>2){
+                        printf("Teleported kin to attach and forced binding\n");
+                    }
                 }
             }
 
