@@ -255,6 +255,16 @@ void initialbinding(){
             head[m][n][2]=NAN;
         }
     }
+
+    if (bound[0][0] && initial_head){
+        head[0][0][0]=initial_head;
+        head[0][0][1]=y_MT;
+        head[0][0][2]=z_MT;
+    } else if(bound[1][0] && initial_head) {
+        head[1][0][0]=initial_head;
+        head[1][0][1]=y_MT;
+        head[1][0][2]=z_MT;
+    }
 }
 
 void initialnucleotide(){

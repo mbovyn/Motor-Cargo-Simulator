@@ -174,6 +174,7 @@ Initial Binding
 
 double MT_dist[2][NMOTORSMAX];
 int done;
+double initial_head;
 
 /* -------------------------------------------------------------------
 Stepping

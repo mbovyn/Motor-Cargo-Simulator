@@ -260,7 +260,9 @@ int simulate_cargo()
         step ++;
 
         //record data
-        inLoopDataCollection();
+        if( (ReturnDetails==1 && hit_action) || ReturnDetails>1){
+            inLoopDataCollection();
+        }
 
         if (verboseTF>3)
             printf("Time t_inst = %g, timestep step = %ld\n", t_inst, step);

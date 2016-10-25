@@ -223,7 +223,7 @@ void getInputParams( void )
     //InitialBinding
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&InitialBinding);
+    sscanf(tmpString,"%s %d %lf",blah,&InitialBinding,&initial_head);
 
     for(int n_lines=1;n_lines<=13;n_lines++)
     fgets(tmpString, 100, fParams);

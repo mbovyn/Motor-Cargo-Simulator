@@ -68,7 +68,7 @@ void initializeDataCollection()
         //create the different file names
         //name of file for center location and locations of motors
 
-        sprintf(repeat_number,"%d",j);
+        sprintf(repeat_number,".%d",j);
 
         strcpy(centerlocsName,runName);
         strcat(centerlocsName,repeat_number);
