@@ -83,6 +83,7 @@ double D_c; //kBT/xiCargoTranslation
 double D_cRotation;
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
+double dt_default=.00001;
 
 /* -------------------------------------------------------------------
 Listing of optional arguements to pass in
@@ -98,6 +99,7 @@ int InitialNucleotideBehavior;
 int NucleotideBehavior;
 int MotorLoading;
 int ReturnDetails;
+int ReturnHeads;
 int ReturnFinalState;
 int ReturnForces;
 int UseSteric;

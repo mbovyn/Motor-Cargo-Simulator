@@ -59,7 +59,7 @@ int simulate_cargo()
     t_inst = 0;
 
     //setup data collection
-    initializeDataCollection();
+    inLoopDataCollection();
 
     //Have different options for end condition of the Simulation
     //initially set flag to stop the simualtion to false
@@ -359,7 +359,8 @@ int simulate_cargo()
             }
         }
 
-    finalizeDataCollection();
+    //finalizeDataCollection();
+    simulationEndDataCollection();
 
     return prematureReturn;
 }

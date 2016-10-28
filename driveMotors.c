@@ -100,25 +100,7 @@ int main( int argc, char *argv[] )
         printf("Running %d repeats\n",repeats );
     }
 
-    //open summary file
-    strcpy(summaryName,runName);
-    strcat(summaryName,"_Summary");
-    strcat(summaryName,".txt");
-
-    //if summary file exists from another call, open it
-    //otherwise, create it and write the header
-    if( access( summaryName, F_OK ) != -1 ) {
-        //file exists
-        fSummary = fopen(summaryName, "a");
-    } else {
-        // file doesn't exist
-        fSummary = fopen(summaryName, "w");
-        fInUse=fSummary;
-        writeBaseHeader();
-        writeSummaryHeader();
-        writeCenterLocsHeader();
-        fprintf(fSummary, "\n");
-    }
+    initializeDataCollection();
 
     //call simulation function in loop
 
@@ -130,7 +112,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    fclose(fSummary);
+    finalizeDataCollection();
 
     //print the final score
     if(verboseTF>0){

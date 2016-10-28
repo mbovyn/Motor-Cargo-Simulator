@@ -156,7 +156,10 @@ void getInputParams( void )
         dt_max_Motor=.9*1/(k_m[1]*mu_m[1]);
     }
     if(dt_max_Motor==0){
-        printf("dt_max for spring not set. 0 motors of each type?\n");
+        if(verboseTF>2){
+            printf("dt_max for spring is 0 (no motors?) - setting to default.\n");
+        }
+        dt_max_Motor=dt_default;
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
@@ -172,7 +175,10 @@ void getInputParams( void )
         dt_max_Diffusion=.01*pow(R,2)/D_m[1];
     }
     if(dt_max_Diffusion==0){
-        printf("dt_max for diffusion not set. 0 motors of each type?\n");
+        if(verboseTF>2){
+            printf("dt_max for diffusion is 0 (no motors?) - setting to default.\n");
+        }
+        dt_max_Diffusion=dt_default;
     }
 
     //the default max is the smaller of the two maximum dt's
@@ -190,8 +196,8 @@ void getInputParams( void )
     }
 
     //overrule time step manually if too large
-    if(dt_max_base>.00001){
-        dt_max_base=.00001;
+    if(dt_max_base>dt_default){
+        dt_max_base=dt_default;
         if(verboseTF>0){
             printf("Time step too large, overruling. dt=%f\n",dt_max_base);
         }
@@ -317,23 +323,15 @@ void getInputParams( void )
     //ReturnDetails
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&ReturnDetails);
+    sscanf(tmpString,"%s %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces);
 
-    for(int n_lines=1;n_lines<=5;n_lines++)
+    for(int n_lines=1;n_lines<=12;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //ReturnFinalState
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&ReturnFinalState);
-
-    for(int n_lines=1;n_lines<=5;n_lines++)
-      fgets(tmpString, 100, fParams);
-
-    //ReturnForces
-
-    fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&ReturnForces);
 
     for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
