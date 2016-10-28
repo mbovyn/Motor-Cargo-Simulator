@@ -22,6 +22,7 @@ int StopOnMotor2Attach;
 int StopOnAllbound;
 int StopOnStep;
 double StopOnTime;
+double StopOnDistance;
 
 
 /* -------------------------------------------------------------------

@@ -63,7 +63,6 @@ int main( int argc, char *argv[] )
     D_m[0]=NAN;
     if(argc>5){
         D_m[0]=atof(argv[5]);
-
     }
 
     eps_0[0]=NAN;
@@ -79,6 +78,11 @@ int main( int argc, char *argv[] )
     z_MT_offset=NAN;
     if(argc>8){
         z_MT_offset=atof(argv[8]);
+    }
+
+    R=NAN;
+    if(argc>9){
+        R=atof(argv[9]);
     }
 
     // load parameters

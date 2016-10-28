@@ -318,6 +318,12 @@ int simulate_cargo()
             }
         }
 
+        if(StopOnDistance){
+            if(locs[0][0][0]>StopOnDistance){
+                prematureReturn=6;
+            }
+        }
+
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     //--------------------------------------------------------------------------
@@ -344,6 +350,9 @@ int simulate_cargo()
                 break;
             case 5:
                 printf("time limit\n");
+                break;
+            case 6:
+                printf("distance limit\n");
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");

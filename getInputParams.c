@@ -94,7 +94,13 @@ void getInputParams( void )
     sscanf(tmpString,"%s %lf %lf %lf", blah,
         &center_initial[0], &center_initial[1],&center_initial[2]);
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf", blah,&R);
+    if(isnan(R) || R==0){
+        sscanf(tmpString,"%s %lf", blah,&R);
+    }
+    else{//if not NAN, the value was set in command line so trash it
+        sscanf(tmpString,"%s %lf", blah,&trash);
+    }
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf", blah,&eta);
 
@@ -348,6 +354,9 @@ void getInputParams( void )
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnTime);
+
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %lf",blah,&StopOnDistance);
 
     //close file
     fclose(fParams);
