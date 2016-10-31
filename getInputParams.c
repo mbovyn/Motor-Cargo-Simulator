@@ -356,6 +356,15 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnDistance);
 
+    fgets(tmpString, 100, fParams);
+    if(isnan(theta_c)){
+        sscanf(tmpString,"%s %d %lf",blah,&StopBelowThetaC,&theta_c);
+    }
+    else{//if not NAN, the value was set in command line so trash it
+        sscanf(tmpString,"%s %d %lf", blah,&StopBelowThetaC,&trash);
+        StopBelowThetaC=1;
+    }
+
     //close file
     fclose(fParams);
 

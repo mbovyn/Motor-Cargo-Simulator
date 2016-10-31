@@ -242,16 +242,15 @@ void cargobehavior()
 
         default:
             printf("bad value for CargoBehavior\n" );
+    }//finished switch
 
-        //force anchor back onto cargo surface
-        for(m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                convert_loc_to_spherical();
-                convert_loc_sph_to_cart();
-            }
+    //force anchor back onto cargo surface
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            convert_loc_to_spherical();
+            convert_loc_sph_to_cart();
         }
     }
-
 
 } // finished cargobehavior
 

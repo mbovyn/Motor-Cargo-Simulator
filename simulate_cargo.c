@@ -324,6 +324,13 @@ int simulate_cargo()
             }
         }
 
+        if(StopBelowThetaC){
+            convert_loc_to_spherical();
+            if(locs_sph[0][0][1]<theta_c){
+                prematureReturn=7;
+            }
+        }
+
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     //--------------------------------------------------------------------------
@@ -353,6 +360,9 @@ int simulate_cargo()
                 break;
             case 6:
                 printf("distance limit\n");
+                break;
+            case 7:
+                printf("below theta_c\n");
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");

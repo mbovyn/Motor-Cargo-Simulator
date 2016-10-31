@@ -23,6 +23,8 @@ int StopOnAllbound;
 int StopOnStep;
 double StopOnTime;
 double StopOnDistance;
+int StopBelowThetaC;
+double theta_c;
 
 
 /* -------------------------------------------------------------------

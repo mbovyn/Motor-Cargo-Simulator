@@ -85,6 +85,11 @@ int main( int argc, char *argv[] )
         R=atof(argv[9]);
     }
 
+    theta_c=NAN;
+    if(argc>10){
+        theta_c=atof(argv[10]);
+    }
+
     // load parameters
     getInputParams();
     //Print out last thing we read in

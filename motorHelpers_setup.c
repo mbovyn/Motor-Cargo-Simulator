@@ -96,10 +96,25 @@ void initiallocations(){
     if(SetAtBottom){
         //if passed 1, want to attach for m=0 (kinesin)
         //if passed 2, attach for m=1 (dynein)
-        if(m==SetAtBottom-1){
+        if(SetAtBottom==1 && m==1){
             init_locs[0][0]=0;
             init_locs[0][1]=0;
             init_locs[0][2]=-R;
+        }
+        if(SetAtBottom==2 && m==2){
+            init_locs[0][0]=0;
+            init_locs[0][1]=0;
+            init_locs[0][2]=-R;
+        }
+        if(SetAtBottom==3 && m==1){
+            init_locs[0][0]=0;
+            init_locs[0][1]=0;
+            init_locs[0][2]=R;
+        }
+        if(SetAtBottom==4 && m==2){
+            init_locs[0][0]=0;
+            init_locs[0][1]=0;
+            init_locs[0][2]=R;
         }
     }//set at bottom
 
