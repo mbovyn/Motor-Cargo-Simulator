@@ -140,8 +140,7 @@ void getInputParams( void )
       mu_m[m]=D_m[m]/kBT;
     }
     D_c=kBT*muCargoTranslation;
-    D_cRotation=kBT*muCargoRotation;
-    DCargoRotation=D_cRotation;
+    DCargoRotation=kBT*muCargoRotation;
     DCargoTranslation=D_c;
 
     z_MT=-R-z_MT_offset; //z location of the MT R-.05
