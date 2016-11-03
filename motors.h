@@ -159,14 +159,13 @@ intial locations
 */
 
 double init_locs[NMOTORSMAX][3]; //initial locations, set by initiallocations
-double uu[NMOTORSMAX]; //random variables to generate elevations
-double vv[NMOTORSMAX]; //random variables to generate azimuths
-double az[NMOTORSMAX];
-double el[NMOTORSMAX];
-double x[NMOTORSMAX]; //temporary holder for cartesian locations
-double y[NMOTORSMAX];
-double z[NMOTORSMAX];
-double rcosel[NMOTORSMAX];
+double uu; //random variables to generate elevations
+double vv; //random variables to generate azimuths
+double az;
+double el;
+double x; //temporary holder for cartesian locations
+double y;
+double z;
 
 int SetAtBottom;
 double InitAngle;

@@ -8,34 +8,54 @@ void pickpointsphere();
 void findMTdist();
 
 
-void pickpointsphere(){
-    //find random points on sphere for each motor according to
-    //http://mathworld.wolfram.com/SpherePointPicking.html
+// void pickpointsphere(){
+//     //find random points on sphere for each motor according to
+//     //http://mathworld.wolfram.com/SpherePointPicking.html
+//
+//     for(n=0;n<N[m];n++){
+//         uu[n]=RAND;
+//         vv[n]=RAND;
+//     }
+//
+//     //convert random u's to random azimuths
+//     for(n=0;n<N[m];n++)
+//         az[n]=2*pi*uu[n];
+//
+//     //convert random v's to random elevations
+//     //need -pi/2 to convert from Wolfram's convention of 0 to pi to
+//     //Matlab's of -pi/2 to pi/2
+//     for(n=0;n<N[m];n++)
+//         el[n]=acos(2*vv[n]-1)-pi/2;
+//
+//     //generate cartesian coords from spherical ones
+//     for(n=0;n<N[m];n++){
+//         rcosel[n] = R*cos(el[n]);
+//         x[n]=rcosel[n]*cos(az[n]);
+//         y[n]=rcosel[n]*sin(az[n]);
+//         z[n]=R*sin(el[n]);
+//     }
+// }
 
-    for(n=0;n<N[m];n++){
-        uu[n]=RAND;
-        vv[n]=RAND;
-    }
+
+void pickpointsphere(){
+    //find random point on the unit sphere
+    //http://mathworld.wolfram.com/SpherePointPicking.html
+    uu=RAND;
+    vv=RAND;
 
     //convert random u's to random azimuths
-    for(n=0;n<N[m];n++)
-        az[n]=2*pi*uu[n];
+    az=2*pi*uu;
 
     //convert random v's to random elevations
     //need -pi/2 to convert from Wolfram's convention of 0 to pi to
     //Matlab's of -pi/2 to pi/2
-    for(n=0;n<N[m];n++)
-        el[n]=acos(2*vv[n]-1)-pi/2;
+    el=acos(2*vv-1)-pi/2;
 
     //generate cartesian coords from spherical ones
-    for(n=0;n<N[m];n++){
-        rcosel[n] = R*cos(el[n]);
-        x[n]=rcosel[n]*cos(az[n]);
-        y[n]=rcosel[n]*sin(az[n]);
-        z[n]=R*sin(el[n]);
-    }
+    x=cos(el)*cos(az);
+    y=cos(el)*sin(az);
+    z=sin(el);
 }
-
 
 void initiallocations(){
 
@@ -54,16 +74,17 @@ void initiallocations(){
                 init_locs[n][2]=-R;
             break;
         case 2:
-            pickpointsphere();
+
             //set these to the initial locations, adjust for center of cargo
             for(n=0;n<N[m];n++){
+                pickpointsphere();
                 for(i=0;i<3;i++){
                     if(i==0)
-                        init_locs[n][i]=x[n]+center[i];
+                        init_locs[n][i]=x*R+center[i];
                     if(i==1)
-                        init_locs[n][i]=y[n]+center[i];
+                        init_locs[n][i]=y*R+center[i];
                     if(i==2)
-                        init_locs[n][i]=z[n]+center[i];
+                        init_locs[n][i]=z*R+center[i];
                     }
             }
             break;
@@ -96,22 +117,22 @@ void initiallocations(){
     if(SetAtBottom){
         //if passed 1, want to attach for m=0 (kinesin)
         //if passed 2, attach for m=1 (dynein)
-        if(SetAtBottom==1 && m==1){
+        if(SetAtBottom==1 && m==0){
             init_locs[0][0]=0;
             init_locs[0][1]=0;
             init_locs[0][2]=-R;
         }
-        if(SetAtBottom==2 && m==2){
+        if(SetAtBottom==2 && m==1){
             init_locs[0][0]=0;
             init_locs[0][1]=0;
             init_locs[0][2]=-R;
         }
-        if(SetAtBottom==3 && m==1){
+        if(SetAtBottom==3 && m==0){
             init_locs[0][0]=0;
             init_locs[0][1]=0;
             init_locs[0][2]=R;
         }
-        if(SetAtBottom==4 && m==2){
+        if(SetAtBottom==4 && m==1){
             init_locs[0][0]=0;
             init_locs[0][1]=0;
             init_locs[0][2]=R;
