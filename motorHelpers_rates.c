@@ -226,7 +226,7 @@ void binding_rates() //sets bind_possible and bind_rate
             for(n=0;n<N[m];n++){
                 convert_loc_to_spherical();
                 if(!bound[m][n]){
-                    if(locs_sph[m][n][1]<-pi/4){
+                    if(locs_sph[m][n][1]<theta_c){
                         bind_possible[m][n]=1;
                         bind_rate[m][n]=INF;
                     }

@@ -362,7 +362,21 @@ void getInputParams( void )
     }
     else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %d %lf", blah,&StopBelowThetaC,&trash);
-        StopBelowThetaC=1;
+        //StopBelowThetaC=1;
+    }
+
+    //debugging
+
+    fgets(tmpString, 100, fParams);
+    fgets(tmpString, 100, fParams);
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %lf",blah,&dt_override);
+
+    if(dt_override){
+        dt_max_base=dt_override;
+        if(verboseTF>0){
+            printf("Overriding dt. Now %g\n",dt_override);
+        }
     }
 
     //close file

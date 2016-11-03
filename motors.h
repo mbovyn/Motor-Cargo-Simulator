@@ -86,6 +86,7 @@ double D_cRotation;
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
 double dt_default=.00001;
+double dt_override;
 
 /* -------------------------------------------------------------------
 Listing of optional arguements to pass in
