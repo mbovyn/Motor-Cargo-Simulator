@@ -74,8 +74,19 @@ void generate_brownian_displacement_anchor(){
     generate_rand_normal();
     //cartesian displacement vector is sum of two unit vectors weighted by
     //gaussian random variable
+
+    // for(i=0;i<3;i++){
+    //     brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
+    // }
+
+    //doing it this way is too fast by a factor of 2
+
+    theta=RAND*2*pi;
+    u=randn1*cos(theta);
+    v=randn1*sin(theta);
+
     for(i=0;i<3;i++){
-        brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
+        brownian_displacement[i]=u*u_hat[i]+v*v_hat[i];
     }
 }
 
@@ -86,6 +97,14 @@ void generate_brownian_displacement_cargo(){
     brownian_displacement[1]=randn2;
     generate_rand_normal();
     brownian_displacement[2]=randn1;
+
+    //that way doesn't work
+    pickpointsphere();
+    generate_rand_normal();
+
+    brownian_displacement[0]=randn1*x;
+    brownian_displacement[1]=randn1*y;
+    brownian_displacement[2]=randn1*z;
 }
 
 void generate_brownian_displacement_rotation(){
@@ -98,7 +117,7 @@ void generate_brownian_displacement_rotation(){
     // generate_rand_normal();
     // brownian_displacement[2]=randn1;
 
-    //not sure that way actually works
+    //not sure that way actually works (seems to be too slow by factor of e)
     //instead, try picking a random unit vector with a gaussian magnitude
 
     //pick a random point on the unit sphere
@@ -205,13 +224,15 @@ void update_motor_locations(){
             //set anchor location of solver syntax (a) from syntax in rest
             //of program (locs)
 
-            for(i=0;i<3;i++){
-                locs[m][n][i]=a1[nn][i];
+            if(MotorDiffusion>2){
+                for(i=0;i<3;i++){
+                    locs[m][n][i]=a1[nn][i];
+                }
+                if(verboseTF>4){
+                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
+                nn++;
             }
-            if(verboseTF>4){
-                printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-            }
-            nn++;
         }
     }
 }

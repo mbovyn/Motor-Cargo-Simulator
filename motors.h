@@ -213,6 +213,7 @@ double rand1, rand2, randn1, randn2;
 double lim;
 double v_cart[3];
 double v_sph[3];
+double u, v, theta;
 double u_hat[3], v_hat[3];
 double du, dv, dx, dy, dz;
 double brownian_displacement[3];
