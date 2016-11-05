@@ -75,19 +75,19 @@ void generate_brownian_displacement_anchor(){
     //cartesian displacement vector is sum of two unit vectors weighted by
     //gaussian random variable
 
-    // for(i=0;i<3;i++){
-    //     brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
-    // }
+    for(i=0;i<3;i++){
+        brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
+    }
 
     //doing it this way is too fast by a factor of 2
 
-    theta=RAND*2*pi;
-    u=randn1*cos(theta);
-    v=randn1*sin(theta);
-
-    for(i=0;i<3;i++){
-        brownian_displacement[i]=u*u_hat[i]+v*v_hat[i];
-    }
+    // theta=RAND*2*pi;
+    // u=randn1*cos(theta);
+    // v=randn1*sin(theta);
+    //
+    // for(i=0;i<3;i++){
+    //     brownian_displacement[i]=u*u_hat[i]+v*v_hat[i];
+    // }
 }
 
 void generate_brownian_displacement_cargo(){
@@ -99,17 +99,17 @@ void generate_brownian_displacement_cargo(){
     brownian_displacement[2]=randn1;
 
     //that way doesn't work
-    pickpointsphere();
-    generate_rand_normal();
-
-    brownian_displacement[0]=randn1*x;
-    brownian_displacement[1]=randn1*y;
-    brownian_displacement[2]=randn1*z;
+    // pickpointsphere();
+    // generate_rand_normal();
+    //
+    // brownian_displacement[0]=randn1*x;
+    // brownian_displacement[1]=randn1*y;
+    // brownian_displacement[2]=randn1*z;
 }
 
 void generate_brownian_displacement_rotation(){
 
-    // //make gaussian random variables
+    //make gaussian random variables
     // generate_rand_normal();
     // brownian_displacement[0]=randn1;
     // brownian_displacement[1]=randn2;
@@ -121,7 +121,7 @@ void generate_brownian_displacement_rotation(){
     //instead, try picking a random unit vector with a gaussian magnitude
 
     //pick a random point on the unit sphere
-    //same as picking random unit vector in spherical, then converting to cartesian
+    //same as picking randomly directed unit vector, then converting to cartesian
     pickpointsphere();
     //generate gaussian random variable
     generate_rand_normal();
@@ -258,7 +258,7 @@ void cargobehavior()
 
             //transfer cargo center
             center[0]=c1[0];
-            center[1]=c1[1];
+            //center[1]=c1[1];
             //center[2]=c1[2];
 
             break;
@@ -365,8 +365,7 @@ void calculate_forces()
         Fsteric[0]=0;
         Fsteric[1]=-kcMT*(R-center_MT_dist)*(y_MT-center[1]);
         Fsteric[2]=-kcMT*(R-center_MT_dist)*(z_MT-center[2]);
-    }
-    else{
+    }else{
         for(i=0;i<3;i++){
             Fsteric[i]=0;
         }
