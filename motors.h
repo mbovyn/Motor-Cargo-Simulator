@@ -81,7 +81,6 @@ double z_MT; //z location of MT
 double muCargoTranslation; //1/6*pi*eta*R
 double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
-double D_c; //kBT/xiCargoTranslation
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
 double dt_default=.00001;

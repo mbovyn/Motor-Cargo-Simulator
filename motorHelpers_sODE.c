@@ -252,7 +252,7 @@ void cargobehavior()
 
             break;
 
-        case 2: //on rails - cargo can't move in z direction
+        case 2: //on rails - only move in x direction
 
             update_motor_locations();
 

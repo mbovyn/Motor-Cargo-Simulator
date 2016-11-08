@@ -139,9 +139,8 @@ void getInputParams( void )
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
-    D_c=kBT*muCargoTranslation;
     DCargoRotation=kBT*muCargoRotation;
-    DCargoTranslation=D_c;
+    DCargoTranslation=kBT*muCargoTranslation;
 
     z_MT=-R-z_MT_offset; //z location of the MT R-.05
 
@@ -311,7 +310,7 @@ void getInputParams( void )
     for(int n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
-    //ExternalTorque
+    //Use Steric
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&UseSteric);
