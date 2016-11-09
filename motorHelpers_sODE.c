@@ -470,10 +470,14 @@ void compute_next_locations(){
 
         case 4: //diffusion handled by full treatment with drag
 
-            for(nn=0;nn<N[0]+N[1];nn++){
-                generate_brownian_displacement_anchor();
-                for(i=0;i<3;i++){
-                    Dba[nn][i]=brownian_displacement[i];
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
+                    }
+                    nn++;
                 }
             }
 
@@ -494,22 +498,26 @@ void compute_next_locations(){
 
             //set_brownian_forces_to_0();
 
-            for(nn=0;nn<N[0]+N[1];nn++){
-                generate_brownian_displacement_anchor();
-                for(i=0;i<3;i++){
-                    Dba[nn][i]=brownian_displacement[i];
-                    if(verboseTF>4){
-                        printf("%lf ",Dba[nn][i]);
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
                     }
-
-                }
-                if(verboseTF>4){
-                    printf("\n");
+                    if(verboseTF>4){
+                        printf("brownian displacements generated for motor are (%lf %lf %lf)\n",Dba[nn][0],Dba[nn][1],Dba[nn][2]);
+                        printf("locs before solve are (%lf %lf %lf)\n",locs[0][0][0],locs[0][0][1],locs[0][0][2]);
+                    }
+                    nn++;
                 }
             }
 
 
             stochastic_equations();
+            if(verboseTF>4){
+                printf("locs update is (%lf %lf %lf)\n",a1[0][0],a1[0][1],a1[0][2]);
+            }
             break;
 
         case 6: //only cargo translational diffusion
@@ -554,9 +562,7 @@ void compute_next_locations(){
                     // }
 
                 }
-                // if(verboseTF>4){
-                //     printf("\n");
-                // }
+                printf("brownian displacements generated for motor are (%lf %lf %lf)\n",Dba[nn][0],Dba[nn][1],Dba[nn][2]);
             }
 
             stochastic_equations();
