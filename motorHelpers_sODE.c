@@ -141,9 +141,17 @@ void diffuse_sph_one_motor(){
         locs[m][n][i]+=sqrt(4*D_m[m]*dt)*brownian_displacement[i];
     }
 
+    if(verboseTF>4 && MotorDiffusion==8){
+        printf("Legacy, locs update is     (%lf %lf %lf)\n",locs[0][0][0],locs[0][0][1],locs[0][0][2] );
+    }
+
     //bring back to sphere surface by converting to spherical and back (fix R)
     convert_loc_to_spherical();
     convert_loc_sph_to_cart();
+
+    if(verboseTF>4 && MotorDiffusion==8){
+        printf("Legacy, locs final is                             (%lf %lf %lf)\n",locs[0][0][0],locs[0][0][1],locs[0][0][2] );
+    }
 }
 
 // old version
@@ -228,9 +236,6 @@ void update_motor_locations(){
                 for(i=0;i<3;i++){
                     locs[m][n][i]=a1[nn][i];
                 }
-                if(verboseTF>4){
-                    printf("after solve, location vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                }
                 nn++;
             }
         }
@@ -283,6 +288,9 @@ void cargobehavior()
         for(n=0;n<N[m];n++){
             convert_loc_to_spherical();
             convert_loc_sph_to_cart();
+            if(verboseTF>4 && MotorDiffusion==8){
+                printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+            }
         }
     }
 
@@ -484,12 +492,22 @@ void compute_next_locations(){
 
         case 5: //anchors diffuse, cargo translation and rotation set to 0
 
+            //set_brownian_forces_to_0();
+
             for(nn=0;nn<N[0]+N[1];nn++){
                 generate_brownian_displacement_anchor();
                 for(i=0;i<3;i++){
                     Dba[nn][i]=brownian_displacement[i];
+                    if(verboseTF>4){
+                        printf("%lf ",Dba[nn][i]);
+                    }
+
+                }
+                if(verboseTF>4){
+                    printf("\n");
                 }
             }
+
 
             stochastic_equations();
             break;
@@ -512,6 +530,41 @@ void compute_next_locations(){
             }
 
             stochastic_equations();
+            break;
+
+        case 8: //testing for anchor diffusion
+
+            //printf("At beginning, locs is (%lf %lf %lf)\n",locs[0][0][0],locs[0][0][1],locs[0][0][2] );
+
+
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    diffuse_sph_one_motor();
+                }
+            }
+
+
+
+            for(nn=0;nn<N[0]+N[1];nn++){
+                //generate_brownian_displacement_anchor();
+                for(i=0;i<3;i++){
+                    Dba[nn][i]=brownian_displacement[i];
+                    // if(verboseTF>4){
+                    //     printf("%lf ",Dba[nn][i]);
+                    // }
+
+                }
+                // if(verboseTF>4){
+                //     printf("\n");
+                // }
+            }
+
+            stochastic_equations();
+
+            if(verboseTF>4){
+                printf("stochastic, locs update is (%lf %lf %lf)\n",a1[0][0],a1[0][1],a1[0][2] );
+            }
+
             break;
 
         default:
