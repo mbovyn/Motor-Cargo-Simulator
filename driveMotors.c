@@ -52,7 +52,7 @@ int main( int argc, char *argv[] )
         verboseTF = atoi(argv[4]);
 
     // Intialize random number generator (twister.c)
-    RanInit(1);
+    RanInit(0); //can set RanInit(1) to use same seed every time
     if(verboseTF>0){
         //if ever see two that are the same, know iSEED wasn't updated
         printf("The test rand is %f\n",RAND);
