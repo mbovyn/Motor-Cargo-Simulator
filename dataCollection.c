@@ -18,16 +18,16 @@ void simulationEndDataCollection();
 
 
 void writeBaseHeader(){
-    fprintf(fInUse, "repeat step       time                   ");
+    fprintf(fInUse, "repeat       step time                   ");
 }
 
 void writeCenterLocsHeader(){
-    fprintf(fInUse, "center_x      center_y      center_z      ");
+    fprintf(fInUse, "center_x                center_y                center_z                ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"type%dmotor%d_x ",m,n);
-            fprintf(fInUse,"type%dmotor%d_y ",m,n);
-            fprintf(fInUse,"type%dmotor%d_z ",m,n);
+            fprintf(fInUse,"type%dmotor%d_x           ",m,n);
+            fprintf(fInUse,"type%dmotor%d_y           ",m,n);
+            fprintf(fInUse,"type%dmotor%d_z           ",m,n);
         }
     }
 }
@@ -35,9 +35,9 @@ void writeCenterLocsHeader(){
 void writeHeadHeader(){
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"type%dmotor%d_x ",m,n);
-            fprintf(fInUse,"type%dmotor%d_y ",m,n);
-            fprintf(fInUse,"type%dmotor%d_z ",m,n);
+            fprintf(fInUse,"type%dmotor%d_x           ",m,n);
+            fprintf(fInUse,"type%dmotor%d_y           ",m,n);
+            fprintf(fInUse,"type%dmotor%d_z           ",m,n);
         }
     }
 }
@@ -147,14 +147,14 @@ void writeBase(){
 
 void writeCenterLocs(){
     //write cargo center and anchor locations
-    fprintf(fInUse, "%+E %+E %+E ",
+    fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
             center[0],
             center[1],
             center[2]
             );
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fInUse, "%+E %+E %+E ",
+            fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
                 locs[m][n][0],
                 locs[m][n][1],
                 locs[m][n][2]
@@ -167,7 +167,7 @@ void writeHead(){
     //write line of head locations
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"%+E %+E %+E ",
+            fprintf(fInUse,"%+1.16E %+1.16E %+1.16E ",
                 head[m][n][0],
                 head[m][n][1],
                 head[m][n][2]
