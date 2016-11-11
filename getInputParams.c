@@ -138,6 +138,7 @@ void getInputParams( void )
     muCargoRotation=1/(8*pi*eta*pow(R,3));
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
+      printf("mu_m is %lf\n",mu_m[m]);
     }
     DCargoRotation=kBT*muCargoRotation;
     DCargoTranslation=kBT*muCargoTranslation;
