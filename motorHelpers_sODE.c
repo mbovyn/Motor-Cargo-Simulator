@@ -573,21 +573,6 @@ void compute_next_locations(){
 
             break;
 
-        case 9: //bead like - no anchor diffusion
-
-            generate_brownian_displacement_cargo();
-            for(i=0;i<3;i++){
-                Dbc[i]=brownian_displacement[i];
-            }
-
-            generate_brownian_displacement_rotation();
-            for(i=0;i<3;i++){
-                Rbc[i]=brownian_displacement[i];
-            }
-
-            stochastic_equations();
-            break;
-
         default:
             printf("Bad Motor Diffusion type\n");
 
