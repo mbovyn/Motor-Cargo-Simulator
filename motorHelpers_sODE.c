@@ -110,25 +110,25 @@ void generate_brownian_displacement_cargo(){
 void generate_brownian_displacement_rotation(){
 
     //make gaussian random variables
-    // generate_rand_normal();
-    // brownian_displacement[0]=randn1;
-    // brownian_displacement[1]=randn2;
-    // //make two more and use the first to find dz (other is wasted)
-    // generate_rand_normal();
-    // brownian_displacement[2]=randn1;
+    generate_rand_normal();
+    brownian_displacement[0]=randn1;
+    brownian_displacement[1]=randn2;
+    //make two more and use the first to find dz (other is wasted)
+    generate_rand_normal();
+    brownian_displacement[2]=randn1;
 
     //not sure that way actually works (seems to be too slow by factor of e)
     //instead, try picking a random unit vector with a gaussian magnitude
 
-    //pick a random point on the unit sphere
-    //same as picking randomly directed unit vector, then converting to cartesian
-    pickpointsphere();
-    //generate gaussian random variable
-    generate_rand_normal();
-    //set output to random spharical unit vector * gaussian random variable
-    brownian_displacement[0]=randn1*x;
-    brownian_displacement[1]=randn1*y;
-    brownian_displacement[2]=randn1*z;
+    // //pick a random point on the unit sphere
+    // //same as picking randomly directed unit vector, then converting to cartesian
+    // pickpointsphere();
+    // //generate gaussian random variable
+    // generate_rand_normal();
+    // //set output to random spharical unit vector * gaussian random variable
+    // brownian_displacement[0]=randn1*x;
+    // brownian_displacement[1]=randn1*y;
+    // brownian_displacement[2]=randn1*z;
 }
 
 void diffuse_sph_one_motor(){
