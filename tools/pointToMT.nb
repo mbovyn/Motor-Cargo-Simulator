@@ -10,21 +10,252 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     11180,        330]
-NotebookOptionsPosition[     10434,        299]
-NotebookOutlinePosition[     10794,        315]
-CellTagsIndexPosition[     10751,        312]
+NotebookDataLength[     23653,        685]
+NotebookOptionsPosition[     22376,        635]
+NotebookOutlinePosition[     22736,        651]
+CellTagsIndexPosition[     22693,        648]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
+Cell["Find closest point on the MT", "Title",
+ CellChangeTimes->{{3.6888307896962357`*^9, 3.688830842525218*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{
+   LineBox[{{0.17457682291666668`, 0.8916775173611112}, {1.193305121527778, 
+    0.36208767361111105`}}], 
+   {AbsolutePointSize[16.982436524617444`], 
+    PointBox[{0.5023871527777779, 0.35314670138888893`}]}, 
+   {AbsolutePointSize[16.982436524617444`], 
+    PointBox[{0.4124457465277779, 0.790310329861111}]}, 
+   {AbsolutePointSize[16.982436524617444`], EdgeForm[{GrayLevel[0.], Opacity[
+    1.], AbsoluteThickness[1], Dashing[{0, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.8090230904481502, 0.5298988066565886}, {0.9666705711842528, 
+     0.4481062043309716}}]}, InsetBox[
+    StyleBox[Cell["MTvec",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     TextAlignment->Center,
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.7939887152777779, 0.46035156249999987}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], InsetBox[
+    StyleBox[Cell["cVector",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.5898328993055557, 0.45581597222222225}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], 
+   {AbsolutePointSize[16.982436524617444`], Dashing[{Small, Small}], 
+    EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+    Dashing[{Small, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.5007918642257099, 0.3554122891949318}, {0.6760647590269075, 
+     0.6274119285377986}}]}, InsetBox[
+    StyleBox[Cell["p=(x,y,z)",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.46461588541666676, 0.2958224826388889}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], InsetBox[
+    StyleBox[Cell["MTpoint",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.2919487847222223, 0.7400065104166668}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], 
+   LineBox[{{0.1977756076388889, 0.9289930555555556}, {1.2165039062500003`, 
+    0.3994032118055554}}], 
+   {Dashing[{0, Small, Small, Small}], 
+    LineBox[{{0.18780381944444446`, 0.9097547743055555}, {1.2065321180555557`,
+      0.38016493055555534`}}]}},
+  ContentSelectable->True,
+  ImageMargins->0.,
+  ImagePadding->{{0., 0.}, {0., 0.}},
+  ImageSize->{480, 360},
+  PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+  PlotRangePadding->Automatic]], "Input",
+ CellChangeTimes->{
+  3.688831040457727*^9, {3.688831163935457*^9, 3.688831167170092*^9}, {
+   3.688831198787663*^9, 3.688831222357553*^9}, {3.688831268525399*^9, 
+   3.688831292612329*^9}, {3.688831332152627*^9, 3.688831343937106*^9}, 
+   3.688831752500833*^9, {3.688831809121738*^9, 3.688831811472343*^9}, {
+   3.688833591756962*^9, 3.688833591894885*^9}}],
+
+Cell["\<\
+We have the situation shown above, where we want to find the vector cVector \
+from the point (x,y,z) to closest point on the surface of the MT. The MT \
+centerline is defined by a point MTpoint and a unit vector MTvec.\
+\>", "Text",
+ CellChangeTimes->{{3.688831446985259*^9, 3.6888315847515287`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{
+   LineBox[{{0.17457682291666668`, 0.8916775173611112}, {1.193305121527778, 
+    0.36208767361111105`}}], 
+   {AbsolutePointSize[16.982436524617444`], 
+    PointBox[{0.5023871527777779, 0.35314670138888893`}]}, 
+   {AbsolutePointSize[16.982436524617444`], 
+    PointBox[{0.4124457465277779, 0.790310329861111}]}, 
+   {AbsolutePointSize[16.982436524617444`], EdgeForm[{GrayLevel[0.], Opacity[
+    1.], AbsoluteThickness[1], Dashing[{0, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.8090230904481502, 0.5298988066565886}, {0.9666705711842528, 
+     0.4481062043309716}}]}, InsetBox[
+    StyleBox[Cell["MTvec",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     TextAlignment->Center,
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.7939887152777779, 0.46035156249999987}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], 
+   {AbsolutePointSize[16.982436524617444`], Dashing[{Small, Small}], 
+    EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+    Dashing[{Small, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.5008627393889677, 0.3556587322400639}, {0.6918232920364997, 
+     0.6451860482748906}}]}, InsetBox[
+    StyleBox[Cell["MTpoint",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.2919487847222223, 0.7400065104166668}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], 
+   LineBox[{{0.1977756076388889, 0.9289930555555556}, {1.2165039062500003`, 
+    0.3994032118055554}}], 
+   {Dashing[{0, Small, Small, Small}], 
+    LineBox[{{0.18780381944444446`, 0.9097547743055555}, {1.2065321180555557`,
+      0.38016493055555534`}}]}, 
+   {AbsolutePointSize[16.982436524617444`], StrokeForm[RGBColor[1, 0, 0]], 
+    EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.], AbsoluteThickness[1], 
+    Dashing[{0, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.6866210937500001, 0.6508897569444445}, {0.41015625000000006`,
+      0.7932942708333333}}]}, 
+   {AbsolutePointSize[16.982436524617444`], StrokeForm[Hue[
+    0.6666666666666666, 1., 1.]], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.],
+     AbsoluteThickness[1], Dashing[{0, Small}]}], EdgeForm[None], 
+    ArrowBox[{{0.5045098182268964, 0.350707308386654}, {0.40991628155333065`, 
+     0.7923320027499839}}]}, InsetBox[
+    StyleBox[Cell["t",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.5786783854166668, 0.782465277777778}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], InsetBox[
+    StyleBox[Cell["p",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.48019748263888895, 0.2960069444444442}, {
+    Left, Baseline},
+    Alignment->{Left, Top}], InsetBox[
+    StyleBox[Cell["v",
+      GeneratedCell->False,
+      CellAutoOverwrite->False,
+      CellBaseline->Baseline,
+      TextAlignment->Left],
+     FontColor->GrayLevel[0.4],
+     Background->GrayLevel[1.]], {0.6342230902777779, 0.4771267361111112}, {
+    Left, Baseline},
+    Alignment->{Left, Top}]},
+  ContentSelectable->True,
+  ImageMargins->0.,
+  ImagePadding->{{0., 0.}, {0., 0.}},
+  ImageSize->{480, 360},
+  PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+  PlotRangePadding->Automatic]], "Input",
+ CellChangeTimes->{
+  3.688831040457727*^9, {3.688831163935457*^9, 3.688831167170092*^9}, {
+   3.688831198787663*^9, 3.688831222357553*^9}, {3.688831268525399*^9, 
+   3.688831292612329*^9}, {3.688831332152627*^9, 3.688831343937106*^9}, 
+   3.688831752500833*^9, 3.688833046909224*^9, {3.688833574901648*^9, 
+   3.688833632324485*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"MTpoint", "-", "p"}], ")"}], "\[CenterDot]", "MTvec"}], 
+      ")"}], "MTvec"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{"v", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"MTpoint", "-", "p"}], ")"}], "-", "t"}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"   ", 
+    RowBox[{"=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"MTpoint", "-", "p"}], ")"}], "-", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"MTpoint", "-", "p"}], ")"}], "\[CenterDot]", "MTvec"}], 
+        ")"}], "MTvec"}]}]}]}], TraditionalForm]}],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"cVector", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       SubscriptBox["R", "MT"]}], ")"}], "v"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.688833489089883*^9, 3.688833546756832*^9}, {
+  3.6888336177077436`*^9, 3.6888337521251717`*^9}, {3.68883378618743*^9, 
+  3.6888338135045013`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Find the vector from the point to the closest point on the MT\
+\>", "Section",
+ CellChangeTimes->{{3.688830854247787*^9, 3.688830874171462*^9}}],
+
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{"pointToMTvec", "=", 
   RowBox[{
-   RowBox[{"Cross", "[", 
-    RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"1", "-", 
+      RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], "*", "\[IndentingNewLine]", 
+    RowBox[{"(", 
      RowBox[{
       RowBox[{"{", 
        RowBox[{
@@ -36,100 +267,191 @@ Cell[BoxData[
          RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], "}"}], 
       "-", 
       RowBox[{"{", 
-       RowBox[{"x", ",", "y", ",", "z"}], "}"}]}], ",", 
-     RowBox[{"{", 
+       RowBox[{"x", ",", "y", ",", "z"}], "}"}]}], ")"}]}], "-", 
+   RowBox[{
+    RowBox[{"Dot", "[", 
+     RowBox[{
       RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}], ",", 
+         RowBox[{
+          RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}], ",", 
+         RowBox[{
+          RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], "}"}], 
+       "-", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "y", ",", "z"}], "}"}]}], ",", 
+      RowBox[{"{", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}], ",", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}], ",", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}], "}"}]}], 
-    "]"}], 
-   RowBox[{"(", 
-    RowBox[{"1", "-", 
-     RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}]}]}]], "Input",
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}], ",", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}], ",", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}], "}"}]}], 
+     "]"}], "*", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}], ",", 
+      RowBox[{
+       RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}], ",", 
+      RowBox[{
+       RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}], 
+     "}"}]}]}]}]], "Input",
  CellChangeTimes->{{3.688766537359676*^9, 3.688766543456649*^9}, {
   3.6887707971594353`*^9, 3.688770812436227*^9}, {3.688771358420042*^9, 
-  3.68877140134986*^9}}],
+  3.68877140134986*^9}, {3.688830530816729*^9, 3.688830579153879*^9}, {
+  3.6888306250086203`*^9, 3.6888306417381496`*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{
    RowBox[{
-    RowBox[{"(", 
-     RowBox[{"1", "-", 
-      RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
-    RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "x"}], "+", 
+       RowBox[{
+        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}]}], ")"}]}], 
+    "-", 
+    RowBox[{
      RowBox[{
-      RowBox[{"z", " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "-", 
+      RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}], " ", 
+     RowBox[{"(", 
       RowBox[{
        RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "x"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "-", 
-      RowBox[{"y", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "y"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}], "+", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}], " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}]}], ")"}]}], 
-   ",", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "z"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}]}], ")"}]}]}],
+    ",", 
    RowBox[{
-    RowBox[{"(", 
-     RowBox[{"1", "-", 
-      RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
-    RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "y"}], "+", 
+       RowBox[{
+        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}]}], ")"}]}], 
+    "-", 
+    RowBox[{
      RowBox[{
-      RowBox[{
-       RowBox[{"-", "z"}], " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "+", 
+      RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}], " ", 
+     RowBox[{"(", 
       RowBox[{
        RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "x"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "+", 
-      RowBox[{"x", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "y"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}], "-", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}], " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}]}], ")"}]}], 
-   ",", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "z"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}]}], ")"}]}]}],
+    ",", 
    RowBox[{
-    RowBox[{"(", 
-     RowBox[{"1", "-", 
-      RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
-    RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"RMT", "[", "MTnum", "]"}]}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "z"}], "+", 
+       RowBox[{
+        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], ")"}]}], 
+    "-", 
+    RowBox[{
      RowBox[{
-      RowBox[{"y", " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "-", 
+      RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}], " ", 
+     RowBox[{"(", 
       RowBox[{
        RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "x"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "0", "]"}]}], "-", 
-      RowBox[{"x", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "y"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "1", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "+", 
        RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}], "+", 
-      RowBox[{
-       RowBox[{
-        RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "0", "]"}], " ", 
-       RowBox[{
-        RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}]}], ")"}]}]}], 
-  "}"}]], "Output",
- CellChangeTimes->{3.688766544989389*^9, 3.6887667986143837`*^9, 
-  3.688766932511231*^9, 3.688768030798649*^9, 3.688771402624337*^9, 
-  3.688771626799361*^9}]
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "z"}], "+", 
+          RowBox[{
+           RowBox[{"MTpoint", "[", "MTnum", "]"}], "[", "2", "]"}]}], ")"}], 
+        " ", 
+        RowBox[{
+         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "2", "]"}]}]}], 
+      ")"}]}]}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.688766544989389*^9, 3.6887667986143837`*^9, 3.688766932511231*^9, 
+   3.688768030798649*^9, 3.688771402624337*^9, 3.688771626799361*^9, {
+   3.68883063462963*^9, 3.688830644739772*^9}, 3.6888306761137943`*^9}]
+}, Open  ]]
 }, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The associated distance", "Section",
+ CellChangeTimes->{{3.688830900789309*^9, 3.688830913354908*^9}}],
 
 Cell[CellGroupData[{
 
@@ -164,8 +486,14 @@ Cell[BoxData[
    3.68876291328448*^9, 3.68876293667338*^9}, {3.688763970172818*^9, 
    3.688763987134707*^9}, 3.688765607485298*^9, 3.688765657543119*^9, 
    3.688766798492468*^9, 3.6887669323943777`*^9, 3.688768030674038*^9, 
-   3.6887715044435883`*^9, 3.688771626858008*^9}]
+   3.6887715044435883`*^9, 3.688771626858008*^9, 3.68883067617521*^9}]
+}, Open  ]]
 }, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The associated point", "Section",
+ CellChangeTimes->{{3.6888309184741*^9, 3.68883092274868*^9}}],
 
 Cell[CellGroupData[{
 
@@ -199,8 +527,14 @@ Cell[BoxData[
  CellChangeTimes->{3.688765476008861*^9, 3.6887665715250893`*^9, 
   3.688766633943677*^9, 3.688766798664248*^9, 3.6887669325613947`*^9, 
   3.688768030848065*^9, 3.68877067626058*^9, 3.688771534527863*^9, 
-  3.688771626880307*^9}]
+  3.688771626880307*^9, 3.688830676196701*^9}]
+}, Open  ]]
 }, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Write to file", "Section",
+ CellChangeTimes->{{3.6888309263372927`*^9, 3.6888309281036463`*^9}}],
 
 Cell[BoxData[{
  RowBox[{"DeleteFile", "[", 
@@ -294,11 +628,13 @@ Cell[BoxData["\<\"/Users/Matt/project_code/Motor_Freedom/tools/pointToMT_\
 formulae.txt\"\>"], "Output",
  CellChangeTimes->{{3.6887629134056187`*^9, 3.688762936915783*^9}, 
    3.6887639872949343`*^9, 3.6887667988245487`*^9, 3.6887669326629877`*^9, 
-   3.6887680309129047`*^9, 3.688771626959546*^9}]
+   3.6887680309129047`*^9, 3.688771626959546*^9, 3.6888306762734737`*^9}]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 },
 WindowSize->{808, 911},
-WindowMargins->{{229, Automatic}, {Automatic, 69}},
+WindowMargins->{{283, Automatic}, {Automatic, 92}},
 FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
 21, 2016)",
 StyleDefinitions->"Default.nb"
@@ -315,22 +651,41 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 1080, 31, 75, "Input"],
-Cell[1663, 55, 2515, 75, 138, "Output"]
+Cell[580, 22, 113, 1, 92, "Title"],
+Cell[696, 25, 3005, 70, 375, "Input"],
+Cell[3704, 97, 310, 5, 49, "Text"],
+Cell[4017, 104, 3892, 89, 375, "Input"],
+Cell[7912, 195, 1253, 44, 88, "Text"],
+Cell[CellGroupData[{
+Cell[9190, 243, 154, 3, 64, "Section"],
+Cell[CellGroupData[{
+Cell[9369, 250, 1990, 56, 117, "Input"],
+Cell[11362, 308, 4244, 138, 201, "Output"]
+}, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4215, 135, 584, 14, 32, "Input"],
-Cell[4802, 151, 680, 15, 39, "Output"]
+Cell[15655, 452, 108, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[15788, 457, 584, 14, 32, "Input"],
+Cell[16375, 473, 701, 15, 39, "Output"]
+}, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[5519, 171, 799, 16, 32, "Input"],
-Cell[6321, 189, 493, 12, 32, "Output"]
-}, Open  ]],
-Cell[6829, 204, 667, 17, 75, "Input"],
-Cell[7499, 223, 2529, 62, 201, "Input"],
+Cell[17125, 494, 102, 1, 64, "Section"],
 Cell[CellGroupData[{
-Cell[10053, 289, 64, 1, 32, "Input"],
-Cell[10120, 292, 298, 4, 32, "Output"]
+Cell[17252, 499, 799, 16, 32, "Input"],
+Cell[18054, 517, 515, 12, 32, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18618, 535, 102, 1, 64, "Section"],
+Cell[18723, 538, 667, 17, 75, "Input"],
+Cell[19393, 557, 2529, 62, 201, "Input"],
+Cell[CellGroupData[{
+Cell[21947, 623, 64, 1, 32, "Input"],
+Cell[22014, 626, 322, 4, 32, "Output"]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 }
 ]
