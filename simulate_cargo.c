@@ -121,16 +121,20 @@ int simulate_cargo()
                 }
 
                 // loop through binding rates
-                if(bind_possible[m][n] && nuc_ready[m][n]){
-                    dtHere = -1/bind_rate[m][n]*log(RAND);
-                    if (dtHere < gillespie_dt )
-                    {
-                        gillespie_dt = dtHere;
-                        hit_m      = m;
-                        hit_n      = n;
-                        hit_action = 2; // binding
+                for(k=0;k<n_MTs;k++){
+                    if(bind_possible[m][n][k] && nuc_ready[m][n]){
+                        dtHere = -1/bind_rate[m][n][k]*log(RAND);
+                        if (dtHere < gillespie_dt )
+                        {
+                            gillespie_dt = dtHere;
+                            hit_m      = m;
+                            hit_n      = n;
+                            hit_k      = k;
+                            hit_action = 2; // binding
+                        }
                     }
                 }
+
 
                 // loop through detachment rates
                 if(unbind_possible[m][n]){
@@ -195,7 +199,9 @@ int simulate_cargo()
         if(hit_action){
             if (hit_action == 1) // stepping
             {
-                head[hit_m][hit_n][0] += step_size[hit_m];
+                head[hit_m][hit_n][0] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][0];
+                head[hit_m][hit_n][1] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][1];
+                head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][2];
 
                 if(verboseTF>2){
                     printf("on step, t was %g force was %g pN and rate was %g per second\n",
@@ -205,16 +211,19 @@ int simulate_cargo()
             else if (hit_action == 2) // binding
             {
                 //set bound status
-                bound[hit_m][hit_n]=1;
+                bound[hit_m][hit_n]=hit_k+1;
 
                 //set head location
-                head[hit_m][hit_n][0]=locs[hit_m][hit_n][0];
-                head[hit_m][hit_n][1]=y_MT;
-                head[hit_m][hit_n][2]=z_MT;
+                closestPointOnMT(locs[hit_m][hit_n][0],
+                    locs[hit_m][hit_n][1],locs[hit_m][hit_n][2],hit_k);
+
+                head[hit_m][hit_n][0]=cPoint[0];
+                head[hit_m][hit_n][1]=cPoint[1];
+                head[hit_m][hit_n][2]=cPoint[2];
 
                 if(verboseTF>2){
-                    printf("on binding, t was %g, MT_dist was %g microns\n",
-                        t_inst,MT_dist[hit_m][hit_n]);
+                    printf("on binding of type%ldmotor%ld to MT %d, t was %g, MT_dist was %g microns\n",
+                        hit_m,hit_n,bound[hit_m][hit_n],t_inst,MTdist);
                 }
             }
             else if (hit_action == 3) // detachment

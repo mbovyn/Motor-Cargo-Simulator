@@ -197,45 +197,53 @@ void binding_rates() //sets bind_possible and bind_rate
             //motors can bind if the anchors are closer to the MT
             //than they are long
             findMTdist();
-            for(n=0;n<N[m];n++){
-                if(bind_possible[m][n]){
-                    bind_rate[m][n]=pi_0[m];
+            for(k=0;k<n_MTs;k++){
+                for(n=0;n<N[m];n++){
+                    if(bind_possible[m][n][k]){
+                        bind_rate[m][n][k]=pi_0[m];
+                    }
                 }
             }
+
             break;
 
         case 2:
             //no motors can bind
-            for(n=0;n<N[m];n++){
-                bind_possible[m][n]=0;
+            for(k=0;k<n_MTs;k++){
+                for(n=0;n<N[m];n++){
+                    bind_possible[m][n][k]=0;
+                }
             }
             break;
 
         case 3: //motors always bind if possible
             findMTdist();
-            for(n=0;n<N[m];n++){
-                if(bind_possible[m][n]){
-                    bind_rate[m][n]=INF;
+            for(k=0;k<n_MTs;k++){
+                for(n=0;n<N[m];n++){
+                    if(bind_possible[m][n][k]){
+                        bind_rate[m][n][k]=INF;
+                    }
                 }
             }
 
             break;
 
         case 4: //motors bind if below a certain latitude (for MFP test)
+        //1 MT only
 
             for(n=0;n<N[m];n++){
                 convert_loc_to_spherical();
                 if(!bound[m][n]){
                     if(locs_sph[m][n][1]<theta_c){
-                        bind_possible[m][n]=1;
-                        bind_rate[m][n]=INF;
+                        bind_possible[m][n][0]=1;
+                        bind_rate[m][n][0]=INF;
                     }
                     else{
-                        bind_possible[m][n]=0;
+                        bind_possible[m][n][0]=0;
                     }
                 }
                 else{
-                    bind_possible[m][n]=0;
+                    bind_possible[m][n][0]=0;
                 }
             }
 
@@ -243,12 +251,14 @@ void binding_rates() //sets bind_possible and bind_rate
 
         case 5: //motors can bind if in range, but not if they're too close
 
-            findMTdist();
-            for(n=0;n<N[m];n++){
-                if(bind_possible[m][n] && MT_dist[m][n]>L[m]*innerlimit){
-                    bind_rate[m][n]=pi_0[m];
-                }
-            }
+            // findMTdist();
+            // for(n=0;n<N[m];n++){
+            //     if(bind_possible[m][n][k] && MT_dist[m][n]>L[m]*innerlimit){
+            //         bind_rate[m][n]=pi_0[m];
+            //     }
+            // }
+
+            printf("Code needs to be reconfigured to exclude binding when too close\n");
 
             break;
 

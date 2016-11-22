@@ -110,22 +110,40 @@ void getInputParams( void )
 
     //Microtubule Parameters
 
-    //Can input from command line
-    //only read if its still set to default nan value
+    //number of MTs
     fgets(tmpString, 100, fParams);
-    if(isnan(z_MT_offset) || z_MT_offset==0){
-        sscanf(tmpString,"%s %lf", blah,&z_MT_offset);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf", blah,&trash);
-    }
-    fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf", blah,&y_MT);
-    fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf", blah,&R_MT);
+    sscanf(tmpString,"%s %d", blah,&n_MTs);
+    //MT-cargo steric spring constant
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf", blah,&kcMT);
 
+    fgets(tmpString, 100, fParams);
+    fgets(tmpString, 100, fParams);
+
+    //the parameters of each MT
+    for(i=0;i<n_MTs;i++){
+        fgets(tmpString, 100, fParams);
+        sscanf(tmpString,"(%lf %lf %lf) (%lf %lf %lf) %lf",
+            &MTpoint[i][0],&MTpoint[i][1],&MTpoint[i][2],
+            &MTvec[i][0],&MTvec[i][1],&MTvec[i][2],
+            &R_MT[i]);
+    }
+
+    //set offset if one is input
+    if(!isnan(z_MT_offset)){
+        MTpoint[0][2]+=z_MT_offset;
+    }
+
+    //print out what we have
+    if(verboseTF>2){
+        printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
+        for(i=0;i<n_MTs;i++){
+            printf("(%g,%g,%g) (%g,%g,%g) %g\n",
+            MTpoint[i][0],MTpoint[i][1],MTpoint[i][2],
+            MTvec[i][0],MTvec[i][1],MTvec[i][2],
+            R_MT[i]);
+        }
+    }
 
     //make sure we have the right values
     //printf("Read in motor numbers as %ld %ld\n",N[0],N[1]);
@@ -141,8 +159,6 @@ void getInputParams( void )
     }
     DCargoRotation=kBT*muCargoRotation;
     DCargoTranslation=kBT*muCargoTranslation;
-
-    z_MT=-R-z_MT_offset; //z location of the MT R-.05
 
     //find maximum time step for attached motors
     //set to satisfy

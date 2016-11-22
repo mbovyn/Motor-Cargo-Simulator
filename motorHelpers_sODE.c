@@ -326,9 +326,34 @@ void setup_solve()
 }
 
 void evaluate_steric(){
-    center_MT_dist=hypot(center[1]-y_MT,center[2]-z_MT);
-    if(center_MT_dist<R){
-        need_steric=1;
+    //set value of steric force
+    //set if we need the steric spring timestep
+
+    need_steric=0;
+
+    //initially set to 0
+    for(i=0;i<3;i++){
+        Fsteric[i]=0;
+    }
+    //find steric force for each MT
+    for(k=0;k<n_MTs;k++){
+        pointToMTdist(center[0],center[1],center[2],k);
+        if(MTdist<R){
+            //implement the steric force
+            Fsterick[0]=-kcMT*(R*cVector[0]/MTdist - cVector[0]);
+            Fsterick[1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
+            Fsterick[2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
+            //set that we need the steric spring so we know to use the smaller timestep
+            need_steric=1;
+        }else{
+            for(i=0;i<3;i++){
+                Fsterick[i]=0;
+            }
+        }
+        //add up forces from each MT into one total steric force
+        for(i=0;i<3;i++){
+            Fsteric[i]+=Fsterick[i];
+        }
     }
 }
 
@@ -365,18 +390,6 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
-    }
-
-    //set value of steric force
-    if(need_steric){
-        //implement the steric force
-        Fsteric[0]=0;
-        Fsteric[1]=-kcMT*(R-center_MT_dist)*(y_MT-center[1]);
-        Fsteric[2]=-kcMT*(R-center_MT_dist)*(z_MT-center[2]);
-    }else{
-        for(i=0;i<3;i++){
-            Fsteric[i]=0;
-        }
     }
 
     //transform force vectors to spherical and split into radial and tangential

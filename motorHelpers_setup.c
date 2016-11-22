@@ -6,6 +6,8 @@ void initialnucleotide();
 //helper helpers
 void pickpointsphere();
 void findMTdist();
+void closestPointOnMT(double x,double y,double z,int MTnum);
+void pointToMTdist(double x,double y,double z, int MTnum);
 
 
 // void pickpointsphere(){
@@ -148,21 +150,39 @@ void initiallocations(){
     }
 } // finished initiallocations
 
+void vecToClosestPointOnMT(double x,double y,double z, int MTnum){
+    //closest distance from point to line defined by point and unit vector is
+    //dist = | (point on MT)-(x,y,z) x MT_unit_vector |
+    cVector[0] = (1 - R_MT[MTnum])*(z*MTvec[MTnum][1] - MTpoint[MTnum][2]*MTvec[MTnum][1] - y*MTvec[MTnum][2] + MTpoint[MTnum][1]*MTvec[MTnum][2]);
+    cVector[1] = (1 - R_MT[MTnum])*(-(z*MTvec[MTnum][0]) + MTpoint[MTnum][2]*MTvec[MTnum][0] + x*MTvec[MTnum][2] - MTpoint[MTnum][0]*MTvec[MTnum][2]);
+    cVector[2] = (1 - R_MT[MTnum])*(y*MTvec[MTnum][0] - MTpoint[MTnum][1]*MTvec[MTnum][0] - x*MTvec[MTnum][1] + MTpoint[MTnum][0]*MTvec[MTnum][1]);
+}
+
+void pointToMTdist(double x,double y,double z, int MTnum){
+    vecToClosestPointOnMT(x,y,z,MTnum);
+    MTdist = sqrt(pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2));
+}
+
 void findMTdist(){
     //Find out if each motor is close enough to bind to the MT
     //sets bind_possible
     for(n=0;n<N[m];n++){
         if(bound[m][n]==0){
-            MT_dist[m][n]=hypot(locs[m][n][1]-y_MT,locs[m][n][2]-z_MT);
-            if (MT_dist[m][n]<=L[m]) {
-                bind_possible[m][n]=1;
+
+            //for each MT, find the distance from the anchor
+            for(k=0;k<n_MTs;k++){
+                pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
+                if (MTdist<=L[m]) {
+                    bind_possible[m][n][k]=1;
+                }else{
+                    bind_possible[m][n][k]=0;
+                }
             }
-            else{
-                bind_possible[m][n]=0;
+
+        }else{
+            for(k=0;k<n_MTs;k++){
+                bind_possible[m][n][k]=0;
             }
-        }
-        else{
-            bind_possible[m][n]=0;
         }
     }
 }
@@ -182,12 +202,16 @@ void initialbinding(){
 
             //set bound status to mirror capture possibility
             for(n=0;n<N[m];n++){
-                bound[m][n]=bind_possible[m][n];
+                for(k=0;k<n_MTs;k++){
+                    //set bound to MT number
+                    bound[m][n]=(k+1)*bind_possible[m][n][k];
+                }
             }
+            //Note: this will always bind the motor to the last MT if there are multiple MTs in range
 
             break;
 
-        case 2: //Bind only one kinesin
+        case 2: //Bind only one kinesin to 1st MT
 
             //find the distance from each anchor to the MT
             findMTdist();
@@ -198,7 +222,7 @@ void initialbinding(){
                 //loop through motors to assign binding status
                 for(n=0;n<N[m];n++){
                     //of the motors for which capture is possible, attach only one
-                    if(bind_possible[m][n]){
+                    if(bind_possible[m][n][0]){
                         if(done==0){
                             bound[m][n]=1;
                             done=1;
@@ -218,7 +242,7 @@ void initialbinding(){
                     locs[0][0][2]=-R;
                     bound[0][0]=1;
                     if(verboseTF>2){
-                        printf("Teleported kin to attach and forced binding\n");
+                        printf("Teleported kin to bottom and forced binding\n");
                     }
                 }
             }
@@ -234,18 +258,18 @@ void initialbinding(){
 
             break;
 
-        case 4: //Bind only one kinesin
+        case 4: //Bind only one dyn
 
             //find the distance from each anchor to the MT
             findMTdist();
 
-            //attach the one kinesin
+            //attach the one dyn
             if(m==1){
                 done=0;
                 //loop through motors to assign binding status
                 for(n=0;n<N[m];n++){
                     //of the motors for which capture is possible, attach only one
-                    if(bind_possible[m][n]){
+                    if(bind_possible[m][n][0]){
                         if(done==0){
                             bound[m][n]=1;
                             done=1;
@@ -280,10 +304,11 @@ void initialbinding(){
     //this sets the heads directly below the anchor (same x position)
     //should later change to projection from center of cargo?
     for(n=0;n<N[m];n++){
-        if(bound[m][n]==1){
-            head[m][n][0]=locs[m][n][0];
-            head[m][n][1]=y_MT;
-            head[m][n][2]=z_MT;
+        if(bound[m][n]){
+            closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],bound[m][n]);
+            for(i=0;i<3;i++){
+                head[m][n][i]=cPoint[i];
+            }
         }
         else{
             head[m][n][0]=NAN;
@@ -293,14 +318,24 @@ void initialbinding(){
     }
 
     if (bound[0][0] && initial_head){
-        head[0][0][0]=R+initial_head;
-        head[0][0][1]=y_MT;
-        head[0][0][2]=z_MT;
+        closestPointOnMT(locs[0][0][0],locs[0][0][1],locs[0][0][2],bound[0][0]);
+        head[0][0][0]=cPoint[0]+R+initial_head;
+        head[0][0][1]=cPoint[1];
+        head[0][0][2]=cPoint[2];
     } else if(bound[1][0] && initial_head) {
-        head[1][0][0]=R+initial_head;
-        head[1][0][1]=y_MT;
-        head[1][0][2]=z_MT;
+        closestPointOnMT(locs[1][0][0],locs[1][0][1],locs[1][0][2],bound[1][0]);
+        head[1][0][0]=cPoint[0]+R+initial_head;
+        head[1][0][1]=cPoint[1];
+        head[1][0][2]=cPoint[2];
     }
+}
+
+void closestPointOnMT(double x,double y,double z,int MTnum){
+    //find the closest point on the MT to the point given
+    vecToClosestPointOnMT(x,y,z,MTnum);
+    cPoint[0] = x + cVector[0];
+    cPoint[1] = y + cVector[1];
+    cPoint[2] = z + cVector[2];
 }
 
 void initialnucleotide(){

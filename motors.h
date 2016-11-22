@@ -1,6 +1,7 @@
 
 // Macros
-#define NMOTORSMAX 1000
+#define NMOTORSMAX 10
+#define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
 #define INF 1e14
@@ -70,14 +71,18 @@ double eta; //Dynamic viscosity of surrounding fluid 10*8.9E-4
 
 //Microtubule Parameters
 
-double z_MT_offset; //z location of the MT R-.05
-double y_MT; //y location of the MT 0
-double R_MT; //radius of the MT .012
+double z_MT_offset; //amount to change base location of MT from params file
+//double y_MT; //y location of the MT 0
+double R_MT[NMTSMAX]; //radius of the MT .012
 double kcMT; //steric spring to keep cargo out of MT (pN/micron) 400
+
+int n_MTs;
+double MTpoint[NMTSMAX][3];
+double MTvec[NMTSMAX][3];
 
 //Calculated Parameters
 
-double z_MT; //z location of MT
+//double z_MT; //z location of MT
 double muCargoTranslation; //1/6*pi*eta*R
 double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
@@ -126,18 +131,18 @@ double F_m_vec [2][NMOTORSMAX][3];
 
 // booleans
 int bound            [2][NMOTORSMAX];
-int bind_possible    [2][NMOTORSMAX];
+int bind_possible    [2][NMOTORSMAX][NMTSMAX];
 int unbind_possible  [2][NMOTORSMAX];
 int step_possible    [2][NMOTORSMAX];
 int exchange_possible[2][NMOTORSMAX];
 int nuc_ready        [2][NMOTORSMAX];
-int need_steric=0;
+int need_steric;
 
 // scalars
 double F_m_mag      [2][NMOTORSMAX];
 double step_rate    [2][NMOTORSMAX];
 double unbind_rate  [2][NMOTORSMAX];
-double bind_rate    [2][NMOTORSMAX];
+double bind_rate    [2][NMOTORSMAX][NMTSMAX];
 double exchange_rate[2][NMOTORSMAX];
 
 //For gillespie time step choosing
@@ -147,11 +152,13 @@ double dt;
 double gillespie_dt, dtHere, dt_max;
 
 long hit_m, hit_n;
+int hit_k;
 int hit_action;
 
 //variables to loop over, m=motor type number, n=motor number within type
 //i for dimensions, usually 3
-int m,n,i;
+//k for MT number
+int m,n,i,k;
 
 /* -------------------------------------------------------------------
 intial locations
@@ -175,9 +182,12 @@ double innerlimit;
 Initial Binding
 */
 
-double MT_dist[2][NMOTORSMAX];
+double MTdist;
 int done;
 double initial_head;
+
+double cPoint[3];
+double cVector[3];
 
 /* -------------------------------------------------------------------
 Stepping
@@ -243,6 +253,7 @@ double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
 double Fsteric[3];
+double Fsterick[3];
 double TorqeExt[3];
 
 //setup

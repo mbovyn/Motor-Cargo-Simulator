@@ -3,7 +3,7 @@
 #fnames=(forwardequations.c stochasticequations.c)
 #echo ${fnames[1]}
 
-for fname in forwardequations.c stochasticequations.c
+for fname in pointToMT_formulae.txt stochasticequations.c
 do
     if [ -e $fname ] ; then
 
@@ -31,6 +31,11 @@ do
         #note need to escape [ and ] because it thinks its being used for a range,
         #a la [0-9]
         sed -i '' 's/sqrt\[\([0-9][0-9]*\)\]/sqrt(\1)/g' $fname
+
+        #replace parens with brackets around variable in point to MT dist
+        sed -i '' 's/(MTnum)/[MTnum]/g' $fname
+        #replace RMT with R_MT
+        sed -i '' 's/RMT/R_MT/g' $fname
 
         echo processed $fname
 
