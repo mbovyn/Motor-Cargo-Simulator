@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     11085,        328]
-NotebookOptionsPosition[     10340,        297]
-NotebookOutlinePosition[     10700,        313]
-CellTagsIndexPosition[     10657,        310]
+NotebookDataLength[     11180,        330]
+NotebookOptionsPosition[     10434,        299]
+NotebookOutlinePosition[     10794,        315]
+CellTagsIndexPosition[     10751,        312]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -127,7 +127,8 @@ Cell[BoxData[
         RowBox[{"MTvec", "[", "MTnum", "]"}], "[", "1", "]"}]}]}], ")"}]}]}], 
   "}"}]], "Output",
  CellChangeTimes->{3.688766544989389*^9, 3.6887667986143837`*^9, 
-  3.688766932511231*^9, 3.688768030798649*^9, 3.688771402624337*^9}]
+  3.688766932511231*^9, 3.688768030798649*^9, 3.688771402624337*^9, 
+  3.688771626799361*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -163,7 +164,7 @@ Cell[BoxData[
    3.68876291328448*^9, 3.68876293667338*^9}, {3.688763970172818*^9, 
    3.688763987134707*^9}, 3.688765607485298*^9, 3.688765657543119*^9, 
    3.688766798492468*^9, 3.6887669323943777`*^9, 3.688768030674038*^9, 
-   3.6887715044435883`*^9}]
+   3.6887715044435883`*^9, 3.688771626858008*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -197,7 +198,8 @@ Cell[BoxData[
     RowBox[{"cVector", "[", "2", "]"}]}]}], "}"}]], "Output",
  CellChangeTimes->{3.688765476008861*^9, 3.6887665715250893`*^9, 
   3.688766633943677*^9, 3.688766798664248*^9, 3.6887669325613947`*^9, 
-  3.688768030848065*^9, 3.68877067626058*^9, 3.688771534527863*^9}]
+  3.688768030848065*^9, 3.68877067626058*^9, 3.688771534527863*^9, 
+  3.688771626880307*^9}]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -292,7 +294,7 @@ Cell[BoxData["\<\"/Users/Matt/project_code/Motor_Freedom/tools/pointToMT_\
 formulae.txt\"\>"], "Output",
  CellChangeTimes->{{3.6887629134056187`*^9, 3.688762936915783*^9}, 
    3.6887639872949343`*^9, 3.6887667988245487`*^9, 3.6887669326629877`*^9, 
-   3.6887680309129047`*^9}]
+   3.6887680309129047`*^9, 3.688771626959546*^9}]
 }, Open  ]]
 },
 WindowSize->{808, 911},
@@ -314,21 +316,21 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 1080, 31, 75, "Input"],
-Cell[1663, 55, 2490, 74, 138, "Output"]
+Cell[1663, 55, 2515, 75, 138, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4190, 134, 584, 14, 32, "Input"],
-Cell[4777, 150, 658, 15, 39, "Output"]
+Cell[4215, 135, 584, 14, 32, "Input"],
+Cell[4802, 151, 680, 15, 39, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[5472, 170, 799, 16, 32, "Input"],
-Cell[6274, 188, 468, 11, 32, "Output"]
+Cell[5519, 171, 799, 16, 32, "Input"],
+Cell[6321, 189, 493, 12, 32, "Output"]
 }, Open  ]],
-Cell[6757, 202, 667, 17, 75, "Input"],
-Cell[7427, 221, 2529, 62, 201, "Input"],
+Cell[6829, 204, 667, 17, 75, "Input"],
+Cell[7499, 223, 2529, 62, 201, "Input"],
 Cell[CellGroupData[{
-Cell[9981, 287, 64, 1, 32, "Input"],
-Cell[10048, 290, 276, 4, 32, "Output"]
+Cell[10053, 289, 64, 1, 32, "Input"],
+Cell[10120, 292, 298, 4, 32, "Output"]
 }, Open  ]]
 }
 ]
