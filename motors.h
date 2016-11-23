@@ -278,14 +278,14 @@ char repeat_number[100];
 double trash;
 
 //strings to use for filnames and lines read in
-char paramFileName[100], tmpString[100], runName[100], blah[100];
+char paramFileName[100], MTparamFileName[100], tmpString[100], runName[100], blah[100];
 char centerlocsName[100], headName[100], summaryName[100], forcesName[100];
 
 // input/output files
 //optional output files
 FILE *fCenterLocs, *fHead, *fForces;
 //input parameters file
-FILE *fParams;
+FILE *fParams,*fMTParams;
 //basic summary output file
 FILE *fSummary;
 //variable

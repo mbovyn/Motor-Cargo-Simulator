@@ -24,8 +24,6 @@ void getInputParams( void )
       fgets(tmpString, 100, fParams);
     }
 
-
-
     //motor parameters
 
     fgets(tmpString, 100, fParams);
@@ -117,33 +115,11 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf", blah,&kcMT);
 
-    fgets(tmpString, 100, fParams);
-    fgets(tmpString, 100, fParams);
-
-    //the parameters of each MT
-    for(i=0;i<n_MTs;i++){
-        fgets(tmpString, 100, fParams);
-        sscanf(tmpString,"(%lf %lf %lf) (%lf %lf %lf) %lf",
-            &MTpoint[i][0],&MTpoint[i][1],&MTpoint[i][2],
-            &MTvec[i][0],&MTvec[i][1],&MTvec[i][2],
-            &R_MT[i]);
-    }
-
-    //set offset if one is input
-    if(!isnan(z_MT_offset)){
-        MTpoint[0][2]+=z_MT_offset;
-    }
-
-    //print out what we have
-    if(verboseTF>2){
-        printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
-        for(i=0;i<n_MTs;i++){
-            printf("(%g,%g,%g) (%g,%g,%g) %g\n",
-            MTpoint[i][0],MTpoint[i][1],MTpoint[i][2],
-            MTvec[i][0],MTvec[i][1],MTvec[i][2],
-            R_MT[i]);
-        }
-    }
+    // fgets(tmpString, 100, fParams);
+    // fgets(tmpString, 100, fParams);
+    // fgets(tmpString, 100, fParams);
+    // fgets(tmpString, 100, fParams);
+    // fgets(tmpString, 100, fParams);
 
     //make sure we have the right values
     //printf("Read in motor numbers as %ld %ld\n",N[0],N[1]);
@@ -395,5 +371,46 @@ void getInputParams( void )
 
     //close file
     fclose(fParams);
+
+    //Read in MT params from MTparams file
+
+    //open the file
+    strcpy(MTparamFileName,runName);
+    strcat(MTparamFileName,"_MT_params");
+    strcat(MTparamFileName,".txt");
+    fMTParams = fopen(MTparamFileName, "r");
+
+    //skip the header lines
+    for(int n_lines=1;n_lines<=5;n_lines++)
+    {
+      fgets(tmpString, 100, fMTParams);
+    }
+
+    //the parameters of each MT
+    for(i=0;i<n_MTs;i++){
+        fgets(tmpString, 100, fMTParams);
+        sscanf(tmpString,"(%lf %lf %lf) (%lf %lf %lf) %lf",
+            &MTpoint[i][0],&MTpoint[i][1],&MTpoint[i][2],
+            &MTvec[i][0],&MTvec[i][1],&MTvec[i][2],
+            &R_MT[i]);
+    }
+
+    //set offset if one is input
+    if(!isnan(z_MT_offset)){
+        MTpoint[0][2]+=z_MT_offset;
+    }
+
+    //print out what we have
+    if(verboseTF>2){
+        printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
+        for(i=0;i<n_MTs;i++){
+            printf("(%g,%g,%g) (%g,%g,%g) %g\n",
+            MTpoint[i][0],MTpoint[i][1],MTpoint[i][2],
+            MTvec[i][0],MTvec[i][1],MTvec[i][2],
+            R_MT[i]);
+        }
+    }
+
+    fclose(fMTParams);
 
 }

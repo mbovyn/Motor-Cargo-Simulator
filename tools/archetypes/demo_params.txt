@@ -1,7 +1,7 @@
 //
 // example parameter file
 //  
-// C program reads this in line by line, so adding new lines will break it
+// 
 // 
 // 
 // 
@@ -40,16 +40,14 @@ eta     8.9E-3 //Dynamic viscosity of surrounding fluid (10x water) 10*8.9E-4
 
 //Microtubule Parameters
 
-z_MT_offset  0    //z location of the MT is -R-offset
-y_MT         0    //y location of the MT 0
-R_MT         .012 //radius of the MT .012
-kcMT         400  //steric spring to keep cargo out of MT (pN/micron) 400
+n_MTs   1    // number of MTs in simulation
+kcMT    400  //steric spring to keep cargo out of MT (pN/micron) 400
 
 //Keyword Arguments------------------------------------------------------------
 
 //Motor Location
 
-InitialLocations 3 0 0
+InitialLocations 4 0 0
 /*
 1: 
 2: LocationsRandom
@@ -66,7 +64,7 @@ set second parameter to 1 to set a kin at bottom, 2 for dyn, 3 for kin on top, 4
 third parameter used to pass in angle (degrees)
  */
 
-MotorDiffusion 5
+MotorDiffusion 4
 /*
 1: no drag - Diffuse all motors
 2: no drag - Only diffuse non-attached motors
@@ -82,7 +80,7 @@ MotorDiffusion 5
 
 //Interaction of motors with MT
 
-InitialBinding 3 .2
+InitialBinding 2 .2
 /*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -96,7 +94,7 @@ InitialBinding 3 .2
 10:
  */
 
-Binding 2 .5
+Binding 1 .5
 /*
 1: set given binding rate if in range
 2: motors don’t bind
@@ -110,7 +108,7 @@ Binding 2 .5
 10:
  */
 
-Unbinding 3
+Unbinding 1
 /*
 1: Ambarish Unbinding
 2: unbind at constant rate eps_0
@@ -206,7 +204,7 @@ ExternalTorque 1 0 0 100
 
 */
 
-UseSteric 0
+UseSteric 1
 /*
 1: Use steric force
 0: Don’t use steric force
@@ -216,7 +214,7 @@ Note: steric force spring constant specified in kcMT
 
 //Output
 
-ReturnDetails 2 0 1
+ReturnDetails 2 1 0
 /* create text files with records of anchor and head locations
 0: Don’t return any details during simulation
 1: Return details only when something important happens (step, attachment, etc.)
@@ -236,13 +234,13 @@ Not implemented
 */
 
 //Simulation end conditions (1=yes,0=no)
-RequireAttached 0
+RequireAttached 1
 StopOnMotor2Attach 0
 StopOnAllAttached 0
 StopOnStep 0              //0 for don’t stop, otherwise enter step
 StopOnTime 0              //0 for don’t stop, otherwise enter time
 StopOnDistance 0          //0 for don’t stop, otherwise enter distance in microns
-StopBelowThetaC 1 -.74 //0 for don’t stop, otherwise elevation in radians -pi/2 to pi/2
+StopBelowThetaC 0 0 //0 for don’t stop, otherwise elevation in radians -pi/2 to pi/2
 
 //debugging
 dt_override 0 //set this to 0 for no override, otherwise overrides set dt
