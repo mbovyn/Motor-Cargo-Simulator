@@ -1,0 +1,248 @@
+//
+// example parameter file
+//  
+// C program reads this in line by line, so adding new lines will break it
+// 
+// 
+// 
+
+//Input parameters------------------------------------------------------------
+
+//Motor Parameters
+//entry 1 for kinesins, entry 2 for dynein
+
+N      1 0 //number of motors
+
+//Muller Sim
+F_s    5 5 //stall force (pN) 5
+F_d    4 4 //detachment force (pN) 4
+eps_0  1 1 //base unbinding rate (1/sec) 1
+pi_0   5 5 //base binding rate (1/sec) 5
+v_f    1 -1 //unloaded forward velocity (microns/s) 1
+v_b    -.006 .006 //max backward velocity (microns/s) .006
+
+//Kunwar Sim
+a         1.07 1.07  //superstall parameter 1.07
+b         .186 .186  //superstall parameter .186
+w         1 2        //force-velocity curve exponent 2
+L         .1 .1      //motor spring rest length (microns) .1
+k_m       320 320    //motor spring constant (pN/micron) 320
+step_size .008 -.008  //length of a motor step (microns) .008
+
+//Bovyn Sim
+D_m       3 3   //diffusion constant of the anchor (microns^2/s) 3-5
+
+//Cargo Parameters
+
+center  0 0 0 //initial location of center of Cargo [0 0 0]
+R       .25   //Cargo Radius (microns) .25
+eta     8.9E-3 //Dynamic viscosity of surrounding fluid (10x water) 10*8.9E-4
+
+//Microtubule Parameters
+
+z_MT_offset  0    //z location of the MT is -R-offset
+y_MT         0    //y location of the MT 0
+R_MT         .012 //radius of the MT .012
+kcMT         400  //steric spring to keep cargo out of MT (pN/micron) 400
+
+//Keyword Arguments------------------------------------------------------------
+
+//Motor Location
+
+InitialLocations 3 0 0
+/*
+1: 
+2: LocationsRandom
+3: LocationsTop
+4: LocationsBottom
+5: 
+6: 
+7: Start at a defined elevation (specify in 3rd input in degrees)
+8:
+9:
+10:
+
+set second parameter to 1 to set a kin at bottom, 2 for dyn, 3 for kin on top, 4 for din
+third parameter used to pass in angle (degrees)
+ */
+
+MotorDiffusion 5
+/*
+1: no drag - Diffuse all motors
+2: no drag - Only diffuse non-attached motors
+3: deterministic
+4: full stochastic
+5: full treatment - cargo diffusion (rot and trans) set to 0
+6: full treatment - cargo rot and anchor diffusion set to 0
+7: full treatment - cargo trans and anchor diffusion set to 0
+8:
+9:
+10:
+ */
+
+//Interaction of motors with MT
+
+InitialBinding 3 .2
+/*
+1: Bind all in range
+2: Bind only 1 Kin
+3: Don’t bind
+4: bind 1 dyn
+5:
+6:
+7:
+8:
+9:
+10:
+ */
+
+Binding 2 .5
+/*
+1: set given binding rate if in range
+2: motors don’t bind
+3: always bind if in range
+4: bind if below theta_c (for MFP test)
+5: set binding rate if between L and inner limit (fraction*L)
+6:
+7:
+8:
+9:
+10:
+ */
+
+Unbinding 3
+/*
+1: Ambarish Unbinding
+2: unbind at constant rate eps_0
+3: NoUnbinding
+4:
+5: 
+6:
+7:
+8:
+9:
+10:
+ */
+
+Stepping 2 999999999
+/*
+1: Step at rate determined by unloaded velocity
+2: Stepping rate depends on force (Ambarish)
+3: no stepping
+4: override stepping rate with second input (999999999 for always step)
+5: 
+6:
+7:
+8:
+9:
+10:
+ */
+
+InitialNucleotideBehavior 1
+/*
+1: All start ready
+2: All start not ready
+3: 
+4:
+5: 
+6:
+7:
+8:
+9:
+10:
+ */
+
+NucleotideBehavior 0 300 300
+/*
+1: No nucleotide exchange (explicit)
+2: set constant nucleotide exchange rate (give in arguments 2 and 3)
+3: 
+4:
+5: 
+6:
+7:
+8:
+9:
+10:
+second and third arguments are nucleotide exchange rates
+if first argument is set to 0, nucleotide exchange is ignored
+ */
+
+//Bound motor behavior
+
+MotorLoading 1
+/*
+1: Load by stretch of necks
+2: Force always 0
+*/
+
+//Cargo Behavior
+
+CargoBehavior 1
+/*
+1: Cargo moves normally
+2: On rails - cargo can’t move in z
+3: stuck - cargo can’t move at all
+4:
+5: 
+6:
+7:
+8:
+9:
+10:
+ */
+
+ExternalForce 1 1 0 0
+/*
+1: no external forces
+2: external force given by next three values (x y z)
+3: force given by optical trap (not implemented yet)
+*/
+
+ExternalTorque 1 0 0 100
+/*
+1: no external torque
+2: external torque given by next three values (x y z)
+
+*/
+
+UseSteric 0
+/*
+1: Use steric force
+0: Don’t use steric force
+
+Note: steric force spring constant specified in kcMT
+/*
+
+//Output
+
+ReturnDetails 2 0 1
+/* create text files with records of anchor and head locations
+0: Don’t return any details during simulation
+1: Return details only when something important happens (step, attachment, etc.)
+2: Return details every step
+3:
+4:
+5:
+
+set second value to 1 to return file with head locations, 0 for no
+set third value to 1 to return file with forces, 0 for no
+*/
+
+ReturnFinalState 1
+/*
+Not implemented
+
+*/
+
+//Simulation end conditions (1=yes,0=no)
+RequireAttached 0
+StopOnMotor2Attach 0
+StopOnAllAttached 0
+StopOnStep 0              //0 for don’t stop, otherwise enter step
+StopOnTime 0              //0 for don’t stop, otherwise enter time
+StopOnDistance 0          //0 for don’t stop, otherwise enter distance in microns
+StopBelowThetaC 1 -.74 //0 for don’t stop, otherwise elevation in radians -pi/2 to pi/2
+
+//debugging
+dt_override 0 //set this to 0 for no override, otherwise overrides set dt
