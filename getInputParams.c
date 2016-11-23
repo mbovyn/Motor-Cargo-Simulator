@@ -115,12 +115,6 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf", blah,&kcMT);
 
-    // fgets(tmpString, 100, fParams);
-    // fgets(tmpString, 100, fParams);
-    // fgets(tmpString, 100, fParams);
-    // fgets(tmpString, 100, fParams);
-    // fgets(tmpString, 100, fParams);
-
     //make sure we have the right values
     //printf("Read in motor numbers as %ld %ld\n",N[0],N[1]);
     //printf("Read in kcMT as %lf\n",kcMT);

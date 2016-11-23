@@ -6,8 +6,8 @@ int simulate_cargo()
     // Hybrid fixed time step / gillespie with stochastic steppers
 
     // Setup
-    if (verboseTF>2)
-        printf("Performing setup step\n");
+    if (verboseTF>4)
+        printf("\nPerforming setup step\n\n");
 
     //set current center to center that was passed in
     for(i=0;i<3;i++)
@@ -19,6 +19,7 @@ int simulate_cargo()
         // set initial locations of motors -------------------------------------
         initiallocations();
         //sets locs
+
 
         // set initial binding status ---------------------------------------
         initialbinding();
@@ -43,6 +44,49 @@ int simulate_cargo()
     calculate_forces();
     set_brownian_forces_to_0();
 
+    if(verboseTF>4){
+        printf("The initial locations of the anchors are set to:\n");
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                printf("    type%dmotor%d: (%g,%g,%g)\n",
+                    m,n,locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+            }
+        }
+
+        printf("The initial binding state of the motors is:\n");
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                printf("    type%dmotor%d: %d\n",
+                    m,n,bound[m][n]);
+            }
+        }
+
+        printf("The initial locations of the heads are set to:\n");
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                printf("    type%dmotor%d: (%g,%g,%g)\n",
+                    m,n,head[m][n][0],head[m][n][1],head[m][n][2]);
+            }
+        }
+
+        printf("The initial forces exerted by the motors are:\n");
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                printf("    type%dmotor%d: (%g,%g,%g) with magnitude %g\n",
+                    m,n,
+                    F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2],
+                    F_m_mag[m][n]);
+            }
+        }
+
+        printf("The initial forces on the cargo are:\n");
+        printf("    External Force: (%g,%g,%g)\n",
+            Ftrap[0],Ftrap[0],Ftrap[0]);
+        printf("    External Torque: (%g,%g,%g)\n",
+            TorqeExt[0],TorqeExt[0],TorqeExt[0]);
+
+    }//end of super verbose display
+
     // -------------------------------------------------------------------------
     // ---------------------&&&&&&&&&&&&&&&&&&&&&&&&&---------------------------
     //                             Simulate!
@@ -51,8 +95,8 @@ int simulate_cargo()
 
     //simulate forward in time
 
-    if (verboseTF>2)
-        printf("Beginning Simulation\n");
+    if (verboseTF>4)
+        printf("\nBeginning Simulation\n\n");
 
     //set initial values
     step   = 1;
@@ -96,6 +140,49 @@ int simulate_cargo()
             //uses bound, sets exchange_rate, exchange_possible
 
         } //end of 2nd loop over motor types _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
+
+        if(verboseTF>4){
+
+            printf("At step %ld -----------------------------------------------\n",step);
+            printf("The forces exerted by the motors are:\n");
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    printf("    type%dmotor%d: (%g,%g,%g) with magnitude %g\n",
+                        m,n,
+                        F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2],
+                        F_m_mag[m][n]);
+                }
+            }
+
+            printf("The stepping status was found to be:\n");
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    printf("    type%dmotor%d: step possible was %d and the rate was %g\n",
+                        m,n,step_possible[m][n],step_rate[m][n]);
+                }
+            }
+
+            printf("The binding status was found to be:\n");
+            for (k=0;k<n_MTs;k++){
+                printf("    For MT %d:\n",k+1);
+                for (m=0;m<2;m++){
+                    for(n=0;n<N[m];n++){
+                        printf("    type%dmotor%d: bind possible was %d and the rate was %g\n",
+                            m,n,bind_possible[m][n][k],bind_rate[m][n][k]);
+                    }
+                }
+            }
+
+            printf("The unbinding status was found to be:\n");
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    printf("    type%dmotor%d: unbind possible was %d and the rate was %g\n",
+                        m,n,unbind_possible[m][n],unbind_rate[m][n]);
+                }
+            }
+
+
+        }//end of super verbose display
 
         //----------------------------------------------------------------------
         //// Gillespie
@@ -199,9 +286,9 @@ int simulate_cargo()
         if(hit_action){
             if (hit_action == 1) // stepping
             {
-                head[hit_m][hit_n][0] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][0];
-                head[hit_m][hit_n][1] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][1];
-                head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]][2];
+                head[hit_m][hit_n][0] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][0];
+                head[hit_m][hit_n][1] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][1];
+                head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
 
                 if(verboseTF>2){
                     printf("on step, t was %g force was %g pN and rate was %g per second\n",
@@ -283,7 +370,7 @@ int simulate_cargo()
             Foundbound=0;
             for(m=0;m<2 && !Foundbound;m++){
                 for(n=0;n<N[m] && !Foundbound;n++){
-                    if (bound[m][n] == 1){
+                    if (bound[m][n]){
                         prematureReturn = 0;
                         Foundbound=1;
                     }

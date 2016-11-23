@@ -51,6 +51,12 @@ int main( int argc, char *argv[] )
     if(argv[4]) // Verbose Output
         verboseTF = atoi(argv[4]);
 
+    if (verboseTF>4){
+        printf("\n-------------------------------------------------\n");
+        printf("\nBeginning new run\n\n");
+        printf("-------------------------------------------------\n\n");
+    }
+
     // Intialize random number generator (twister.c)
     RanInit(0); //can set RanInit(1) to use same seed every time
     if(verboseTF>0){
@@ -91,6 +97,11 @@ int main( int argc, char *argv[] )
     }
 
     // load parameters
+
+    if (verboseTF>4)
+        printf("\nReading in Parameters\n\n");
+
+
     getInputParams();
     //Print out last thing we read in
     //this makes sure everything was read in correctly

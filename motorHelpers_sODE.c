@@ -335,6 +335,11 @@ void evaluate_steric(){
     for(i=0;i<3;i++){
         Fsteric[i]=0;
     }
+
+    if(verboseTF>4){
+        printf("The steric force was found to be:\n");
+    }
+
     //find steric force for each MT
     for(k=0;k<n_MTs;k++){
         pointToMTdist(center[0],center[1],center[2],k);
@@ -350,12 +355,26 @@ void evaluate_steric(){
                 Fsterick[i]=0;
             }
         }
+
+        if(verboseTF>4){
+            printf("    MT %d: (%g,%g,%g)\n",
+                k+1,Fsterick[0],Fsterick[1],Fsterick[2]);
+
+        }
+
         //add up forces from each MT into one total steric force
         for(i=0;i<3;i++){
             Fsteric[i]+=Fsterick[i];
         }
+
+    }// loop over MTs
+
+    if(verboseTF>4){
+        printf("    Total: (%g,%g,%g)\n",
+            Fsteric[0],Fsteric[1],Fsteric[2]);
     }
-}
+
+} //evaluate_steric
 
 void calculate_forces()
 {
@@ -409,14 +428,13 @@ void calculate_forces()
                 for(i=0;i<3;i++){
                     FmTangential[nn][i]=v_cart[i];
                 }
-                if(verboseTF>4){
-                    printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
-                    printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                    printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
-                    printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
-                    printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
-                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
-                }
+
+                // printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
+                // printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                // printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
+                // printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+                // printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+                // printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
 
             }
             else{

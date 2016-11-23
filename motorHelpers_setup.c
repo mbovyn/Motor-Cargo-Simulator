@@ -152,14 +152,20 @@ void initiallocations(){
 
 void vecToClosestPointOnMT(double x,double y,double z, int MTnum){
     //from mathematica file
-    cVector[0] = (1 - R_MT[MTnum])*(-x + MTpoint[MTnum][0]) - MTvec[MTnum][0]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]);
-    cVector[1] = (1 - R_MT[MTnum])*(-y + MTpoint[MTnum][1]) - MTvec[MTnum][1]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]);
-    cVector[2] = (1 - R_MT[MTnum])*(-z + MTpoint[MTnum][2]) - MTvec[MTnum][2]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]);
+    cVector[0] = (-x + MTpoint[MTnum][0] - MTvec[MTnum][0]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]))*(1 - R_MT[MTnum]/sqrt(pow(x - MTpoint[MTnum][0] + MTvec[MTnum][0]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(y - MTpoint[MTnum][1] + MTvec[MTnum][1]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(z - MTpoint[MTnum][2] + MTvec[MTnum][2]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2)));
+    cVector[1] = (-y + MTpoint[MTnum][1] - MTvec[MTnum][1]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]))*(1 - R_MT[MTnum]/sqrt(pow(x - MTpoint[MTnum][0] + MTvec[MTnum][0]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(y - MTpoint[MTnum][1] + MTvec[MTnum][1]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(z - MTpoint[MTnum][2] + MTvec[MTnum][2]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2)));
+    cVector[2] = (-z + MTpoint[MTnum][2] - MTvec[MTnum][2]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]))*(1 - R_MT[MTnum]/sqrt(pow(x - MTpoint[MTnum][0] + MTvec[MTnum][0]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(y - MTpoint[MTnum][1] + MTvec[MTnum][1]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2) + pow(z - MTpoint[MTnum][2] + MTvec[MTnum][2]*((-x + MTpoint[MTnum][0])*MTvec[MTnum][0] + (-y + MTpoint[MTnum][1])*MTvec[MTnum][1] + (-z + MTpoint[MTnum][2])*MTvec[MTnum][2]),2)));
+
+    // printf("Vec from (%g,%g,%g) to MT%d at (%g,%g,%g): (%g,%g,%g)\n",
+    // x,y,z,MTnum,MTpoint[MTnum][0],MTpoint[MTnum][1],MTpoint[MTnum][2],cVector[0],cVector[1],cVector[2]);
 }
 
 void pointToMTdist(double x,double y,double z, int MTnum){
     vecToClosestPointOnMT(x,y,z,MTnum);
     MTdist = sqrt(pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2));
+
+    // printf("Distance from (%g,%g,%g) to MT%d at (%g,%g,%g): %g\n",
+    // x,y,z,MTnum,MTpoint[MTnum][0],MTpoint[MTnum][1],MTpoint[MTnum][2],MTdist);
 }
 
 void findMTdist(){
@@ -170,6 +176,7 @@ void findMTdist(){
 
             //for each MT, find the distance from the anchor
             for(k=0;k<n_MTs;k++){
+                // printf("Calling pointtoMTdist from findMTdist\n");
                 pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
                 if (MTdist<=L[m]) {
                     bind_possible[m][n][k]=1;
@@ -304,7 +311,9 @@ void initialbinding(){
     //should later change to projection from center of cargo?
     for(n=0;n<N[m];n++){
         if(bound[m][n]){
-            closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],bound[m][n]);
+            // printf("Calling closestPoint from head setting\n");
+            closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],bound[m][n]-1);
+            //printf("cVector is \n", );
             for(i=0;i<3;i++){
                 head[m][n][i]=cPoint[i];
             }
@@ -317,12 +326,12 @@ void initialbinding(){
     }
 
     if (bound[0][0] && initial_head){
-        closestPointOnMT(locs[0][0][0],locs[0][0][1],locs[0][0][2],bound[0][0]);
+        closestPointOnMT(locs[0][0][0],locs[0][0][1],locs[0][0][2],bound[0][0]-1);
         head[0][0][0]=cPoint[0]+R+initial_head;
         head[0][0][1]=cPoint[1];
         head[0][0][2]=cPoint[2];
     } else if(bound[1][0] && initial_head) {
-        closestPointOnMT(locs[1][0][0],locs[1][0][1],locs[1][0][2],bound[1][0]);
+        closestPointOnMT(locs[1][0][0],locs[1][0][1],locs[1][0][2],bound[1][0]-1);
         head[1][0][0]=cPoint[0]+R+initial_head;
         head[1][0][1]=cPoint[1];
         head[1][0][2]=cPoint[2];
@@ -335,6 +344,9 @@ void closestPointOnMT(double x,double y,double z,int MTnum){
     cPoint[0] = x + cVector[0];
     cPoint[1] = y + cVector[1];
     cPoint[2] = z + cVector[2];
+
+    // printf("Point from (%g,%g,%g) closest to MT%d at (%g,%g,%g): (%g,%g,%g)\n",
+    // x,y,z,MTnum,MTpoint[MTnum][0],MTpoint[MTnum][1],MTpoint[MTnum][2],cPoint[0],cPoint[1],cPoint[2]);
 }
 
 void initialnucleotide(){

@@ -12,7 +12,7 @@
 filename = [results_prefix '_params.txt'];
 delimiter = ' ';
 startRow = [30,33];
-endRow = [31,33];
+endRow = [31,36];
 
 %% Format string for each line of text:
 %   column2: double (%f)
