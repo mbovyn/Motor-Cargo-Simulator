@@ -349,11 +349,18 @@ void getInputParams( void )
         //StopBelowThetaC=1;
     }
 
-    //debugging
+    //success condition
 
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d %d",blah,&success,&success_mode);
+
+    //debugging
+
+    for(int n_lines=1;n_lines<=15;n_lines++)
+      fgets(tmpString, 100, fParams);
+
     sscanf(tmpString,"%s %lf",blah,&dt_override);
 
     if(dt_override){
@@ -361,6 +368,18 @@ void getInputParams( void )
         if(verboseTF>0){
             printf("Overriding dt. Now %g\n",dt_override);
         }
+    }
+
+    //check bit
+
+    fgets(tmpString, 100, fParams);
+    fgets(tmpString, 100, fParams);
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&check_bit);
+
+    if(check_bit!=732){
+        printf("\n\n\nError! Exiting!\n\n\nCheck bit incorrect, mismatch between paramers file and read in code\n");
+        exit(0);
     }
 
     //close file

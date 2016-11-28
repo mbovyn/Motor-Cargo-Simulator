@@ -26,6 +26,10 @@ double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
 double theta_c;
+int success, success_mode;
+
+// check
+int check_bit;
 
 
 /* -------------------------------------------------------------------

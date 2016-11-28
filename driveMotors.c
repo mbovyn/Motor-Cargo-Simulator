@@ -123,8 +123,23 @@ int main( int argc, char *argv[] )
     for(j=0;j<repeats;j++){
         result=simulate_cargo();
         //count up number of results we've labeled as success for this trial
-        if(result==2){
-            successes++;
+        if(success_mode==1){
+            switch(success){
+                case 1:
+
+                    if(bound[0][0]){
+                        successes++;
+                    }
+
+                    break;
+
+                //default:
+                    //do nothing
+            }
+        }else{
+            if(result==success){
+                successes++;
+            }
         }
     }
 
@@ -132,7 +147,21 @@ int main( int argc, char *argv[] )
 
     //print the final score
     if(verboseTF>0){
-        printf("There were %d successes in %d trials\n",successes,repeats );
+        printf("There were %d successes in %d trials, where success is ",successes,repeats );
+        if(success_mode==1){
+            switch(success){
+                case 0:
+                    printf("not possible\n");
+                    break;
+                case 1:
+                    printf("type0motor0 being bound at the last step\n");
+                    break;
+                default:
+                    printf("not defined\n");
+            }
+        }else{
+            printf("stopping by condition %d\n",success);
+        }
     }
 
     return 0;
