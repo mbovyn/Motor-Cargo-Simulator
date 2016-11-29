@@ -121,7 +121,7 @@ int main( int argc, char *argv[] )
     //call simulation function in loop
 
     for(j=0;j<repeats;j++){
-        
+
         result=simulate_cargo();
 
     }

@@ -315,6 +315,13 @@ int simulate_cargo()
             }
             else if (hit_action == 3) // detachment
             {
+
+                if(verboseTF>2){
+                    printf("on unbinding of type%ldmotor%ld from MT%d, t was %g, force was %g pN and rate was %g per second\n",
+                        hit_m,hit_n,bound[hit_m][hit_n],t_inst,F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
+
+                }
+
                 //set motor to no longer being bound
                 bound[hit_m][hit_n] = 0;
 
@@ -328,11 +335,7 @@ int simulate_cargo()
                     nuc_ready[hit_m][hit_n]=0;
                 }
 
-                if(verboseTF>2){
-                    printf("on unbinding, t was %g, force was %g pN and rate was %g per second\n",
-                        t_inst,F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
 
-                }
             }
             else if(hit_action==4){ //nucleotide exchange
                 nuc_ready[hit_m][hit_n]=1;
@@ -365,7 +368,7 @@ int simulate_cargo()
 
         //find if we've hit any of the end conditions
 
-        if (Requirebound){ // check if there are no motors bound
+        if (Requirebound || MultiMTassay){ // check if there are no motors bound
             prematureReturn = 1;
             Foundbound=0;
             for(m=0;m<2 && !Foundbound;m++){
@@ -427,6 +430,30 @@ int simulate_cargo()
             }
         }
 
+        if(MultiMTassay){
+
+            //above, we've required at least one motor to be bound
+
+            //pass if we make it past the point where a motor can attach to the second MT
+            if(center[0]>MTpoint[1][0]+R+L[0]){
+                prematureReturn=8;
+            }
+
+            //switch if there is a motor bound to the second MT but none to the first
+            if(prematureReturn!=1){
+                prematureReturn = 9;
+                Foundbound=0;
+                for(m=0;m<2 && !Foundbound;m++){
+                    for(n=0;n<N[m] && !Foundbound;n++){
+                        if (bound[m][n]==1){
+                            prematureReturn = 0;
+                            Foundbound=1;
+                        }
+                    }
+                }
+            }
+        }
+
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     //--------------------------------------------------------------------------
@@ -459,6 +486,12 @@ int simulate_cargo()
                 break;
             case 7:
                 printf("below theta_c\n");
+                break;
+            case 8:
+                printf("pass condition for MT switching assay\n");
+                break;
+            case 9:
+                printf("switch condition for MT switching assay\n");
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");

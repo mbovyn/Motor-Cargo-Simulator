@@ -210,10 +210,12 @@ void initialbinding(){
             for(n=0;n<N[m];n++){
                 for(k=0;k<n_MTs;k++){
                     //set bound to MT number
-                    bound[m][n]=(k+1)*bind_possible[m][n][k];
+                    if(!bound[m][n]){
+                        bound[m][n]=(k+1)*bind_possible[m][n][k];
+                    }
+                    //Note: this will always bind the motor to the first MT if there are multiple MTs in range
                 }
             }
-            //Note: this will always bind the motor to the last MT if there are multiple MTs in range
 
             break;
 

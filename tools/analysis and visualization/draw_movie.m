@@ -7,7 +7,8 @@ set(0,'defaultfigurecolor','w')
 
 %take in parameters from the files read by the simulation
 %only take it in if we haven't done it already
-if ~exist('R','var')
+if ~exist('N','var')
+    disp('Importing Parameters')
     %2 entry parameters
     run([analysispath '/import_params2.m'])
     %1 entry parameters
@@ -18,6 +19,9 @@ end
 
 %take in the summary the simulation writes if we haven't yet
 if ~exist('exit_cond','var')
+    
+    disp('Importing Summary')
+    
     run([analysispath '/import_summary.m'])
     
     if disp_theta_c==0
@@ -31,7 +35,9 @@ end
 
 %take in the location data written by the simulation
 %only if it hasn't already been read in
-if ~exist('locs','var')
+if ~exist('loc_rec','var')
+    
+    disp('Importing locs')
     
     run([analysispath '/import_locs.m'])
         
@@ -42,10 +48,6 @@ if ~exist('locs','var')
     else
         disp('No file to read heads from')
     end
-    
-    if isnan(skip_frames)
-        skip_frames=ceil(size(loc_rec,2)/frames);
-    end
 
 end
 
@@ -54,6 +56,7 @@ end
 %take in the force data written by the simulation
 %only if we're going to use it and it hasn't already been read in
 if draw_forces==true && ~exist('Fext','var')
+    disp('Importing Forces')
     run([analysispath '/import_forces.m'])
 end
 
@@ -102,6 +105,8 @@ end
 %--------------------------------------------------------------------------
 
 if ~exist('attach_rec','var')
+    
+    disp('Creating attach_rec')
 
     if ~exist('head_rec','var')
         head_rec=cell(size(loc_rec));
@@ -153,6 +158,8 @@ if ~exist('tan_scaling','var')
     %scale forces on cargo to cargo radius
     %and forces on anchor to motor length
     if draw_forces==true
+        
+        disp('Creating force scaling')
 
         mags_ext=sqrt(sum(Fext.*Fext,2));
         ext_scaling=R/median(mags_ext(mags_ext>1E-8));
@@ -184,6 +191,10 @@ if ~exist('tan_scaling','var')
 
 end
 
+if isnan(skip_frames)
+    skip_frames=ceil(size(loc_rec,2)/frames);
+end
+
 %find the final frame to draw from the given inputs
 final_frame=min([start_frame+frames*skip_frames size(center,1)]);
 
@@ -191,31 +202,17 @@ if start_frame+frames*skip_frames > size(center,1)
     loop_ts=[start_frame:skip_frames:final_frame length(t_arr)];
 else
     loop_ts=start_frame:skip_frames:final_frame;
-end
- 
+end   
+
 %loop over each frame we want to draw
 for t=loop_ts
-    
-    %plot vesicle
+    %% plot vesicle
     h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
     
-    
+    %% initial axis properites
     hold on
-    axis equal
     
-    set(gca,'color',[.95 .95 .95])
-    
-    axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)])
-%     buf=R+.1;
-%     axis([center(t,1)-buf center(t,1)+buf ...
-%         center(t,2)-buf center(t,2)+buf ...
-%         center(t,3)-buf center(t,3)+buf])
-    
-    if t==start_frame && exist('init_view','var')
-        view(init_view(1),init_view(2));
-    end
-    
-    %motor anchors and heads
+    %% motor anchors and heads
     for m=1:2
         
         %access location information from this time step
@@ -332,7 +329,6 @@ for t=loop_ts
     for i=1:n_MTs
         
         [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
-        axis equal;
         
     end
     
@@ -357,6 +353,8 @@ for t=loop_ts
         
     end
     
+    %% extra display items
+    
     %plot a ring to indicate the location of the critical angle
     %for visualizing mean first passage time test
     if ~isnan(theta_c)
@@ -365,12 +363,21 @@ for t=loop_ts
         plotCircle3D(circle_center,[0 0 1],R*cos(theta_c))
     end
     
+    %     if p.Results.Diagnostics==true
+    % %     if ~isempty(cargo_loc) && t>start_frame
+    % %         if cargo_v(t)>0
+    % %             status='Kinesin (blue) winning, moving (+)';
+    % %         elseif cargo_v(t)<0
+    % %             status='Dynein (red) winning, moving (-)';
+    % %         else
+    % %             status='Not moving';
+    % %         end
+    % %         
+    % %         text(0,0,.7,status,'HorizontalAlignment','center')
+    % %     end
+    %     end
     
-
-    
-    xlabel('x (\mum)')
-    ylabel('y (\mum)')
-    zlabel('z (\mum)')
+    %% plot labels
     
     if Diagnostics>1
         title(sprintf([titlestring '\n Frame ' num2str(t) ', t=' num2str(t_arr(t))]))
@@ -380,35 +387,37 @@ for t=loop_ts
         %display current simulation time
         %text(-.4,.4,.4,['t=' num2str(t_arr(t))])
         
-        title(sprintf([titlestring '\n t=' num2str(t_arr(t))]))
+        title(sprintf([titlestring '\n t=' sprintf('%0.3f',t_arr(t))]))
     else
         title(titlestring)
     end
 
+    xlabel('x (\mum)')
+    ylabel('y (\mum)')
+    zlabel('z (\mum)')
+    
+    
+    %% axis and view properties
+    
+    if t==start_frame && exist('init_view','var')
+        view(init_view(1),init_view(2));
+    end
     
     if ~isnan(theta_c)
         %set view angle
         view(0,0)
     end
     
-%     if p.Results.Diagnostics==true
-% %     if ~isempty(cargo_loc) && t>start_frame
-% %         if cargo_v(t)>0
-% %             status='Kinesin (blue) winning, moving (+)';
-% %         elseif cargo_v(t)<0
-% %             status='Dynein (red) winning, moving (-)';
-% %         else
-% %             status='Not moving';
-% %         end
-% %         
-% %         text(0,0,.7,status,'HorizontalAlignment','center')
-% %     end
-%     end
-    
-    
     if t>start_frame
         view(az,el)
     end
+    
+    axis equal
+    set(gca,'color',[.95 .95 .95])
+    
+    axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
+    
+    %% draw and save, prepare for next frame
     
     drawnow
     

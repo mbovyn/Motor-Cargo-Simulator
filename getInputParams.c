@@ -349,6 +349,9 @@ void getInputParams( void )
         //StopBelowThetaC=1;
     }
 
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&MultiMTassay);
+
     //success condition
 
     fgets(tmpString, 100, fParams);

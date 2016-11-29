@@ -25,6 +25,7 @@ int StopOnStep;
 double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
+int MultiMTassay;
 double theta_c;
 int success, success_mode, trial_success;
 
