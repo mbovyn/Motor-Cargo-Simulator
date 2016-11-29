@@ -439,18 +439,8 @@ int simulate_cargo()
                 prematureReturn=8;
             }
 
-            //switch if there is a motor bound to the second MT but none to the first
-            if(prematureReturn!=1){
-                prematureReturn = 9;
-                Foundbound=0;
-                for(m=0;m<2 && !Foundbound;m++){
-                    for(n=0;n<N[m] && !Foundbound;n++){
-                        if (bound[m][n]==1){
-                            prematureReturn = 0;
-                            Foundbound=1;
-                        }
-                    }
-                }
+            if(center[1]>R+L[0])){
+                prematureReturn=9;
             }
         }
 

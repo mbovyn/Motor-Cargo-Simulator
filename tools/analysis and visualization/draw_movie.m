@@ -144,7 +144,7 @@ if SaveMPEG~=false
     
     M(frames)=struct('cdata',[],'colormap',[]);
 
-    vidObj = VideoWriter(SaveMPEG);
+    vidObj = VideoWriter([localpath '/' SaveMPEG]);
     vidObj.FrameRate=20;
     vidObj.Quality=75;
     
