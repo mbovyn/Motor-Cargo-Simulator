@@ -29,7 +29,7 @@ startRow = 2;
 % For more information, see the TEXTSCAN documentation.
 %formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
-num=10;
+num=11;
 
 piece1=repmat('%f',1,num+3+3*(N(1)+N(2)));
 piece2='%[^\n\r]';
@@ -59,12 +59,14 @@ repeat = dataArray{:,1};
 step = dataArray{:, 2};
 t_arr = dataArray{:, 3};
 exit_cond = dataArray{:, 4};
-D_anchor = dataArray{:, 5};
-eps_0 = dataArray{:, 6};
-pi_0 = dataArray{:, 7};
-offset = dataArray{:, 8};
-R = dataArray{:,9};
-theta_c = dataArray{:,10};
+success = dataArray{:,5};
+success=logical(success);
+D_anchor = dataArray{:, 6};
+eps_0 = dataArray{:, 7};
+pi_0 = dataArray{:, 8};
+offset = dataArray{:, 9};
+R = dataArray{:,10};
+theta_c = dataArray{:,11};
 
 center_final = [dataArray{:, num+1} dataArray{:, num+2} dataArray{:, num+3}];
 % type0motor0_x = dataArray{:, 10};

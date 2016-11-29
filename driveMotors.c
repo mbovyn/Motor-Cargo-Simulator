@@ -121,26 +121,9 @@ int main( int argc, char *argv[] )
     //call simulation function in loop
 
     for(j=0;j<repeats;j++){
+        
         result=simulate_cargo();
-        //count up number of results we've labeled as success for this trial
-        if(success_mode==1){
-            switch(success){
-                case 1:
 
-                    if(bound[0][0]){
-                        successes++;
-                    }
-
-                    break;
-
-                //default:
-                    //do nothing
-            }
-        }else{
-            if(result==success){
-                successes++;
-            }
-        }
     }
 
     finalizeDataCollection();

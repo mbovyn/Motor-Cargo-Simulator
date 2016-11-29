@@ -13,7 +13,6 @@ if ~exist('R','var')
     %1 entry parameters
     run([analysispath '/import_params.m'])
     %MT params
-    %1 entry parameters
     run([analysispath '/import_MT_params.m'])
 end
 
@@ -198,10 +197,9 @@ end
 for t=loop_ts
     
     %plot vesicle
-    [xp,yp,zp]=ellipsoid(center(t,1),center(t,2),center(t,3),R,R,R,n_cargo_surf);
-    h=surf(xp,yp,zp,'edgealpha',.3);
-    alpha(.2)
-    set(h,'FaceColor','y');
+    h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
+    
+    
     hold on
     axis equal
     
@@ -333,39 +331,10 @@ for t=loop_ts
     %% MTs
     for i=1:n_MTs
         
-        xends=[-.15 .5];
-        yends=[-.15 .15];
-        zends=[-.01 .2];
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
+        axis equal;
         
-        n1_vec=(-[xends(1) yends(1) zends(1)]+MTpt{i})./MTvec{i};
-        n1=min(n1_vec(isfinite(n1_vec)));
-        n2_vec=([xends(2) yends(2) zends(2)]-MTpt{i})./MTvec{i};
-        n2=min(n2_vec(isfinite(n2_vec)));
-        
-        end1=MTpt{i}-MTvec{i}*n1;
-        end2=MTpt{i}+MTvec{i}*n2;
-        
-        [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT(i),20,'g',0,.3);
-        
-        hold on
-        axis equal
-        
-%         [zc,yc,xc] = cylinder(R_MT(i));
-%         h_cyl=surf((4*(xc-.5)),yc+y_MT,zc+z_MT,'edgealpha',0.3);
-%         set(h_cyl,'FaceColor','g');
-
-        text(end2(1)+.02*MTvec{i}(1),end2(2)+.02*MTvec{i}(2),end2(3)+.02*MTvec{i}(3)...
-            ,'(+)','FontWeight','bold'...
-            ,'HorizontalAlignment','center','FontSize',16 ...
-            ...%,'VerticalAlignment','bottom')
-            ,'VerticalAlignment','middle')
-        text(end1(1)-.02*MTvec{i}(1),end1(2)-.02*MTvec{i}(2),end1(3)-.02*MTvec{i}(3)...
-            ,'(-)','FontWeight','bold'...
-            ,'FontSize',16 ...
-            ...%,'HorizontalAlignment','right','VerticalAlignment','bottom')
-            ,'HorizontalAlignment','center','VerticalAlignment','middle')
     end
-    
     
     %% if have force vectors, plot out the forces acting on the cargo
     if draw_forces==true

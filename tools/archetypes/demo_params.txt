@@ -1,9 +1,9 @@
 //
-// example parameter file
+// params for testing deterministic drag of cargo
 //  
-// 
-// 
-// 
+// one kinesin with linear force-velocity relationship 
+// small cargo with high membrane viscosity
+// starts attached
 // 
 
 //Input parameters------------------------------------------------------------
@@ -40,7 +40,7 @@ eta     8.9E-3 //Dynamic viscosity of surrounding fluid (10x water) 10*8.9E-4
 
 //Microtubule Parameters
 
-n_MTs   1    // number of MTs in simulation
+n_MTs   2    // number of MTs in simulation
 kcMT    400  //steric spring to keep cargo out of MT (pN/micron) 400
 
 //Keyword Arguments------------------------------------------------------------
@@ -64,7 +64,7 @@ set second parameter to 1 to set a kin at bottom, 2 for dyn, 3 for kin on top, 4
 third parameter used to pass in angle (degrees)
  */
 
-MotorDiffusion 4
+MotorDiffusion 3
 /*
 1: no drag - Diffuse all motors
 2: no drag - Only diffuse non-attached motors
@@ -92,7 +92,7 @@ InitialBinding 2 0
 8:
 9:
 10:
- */ set second argument > 0 to set head forward in x that amount
+ */
 
 Binding 1 .5
 /*
@@ -242,5 +242,23 @@ StopOnTime 0              //0 for don’t stop, otherwise enter time
 StopOnDistance 0          //0 for don’t stop, otherwise enter distance in microns
 StopBelowThetaC 0 0 //0 for don’t stop, otherwise elevation in radians -pi/2 to pi/2
 
+//Success Conditions
+Success 1 1
+/*success success_mode - if mode=0, success if result==success
+0: Nothing counts as success
+1: Success if type0motor0 is bound
+2:
+3:
+4:
+5:
+6:
+7:
+8:
+9:
+*/
+
 //debugging
 dt_override 0 //set this to 0 for no override, otherwise overrides set dt
+
+//check for correct read in
+checkbit 732

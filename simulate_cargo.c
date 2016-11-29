@@ -462,8 +462,31 @@ int simulate_cargo()
                 break;
             default:
                 printf("Missed case on reporting end of sim condition\n");
-            }
         }
+    }
+
+    //count up number of results we've labeled as success for this trial
+
+    trial_success=0;
+    if(success_mode==1){
+        switch(success){
+            case 1:
+
+                if(bound[0][0]){
+                    successes++;
+                    trial_success=1;
+                }
+
+                break;
+
+            //default:
+                //do nothing
+        }
+    }else{
+        if(prematureReturn==success){
+            successes++;
+        }
+    }
 
     //finalizeDataCollection();
     simulationEndDataCollection();

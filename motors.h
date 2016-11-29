@@ -26,7 +26,7 @@ double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
 double theta_c;
-int success, success_mode;
+int success, success_mode, trial_success;
 
 // check
 int check_bit;
