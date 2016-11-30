@@ -37,6 +37,9 @@ do
         #replace RMT with R_MT
         sed -i '' 's/RMT/R_MT/g' $fname
 
+        #the exit statement doesn't go with the rule
+        sed -i '' 's/exit\[0\];/exit(0);/g' $fname
+
         echo processed $fname
 
     fi
