@@ -18,8 +18,24 @@
 #include "dataCollection.c" //writes data to file
 #include "motorHelpers_setup.c" //file with functions for setup
 #include "motorHelpers_rates.c" //functions for finding stepping rates
-#include "stochasticequations.c" //genearated by mathematica
-#include "beadequations.c"
+
+//in the preprocessor, select which equation files to include
+//want to do this because the equation files with large numbers of motors
+//take a long time to compile
+#if (0 <= NMOTORSMAX && NMOTORSMAX <= 5)
+    #include "stochasticequations5.c" //genearated by mathematica
+    #include "beadequations5.c"
+#elif (5 < NMOTORSMAX && NMOTORSMAX <= 10)
+    #include "stochasticequations10.c" //genearated by mathematica
+    #include "beadequations10.c"
+#elif (10 < NMOTORSMAX && NMOTORSMAX <= 20)
+    #include "stochasticequations20.c" //genearated by mathematica
+    #include "beadequations20.c"
+#else
+    #include "stochasticequations5.c" //genearated by mathematica
+    #include "beadequations50.c"
+#endif
+
 #include "motorHelpers_sODE.c" //functions for setting up the solve
 #include "simulate_cargo.c" //main simulation
 
