@@ -439,7 +439,7 @@ int simulate_cargo()
                 prematureReturn=8;
             }
 
-            if(center[1]>R+L[0])){
+            if(center[1]>R+L[0]){
                 prematureReturn=9;
             }
         }

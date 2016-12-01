@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 10
+#define NMOTORSMAX 5
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -227,7 +227,7 @@ double rand1, rand2, randn1, randn2;
 double lim;
 double v_cart[3];
 double v_sph[3];
-double u, v, theta;
+double u, v;
 double u_hat[3], v_hat[3];
 double du, dv, dx, dy, dz;
 double brownian_displacement[3];
@@ -272,6 +272,9 @@ double Rbc[3];
 double DAnchor[NMOTORSMAX];
 double DCargoTranslation;
 double DCargoRotation;
+
+//bead
+double theta[3], theta1[3];
 
 /* -------------------------------------------------------------------
  // Stuff for input/output

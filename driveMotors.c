@@ -19,6 +19,7 @@
 #include "motorHelpers_setup.c" //file with functions for setup
 #include "motorHelpers_rates.c" //functions for finding stepping rates
 #include "stochasticequations.c" //genearated by mathematica
+#include "beadequations.c"
 #include "motorHelpers_sODE.c" //functions for setting up the solve
 #include "simulate_cargo.c" //main simulation
 

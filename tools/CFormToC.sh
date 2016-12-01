@@ -3,7 +3,7 @@
 #fnames=(forwardequations.c stochasticequations.c)
 #echo ${fnames[1]}
 
-for fname in pointToMT_formulae.txt stochasticequations.c
+for fname in pointToMT_formulae.txt stochasticequations.c beadequations.c
 do
     if [ -e $fname ] ; then
 

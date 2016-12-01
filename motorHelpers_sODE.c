@@ -78,16 +78,6 @@ void generate_brownian_displacement_anchor(){
     for(i=0;i<3;i++){
         brownian_displacement[i]=randn1*u_hat[i]+randn2*v_hat[i];
     }
-
-    //doing it this way is too fast by a factor of 2
-
-    // theta=RAND*2*pi;
-    // u=randn1*cos(theta);
-    // v=randn1*sin(theta);
-    //
-    // for(i=0;i<3;i++){
-    //     brownian_displacement[i]=u*u_hat[i]+v*v_hat[i];
-    // }
 }
 
 void generate_brownian_displacement_cargo(){
@@ -396,6 +386,11 @@ void calculate_forces()
             printf("bad value for external_force\n");
     }
 
+    if(verboseTF>4){
+        printf("The external force on the cargo is: (%g,%g,%g)\n",
+            Ftrap[0],Ftrap[1],Ftrap[2]);
+    }
+
     //deal with external torque
     switch(external_torque){
         case 1:
@@ -409,6 +404,11 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
+    }
+
+    if(verboseTF>4){
+        printf("The external torque on the cargo is: (%g,%g,%g)\n",
+            TorqeExt[0],TorqeExt[1],TorqeExt[2]);
     }
 
     //transform force vectors to spherical and split into radial and tangential
@@ -429,12 +429,16 @@ void calculate_forces()
                     FmTangential[nn][i]=v_cart[i];
                 }
 
-                // printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
-                // printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                // printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
-                // printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
-                // printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
-                // printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
+                if(verboseTF>4){
+                    printf("On type%dmotor%d\n",m,n);
+                    printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
+                    printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                    printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
+                    printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+                    printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
+                }
+
 
             }
             else{
@@ -619,9 +623,34 @@ void compute_next_locations(){
             stochastic_equations();
             break;
 
+        case 10:
+
+            generate_brownian_displacement_cargo();
+            for(i=0;i<3;i++){
+                Dbc[i]=brownian_displacement[i];
+            }
+
+            generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=brownian_displacement[i];
+            }
+
+            bead_equations();
+            break;
+
         default:
             printf("Bad Motor Diffusion type\n");
 
+    }
+
+    if(verboseTF>4){
+        printf("After solve, we have:\n");
+        for(nn=0;nn<N[0]+N[1];nn++){
+            printf("    For motor %ld",nn);
+            printf(" change in motor location is (%g,%g,%g)\n",a1[nn][0],a1[nn][1],a1[nn][2] );
+        }
+        printf("\n    Change in cargo location is (%g,%g,%g)\n",c1[0]-c[0],c1[1]-c[1],c1[2]-c[2]);
+        printf("    Change in cargo angle is (%g,%g,%g)\n",theta1[0]-theta[0],theta1[1]-theta[1],theta1[2]-theta[2]);
     }
 
 }
