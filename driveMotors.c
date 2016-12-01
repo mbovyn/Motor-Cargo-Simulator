@@ -31,9 +31,12 @@
 #elif (10 < NMOTORSMAX && NMOTORSMAX <= 20)
     #include "stochasticequations20.c" //genearated by mathematica
     #include "beadequations20.c"
-#else
+#elif (20 < NMOTORSMAX && NMOTORSMAX <=50)
     #include "stochasticequations5.c" //genearated by mathematica
     #include "beadequations50.c"
+#else
+    #include "stochasticequations5.c" //genearated by mathematica
+    #include "beadequations101.c"
 #endif
 
 #include "motorHelpers_sODE.c" //functions for setting up the solve
