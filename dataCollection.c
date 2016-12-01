@@ -214,8 +214,8 @@ void writeForces(){
 }//writeForces
 
 void writeSummary(){
-    fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %g ",
-        prematureReturn,trial_success,D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,theta_c);
+    fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %ld %g ",
+        prematureReturn,trial_success,D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],theta_c);
 }
 
 void inLoopDataCollection()
@@ -268,5 +268,30 @@ void simulationEndDataCollection(){
     writeBase();
     writeSummary();
     writeCenterLocs();
+    fprintf(fSummary, "\n");
+}
+
+void write_error(){
+    //write an error for the run if we exited prematurely
+    fInUse=fSummary;
+    writeBase();
+    //write NANs in place of summary
+    fprintf(fInUse, "%g         %g     %8g %g     %g    %g   %g  %g %g ",
+        NAN,NAN,NAN,NAN,NAN,NAN,NAN,NAN,NAN);
+    //write NANs in place of center locs
+    fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
+            NAN,
+            NAN,
+            NAN
+            );
+    for (m = 0; m<2; m++) {
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
+                NAN,
+                NAN,
+                NAN
+                );
+        }
+    }
     fprintf(fSummary, "\n");
 }

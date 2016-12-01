@@ -648,6 +648,31 @@ void compute_next_locations(){
 
     }
 
+    //check for error states
+
+    if(fabs(c1[0]-c[0]) > .5
+    || fabs(c1[1]-c[1]) > .5
+    || fabs(c1[2]-c[2]) > .5){
+        printf("\n\n\nError! Cargo moved more than 500nm in one time step!\nExiting gracefully\n\n\n");
+        graceful_exit=1;
+    }
+
+    if(fabs(theta1[0]-theta[0]) > pi/5
+        || fabs(theta1[0]-theta[0]) > pi/5
+        || fabs(theta1[0]-theta[0]) > pi/5){
+            printf("\n\n\nError! Cargo rotated more than pi/5 in one time step!\nExiting gracefully\n\n\n");
+            graceful_exit=1;
+        }
+
+    for(nn=0;nn<N[0]+N[1];nn++){
+        if(fabs(a1[nn][0]-a[nn][0]) > .1
+        || fabs(a1[nn][1]-a[nn][1]) > .1
+        || fabs(a1[nn][2]-a[nn][2]) > .1){
+            printf("\n\n\nError! Motor number %ld moved more than 100nm in one time step!\nExiting gracefully\n\n\n",nn);
+            graceful_exit=1;
+        }
+    }
+
     if(verboseTF>4){
         printf("After solve, we have:\n");
         for(nn=0;nn<N[0]+N[1];nn++){

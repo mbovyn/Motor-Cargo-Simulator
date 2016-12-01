@@ -108,9 +108,10 @@ int simulate_cargo()
     //Have different options for end condition of the Simulation
     //initially set flag to stop the simualtion to false
     prematureReturn=0;
+    graceful_exit=0;
 
     //simulate until one of the end conditions triggers and sets the flag
-    while (!prematureReturn)  //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    while (!prematureReturn && !graceful_exit)  //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     {
         //----------------------------------------------------------------------
         // Find rates for Stepping, Binding and Unbinding
@@ -347,6 +348,7 @@ int simulate_cargo()
             else
             {
                 printf("Should not have gotten here on choosing action in Gillespie\n");
+                graceful_exit=1;
             }
         }
 
@@ -456,70 +458,79 @@ int simulate_cargo()
     // End of sim
     //--------------------------------------------------------------------------
 
-    if (verboseTF>2)
-        printf("Simulation Ended\n");
+    if(graceful_exit){
 
-    if(verboseTF>1){
-        printf("repeat %d stopped at t=%g / step %ld by ",j+1,t_inst,step);
-        switch (prematureReturn) {
-            case 1:
-                printf("detachment\n");
-                break;
-            case 2:
-                printf("motor 2 attach\n");
-                break;
-            case 3:
-                printf("all bound\n");
-                break;
-            case 4:
-                printf("step limit\n");
-                break;
-            case 5:
-                printf("time limit\n");
-                break;
-            case 6:
-                printf("distance limit\n");
-                break;
-            case 7:
-                printf("below theta_c\n");
-                break;
-            case 8:
-                printf("pass condition for MT switching assay\n");
-                break;
-            case 9:
-                printf("switch condition for MT switching assay\n");
-                break;
-            default:
-                printf("Missed case on reporting end of sim condition\n");
+        write_error();
+        return 0;
+
+    } else {
+
+        if (verboseTF>2)
+            printf("Simulation Ended\n");
+
+        if(verboseTF>1){
+            printf("repeat %d stopped at t=%g / step %ld by ",j+1,t_inst,step);
+            switch (prematureReturn) {
+                case 1:
+                    printf("detachment\n");
+                    break;
+                case 2:
+                    printf("motor 2 attach\n");
+                    break;
+                case 3:
+                    printf("all bound\n");
+                    break;
+                case 4:
+                    printf("step limit\n");
+                    break;
+                case 5:
+                    printf("time limit\n");
+                    break;
+                case 6:
+                    printf("distance limit\n");
+                    break;
+                case 7:
+                    printf("below theta_c\n");
+                    break;
+                case 8:
+                    printf("pass condition for MT switching assay\n");
+                    break;
+                case 9:
+                    printf("switch condition for MT switching assay\n");
+                    break;
+                default:
+                    printf("Missed case on reporting end of sim condition\n");
+            }
         }
+
+        //count up number of results we've labeled as success for this trial
+
+        trial_success=0;
+        if(success_mode==1){
+            switch(success){
+                case 1:
+
+                    if(bound[0][0]){
+                        successes++;
+                        trial_success=1;
+                    }
+
+                    break;
+
+                //default:
+                    //do nothing
+            }
+        }else{
+            if(prematureReturn==success){
+                successes++;
+                trial_success=1;
+            }
+        }
+
+        //finalizeDataCollection();
+        simulationEndDataCollection();
+
+        return prematureReturn;
     }
 
-    //count up number of results we've labeled as success for this trial
-
-    trial_success=0;
-    if(success_mode==1){
-        switch(success){
-            case 1:
-
-                if(bound[0][0]){
-                    successes++;
-                    trial_success=1;
-                }
-
-                break;
-
-            //default:
-                //do nothing
-        }
-    }else{
-        if(prematureReturn==success){
-            successes++;
-            trial_success=1;
-        }
-    }
-
-    //finalizeDataCollection();
-    simulationEndDataCollection();
-
-    return prematureReturn;
 }

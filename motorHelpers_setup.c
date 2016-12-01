@@ -113,6 +113,7 @@ void initiallocations(){
     // end
         default:
             printf("Not a valid initial location type\n");
+            exit(0);
     }//switch
 
     //if passed the setting to have one of the motors on the bottom
@@ -304,6 +305,7 @@ void initialbinding(){
 
         default:
             printf("Not a valid initial binding type\n");
+            exit(0);
     }
 
     //set head locations to reflect binding status
@@ -369,5 +371,6 @@ void initialnucleotide(){
 
         default:
             printf("Invalid Initial Nucleotide Behavior setting\n");
+            exit(0);
     }
 }//finished initialnucleotide

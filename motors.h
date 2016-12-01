@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 50
+#define NMOTORSMAX 5
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -42,6 +42,7 @@ things that should get set by the calling script
 int prematureReturn;
 int FoundNotbound;
 int Foundbound;
+int graceful_exit;
 
 //Motor Parameters
 
