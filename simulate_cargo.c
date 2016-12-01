@@ -514,6 +514,7 @@ int simulate_cargo()
     }else{
         if(prematureReturn==success){
             successes++;
+            trial_success=1;
         }
     }
 
