@@ -84,6 +84,12 @@ switch plot_box
         yends=[min(center(:,2))-R max(center(:,2))+R];
         zends=[min(center(:,3))-R max(center(:,3))+R];
         
+    case 4 % cargo centered
+        
+        xends=[-(R+max_length) R+max_length];
+        yends=[-(R+max_length) R+max_length];
+        zends=[-(R+max_length+.02) R+max_length+.02];
+        
     otherwise
         
         error('Unusable key for plot bounds specified in plot_box')
@@ -192,7 +198,7 @@ if ~exist('tan_scaling','var')
 end
 
 if isnan(skip_frames)
-    skip_frames=ceil(size(loc_rec,2)/frames);
+    skip_frames=ceil((size(loc_rec,2))/frames);
 end
 
 %find the final frame to draw from the given inputs
@@ -414,6 +420,14 @@ for t=loop_ts
     
     axis equal
     set(gca,'color',[.95 .95 .95])
+    
+    if plot_box==4
+        
+        xends=[center(t,1)-(R+max_length) center(t,1)+R+max_length];
+        yends=[center(t,2)-(R+max_length) center(t,2)+R+max_length];
+        zends=[center(t,3)-(R+max_length+.02) center(t,3)+R+max_length+.02];
+        
+    end
     
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
     

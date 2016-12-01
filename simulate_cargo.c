@@ -359,7 +359,9 @@ int simulate_cargo()
         step ++;
 
         //record data
-        if( (ReturnDetails==1 && hit_action) || ReturnDetails>1){
+        if( (ReturnDetails==1 && hit_action)
+            || ReturnDetails==2
+            || (ReturnDetails==3 && (step-1)%1000==0) ){
             inLoopDataCollection();
         }
 
@@ -442,6 +444,10 @@ int simulate_cargo()
             if(center[1]>R+L[0]){
                 prematureReturn=9;
             }
+        }
+
+        if(prematureReturn && ReturnDetails){
+            inLoopDataCollection();
         }
 
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

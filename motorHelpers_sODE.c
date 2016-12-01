@@ -638,6 +638,11 @@ void compute_next_locations(){
             bead_equations();
             break;
 
+        case 11:
+
+            bead_equations();
+            break;
+
         default:
             printf("Bad Motor Diffusion type\n");
 

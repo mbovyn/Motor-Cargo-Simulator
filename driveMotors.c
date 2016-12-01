@@ -108,9 +108,14 @@ int main( int argc, char *argv[] )
         R=atof(argv[9]);
     }
 
-    theta_c=NAN;
+    N[0]=NAN;
     if(argc>10){
-        theta_c=atof(argv[10]);
+        N[0]=atof(argv[10]);
+    }
+
+    theta_c=NAN;
+    if(argc>11){
+        theta_c=atof(argv[11]);
     }
 
     // load parameters

@@ -8,6 +8,16 @@ void getInputParams( void )
 
     //open the parameter file (name specified in drive_motors.c)
     //fParams initialized in motors.h
+
+    //open the MT file
+    strcpy(MTparamFileName,paramFileName);
+    strcat(MTparamFileName,"_MT_params");
+    strcat(MTparamFileName,".txt");
+    fMTParams = fopen(MTparamFileName, "r");
+
+    //open the param file
+    strcat(paramFileName,"_params");
+    strcat(paramFileName,".txt");
     fParams = fopen(paramFileName, "r");
 
     //My approach: use fgets() to scan each line into the temporary string
@@ -27,7 +37,11 @@ void getInputParams( void )
     //motor parameters
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %ld %ld", blah, &N[0], &N[1]);
+    if(isnan(N[0]) || N[0]==0){
+        sscanf(tmpString,"%s %ld %ld", blah,&N[0], &N[1]);
+    }else{//if not NAN, the value was set in command line so trash it
+        sscanf(tmpString,"%s %lf %ld", blah,&trash, &N[1]);
+    }
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     //Muller
@@ -186,6 +200,8 @@ void getInputParams( void )
             printf("Time step too large, overruling. dt=%f\n",dt_max_base);
         }
     }
+
+
 
 
     //all of this may not have been necessay since dt_max_Motor is also a
@@ -388,13 +404,11 @@ void getInputParams( void )
     //close file
     fclose(fParams);
 
-    //Read in MT params from MTparams file
+    if(verboseTF>4){
+        printf("read in all params from params file\n");
+    }
 
-    //open the file
-    strcpy(MTparamFileName,runName);
-    strcat(MTparamFileName,"_MT_params");
-    strcat(MTparamFileName,".txt");
-    fMTParams = fopen(MTparamFileName, "r");
+    //Read in MT params from MTparams file
 
     //skip the header lines
     for(int n_lines=1;n_lines<=5;n_lines++)
@@ -428,5 +442,7 @@ void getInputParams( void )
     }
 
     fclose(fMTParams);
+
+
 
 }
