@@ -64,8 +64,24 @@ if ~exist('omega','var') && exist(strcat(results_prefix,'_Omega.txt'),'file')
     disp('Importing Omega - Cargo Rotation')
     import_omega
     %rotation function is in degrees
-    omega_cum=cumsum(omega)*180/pi;
+    %omega_cum=cumsum(omega)*180/pi;
+    
+    %can't simply add euler vectors to get aggregate rotation
+    
 end
+
+%%
+
+quaternians=SpinCalc('EA123toQ',omega*180/pi,eps,1);
+
+cumquatprod=zeros(size(quaternians));
+cumquatprod(1,:)=quaternians(1,:);
+for i=2:size(quaternians,1)
+    cumquatprod(i,:)=quatmultiply(cumquatprod(i-1,:),quaternians(i,:));
+end
+cumeuler=SpinCalc('QtoEA123',cumquatprod,eps,1);
+
+
 
 %% set plot bounds
 
@@ -225,9 +241,14 @@ for t=loop_ts
     h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
     
     if exist('omega','var')
-        rotate(h,[1 0 0],omega_cum(t,1),[center(t,1),center(t,2),center(t,3)])
-        rotate(h,[0 1 0],omega_cum(t,2),[center(t,1),center(t,2),center(t,3)])
-        rotate(h,[0 0 1],omega_cum(t,3),[center(t,1),center(t,2),center(t,3)])
+        
+        for i=1:t
+            
+            rotate(h,[1 0 0],omega(i,1)*180/pi,[center(i,1),center(i,2),center(i,3)])
+            rotate(h,[0 1 0],omega(i,2)*180/pi,[center(i,1),center(i,2),center(i,3)])
+            rotate(h,[0 0 1],omega(i,3)*180/pi,[center(i,1),center(i,2),center(i,3)])
+            
+        end
         
         %rotate(h,[1 0 0],rottry(t)*180/pi,[center(t,1),center(t,2),center(t,3)])
         %rotate(h,[0 1 0],0,[center(t,1),center(t,2),center(t,3)])
@@ -405,7 +426,7 @@ for t=loop_ts
     %% plot labels
     
     if Diagnostics>1
-        title(sprintf([titlestring '\n Frame ' num2str(t) ', t=' num2str(t_arr(t))]))
+        title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',t_arr(t))]))
     elseif Diagnostics>0
         %display current frame
         %text(.4,-.4,.4,['Frame ' num2str(t)])
