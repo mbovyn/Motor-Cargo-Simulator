@@ -60,6 +60,13 @@ if draw_forces==true && ~exist('Fext','var')
     run([analysispath '/import_forces.m'])
 end
 
+if ~exist('omega','var') && exist(strcat(results_prefix,'_Omega.txt'),'file')
+    disp('Importing Omega - Cargo Rotation')
+    import_omega
+    %rotation function is in degrees
+    omega_cum=cumsum(omega)*180/pi;
+end
+
 %% set plot bounds
 
 max_length=max(R_motor);
@@ -208,12 +215,24 @@ if start_frame+frames*skip_frames > size(center,1)
     loop_ts=[start_frame:skip_frames:final_frame length(t_arr)];
 else
     loop_ts=start_frame:skip_frames:final_frame;
-end   
+end
+
+rottry=linspace(0,2*pi,length(omega(:,1)));
 
 %loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
     h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
+    
+    if exist('omega','var')
+        rotate(h,[1 0 0],omega_cum(t,1),[center(t,1),center(t,2),center(t,3)])
+        rotate(h,[0 1 0],omega_cum(t,2),[center(t,1),center(t,2),center(t,3)])
+        rotate(h,[0 0 1],omega_cum(t,3),[center(t,1),center(t,2),center(t,3)])
+        
+        %rotate(h,[1 0 0],rottry(t)*180/pi,[center(t,1),center(t,2),center(t,3)])
+        %rotate(h,[0 1 0],0,[center(t,1),center(t,2),center(t,3)])
+        %rotate(h,[0 0 1],0,[center(t,1),center(t,2),center(t,3)])
+    end
     
     %% initial axis properites
     hold on

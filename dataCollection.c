@@ -57,6 +57,10 @@ void writeForcesHeader(){
     }
 }
 
+void writeOmegaHeader(){
+    fprintf(fInUse, "omega_x                omega_y                omega_z                ");
+}
+
 void writeSummaryHeader(){
     fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R  theta_c ");
 }
@@ -137,6 +141,22 @@ void initializeDataCollection()
             fprintf(fForces, "\n");
         }//ReturnForces
 
+        if(ReturnOmega){
+            //file with force values
+            strcpy(omegaName,runName);
+            //strcat(forcesName,repeat_number);
+            strcat(omegaName,"_Omega");
+            strcat(omegaName,".txt");
+
+            //Write center and anchor location to file
+            fOmega = fopen(omegaName, "w");
+            //return header line
+            fInUse=fOmega;
+            writeBaseHeader();
+            writeOmegaHeader();
+            fprintf(fOmega, "\n");
+        }//ReturnForces
+
     }//ReturnDetails
 
 } //initializeDataCollection
@@ -213,6 +233,14 @@ void writeForces(){
     }
 }//writeForces
 
+void writeOmega(){
+    fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
+            omega[0],
+            omega[1],
+            omega[2]
+            );
+}
+
 void writeSummary(){
     fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %ld %g ",
         prematureReturn,trial_success,D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],theta_c);
@@ -240,6 +268,13 @@ void inLoopDataCollection()
             writeForces();
             fprintf(fForces, "\n");
         }//ReturnForces
+
+        if(ReturnOmega){
+            fInUse=fOmega;
+            writeBase();
+            writeOmega();
+            fprintf(fOmega, "\n");
+        }//ReturnOmega
     } //ReturnDetails
 }//inLoopDataCollection
 
@@ -255,6 +290,10 @@ void finalizeDataCollection()
 
         if(ReturnForces){
             fclose(fForces);
+        }
+
+        if(ReturnOmega){
+            fclose(fOmega);
         }
     }//ReturnDetails
 

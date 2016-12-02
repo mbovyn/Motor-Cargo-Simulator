@@ -654,6 +654,10 @@ void compute_next_locations(){
 
     }
 
+    for(i=0;i<3;i++){
+        omega[i]=theta1[i]-theta[i];
+    }
+
     //check for error states
 
     if(fabs(c1[0]-c[0]) > .1
@@ -671,7 +675,7 @@ void compute_next_locations(){
         }
 
     for(nn=0;nn<N[0]+N[1];nn++){
-        if(!graceful_exit 
+        if(!graceful_exit
             && (fabs(a1[nn][0]-a[nn][0]) > .1
             || fabs(a1[nn][1]-a[nn][1]) > .1
             || fabs(a1[nn][2]-a[nn][2]) > .1)){
