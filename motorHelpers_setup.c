@@ -63,6 +63,10 @@ void initiallocations(){
 
     //uses only parameters to generate initial locations
     //sets locs
+
+    if(verboseTF>4){
+        printf("setting initial locations with case %d\n",InitialLocations);
+    }
     switch(InitialLocations){
         case 3:
             //initial locations set to the top of the sphere
@@ -195,6 +199,10 @@ void findMTdist(){
 }
 
 void initialbinding(){
+
+    if(verboseTF>4){
+        printf("setting initial binding with case %d\n",InitialBinding);
+    }
 
     //Set no motors to be bound before we start (need this for findMTdist)
     for(n=0;n<N[m];n++){
@@ -354,6 +362,10 @@ void closestPointOnMT(double x,double y,double z,int MTnum){
 }
 
 void initialnucleotide(){
+
+    if(verboseTF>4){
+        printf("setting initial nucleotide with case %d\n",InitialNucleotideBehavior);
+    }
 
     switch (InitialNucleotideBehavior) {
         case 1: //all start ready

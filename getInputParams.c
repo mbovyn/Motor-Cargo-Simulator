@@ -42,6 +42,10 @@ void getInputParams( void )
     }else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %lf %ld", blah,&trash, &N[1]);
     }
+    if(N[0]+N[1] > NMOTORSMAX){
+        printf("\n\n\nError! Exiting!\nAsked for motors than allowed by NMOTORSMAX\n\n\n");
+        exit(0);
+    }
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     //Muller
