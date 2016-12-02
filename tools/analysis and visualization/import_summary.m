@@ -55,6 +55,11 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
+
+for importi=1:num
+    dataArray{:,importi}=dataArray{:,importi}(~isnan(dataArray{:,importi}));
+end
+
 repeat = dataArray{:,1};
 step = dataArray{:, 2};
 t_arr = dataArray{:, 3};
@@ -90,4 +95,4 @@ end
 
 
 %% Clear temporary variables
-clearvars filename delimiter startRow formatSpec fileID dataArray ans num;
+clearvars filename delimiter startRow formatSpec fileID dataArray ans num importi;
