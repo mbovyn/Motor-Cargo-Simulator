@@ -340,6 +340,12 @@ void evaluate_steric(){
             Fsterick[2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
             //set that we need the steric spring so we know to use the smaller timestep
             need_steric=1;
+
+            if(MTdist < R-.02){
+                printf("\n\n\nError! MT more than 20nm inside cargo!\nExiting gracefully at step %ld\n\n\n",step);
+                graceful_exit=1;
+            }
+
         }else{
             for(i=0;i<3;i++){
                 Fsterick[i]=0;
@@ -650,24 +656,25 @@ void compute_next_locations(){
 
     //check for error states
 
-    if(fabs(c1[0]-c[0]) > .5
-    || fabs(c1[1]-c[1]) > .5
-    || fabs(c1[2]-c[2]) > .5){
-        printf("\n\n\nError! Cargo moved more than 500nm in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    if(fabs(c1[0]-c[0]) > .1
+    || fabs(c1[1]-c[1]) > .1
+    || fabs(c1[2]-c[2]) > .1){
+        printf("\n\n\nError! Cargo moved more than 100nm in one time step!\nExiting gracefully at step %ld\n\n\n",step);
         graceful_exit=1;
     }
 
-    if(fabs(theta1[0]-theta[0]) > pi/5
+    if(!graceful_exit && (fabs(theta1[0]-theta[0]) > pi/5
         || fabs(theta1[0]-theta[0]) > pi/5
-        || fabs(theta1[0]-theta[0]) > pi/5){
+        || fabs(theta1[0]-theta[0]) > pi/5)){
             printf("\n\n\nError! Cargo rotated more than pi/5 in one time step!\nExiting gracefully at step %ld\n\n\n",step);
             graceful_exit=1;
         }
 
     for(nn=0;nn<N[0]+N[1];nn++){
-        if(fabs(a1[nn][0]-a[nn][0]) > .1
-        || fabs(a1[nn][1]-a[nn][1]) > .1
-        || fabs(a1[nn][2]-a[nn][2]) > .1){
+        if(!graceful_exit 
+            && (fabs(a1[nn][0]-a[nn][0]) > .1
+            || fabs(a1[nn][1]-a[nn][1]) > .1
+            || fabs(a1[nn][2]-a[nn][2]) > .1)){
             printf("\n\n\nError! Motor number %ld moved more than 100nm in one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
             graceful_exit=1;
         }

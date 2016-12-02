@@ -292,8 +292,8 @@ int simulate_cargo()
                 head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
 
                 if(verboseTF>2){
-                    printf("on step, t was %g force was %g pN and rate was %g per second\n",
-                        t_inst,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
+                    printf("on step, of type%ldmotor%ld t was %g force was %g pN and rate was %g per second\n",
+                        hit_m,hit_n,t_inst,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
                 }
             }
             else if (hit_action == 2) // binding
@@ -448,6 +448,10 @@ int simulate_cargo()
             }
         }
 
+        if(step>100000000){
+            prematureReturn=10;
+        }
+
         if(prematureReturn && ReturnDetails){
             inLoopDataCollection();
         }
@@ -498,6 +502,8 @@ int simulate_cargo()
                 case 9:
                     printf("switch condition for MT switching assay\n");
                     break;
+                case 10:
+                    printf("Absolute step limit (100 million)\n");
                 default:
                     printf("Missed case on reporting end of sim condition\n");
             }

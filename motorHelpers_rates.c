@@ -27,10 +27,10 @@ void motorloading()
                         +neck_vec[m][n][2]*neck_vec[m][n][2]);
 
                     //
-                    if(neck_mag[m][n]>2*L[m]){
-                        printf("\n\n\nError! Neck length of type%dmotor%d is more than double the rest length!\nExiting gracefully\n\n\n",m,n);
-                        graceful_exit=1;
-                    }
+                    // if(neck_mag[m][n]>2*L[m]){
+                    //     printf("\n\n\nError! Neck length of type%dmotor%d is more than double the rest length!\nExiting gracefully\n\n\n",m,n);
+                    //     graceful_exit=1;
+                    // }
                     //if this is greater than rest length, motor is stretched
                     if(neck_mag[m][n]>L[m]){
                         //find the force exerted by the spring motor
