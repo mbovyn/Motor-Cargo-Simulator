@@ -262,19 +262,6 @@ for t=loop_ts
     h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
     
     if exist('omega','var')
-        
-%         for i=1:t
-%             
-%             rotate(h,[1 0 0],omega(i,1)*180/pi,[center(i,1),center(i,2),center(i,3)])
-%             rotate(h,[0 1 0],omega(i,2)*180/pi,[center(i,1),center(i,2),center(i,3)])
-%             rotate(h,[0 0 1],omega(i,3)*180/pi,[center(i,1),center(i,2),center(i,3)])
-%             
-%         end
-        
-%         rotate(h,[1 0 0],rottry(t)*180/pi,[center(t,1),center(t,2),center(t,3)])
-%         rotate(h,[0 1 0],0,[center(t,1),center(t,2),center(t,3)])
-%         rotate(h,[0 0 1],0,[center(t,1),center(t,2),center(t,3)])
-        
         if(t>1)
             rotate(h,[cumeuler(t-1,1) cumeuler(t-1,2) cumeuler(t-1,3)],cumeuler(t-1,4),[center(t,1),center(t,2),center(t,3)])
         end
@@ -366,6 +353,9 @@ for t=loop_ts
             else
                 error('Error setting anchor face color');
             end
+            
+            set(h_motor,'FaceAlpha',.5)
+            set(h_motor,'EdgeAlpha',.7)
 
             if Diagnostics>1
                 text(loc(n,1),...

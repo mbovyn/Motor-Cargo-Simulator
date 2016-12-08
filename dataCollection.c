@@ -315,9 +315,10 @@ void write_error(){
     //write an error for the run if we exited prematurely
     fInUse=fSummary;
     writeBase();
-    //write NANs in place of summary
-    fprintf(fInUse, "%g         %g     %8g %g     %g    %g   %g  %g %g ",
-        NAN,NAN,NAN,NAN,NAN,NAN,NAN,NAN,NAN);
+    //write summary
+    prematureReturn=-1;
+    trial_success=-1;
+    writeSummary();
     //write NANs in place of center locs
     fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
             NAN,
