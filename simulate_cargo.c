@@ -13,6 +13,10 @@ int simulate_cargo()
     for(i=0;i<3;i++)
         center[i]=center_initial[i];
 
+    for(i=0;i<3;i++){
+        LastBoundLocation[i]=NAN;
+    }
+
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
 
@@ -292,7 +296,7 @@ int simulate_cargo()
                 head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
 
                 if(verboseTF>2){
-                    printf("on step, of type%ldmotor%ld t was %g force was %g pN and rate was %g per second\n",
+                    printf("on step of type%ldmotor%ld, t was %g force was %g pN and rate was %g per second\n",
                         hit_m,hit_n,t_inst,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
                 }
             }
@@ -359,6 +363,19 @@ int simulate_cargo()
         // update timestep and step number
         t_inst += dt;
         step ++;
+
+        //keep track of last bound location
+        Foundbound=0;
+        for(m=0;m<2 && !Foundbound;m++){
+            for(n=0;n<N[m] && !Foundbound;n++){
+                if (bound[m][n]){
+                    Foundbound=1;
+                    for(i=0;i<3;i++){
+                        LastBoundLocation[i]=center[i];
+                    }
+                }
+            }
+        }
 
         //record data
         if( (ReturnDetails==1 && hit_action)
@@ -452,6 +469,16 @@ int simulate_cargo()
             prematureReturn=10;
         }
 
+        if(StopOnBeadDissociation){
+            prematureReturn=11;
+            for(k=0;k<n_MTs;k++){
+                pointToMTdist(center[0],center[1],center[2],k);
+                if(MTdist<.5+R){
+                    prematureReturn=0;
+                }
+            }
+        }
+
         if(prematureReturn && ReturnDetails){
             inLoopDataCollection();
         }
@@ -504,9 +531,14 @@ int simulate_cargo()
                     break;
                 case 10:
                     printf("Absolute step limit (100 million)\n");
+                    break;
+                case 11:
+                    printf("Cargo Dissociation (more than .5 micron from any MT)\n");
+                    break;
                 default:
                     printf("Missed case on reporting end of sim condition\n");
             }
+            printf("Cargo location was (%g,%g,%g)\n",center[0],center[1],center[2] );
         }
 
         //count up number of results we've labeled as success for this trial

@@ -62,7 +62,7 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R  theta_c ");
+    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R  N[0] theta_c last_x                  last_y                  last_z                 ");
 }
 
 void initializeDataCollection()
@@ -242,8 +242,9 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %ld %g ",
-        prematureReturn,trial_success,D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],theta_c);
+    fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %ld %g %+1.16E %+1.16E %+1.16E ",
+        prematureReturn,trial_success,D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],theta_c,
+        LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
 }
 
 void inLoopDataCollection()

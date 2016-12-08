@@ -26,6 +26,7 @@ double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
 int MultiMTassay;
+int StopOnBeadDissociation;
 double theta_c;
 int success, success_mode, trial_success;
 
@@ -281,6 +282,8 @@ double theta[3], theta1[3];
 /* -------------------------------------------------------------------
  // Stuff for input/output
  */
+
+double LastBoundLocation[3];
 
 //variables
 int runningInLoop;

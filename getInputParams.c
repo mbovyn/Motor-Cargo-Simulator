@@ -372,6 +372,9 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&MultiMTassay);
 
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&StopOnBeadDissociation);
+
     //success condition
 
     fgets(tmpString, 100, fParams);
