@@ -235,7 +235,8 @@ switch INPUT_TYPE
         if sqrt(INPUT(:,1).^2+INPUT(:,2).^2+INPUT(:,3).^2)-ones(N,1)>tol*ones(N,1),  %check that input m's constitute unit vector
             error('Input euler vector(s) components do not constitute a unit vector')            
         end
-        if MU<zeros(N,1) || MU>2*pi*ones(N,1), %check if rotation about euler vector is between 0 and 360
+        if any(MU<zeros(N,1)) || any(MU>2*pi*ones(N,1)), %check if rotation about euler vector is between 0 and 360
+            %anys added by Matt Bovyn, 2016
             error('Input euler rotation angle(s) not between 0 and 360 degrees')
         end
         Q=[INPUT(:,1).*sin(MU/2),INPUT(:,2).*sin(MU/2),INPUT(:,3).*sin(MU/2),cos(MU/2)];   %quaternion
