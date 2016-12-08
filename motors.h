@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 101
+#define NMOTORSMAX 5
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -114,6 +114,7 @@ int ReturnDetails;
 int ReturnHeads;
 int ReturnFinalState;
 int ReturnForces;
+int ReturnOmega;
 int UseSteric;
 int CargoBehavior;
 
@@ -288,11 +289,11 @@ double trash;
 
 //strings to use for filnames and lines read in
 char paramFileName[100], MTparamFileName[100], tmpString[100], runName[100], blah[100];
-char centerlocsName[100], headName[100], summaryName[100], forcesName[100];
+char centerlocsName[100], headName[100], summaryName[100], forcesName[100], omegaName[100];
 
 // input/output files
 //optional output files
-FILE *fCenterLocs, *fHead, *fForces;
+FILE *fCenterLocs, *fHead, *fForces, *fOmega;
 //input parameters file
 FILE *fParams,*fMTParams;
 //basic summary output file

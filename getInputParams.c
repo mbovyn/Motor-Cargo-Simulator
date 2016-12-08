@@ -327,7 +327,7 @@ void getInputParams( void )
     //ReturnDetails
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces);
+    sscanf(tmpString,"%s %d %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega);
 
     for(int n_lines=1;n_lines<=12;n_lines++)
       fgets(tmpString, 100, fParams);

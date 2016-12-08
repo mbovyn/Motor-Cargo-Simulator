@@ -60,6 +60,52 @@ if draw_forces==true && ~exist('Fext','var')
     run([analysispath '/import_forces.m'])
 end
 
+%take in the data on the orientation change of the cargo
+if ~exist('omega','var') && exist(strcat(results_prefix,'_Omega.txt'),'file')
+    
+    disp('Importing Omega - Cargo Rotation')
+    import_omega
+    
+    %can't simply add euler vectors to get cumulative rotation
+    %need to convert them to rotation matricies, multiply them, then
+    %convert back
+    
+    %first turn omega vector into normalized vector + magnitude (Euler
+    %Vector)
+    omega_mag=sqrt(sum(omega.*omega,2));
+    EV=[omega(:,1)./omega_mag,omega(:,2)./omega_mag,omega(:,3)./omega_mag,omega_mag*180/pi];
+    %note first value written is 0 vector, so can't be normalized and ends
+    %up NaNs
+    
+    %use function from matlab file exchange to convert to rotation
+    %matricies
+    rotmats=SpinCalc('EVtoDCM',EV,eps,0);
+    %create a cumulative rotation matrix with 1 less entry (to exclude NaNs
+    %from first omega)
+    cumrotmats=zeros(size(rotmats)-[0,0,1]);
+    %set first value to first real rotation
+    cumrotmats(:,:,1)=rotmats(:,:,2);
+    %do cumulative matrix product
+    for i=2:size(cumrotmats,3)
+        cumrotmats(:,:,i)=cumrotmats(:,:,i-1)*rotmats(:,:,i+1);
+    end
+    %find Cumulative Euler Vectors
+    cumeuler=SpinCalc('DCMtoEV',cumrotmats,eps,0);
+    
+    %also tried to do this with quaternians, didn't work for some reason
+    
+%     quaternians=SpinCalc('EVtoQ',EV,eps,1);
+% 
+%     cumquatprod=zeros(size(quaternians));
+%     cumquatprod(1,:)=quaternians(1,:);
+%     cumquatprod(2,:)=quaternians(2,:);
+%     for i=3:size(quaternians,1)
+%         cumquatprod(i,:)=quatmultiply(cumquatprod(i-1,:),quaternians(i,:));
+%     end
+%     cumeuler=SpinCalc('QtoEV',cumquatprod,eps,1);
+    
+end
+
 %% set plot bounds
 
 max_length=max(R_motor);
@@ -208,12 +254,31 @@ if start_frame+frames*skip_frames > size(center,1)
     loop_ts=[start_frame:skip_frames:final_frame length(t_arr)];
 else
     loop_ts=start_frame:skip_frames:final_frame;
-end   
+end
 
-%loop over each frame we want to draw
+%% loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
     h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
+    
+    if exist('omega','var')
+        
+%         for i=1:t
+%             
+%             rotate(h,[1 0 0],omega(i,1)*180/pi,[center(i,1),center(i,2),center(i,3)])
+%             rotate(h,[0 1 0],omega(i,2)*180/pi,[center(i,1),center(i,2),center(i,3)])
+%             rotate(h,[0 0 1],omega(i,3)*180/pi,[center(i,1),center(i,2),center(i,3)])
+%             
+%         end
+        
+%         rotate(h,[1 0 0],rottry(t)*180/pi,[center(t,1),center(t,2),center(t,3)])
+%         rotate(h,[0 1 0],0,[center(t,1),center(t,2),center(t,3)])
+%         rotate(h,[0 0 1],0,[center(t,1),center(t,2),center(t,3)])
+        
+        if(t>1)
+            rotate(h,[cumeuler(t-1,1) cumeuler(t-1,2) cumeuler(t-1,3)],cumeuler(t-1,4),[center(t,1),center(t,2),center(t,3)])
+        end
+    end
     
     %% initial axis properites
     hold on
@@ -386,7 +451,7 @@ for t=loop_ts
     %% plot labels
     
     if Diagnostics>1
-        title(sprintf([titlestring '\n Frame ' num2str(t) ', t=' num2str(t_arr(t))]))
+        title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',t_arr(t))]))
     elseif Diagnostics>0
         %display current frame
         %text(.4,-.4,.4,['Frame ' num2str(t)])

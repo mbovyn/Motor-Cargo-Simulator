@@ -649,9 +649,38 @@ void compute_next_locations(){
             bead_equations();
             break;
 
+        // case 12: //attempt to fix motor wandering
+        //
+        //     generate_brownian_displacement_cargo();
+        //     for(i=0;i<3;i++){
+        //         Dbc[i]=brownian_displacement[i];
+        //     }
+        //
+        //     generate_brownian_displacement_rotation();
+        //     for(i=0;i<3;i++){
+        //         Rbc[i]=brownian_displacement[i];
+        //     }
+        //
+        //     bead_equations();
+        //
+        //     nn=0;
+        //     for(m=0;m<2;m++){
+        //         for(n=0;n<N[m];n++){
+        //             convert_loc_to_spherical();
+        //             locs
+        //             nn++;
+        //         }
+        //     }
+        //
+        //     break;
+
         default:
             printf("Bad Motor Diffusion type\n");
 
+    }
+
+    for(i=0;i<3;i++){
+        omega[i]=theta1[i]-theta[i];
     }
 
     //check for error states
@@ -671,7 +700,7 @@ void compute_next_locations(){
         }
 
     for(nn=0;nn<N[0]+N[1];nn++){
-        if(!graceful_exit 
+        if(!graceful_exit
             && (fabs(a1[nn][0]-a[nn][0]) > .1
             || fabs(a1[nn][1]-a[nn][1]) > .1
             || fabs(a1[nn][2]-a[nn][2]) > .1)){
