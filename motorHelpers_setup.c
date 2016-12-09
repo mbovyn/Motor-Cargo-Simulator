@@ -339,12 +339,12 @@ void initialbinding(){
 
     if (bound[0][0] && initial_head){
         closestPointOnMT(locs[0][0][0],locs[0][0][1],locs[0][0][2],bound[0][0]-1);
-        head[0][0][0]=cPoint[0]+R+initial_head;
+        head[0][0][0]=cPoint[0]+initial_head;
         head[0][0][1]=cPoint[1];
         head[0][0][2]=cPoint[2];
     } else if(bound[1][0] && initial_head) {
         closestPointOnMT(locs[1][0][0],locs[1][0][1],locs[1][0][2],bound[1][0]-1);
-        head[1][0][0]=cPoint[0]+R+initial_head;
+        head[1][0][0]=cPoint[0]+initial_head;
         head[1][0][1]=cPoint[1];
         head[1][0][2]=cPoint[2];
     }

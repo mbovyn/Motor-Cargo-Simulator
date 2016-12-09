@@ -71,6 +71,13 @@ void motorloading()
 
 } // finished motorloading
 
+int force_in_MT_direction(){
+    //evaluates to 1 if force ON HEAD is in same direction as MT
+    return -F_m_vec[m][n][0]*MTvec[bound[m][n]-1][0]+
+        -F_m_vec[m][n][1]*MTvec[bound[m][n]-1][1]+
+        -F_m_vec[m][n][2]*MTvec[bound[m][n]-1][2] > 0;
+}
+
 void stepping_rates()
 {
     switch (Stepping) {
@@ -89,15 +96,29 @@ void stepping_rates()
 
             for(n=0;n<N[m];n++){
                 if (bound[m][n]){
-                    if(F_m_mag[m][n]/F_s[m]<1){
+                    if(F_m_mag[m][n]==0){ //no force
+
+                        step_possible[m][n]=1;
+                        step_rate[m][n]=unloaded_step_rate[m];
+
+                    }else if(force_in_MT_direction()){ //force is assisting
+
+                        step_possible[m][n]=1;
+                        step_rate[m][n]=unloaded_step_rate[m];
+
+                        //printf("stepping under assisting force\n");
+
+                    }else if(F_m_mag[m][n]/F_s[m]<1){ //force is hindering and below stall
+
                         step_possible[m][n]=1;
                         step_rate[m][n]=unloaded_step_rate[m]*(1-pow(F_m_mag[m][n]/F_s[m],w[m]));
-                    }
-                    else{
+
+                        //printf("stepping under hindering force below stall\n");
+
+                    }else{ //force is hindering and greater than stall force
                         step_possible[m][n]=0;
                     }
-                }
-                else{
+                }else{ //motor isn't bound
                     step_possible[m][n]=0;
                 }
             }
@@ -126,6 +147,7 @@ void stepping_rates()
 
         default:
             printf("Invalid stepping rate type\n");
+            exit(0);
     }
 } // finished stepping
 
@@ -181,8 +203,55 @@ void unbinding_rates()
 
         break;
 
+    case 4: //different for assisting and hindering loads
+
+        for(n=0;n<N[m];n++){
+            if(bound[m][n]){
+                unbind_possible[m][n]=1;
+
+                // printf("dot product is %g\n",F_m_vec[m][n][0]*MTvec[bound[m][n]-1][0]+
+                //     F_m_vec[m][n][1]*MTvec[bound[m][n]-1][1]+
+                //     F_m_vec[m][n][1]*MTvec[bound[m][n]-1][1]);
+
+                //under hindering load
+                if(F_m_mag[m][n]==0){
+                    unbind_rate[m][n]=eps_0[m];
+                }else if(force_in_MT_direction()){
+
+                    //motors below stall unbind exponentially
+                    if(F_m_mag[m][n]<F_s[m]){
+                        unbind_rate[m][n]=eps_0[m]*exp(F_m_mag[m][n]/F_d[m]);
+                    }
+                    else{
+                        //kinesins above stall unbind linearly
+                        if(m==0){
+                            unbind_rate[m][n]=a_param[m]+b[m]*F_m_mag[m][n];
+                        }
+                        //dyneins above stall unbind with catch bond
+                        else{
+                            unbind_rate[m][n]=1/(a_param[m]*(1-exp(-F_m_mag[m][n]/b[m])));
+                        }
+                    }
+
+                }else if(!force_in_MT_direction()){
+
+                    unbind_rate[m][n] = eps_0[m] * exp(4*F_m_mag[m][n]/F_d[m]);
+
+                }else{
+                    printf("Error finding out if load was forward or backward\n");
+                    graceful_exit=1;
+                }
+
+            }else{
+                unbind_possible[m][n]=0;
+            }
+        }
+
+        break;
+
     default:
         printf("Invalid Unbinding type\n");
+        exit(0);
     }
 } //finished unbinding
 
