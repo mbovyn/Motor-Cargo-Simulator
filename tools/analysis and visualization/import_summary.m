@@ -29,9 +29,9 @@ startRow = 2;
 % For more information, see the TEXTSCAN documentation.
 %formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
-num=15;
+num=16;
 
-piece1=repmat('%f',1,num+3+3*(N(1)+N(2)));
+piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -72,9 +72,10 @@ pi_0 = dataArray{:, 8};
 offset = dataArray{:, 9};
 R = dataArray{:,10};
 N1 = dataArray{:,11};
-theta_c = dataArray{:,12};
+F1 = dataArray{:,12};
+theta_c = dataArray{:,13};
 
-last_bound_center = [dataArray{:, 13} dataArray{:, 14} dataArray{:, 15}];
+last_bound_center = [dataArray{:, num-2} dataArray{:, num-1} dataArray{:, num}];
 
 center_final = [dataArray{:, num+1} dataArray{:, num+2} dataArray{:, num+3}];
 % type0motor0_x = dataArray{:, 10};
@@ -93,6 +94,23 @@ for m=1:2
             column=num+4+N(1)*3+(n-1)*3;
         end
         locs_final{m}{n}=[dataArray{:,column:column+2}];
+    end
+end
+
+last_locs_col=num+3+3*(N(1)+N(2));
+
+head_final=cell(2,1);
+head_final{1}=cell(N(1),1);
+head_final{2}=cell(N(2),2);
+
+for m=1:2
+    for n=1:N(m)
+        if m==1
+            column=last_locs_col+1+(n-1)*3;
+        else
+            column=last_locs_col+1+N(1)*3+(n-1)*3;
+        end
+        head_final{m}{n}=[dataArray{:,column:column+2}];
     end
 end
 

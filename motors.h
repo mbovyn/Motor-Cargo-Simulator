@@ -95,7 +95,7 @@ double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
-double dt_default=.000005;
+double dt_default=.0000025;
 double dt_override;
 
 /* -------------------------------------------------------------------
@@ -135,6 +135,7 @@ double center_MT_dist;
 // vectors
 double locs[2][NMOTORSMAX][3]; //anchors
 double head[2][NMOTORSMAX][3]; //heads
+double last_bound_head[2][NMOTORSMAX][3];
 double F_m_vec [2][NMOTORSMAX][3];
 
 // booleans

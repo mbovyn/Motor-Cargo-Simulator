@@ -366,12 +366,15 @@ int simulate_cargo()
 
         //keep track of last bound location
         Foundbound=0;
-        for(m=0;m<2 && !Foundbound;m++){
-            for(n=0;n<N[m] && !Foundbound;n++){
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
                 if (bound[m][n]){
                     Foundbound=1;
                     for(i=0;i<3;i++){
                         LastBoundLocation[i]=center[i];
+                    }
+                    for(i=0;i<3;i++){
+                        last_bound_head[m][n][i]=head[m][n][i];
                     }
                 }
             }

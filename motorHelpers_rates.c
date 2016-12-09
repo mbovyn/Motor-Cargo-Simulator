@@ -216,7 +216,7 @@ void unbinding_rates()
                 //under hindering load
                 if(F_m_mag[m][n]==0){
                     unbind_rate[m][n]=eps_0[m];
-                }else if(force_in_MT_direction()){
+                }else if(!force_in_MT_direction()){
 
                     //motors below stall unbind exponentially
                     if(F_m_mag[m][n]<F_s[m]){
@@ -233,9 +233,9 @@ void unbinding_rates()
                         }
                     }
 
-                }else if(!force_in_MT_direction()){
+                }else if(force_in_MT_direction()){
 
-                    unbind_rate[m][n] = eps_0[m] * exp(4*F_m_mag[m][n]/F_d[m]);
+                    unbind_rate[m][n] = eps_0[m] * exp(3*F_m_mag[m][n]/F_d[m]);
 
                 }else{
                     printf("Error finding out if load was forward or backward\n");
