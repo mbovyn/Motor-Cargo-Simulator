@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 101
+#define NMOTORSMAX 5
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -29,6 +29,8 @@ int MultiMTassay;
 int StopOnBeadDissociation;
 double theta_c;
 int success, success_mode, trial_success;
+
+double timer=0;
 
 // check
 int check_bit;

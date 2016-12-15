@@ -125,24 +125,24 @@ void initiallocations(){
         //if passed 1, want to attach for m=0 (kinesin)
         //if passed 2, attach for m=1 (dynein)
         if(SetAtBottom==1 && m==0){
-            init_locs[0][0]=0;
-            init_locs[0][1]=0;
-            init_locs[0][2]=-R;
+            init_locs[0][0]=center[0];
+            init_locs[0][1]=center[1];
+            init_locs[0][2]=center[2]-R;
         }
         if(SetAtBottom==2 && m==1){
-            init_locs[0][0]=0;
-            init_locs[0][1]=0;
-            init_locs[0][2]=-R;
+            init_locs[0][0]=center[0];
+            init_locs[0][1]=center[1];
+            init_locs[0][2]=center[2]-R;
         }
         if(SetAtBottom==3 && m==0){
-            init_locs[0][0]=0;
-            init_locs[0][1]=0;
-            init_locs[0][2]=R;
+            init_locs[0][0]=center[0];
+            init_locs[0][1]=center[1];
+            init_locs[0][2]=center[2]+R;
         }
         if(SetAtBottom==4 && m==1){
-            init_locs[0][0]=0;
-            init_locs[0][1]=0;
-            init_locs[0][2]=R;
+            init_locs[0][0]=center[0];
+            init_locs[0][1]=center[1];
+            init_locs[0][2]=center[2]+R;
         }
     }//set at bottom
 
@@ -255,13 +255,15 @@ void initialbinding(){
                 }
 
                 //if none availiable, teleport one over
-                if(done==0){
-                    locs[0][0][2]=-R;
-                    bound[0][0]=1;
-                    if(verboseTF>2){
-                        printf("Teleported kin to bottom and forced binding\n");
-                    }
-                }
+                // if(done==0){
+                //     locs[0][0][0]=center[0];
+                //     locs[0][0][1]=center[1];
+                //     locs[0][0][2]=center[2]-R;
+                //     bound[0][0]=1;
+                //     if(verboseTF>2){
+                //         printf("Teleported kin to bottom and forced binding\n");
+                //     }
+                // }
             }
 
             break;
@@ -302,11 +304,13 @@ void initialbinding(){
                 }
 
                 //if none availiable, teleport one over
-                if(done==0){
-                    locs[1][0][2]=-R;
-                    bound[1][0]=1;
-                    printf("Teleported dyn to attach\n");
-                }
+                // if(done==0){
+                //     locs[1][0][0]=center[0];
+                //     locs[1][0][1]=center[1];
+                //     locs[1][0][2]=center[2]-R;
+                //     bound[1][0]=1;
+                //     printf("Teleported dyn to attach\n");
+                // }
             }
 
             break;

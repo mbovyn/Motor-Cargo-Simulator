@@ -41,7 +41,7 @@ if ~exist('loc_rec','var')
         
     %take in data on locations of heads if the file exists (sometimes we
     %need not write one)
-    if exist(strcat(results_prefix,'_Heads.txt'),'file')
+    if exist([localpath '/' run_name '_Heads.txt'],'file')
         run([analysispath '/import_head.m'])
     else
         disp('No file to read heads from')
@@ -59,7 +59,7 @@ if draw_forces==true && ~exist('Fext','var')
 end
 
 %take in the data on the orientation change of the cargo
-if ~exist('omega','var') && exist(strcat(results_prefix,'_Omega.txt'),'file')
+if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
     
     disp('Importing Omega - Cargo Rotation')
     import_omega

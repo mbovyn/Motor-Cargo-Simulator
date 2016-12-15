@@ -18,6 +18,7 @@
 #include "dataCollection.c" //writes data to file
 #include "motorHelpers_setup.c" //file with functions for setup
 #include "motorHelpers_rates.c" //functions for finding stepping rates
+#include "stop_conditions.c"
 
 //in the preprocessor, select which equation files to include
 //want to do this because the equation files with large numbers of motors
