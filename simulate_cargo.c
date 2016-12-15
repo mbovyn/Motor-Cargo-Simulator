@@ -437,7 +437,7 @@ int simulate_cargo()
                     printf("below theta_c\n");
                     break;
                 case 8:
-                    printf("pass condition for MT switching assay\n");
+                    printf("pass condition for multiple MT assay\n");
                     break;
                 case 9:
                     printf("switch condition for MT switching assay\n");
@@ -447,6 +447,9 @@ int simulate_cargo()
                     break;
                 case 11:
                     printf("Cargo Dissociation (more than .5 micron from any MT)\n");
+                    break;
+                case 12:
+                    printf("TOW condition for multiple MT assay\n");
                     break;
                 default:
                     printf("Missed case on reporting end of sim condition\n");

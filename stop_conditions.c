@@ -72,7 +72,7 @@ void evaluate_stop_conditions(){
         //above, we've required at least one motor to be bound
 
         //pass if we make it past the point where a motor can attach to the second MT
-        if(center[0]>MTpoint[1][0]+2*R){
+        if(center[0]>MTpoint[1][0]+R){
             prematureReturn=8;
         }
 
@@ -118,7 +118,7 @@ void evaluate_stop_conditions(){
         }
 
         //if the cargo has walked past where it can bind the second MT, its a pass
-        if(center[0]>MTpoint[1][0]+2*R){
+        if(center[0]>MTpoint[1][0]+R){
             prematureReturn=8;
         }
 
