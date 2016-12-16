@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 20
+#define NMOTORSMAX 50
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()

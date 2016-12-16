@@ -471,6 +471,13 @@ int simulate_cargo()
 
                     break;
 
+                case 2:
+
+                    if(center[0]>10){
+                        successes++;
+                        trial_success=1;
+                    }
+
                 //default:
                     //do nothing
             }
