@@ -24,6 +24,8 @@ do
         #replace Mathematica's way of writing exponents (Power(x,y)) with the correct C
         #expression (pow(x,y))
         sed -i '' 's/Power/pow/g' $fname
+        sed -i '' 's/Sin/sin/g' $fname
+        sed -i '' 's/Cos/cos/g' $fname
 
         #replace miscapitalized Sqrt with correct sqrt
         sed -i '' 's/Sqrt/sqrt/g' $fname
@@ -39,6 +41,9 @@ do
 
         #the exit statement doesn't go with the rule
         sed -i '' 's/exit\[0\];/exit(0);/g' $fname
+
+        #need actual == in the if statement
+        sed -i '' 's/omega\[\([0-9]\)\]=0/omega[\1]==0/g' $fname
 
         echo processed $fname
 
