@@ -392,7 +392,7 @@ int simulate_cargo()
 
         evaluate_stop_conditions();
 
-        if(prematureReturn && ReturnDetails){
+        if(prematureReturn && (ReturnDetails || graceful_exit)){
             inLoopDataCollection();
         }
 
