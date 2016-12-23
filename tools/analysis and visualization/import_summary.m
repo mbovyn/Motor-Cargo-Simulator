@@ -82,6 +82,8 @@ center_final = [dataArray{:, num+1} dataArray{:, num+2} dataArray{:, num+3}];
 % type0motor0_y = dataArray{:, 11};
 % type0motor0_z = dataArray{:, 12};
 
+N(1)=N1(1);
+
 locs_final=cell(2,1);
 locs_final{1}=cell(N(1),1);
 locs_final{2}=cell(N(2),2);
