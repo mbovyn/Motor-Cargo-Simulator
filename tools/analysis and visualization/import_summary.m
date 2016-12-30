@@ -99,7 +99,7 @@ for m=1:2
     end
 end
 
-last_locs_col=num+3+3*(N(1)+N(2));
+last_locs_col=num+4+3*(N(1)+N(2));
 
 head_final=cell(2,1);
 head_final{1}=cell(N(1),1);
