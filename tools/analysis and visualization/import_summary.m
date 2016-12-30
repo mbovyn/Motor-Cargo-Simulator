@@ -31,7 +31,8 @@ startRow = 2;
 
 num=16;
 
-piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
+%piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
+piece1=repmat('%f',1,num);
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -43,16 +44,25 @@ fileID = fopen(filename,'r');
 % This call is based on the structure of the file used to generate this
 % code. If an error occurs for a different file, try regenerating the code
 % from the Import Tool.
+dataArray2 = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'HeaderLines' ,startRow-1, 'ReturnOnError', false, 'EndOfLine', '\r\n');
+
+N1 = dataArray2{:,11};
+
+fclose(fileID);
+
+fileID = fopen(filename,'r');
+
+piece1=repmat('%f',1,num+3+2*3*(N1(1)+N(2)));
+piece2='%[^\n\r]';
+
+formatSpec=strcat(piece1,piece2);
+
+%% second time
+
 dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'HeaderLines' ,startRow-1, 'ReturnOnError', false, 'EndOfLine', '\r\n');
 
 %% Close the text file.
 fclose(fileID);
-
-%% Post processing for unimportable data.
-% No unimportable data rules were applied during the import, so no post
-% processing code is included. To generate code which works for
-% unimportable data, select unimportable cells in a file and regenerate the
-% script.
 
 %% Allocate imported array to column variable names
 
@@ -99,7 +109,7 @@ for m=1:2
     end
 end
 
-last_locs_col=num+4+3*(N(1)+N(2));
+last_locs_col=num+4+3*(N(1)+N(2))-1;
 
 head_final=cell(2,1);
 head_final{1}=cell(N(1),1);
