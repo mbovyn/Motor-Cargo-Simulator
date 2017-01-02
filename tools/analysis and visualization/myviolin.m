@@ -162,6 +162,12 @@ else
     support_value = 'unbounded';
 end
 
+if isempty(find(strcmp(varargin,'Width')))==0
+    width_modifier = varargin{find(strcmp(varargin,'Width'))+1};
+else
+    width_modifier = .3;
+end
+
 %%
 if size(fc,1)==1
     fc=repmat(fc,size(Y,2),1);
@@ -177,7 +183,7 @@ for i=1:size(Y,2)
         [f, u, bb]=ksdensity(Y{i},'Support',support_value);
     end
     
-    f=f/max(f)*0.3; %normalize
+    f=f/max(f)*width_modifier; %normalize
     F(:,i)=f;
     U(:,i)=u;
     MED(:,i)=nanmedian(Y{i});
