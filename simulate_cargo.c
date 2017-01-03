@@ -17,14 +17,12 @@ int simulate_cargo()
         LastBoundLocation[i]=NAN;
     }
 
+    // set initial locations of motors -------------------------------------
+    initiallocations();
+    //sets locs
+
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
-
-        // set initial locations of motors -------------------------------------
-        initiallocations();
-        //sets locs
-
-
         // set initial binding status ---------------------------------------
         initialbinding();
         //sets bound and head

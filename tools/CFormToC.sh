@@ -3,7 +3,7 @@
 #fnames=(forwardequations.c stochasticequations.c)
 #echo ${fnames[1]}
 
-for fname in pointToMT_formulae.txt stochasticequations.c beadequations.c
+for fname in pointToMT_formulae.txt stochasticequations.c beadequations.c rotateToVec_formulae.txt
 do
     if [ -e $fname ] ; then
 
@@ -16,6 +16,9 @@ do
         #[0-9] finds any number, then [0-9]* extends to 0 to however many other numbers
         #uses \( \) to save the substring of what's found (the number)
         sed -i '' 's/(\([0-9][0-9]*\))/[\1]/g' $fname
+
+        #does the same for a letter in parens
+        sed -i '' 's/(\([a-z]\))/[\1]/g' $fname
 
         #replace == with =
         #wrote == in Mathematica for ease

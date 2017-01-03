@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 101
+#define NMOTORSMAX 5
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -175,7 +175,7 @@ int m,n,i,k;
 intial locations
 */
 
-double init_locs[NMOTORSMAX][3]; //initial locations, set by initiallocations
+double initlocs[2][NMOTORSMAX][3]; //initial locations, set by initiallocations
 double uu; //random variables to generate elevations
 double vv; //random variables to generate azimuths
 double az;
@@ -188,6 +188,8 @@ int SetAtBottom;
 double InitAngle;
 
 double innerlimit;
+
+double rotmat[9];
 
 /* -------------------------------------------------------------------
 Initial Binding

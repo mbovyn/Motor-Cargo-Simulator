@@ -1,0 +1,18 @@
+For creating rotation matrix:
+
+rotmat[0] = (pow(R,2) - pow(center[0] - initlocs[m][n][0],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
+rotmat[1] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
+rotmat[2] = (center[0] - initlocs[m][n][0])/R;
+rotmat[3] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
+rotmat[4] = (pow(R,2) - pow(center[1] - initlocs[m][n][1],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
+rotmat[5] = (center[1] - initlocs[m][n][1])/R;
+rotmat[6] = (-center[0] + initlocs[m][n][0])/R;
+rotmat[7] = (-center[1] + initlocs[m][n][1])/R;
+rotmat[8] = -((-pow(R,2) + pow(center[0],2) + pow(center[1],2) - 2*center[0]*initlocs[m][n][0] + pow(initlocs[m][n][0],2) - 2*center[1]*initlocs[m][n][1] + pow(initlocs[m][n][1],2) + R*(center[2] - initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2])));
+
+
+For applying rotation matrix:
+
+initlocs[m][n][0] = center[0] + (rotmat[0]*(-center[0] + initlocs[m][n][0]) + rotmat[1]*(-center[1] + initlocs[m][n][1]) + rotmat[2]*(-center[2] + initlocs[m][n][2]))/R;
+initlocs[m][n][1] = center[1] + (rotmat[3]*(-center[0] + initlocs[m][n][0]) + rotmat[4]*(-center[1] + initlocs[m][n][1]) + rotmat[5]*(-center[2] + initlocs[m][n][2]))/R;
+initlocs[m][n][2] = center[2] + (rotmat[6]*(-center[0] + initlocs[m][n][0]) + rotmat[7]*(-center[1] + initlocs[m][n][1]) + rotmat[8]*(-center[2] + initlocs[m][n][2]))/R;
