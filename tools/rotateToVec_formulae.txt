@@ -13,6 +13,6 @@ rotmat[8] = -((-pow(R,2) + pow(center[0],2) + pow(center[1],2) - 2*center[0]*ini
 
 For applying rotation matrix:
 
-initlocs[m][n][0] = center[0] + (rotmat[0]*(-center[0] + initlocs[m][n][0]) + rotmat[1]*(-center[1] + initlocs[m][n][1]) + rotmat[2]*(-center[2] + initlocs[m][n][2]))/R;
-initlocs[m][n][1] = center[1] + (rotmat[3]*(-center[0] + initlocs[m][n][0]) + rotmat[4]*(-center[1] + initlocs[m][n][1]) + rotmat[5]*(-center[2] + initlocs[m][n][2]))/R;
-initlocs[m][n][2] = center[2] + (rotmat[6]*(-center[0] + initlocs[m][n][0]) + rotmat[7]*(-center[1] + initlocs[m][n][1]) + rotmat[8]*(-center[2] + initlocs[m][n][2]))/R;
+initlocs[m][n][0] = center[0] + rotmat[0]*(-center[0] + initlocs[m][n][0]) + rotmat[1]*(-center[1] + initlocs[m][n][1]) + rotmat[2]*(-center[2] + initlocs[m][n][2]);
+initlocs[m][n][1] = center[1] + rotmat[3]*(-center[0] + initlocs[m][n][0]) + rotmat[4]*(-center[1] + initlocs[m][n][1]) + rotmat[5]*(-center[2] + initlocs[m][n][2]);
+initlocs[m][n][2] = center[2] + rotmat[6]*(-center[0] + initlocs[m][n][0]) + rotmat[7]*(-center[1] + initlocs[m][n][1]) + rotmat[8]*(-center[2] + initlocs[m][n][2]);

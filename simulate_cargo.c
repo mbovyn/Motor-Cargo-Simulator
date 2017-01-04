@@ -13,6 +13,9 @@ int simulate_cargo()
     for(i=0;i<3;i++)
         center[i]=center_initial[i];
 
+    if (verboseTF>4)
+        printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
+
     for(i=0;i<3;i++){
         LastBoundLocation[i]=NAN;
     }

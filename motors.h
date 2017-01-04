@@ -176,6 +176,7 @@ intial locations
 */
 
 double initlocs[2][NMOTORSMAX][3]; //initial locations, set by initiallocations
+double initlocsnew[2][NMOTORSMAX][3];
 double uu; //random variables to generate elevations
 double vv; //random variables to generate azimuths
 double az;
