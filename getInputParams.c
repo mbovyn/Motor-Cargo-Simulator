@@ -152,10 +152,10 @@ void getInputParams( void )
     //set to satisfy
     dt_max_Motor=0;
     if(N[0]>0){
-        dt_max_Motor=.9*1/(k_m[0]*mu_m[0]);
+        dt_max_Motor=.9*2/(k_m[0]*mu_m[0]);
     }
     if( N[1]>0 && (k_m[1]*mu_m[1]) > (k_m[0]*mu_m[0]) ){
-        dt_max_Motor=.9*1/(k_m[1]*mu_m[1]);
+        dt_max_Motor=.9*2/(k_m[1]*mu_m[1]);
     }
     if(dt_max_Motor==0){
         if(verboseTF>2){
@@ -165,7 +165,10 @@ void getInputParams( void )
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
-    dt_max_Steric=.9*muCargoTranslation*1/(kcMT);
+    dt_max_Steric=.9*2/(muCargoTranslation*kcMT);
+    if(verboseTF>2){
+        printf("dt_max for steric spring is %g\n",dt_max_Steric);
+    }
 
     //find max time step for just diffusion
     //set to satisfy sqrt(D*dt)<<R
