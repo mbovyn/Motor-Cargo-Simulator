@@ -23,21 +23,28 @@
 //in the preprocessor, select which equation files to include
 //want to do this because the equation files with large numbers of motors
 //take a long time to compile
-#if (0 <= NMOTORSMAX && NMOTORSMAX <= 5)
-    #include "stochasticequations5.c" //genearated by mathematica
+#if defined(bead5)
     #include "beadequations5.c"
-#elif (5 < NMOTORSMAX && NMOTORSMAX <= 10)
-    #include "stochasticequations10.c" //genearated by mathematica
+#elif defined(bead10)
     #include "beadequations10.c"
-#elif (10 < NMOTORSMAX && NMOTORSMAX <= 20)
-    #include "stochasticequations20.c" //genearated by mathematica
+#elif defined(bead20)
     #include "beadequations20.c"
-#elif (20 < NMOTORSMAX && NMOTORSMAX <=50)
-    #include "stochasticequations5.c" //genearated by mathematica
+#elif defined(bead50)
     #include "beadequations50.c"
-#else
-    #include "stochasticequations5.c" //genearated by mathematica
+#elif defined(bead101)
     #include "beadequations101.c"
+#else
+    #include "beadequations5.c"
+#endif
+
+#if defined(free5)
+    #include "stochasticequations5.c"
+#elif defined(free10)
+    #include "stochasticequations10.c"
+#elif defined(free20)
+    #include "stochasticequations20.c"
+#else
+    #include "stochasticequations5.c"
 #endif
 
 #include "motorHelpers_sODE.c" //functions for setting up the solve
