@@ -616,7 +616,7 @@ void compute_next_locations(){
 
             break;
 
-        case 9:
+        case 9: //no anchor diffusion
 
             generate_brownian_displacement_cargo();
             for(i=0;i<3;i++){
@@ -631,7 +631,7 @@ void compute_next_locations(){
             stochastic_equations();
             break;
 
-        case 10:
+        case 10: //bead equations
 
             generate_brownian_displacement_cargo();
             for(i=0;i<3;i++){
@@ -646,7 +646,7 @@ void compute_next_locations(){
             bead_equations();
             break;
 
-        case 11:
+        case 11: //bead equations, deterministic
 
             bead_equations();
             break;

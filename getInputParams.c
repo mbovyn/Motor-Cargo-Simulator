@@ -105,7 +105,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf %lf", blah,
         &center_initial[0], &center_initial[1],&center_initial[2]);
-    if(verboseTF>0){
+    if(verboseTF>1){
         printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
     }
     fgets(tmpString, 100, fParams);
@@ -149,8 +149,9 @@ void getInputParams( void )
 
     //find maximum time step for attached motors
     //set to satisfy
-
-    printf("Choosing Timesteps:\n");
+    if(verboseTF>1){
+        printf("Choosing Timesteps:\n");
+    }
 
     dt_max_Motor=0;
     if(N[0]>0){
@@ -168,7 +169,7 @@ void getInputParams( void )
 
     //find maximum time step for steric spring that keeps cargo out of MT
     dt_max_Steric=.9*1/(muCargoTranslation*kcMT);
-    if(verboseTF>2){
+    if(verboseTF>1){
         printf("     Max time step for steric spring is %g\n",dt_max_Steric);
     }
 
@@ -191,13 +192,13 @@ void getInputParams( void )
     //the default max is the smaller of the two maximum dt's
     if(dt_max_Diffusion<dt_max_Motor){
         dt_max_base=dt_max_Diffusion;
-        if(verboseTF>0){
+        if(verboseTF>1){
             printf("     Choosing max time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
     else{
         dt_max_base=dt_max_Motor;
-        if(verboseTF>0){
+        if(verboseTF>1){
             printf("     Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
         }
     }
@@ -205,7 +206,7 @@ void getInputParams( void )
     //overrule time step manually if too large
     if(dt_max_base>dt_default){
         dt_max_base=dt_default;
-        if(verboseTF>0){
+        if(verboseTF>1){
             printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
         }
     }
@@ -251,7 +252,7 @@ void getInputParams( void )
         }
     }
 
-    for(int n_lines=1;n_lines<=15;n_lines++)
+    for(int n_lines=1;n_lines<=20;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //InitialBinding
@@ -364,48 +365,49 @@ void getInputParams( void )
       fgets(tmpString, 100, fParams);
 
     //End conditions
-
-    printf("Stopping on:\n");
+    if(verboseTF>1){
+        printf("Stopping on:\n");
+    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&Requirebound);
 
-    if(Requirebound && verboseTF>0){
+    if(Requirebound && verboseTF>1){
         printf("     All motors unbound\n");
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnMotor2Attach);
 
-    if(StopOnMotor2Attach && verboseTF>0){
+    if(StopOnMotor2Attach && verboseTF>1){
         printf("     type0motor1 attach\n");
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnAllbound);
 
-    if(StopOnAllbound && verboseTF>0){
+    if(StopOnAllbound && verboseTF>1){
         printf("     All motors bound\n");
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %ld",blah,&StopOnStep);
 
-    if(StopOnStep && verboseTF>0){
+    if(StopOnStep && verboseTF>1){
         printf("     Step %ld\n",StopOnStep);
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnTime);
 
-    if(StopOnTime && verboseTF>0){
+    if(StopOnTime && verboseTF>1){
         printf("     After %g seconds\n",StopOnTime);
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnDistance);
 
-    if(StopOnDistance && verboseTF>0){
+    if(StopOnDistance && verboseTF>1){
         printf("     Cargo x location > %g microns\n",StopOnDistance);
     }
 
@@ -418,21 +420,21 @@ void getInputParams( void )
         //StopBelowThetaC=1;
     }
 
-    if(StopBelowThetaC && verboseTF>0){
+    if(StopBelowThetaC && verboseTF>1){
         printf("     Motor below critical angle of %g\n",theta_c);
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&MultiMTassay);
 
-    if(MultiMTassay && verboseTF>0){
+    if(MultiMTassay && verboseTF>1){
         printf("     MT assay conditions\n");
     }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnBeadDissociation);
 
-    if(StopOnBeadDissociation && verboseTF>0){
+    if(StopOnBeadDissociation && verboseTF>1){
         printf("     Bead > .5 microns from all MTs\n");
     }
 
