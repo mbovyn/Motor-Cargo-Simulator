@@ -97,7 +97,13 @@ int main( int argc, char *argv[] )
     }
 
     // Intialize random number generator (twister.c)
-    RanInit(0); //can set RanInit(1) to use same seed every time
+    #if defined(keepseed)
+        int seed_option=1;
+    #else
+        int seed_option=0;
+    #endif
+    RanInit(seed_option); //can set RanInit(1) to use same seed every time
+
     if(verboseTF>1){
         //if ever see two that are the same, know iSEED wasn't updated
         printf("The test rand is %f\n",RAND);

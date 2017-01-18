@@ -11,6 +11,12 @@ function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT )
 
     end1=MTpt-MTvec.*min(abs(n1));
     end2=MTpt+MTvec.*min(abs(n2));
+    
+    %one of the vectors needs to be flipped if the MTpt goes outside of the
+    %frame. This only works for it getting left behind in the x
+    if xends(1) >0 && MTpt(1)<xends(1)
+        end1(1)=-end1(1);
+    end
 
     [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT,20,'g',0,.3);
 
@@ -24,6 +30,8 @@ function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT )
         ,'FontSize',16 ...
         ...%,'HorizontalAlignment','right','VerticalAlignment','bottom')
         ,'HorizontalAlignment','center','VerticalAlignment','middle')
+    
+    %disp([end1(1)-.02*MTvec(1),end1(2)-.02*MTvec(2),end1(3)-.02*MTvec(3)])
 
 end
 

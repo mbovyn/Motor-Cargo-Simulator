@@ -269,3 +269,4 @@ dt_override 0 //set this to 0 for no override, otherwise overrides set dt
 
 //check for correct read in
 checkbit 732
+checkbit2 576

@@ -130,9 +130,9 @@ switch plot_box
         
     case 4 % cargo centered
         
-        xends=[-(R+max_length) R+max_length];
-        yends=[-(R+max_length) R+max_length];
-        zends=[-(R+max_length+.02) R+max_length+.02];
+%         xends=[-(R+max_length) R+max_length];
+%         yends=[-(R+max_length) R+max_length];
+%         zends=[-(R+max_length+.02) R+max_length+.02];
         
     otherwise
         
@@ -358,13 +358,6 @@ for t=loop_ts
         end
     end
     
-    %% MTs
-    for i=1:n_MTs
-        
-        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
-        
-    end
-    
     %% if have force vectors, plot out the forces acting on the cargo
     if draw_forces==true
         
@@ -457,6 +450,13 @@ for t=loop_ts
     end
     
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
+    
+        %% MTs
+    for i=1:n_MTs
+        
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
+        
+    end
     
     %% draw and save, prepare for next frame
     

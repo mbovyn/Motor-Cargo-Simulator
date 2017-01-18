@@ -33,7 +33,7 @@ int success, success_mode, trial_success;
 double timer=0;
 
 // check
-int check_bit;
+int check_bit, check_bit2;
 
 
 /* -------------------------------------------------------------------

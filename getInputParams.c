@@ -460,13 +460,15 @@ void getInputParams( void )
     }
 
     //check bit
-
+    //need 2 because fgets doesn't read past the last line
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&check_bit);
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&check_bit2);
 
-    if(check_bit!=732){
+    if(check_bit!=732 || check_bit2!=576){
         printf("\n\n\nError! Exiting!\n\n\nCheck bit incorrect, mismatch between paramers file and read in code\n");
         exit(0);
     }
