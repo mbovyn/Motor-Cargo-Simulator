@@ -387,6 +387,17 @@ void initialbinding(){
 
             break;
 
+        case 5: //force bind all motors
+
+            findMTdist();
+
+            //loop through motors to assign binding status
+            for(n=0;n<N[m];n++){
+                bound[m][n]=1;
+            }
+
+            break;
+
         default:
             printf("Not a valid initial binding type\n");
             exit(0);

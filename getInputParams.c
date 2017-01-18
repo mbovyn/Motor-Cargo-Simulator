@@ -42,10 +42,6 @@ void getInputParams( void )
     }else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %lf %ld", blah,&trash, &N[1]);
     }
-    if(N[0]+N[1] > NMOTORSMAX){
-        printf("\n\n\nError! Exiting!\nAsked for motors than allowed by NMOTORSMAX\n\n\n");
-        exit(0);
-    }
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     //Muller
@@ -109,6 +105,9 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf %lf", blah,
         &center_initial[0], &center_initial[1],&center_initial[2]);
+    if(verboseTF>0){
+        printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
+    }
     fgets(tmpString, 100, fParams);
     if(isnan(R) || R==0){
         sscanf(tmpString,"%s %lf", blah,&R);
@@ -150,27 +149,30 @@ void getInputParams( void )
 
     //find maximum time step for attached motors
     //set to satisfy
+
+    printf("Choosing Timesteps:\n");
+
     dt_max_Motor=0;
     if(N[0]>0){
-        dt_max_Motor=.9*2/(k_m[0]*mu_m[0]);
+        dt_max_Motor=.9*1/(k_m[0]*muCargoTranslation);
     }
-    if( N[1]>0 && (k_m[1]*mu_m[1]) > (k_m[0]*mu_m[0]) ){
-        dt_max_Motor=.9*2/(k_m[1]*mu_m[1]);
+    if( N[1]>0 && (k_m[1]*muCargoTranslation) > (k_m[0]*muCargoTranslation) ){
+        dt_max_Motor=.9*1/(k_m[1]*muCargoTranslation);
     }
     if(dt_max_Motor==0){
         if(verboseTF>2){
-            printf("dt_max for spring is 0 (no motors?) - setting to default.\n");
+            printf("dt_max for motor springs is 0 (no motors?) - setting to default.\n");
         }
         dt_max_Motor=dt_default;
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
-    dt_max_Steric=.9*2/(muCargoTranslation*kcMT);
+    dt_max_Steric=.9*1/(muCargoTranslation*kcMT);
     if(verboseTF>2){
-        printf("dt_max for steric spring is %g\n",dt_max_Steric);
+        printf("     Max time step for steric spring is %g\n",dt_max_Steric);
     }
 
-    //find max time step for just diffusion
+    //find max time step for just diffusion of the motors
     //set to satisfy sqrt(D*dt)<<R
     dt_max_Diffusion=0;
     if(N[0]>0){
@@ -190,13 +192,13 @@ void getInputParams( void )
     if(dt_max_Diffusion<dt_max_Motor){
         dt_max_base=dt_max_Diffusion;
         if(verboseTF>0){
-            printf("Choosing max time step based on diffusion, dt=%g\n",dt_max_base);
+            printf("     Choosing max time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
     else{
         dt_max_base=dt_max_Motor;
         if(verboseTF>0){
-            printf("Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
+            printf("     Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
         }
     }
 
@@ -204,7 +206,7 @@ void getInputParams( void )
     if(dt_max_base>dt_default){
         dt_max_base=dt_default;
         if(verboseTF>0){
-            printf("Time step too large, overruling. dt=%f\n",dt_max_base);
+            printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
         }
     }
 
@@ -235,6 +237,19 @@ void getInputParams( void )
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&MotorDiffusion);
+
+    if(MotorDiffusion<10){
+        if(N[0]+N[1] > available_motors_free){
+            printf("\n\n\nError! Exiting!\nAsked for unsupported number of free motors\nCompile with different keyword to include more\n\n\n");
+            exit(0);
+        }
+    }else{
+        if((N[0]+N[1] > available_motors_bead)
+        || ((available_motors_bead==101 && (N[0]+N[1]-1)%10!=0) && !(N[0]+N[1]==0))){
+            printf("\n\n\nError! Exiting!\nAsked for unsupported number of bead motors\nCompile with different keyword\n\n\n");
+            exit(0);
+        }
+    }
 
     for(int n_lines=1;n_lines<=15;n_lines++)
       fgets(tmpString, 100, fParams);
@@ -350,23 +365,49 @@ void getInputParams( void )
 
     //End conditions
 
+    printf("Stopping on:\n");
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&Requirebound);
+
+    if(Requirebound && verboseTF>0){
+        printf("     All motors unbound\n");
+    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnMotor2Attach);
 
+    if(StopOnMotor2Attach && verboseTF>0){
+        printf("     type0motor1 attach\n");
+    }
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnAllbound);
 
+    if(StopOnAllbound && verboseTF>0){
+        printf("     All motors bound\n");
+    }
+
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&StopOnStep);
+    sscanf(tmpString,"%s %ld",blah,&StopOnStep);
+
+    if(StopOnStep && verboseTF>0){
+        printf("     Step %ld\n",StopOnStep);
+    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnTime);
 
+    if(StopOnTime && verboseTF>0){
+        printf("     After %g seconds\n",StopOnTime);
+    }
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnDistance);
+
+    if(StopOnDistance && verboseTF>0){
+        printf("     Cargo x location > %g microns\n",StopOnDistance);
+    }
 
     fgets(tmpString, 100, fParams);
     if(isnan(theta_c)){
@@ -377,11 +418,23 @@ void getInputParams( void )
         //StopBelowThetaC=1;
     }
 
+    if(StopBelowThetaC && verboseTF>0){
+        printf("     Motor below critical angle of %g\n",theta_c);
+    }
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&MultiMTassay);
 
+    if(MultiMTassay && verboseTF>0){
+        printf("     MT assay conditions\n");
+    }
+
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnBeadDissociation);
+
+    if(StopOnBeadDissociation && verboseTF>0){
+        printf("     Bead > .5 microns from all MTs\n");
+    }
 
     //success condition
 
@@ -449,7 +502,7 @@ void getInputParams( void )
     if(verboseTF>2){
         printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
         for(i=0;i<n_MTs;i++){
-            printf("(%g,%g,%g) (%g,%g,%g) %g\n",
+            printf("     (%g,%g,%g) (%g,%g,%g) %g\n",
             MTpoint[i][0],MTpoint[i][1],MTpoint[i][2],
             MTvec[i][0],MTvec[i][1],MTvec[i][2],
             R_MT[i]);

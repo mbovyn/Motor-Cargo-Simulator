@@ -255,8 +255,24 @@ int simulate_cargo()
             }
         } // finished generating reaction rates and finding next event
 
+        //to set motor time step, find number of attached motors
+        nbound=0;
+        for(m=0;m<2;m++){
+            for (n=0;n<N[m];n++){
+                if(bound[m][n]){
+                    nbound++;
+                }
+            }
+        }
+
+        dt_max_MultiMotor=.9*1/(nbound*k_m[0]*muCargoTranslation);
+
         //choose dt max for the current situation
-        dt_max = dt_max_base;
+        if(dt_max_MultiMotor<dt_max_base){
+            dt_max = dt_max_MultiMotor;
+        }else{
+            dt_max = dt_max_base;
+        }
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0

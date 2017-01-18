@@ -35,6 +35,10 @@ void motorloading()
                     if(neck_mag[m][n]>L[m]){
                         //find the force exerted by the spring motor
                         F_m_mag[m][n]=k_m[m]*(neck_mag[m][n]-L[m]);
+                        if(F_m_mag[m][n]>50){
+                            printf("\n\n\nError! type%dmotor%d force > 50pN\nExiting gracefully at step %ld\n\n\n",m,n,step);
+                            graceful_exit=1;
+                        }
                         //find the vector components of this force
                         for(i=0;i<3;i++){
                             unit_vec[i]=neck_vec[m][n][i]/neck_mag[m][n];
@@ -67,6 +71,7 @@ void motorloading()
 
         default:
             printf("Invalid MotorLoading Type\n");
+            exit(0);
     }
 
 } // finished motorloading
@@ -339,6 +344,7 @@ void binding_rates() //sets bind_possible and bind_rate
 
         default:
             printf("Not a valid binding type\n");
+            exit(0);
         }
 }
 
@@ -370,5 +376,6 @@ void nucleotide(){
 
         default:
             printf("Not a valid nucleotide behavior\n");
+            exit(0);
     }
 }

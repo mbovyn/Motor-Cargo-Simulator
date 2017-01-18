@@ -390,6 +390,7 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
+            exit(0);
     }
 
     if(verboseTF>4){
@@ -410,6 +411,7 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
+            exit(0);
     }
 
     if(verboseTF>4){
@@ -676,6 +678,7 @@ void compute_next_locations(){
 
         default:
             printf("Bad Motor Diffusion type\n");
+            exit(0);
 
     }
 
@@ -685,9 +688,9 @@ void compute_next_locations(){
 
     //check for error states
 
-    //if cargo moves by more than this much, it could skip right into the MT too far
-    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > .02){
-        printf("\n\n\nError! Cargo moved too much in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    //cargo moving too far is a sign of instability
+    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > .1){
+        printf("\n\n\nError! Cargo moved >100nm in one time step!\nExiting gracefully at step %ld\n\n\n",step);
         graceful_exit=1;
     }
 
