@@ -341,9 +341,18 @@ void evaluate_steric(){
             //set that we need the steric spring so we know to use the smaller timestep
             need_steric=1;
 
-            if(MTdist < R-.02){
-                printf("\n\n\nError! MT more than 20nm inside cargo!\nExiting gracefully at step %ld\n\n\n",step);
-                graceful_exit=1;
+            if(MTdist < R-.005){
+
+                MTviolationCounter++;
+                if(verboseTF>3){
+                    printf("MT violation at step %ld. Total violations: %d\n",step,MTviolationCounter);
+                }
+                if(MTviolationCounter>5){
+                    printf("\n\n\nError! MT more than 20nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",step);
+                    graceful_exit=1;
+                }
+            }else{
+                MTviolationCounter=0;
             }
 
         }else{
@@ -689,8 +698,8 @@ void compute_next_locations(){
     //check for error states
 
     //cargo moving too far is a sign of instability
-    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > .1){
-        printf("\n\n\nError! Cargo moved >100nm in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
+        printf("\n\n\nError! Cargo moved >R in one time step!\nExiting gracefully at step %ld\n\n\n",step);
         graceful_exit=1;
     }
 

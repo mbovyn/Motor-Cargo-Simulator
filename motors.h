@@ -47,6 +47,8 @@ int FoundNotbound;
 int Foundbound;
 int graceful_exit;
 
+int MTviolationCounter=0;
+
 //Motor Parameters
 
 long N[2]; //number of motors 4

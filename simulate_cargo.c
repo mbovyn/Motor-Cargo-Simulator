@@ -315,8 +315,8 @@ int simulate_cargo()
                     head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
 
                     if(verboseTF>2){
-                        printf("on step of type%ldmotor%ld, t was %g force was %g pN and rate was %g per second\n",
-                            hit_m,hit_n,t_inst,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
+                        printf("Step at %g s:\n    type%ldmotor%ld, force %gpN, rate %g/s\n",
+                            t_inst,hit_m,hit_n,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
                     }
                 }
                 else if (hit_action == 2) // binding
@@ -333,16 +333,16 @@ int simulate_cargo()
                     head[hit_m][hit_n][2]=cPoint[2];
 
                     if(verboseTF>2){
-                        printf("on binding of type%ldmotor%ld to MT %d, t was %g, MT_dist was %g microns\n",
-                            hit_m,hit_n,bound[hit_m][hit_n],t_inst,MTdist);
+                        printf("Binding at %g s:\n    type%ldmotor%ld to MT %d, MT_dist %g microns\n",
+                            t_inst,hit_m,hit_n,bound[hit_m][hit_n],MTdist);
                     }
                 }
                 else if (hit_action == 3) // detachment
                 {
 
                     if(verboseTF>2){
-                        printf("on unbinding of type%ldmotor%ld from MT%d, t was %g, force was %g pN and rate was %g per second\n",
-                            hit_m,hit_n,bound[hit_m][hit_n],t_inst,F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
+                        printf("Unbinding at %g s:\n    type%ldmotor%ld from MT%d, force %g pN, rate %g/s\n",
+                            t_inst,hit_m,hit_n,bound[hit_m][hit_n],F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
 
                     }
 
