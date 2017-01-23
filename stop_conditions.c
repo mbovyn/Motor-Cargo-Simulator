@@ -117,8 +117,8 @@ void evaluate_stop_conditions(){
             prematureReturn=12;
         }
 
-        //if the cargo has walked past where it can bind the second MT, its a pass
-        if(center[0]>MTpoint[1][0]+R){
+        //if the cargo reaches the end of the ToW zone, its a pass
+        if(center[0]>MTpoint[1][0]+ToW_zone){
             prematureReturn=8;
         }
 

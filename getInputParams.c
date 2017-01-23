@@ -425,7 +425,7 @@ void getInputParams( void )
     }
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&MultiMTassay);
+    sscanf(tmpString,"%s %d %lf",blah,&MultiMTassay,&ToW_zone);
 
     if(MultiMTassay && verboseTF>1){
         printf("     MT assay conditions\n");
@@ -495,6 +495,11 @@ void getInputParams( void )
             &MTpoint[i][0],&MTpoint[i][1],&MTpoint[i][2],
             &MTvec[i][0],&MTvec[i][1],&MTvec[i][2],
             &R_MT[i]);
+    }
+
+    //set correct inital center for ToW assay
+    if(ToW_zone){
+        center_initial[0]=MTpoint[0][0]-ToW_zone;
     }
 
     //set offset if one is input

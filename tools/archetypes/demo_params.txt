@@ -246,7 +246,7 @@ StopOnStep 0                //0 for don’t stop, otherwise enter step
 StopOnTime 0                //0 for don’t stop, otherwise enter time
 StopOnDistance 0            //0 for don’t stop, otherwise enter distance in microns
 StopBelowThetaC 0 -1        //2nd value elevation in radians -pi/2 to pi/2
-multiMT_assay 0             //1 for assay conditions to match Jared’s experiment
+multiMT_assay 0 0           //1 for assay conditions to match Jared’s experiment
 StopOnBeadDissociation 1    //stop if bead is > 500nm from all MTs
 
 //Success Conditions
