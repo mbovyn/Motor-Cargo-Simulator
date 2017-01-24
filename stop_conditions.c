@@ -83,6 +83,7 @@ void evaluate_stop_conditions(){
 
     if(step>100000000 && prematureReturn==0){
         prematureReturn=10;
+        printf("\n\nError! Exit by step limit!\n\n");
     }
 
     if(StopOnBeadDissociation && prematureReturn==0){

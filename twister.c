@@ -1,14 +1,14 @@
-/* 
+/*
    A C-program for MT19937, with initialization improved 2002/2/10.
    Coded by Takuji Nishimura and Makoto Matsumoto.
    This is a faster version by taking Shawn Cokus's optimization,
    Matthe Bellew's simplification, Isaku Wada's real version.
 
-   Before using, initialize the state by using init_genrand(seed) 
+   Before using, initialize the state by using init_genrand(seed)
    or init_by_array(init_key, key_length).
 
    Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.                          
+   All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -21,8 +21,8 @@
         notice, this list of conditions and the following disclaimer in the
         documentation and/or other materials provided with the distribution.
 
-     3. The names of its contributors may not be used to endorse or promote 
-        products derived from this software without specific prior written 
+     3. The names of its contributors may not be used to endorse or promote
+        products derived from this software without specific prior written
         permission.
 
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -45,7 +45,7 @@
 
 #include <stdio.h>
 
-/* Period parameters */  
+/* Period parameters */
 #define NTWIST 624
 #define MTWIST 397
 #define MATRIX_A 0x9908b0dfUL   /* constant vector a */
@@ -70,7 +70,7 @@ void init_genrand(unsigned long s)
     int j;
     state[0]= s & 0xffffffffUL;
     for (j=1; j<NTWIST; j++) {
-        state[j] = (1812433253UL * (state[j-1] ^ (state[j-1] >> 30)) + j); 
+        state[j] = (1812433253UL * (state[j-1] ^ (state[j-1] >> 30)) + j);
         /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
         /* In the previous versions, MSBs of the seed affect   */
         /* only MSBs of the array state[].                        */
@@ -106,7 +106,7 @@ void init_by_array(unsigned long init_key[], int key_length)
         if (i>=NTWIST) { state[0] = state[NTWIST-1]; i=1; }
     }
 
-    state[0] = 0x80000000UL; /* MSB is 1; assuring non-zero initial array */ 
+    state[0] = 0x80000000UL; /* MSB is 1; assuring non-zero initial array */
     left = 1; initf = 1;
 }
 
@@ -121,11 +121,11 @@ static void next_state(void)
 
     left = NTWIST;
     next = state;
-    
-    for (j=NTWIST-MTWIST+1; --j; p++) 
+
+    for (j=NTWIST-MTWIST+1; --j; p++)
         *p = p[MTWIST] ^ TWIST(p[0], p[1]);
 
-    for (j=MTWIST; --j; p++) 
+    for (j=MTWIST; --j; p++)
         *p = p[MTWIST-NTWIST] ^ TWIST(p[0], p[1]);
 
     *p = p[MTWIST-NTWIST] ^ TWIST(p[0], state[0]);
@@ -179,8 +179,8 @@ double genrand_real1(void)
     y ^= (y << 15) & 0xefc60000UL;
     y ^= (y >> 18);
 
-    return (double)y * (1.0/4294967295.0); 
-    /* divided by 2^32-1 */ 
+    return (double)y * (1.0/4294967295.0);
+    /* divided by 2^32-1 */
 }
 
 /* generates a random number on [0,1)-real-interval */
@@ -197,7 +197,7 @@ double genrand_real2(void)
     y ^= (y << 15) & 0xefc60000UL;
     y ^= (y >> 18);
 
-    return (double)y * (1.0/4294967296.0); 
+    return (double)y * (1.0/4294967296.0);
     /* divided by 2^32 */
 }
 
@@ -215,42 +215,50 @@ double genrand_real3(void)
     y ^= (y << 15) & 0xefc60000UL;
     y ^= (y >> 18);
 
-    return ((double)y + 0.5) * (1.0/4294967296.0); 
+    return ((double)y + 0.5) * (1.0/4294967296.0);
     /* divided by 2^32 */
 }
 
 /* generates a random number on [0,1) with 53-bit resolution*/
-double genrand_res53(void) 
-{ 
-    unsigned long a=genrand_int32()>>5, b=genrand_int32()>>6; 
-    return(a*67108864.0+b)*(1.0/9007199254740992.0); 
-} 
+double genrand_res53(void)
+{
+    unsigned long a=genrand_int32()>>5, b=genrand_int32()>>6;
+    return(a*67108864.0+b)*(1.0/9007199254740992.0);
+}
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
 
 
 /* Initialization added by Jun 2007 */
+//modified output last ISEED before updating by Matt Bovyn 2017
 void RanInit(int repeatable)
 {
-  FILE *ip; // ISEED file
+  FILE *ip, *ip2; // ISEED files
   long iseed;
-  
+
   ip =fopen("ISEED","r");//open the seed
   fscanf(ip,"%lx",&iseed);
   fclose(ip);
- 
+
+  ip2=fopen("last ISEED","w");
+  fprintf(ip2,"%lx\n",iseed);
+  fclose(ip2);
+
   if (iseed>0) iseed*= -1;
   init_genrand(iseed);
-  
+
   /* printf("ISEED=%lx\n",iseed); */
-  
+
   if(repeatable==0)
   {
-	iseed = genrand_int32();	
+	iseed = genrand_int32();
 	ip=fopen("ISEED","w");
 	fprintf(ip,"%lx\n",iseed);
 	fclose(ip);
   }
-  
+  else{
+      iseed = genrand_int32();
+  }
+
   return;
 }
 
@@ -259,18 +267,18 @@ void printState(char *stateFile)
 {
 	int iState;
 	FILE *fstateFile;
-	
+
 	fstateFile = fopen(stateFile, "w");
-	
+
 	// loop through state
 	for(iState=0; iState<NTWIST; iState++)
 	{
 		fprintf(fstateFile, "%lu\n", state[iState]);
 		//printf("printed state[%d]=%d\n", iState, state[iState]);
 	}
-		
+
 	fclose(fstateFile);
-	
+
 	return;
 }
 
@@ -280,21 +288,18 @@ void loadState(char *stateFile)
 
 	int iState;
 	FILE *fstateFile;
-	
+
 	fstateFile = fopen(stateFile, "r");
-	
+
 	// loop through state
 	for(iState=0; iState<NTWIST; iState++)
 	{
 		fscanf(fstateFile, "%lu", &state[iState]);
 		//printf("state[%d]=%lu\n", iState,state[iState]);
-	
+
 	}
-		
+
 	fclose(fstateFile);
-	
+
 	return;
 }
-
-
-

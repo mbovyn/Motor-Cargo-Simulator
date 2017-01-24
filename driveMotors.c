@@ -107,6 +107,8 @@ int main( int argc, char *argv[] )
     if(verboseTF>1){
         //if ever see two that are the same, know iSEED wasn't updated
         printf("The test rand is %f\n",RAND);
+    }else{
+        RAND;
     }
 
     //can bring D_m[0] and eps_0[0] in from the command line here
