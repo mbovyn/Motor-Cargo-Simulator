@@ -47,10 +47,16 @@ void motorloading()
                     }
                     else{ //if not stretched, exerts no force
                         F_m_mag[m][n]=0;
+                        for(i=0;i<3;i++){
+                            F_m_vec[m][n][i]=0;
+                        }
                     }
                 }
                 else{ //if not bound, force does not exist
                     F_m_mag[m][n]=NAN;
+                    for(i=0;i<3;i++){
+                        F_m_vec[m][n][i]=0;
+                    }
                 }
             }
 
@@ -61,6 +67,9 @@ void motorloading()
             for(n=0;n<N[m];n++){
                 if(bound[m][n]){
                     F_m_mag[m][n]=0;
+                    for(i=0;i<3;i++){
+                        F_m_vec[m][n][i]=0;
+                    }
                 }
                 else{
                     F_m_mag[m][n]=NAN;

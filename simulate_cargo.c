@@ -10,15 +10,13 @@ int simulate_cargo()
         printf("\nPerforming setup step\n\n");
 
     //set current center to center that was passed in
-    for(i=0;i<3;i++)
+    for(i=0;i<3;i++){
         center[i]=center_initial[i];
+        LastBoundLocation[i]=NAN;
+    }
 
     if (verboseTF>4)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
-
-    for(i=0;i<3;i++){
-        LastBoundLocation[i]=NAN;
-    }
 
     // set initial locations of motors -------------------------------------
     initiallocations();
@@ -414,7 +412,7 @@ int simulate_cargo()
             inLoopDataCollection();
         }
 
-        if(prematureReturn && ReturnDetails){
+        if(ReturnDetails && (prematureReturn || graceful_exit) ){
             inLoopDataCollection();
         }
 
