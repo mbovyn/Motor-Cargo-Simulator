@@ -32,11 +32,13 @@ errorbar(Ns,fraction,SEM,'.')
 
 hold on 
 
-experimental_SE=sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
+if exist('experimental_fraction','var')
+    experimental_SE=sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
 
-plot([Ns(1)-2 Ns(end)+2],[experimental_fraction experimental_fraction],'k')
-plot([Ns(1)-2 Ns(end)+2],[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
-plot([Ns(1)-2 Ns(end)+2],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
+    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction experimental_fraction],'k')
+    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
+    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
+end
 
 axis([Ns(1)-2 Ns(end)+2 -inf inf])
 
