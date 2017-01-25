@@ -1,20 +1,23 @@
-%% import data
+%% file juggling
+
+%set the name of the run here
+run_name='TOW_fraction';
+
+%% Import Data
 
 run([analysispath '/import_params_and_multiple_summaries.m'])
 
 %% Find TOW probability
 
-
-
 for i=1:nruns
     
     Ns(i)=runs(i).N1(1,1);
     
-    stayed_on=~(runs(i).exit_cond==1);
+    stayed_on=runs(i).exit_cond==12 | runs(i).exit_cond==8;
     TOWed=sum(runs(i).exit_cond(stayed_on)==12);
     passed=sum(runs(i).exit_cond(stayed_on)==8);
     
-    fraction(i)=TOWed/(TOWed+passed);
+    fraction(i)=TOWed/sum(stayed_on);
     
     %SEM from 
     %http://stats.stackexchange.com/questions/29641/standard-error-for-the-mean-of-a-sample-of-binomial-random-variables
@@ -31,11 +34,13 @@ hold on
 
 experimental_SE=sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
 
-plot([Ns(1) Ns(end)],[experimental_fraction experimental_fraction],'k')
-plot([Ns(1) Ns(end)],[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
-plot([Ns(1) Ns(end)],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
+plot([Ns(1)-2 Ns(end)+2],[experimental_fraction experimental_fraction],'k')
+plot([Ns(1)-2 Ns(end)+2],[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
+plot([Ns(1)-2 Ns(end)+2],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
+
+axis([Ns(1)-2 Ns(end)+2 -inf inf])
 
 xlabel('Number of Motors on the Cargo')
 ylabel('Fraction of Cargos that TOW')
-
+title(titlestr)
 legend('Simulated Fraction +/- Standard Error','Experimental Fraction','+/- Experimental Standard Error','Location','SouthEast')
