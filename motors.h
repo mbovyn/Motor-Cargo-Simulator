@@ -48,7 +48,7 @@ int FoundNotbound;
 int Foundbound;
 int graceful_exit;
 
-int MTviolationCounter=0;
+int MTviolationCounter[NMTSMAX];
 
 //Motor Parameters
 

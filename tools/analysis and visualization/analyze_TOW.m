@@ -40,9 +40,32 @@ if exist('experimental_fraction','var')
     plot([Ns(1)-2 Ns(end)+2],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
 end
 
-axis([Ns(1)-2 Ns(end)+2 -inf inf])
-
-xlabel('Number of Motors on the Cargo')
-ylabel('Fraction of Cargos that TOW')
+axis([Ns(1)-2 Ns(end)+2 0 1])
 title(titlestr)
-legend('Simulated Fraction +/- Standard Error','Experimental Fraction','+/- Experimental Standard Error','Location','SouthEast')
+
+if exist('makesubfigure','var')
+    
+    if strcmp(makesubfigure,'full')
+    
+        xlabel('Number of Motors on the Cargo')
+        ylabel('Fraction of Cargos that TOW')
+        legend('Simulated','Experiment','Location','NorthWest')
+    
+    end
+    
+    set(gca,'FontSize',10);
+
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 0 3.25 3];
+    fig.PaperSize = [3.25 3];
+    
+    
+else
+    
+    xlabel('Number of Motors on the Cargo')
+    ylabel('Fraction of Cargos that TOW')
+    title(titlestr)
+    legend('Simulated +/- Standard Error','Experiment','+/- Experiment Standard Error','Location','NorthWest')
+    
+end

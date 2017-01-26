@@ -343,16 +343,16 @@ void evaluate_steric(){
 
             if(MTdist < R-.005){
 
-                MTviolationCounter++;
+                MTviolationCounter[k]++;
                 if(verboseTF>3){
-                    printf("MT violation at step %ld. Total violations: %d\n",step,MTviolationCounter);
+                    printf("MT %d violation at step %ld. Total violations: %d\n",k,step,MTviolationCounter[k]);
                 }
-                if(MTviolationCounter>5){
-                    printf("\n\n\nError! MT more than 20nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",step);
+                if(MTviolationCounter[k]>5){
+                    printf("\n\n\nError! MT %d more than 5nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",k,step);
                     graceful_exit=1;
                 }
             }else{
-                MTviolationCounter=0;
+                MTviolationCounter[k]=0;
             }
 
         }else{
