@@ -356,6 +356,7 @@ void evaluate_steric(){
             }
 
         }else{
+            MTviolationCounter[k]=0;
             for(i=0;i<3;i++){
                 Fsterick[i]=0;
             }

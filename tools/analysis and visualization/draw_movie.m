@@ -186,10 +186,10 @@ if ~exist('tan_scaling','var')
         disp('Creating force scaling')
 
         mags_ext=sqrt(sum(Fext.*Fext,2));
-        ext_scaling=R/median(mags_ext(mags_ext>1E-8));
+        ext_scaling=R(1)/max(mags_ext);
 
         mags_steric=sqrt(sum(Fsteric.*Fsteric,2));
-        steric_scaling=R/median(mags_steric(mags_steric>1E-8));
+        steric_scaling=R(1)/max(mags_steric);
 
         mags_tan=zeros(size(Ftangential{1}{1},1),N(1)+N(2));
         mags_rad=zeros(size(Fradial{1}{1},1),N(1)+N(2));
@@ -204,10 +204,10 @@ if ~exist('tan_scaling','var')
         mags_tan=mags_tan(:);
         mags_rad=mags_rad(:);
 
-        tan_scaling=R/median(mags_tan(mags_tan>1E-8));
-        rad_scaling=R_motor(1)/median(mags_rad(mags_rad>1E-8));
+        tan_scaling=R(1)/max(mags_tan);
+        rad_scaling=R(1)/max(mags_rad);
 
-        cargo_scaling=max([ext_scaling,steric_scaling,rad_scaling]);
+        cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
 
         clear mags_ext mags_steric mags_tan mags_rad ...
             ext_scaling steric_scaling rad_scaling
