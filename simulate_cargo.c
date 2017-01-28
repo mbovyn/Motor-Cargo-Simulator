@@ -110,6 +110,7 @@ int simulate_cargo()
 
     //setup data collection
     inLoopDataCollection();
+    t_rec=dt_rec;
 
     //Have different options for end condition of the Simulation
     //initially set flag to stop the simualtion to false
@@ -409,9 +410,14 @@ int simulate_cargo()
 
         //record data
         if( (!graceful_exit && !prematureReturn)
-            &&((ReturnDetails==1 && hit_action)
+            &&(    (ReturnDetails==1 && hit_action)
                 || ReturnDetails==2
                 || (ReturnDetails==3 && (step-1)%1000==0) )){
+            inLoopDataCollection();
+        }
+
+        if(ReturnDetails==4 && t_inst>t_rec){
+            t_rec+=dt_rec;
             inLoopDataCollection();
         }
 

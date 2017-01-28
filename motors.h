@@ -295,6 +295,9 @@ double theta[3], theta1[3];
 
 double LastBoundLocation[3];
 
+double t_rec;
+double dt_rec=.001;
+
 //variables
 int runningInLoop;
 char repeat_number[100];

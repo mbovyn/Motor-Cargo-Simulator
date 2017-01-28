@@ -30,22 +30,31 @@ end
 
 errorbar(Ns,fraction,SEM,'.')
 
-hold on 
+hold on
+
+if exist('mult','var')
+    lims=[6 24];
+else
+    lims=[Ns(1)-2 Ns(end)+2];
+end
 
 if exist('experimental_fraction','var')
     experimental_SE=sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
+    experimental_CI=1.96*sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
 
-    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction experimental_fraction],'k')
-    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
-    plot([Ns(1)-2 Ns(end)+2],[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--')
+    plot(lims,[experimental_fraction experimental_fraction],'k')
+    plot(lims,[experimental_fraction+experimental_SE experimental_fraction+experimental_SE],'k--')
+    h=plot(lims,[experimental_fraction-experimental_SE experimental_fraction-experimental_SE],'k--');
+    set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+    
+    plot(lims,[experimental_fraction+experimental_CI experimental_fraction+experimental_CI],'k:')
+    h=plot(lims,[experimental_fraction-experimental_CI experimental_fraction-experimental_CI],'k:');
+    set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 end
 
-axis([Ns(1)-2 Ns(end)+2 0 1])
-title(titlestr)
-
-if exist('makesubfigure','var')
+if (exist('makesubfigure','var') && ~exist('mult','var') ) || exist('lastone','var')
     
-    if strcmp(makesubfigure,'full')
+    if exist('makesubfigure','var') && strcmp(makesubfigure,'full')
     
         xlabel('Number of Motors on the Cargo')
         ylabel('Fraction of Cargos that TOW')
@@ -53,15 +62,22 @@ if exist('makesubfigure','var')
     
     end
     
+    axis([lims(1) lims(2) 0 1])
+    title(titlestr)
+    
     set(gca,'FontSize',10);
 
     fig = gcf;
     fig.PaperUnits = 'inches';
-    fig.PaperPosition = [0 0 3.25 3];
-    fig.PaperSize = [3.25 3];
+    fig.PaperPosition = [0 0 3.25 2.75];
+    fig.PaperSize = [3.25 2.57];
     
+elseif exist('mult','var')
     
 else
+    
+    axis([lims(1) lims(2) 0 1])
+    title(titlestr)
     
     xlabel('Number of Motors on the Cargo')
     ylabel('Fraction of Cargos that TOW')
