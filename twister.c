@@ -235,27 +235,30 @@ void RanInit(int repeatable)
   FILE *ip, *ip2; // ISEED files
   long iseed;
 
-  ip =fopen("ISEED","r");//open the seed
+  ip =fopen("ISEED","r");//open the seed and read it in
   fscanf(ip,"%lx",&iseed);
   fclose(ip);
 
-  ip2=fopen("last ISEED","w");
+  ip2=fopen("last ISEED","w"); //record the current seed before it's overwritten
   fprintf(ip2,"%lx\n",iseed);
   fclose(ip2);
 
   if (iseed>0) iseed*= -1;
-  init_genrand(iseed);
+  init_genrand(iseed); //initialize
 
   /* printf("ISEED=%lx\n",iseed); */
 
   if(repeatable==0)
-  {
+  {//use the previous seed to generate a new one
 	iseed = genrand_int32();
-	ip=fopen("ISEED","w");
+	ip=fopen("ISEED","w"); //overwrite the previous seed
 	fprintf(ip,"%lx\n",iseed);
 	fclose(ip);
   }
-  else{
+  else{//don't overwrite the seed
+      //generate a rand to keep the number of rands generated the same as the
+      //repeatable=0 case (makes sure program calling this gets the same rand
+      //stream in either case)
       iseed = genrand_int32();
   }
 
