@@ -10,21 +10,23 @@ int simulate_cargo()
         printf("\nPerforming setup step\n\n");
 
     //set current center to center that was passed in
-    for(i=0;i<3;i++)
-        center[i]=center_initial[i];
-
     for(i=0;i<3;i++){
+        center[i]=center_initial[i];
         LastBoundLocation[i]=NAN;
     }
+    for(k=0;k<n_MTs;k++){
+        MTviolationCounter[k]=0;
+    }
+
+    if (verboseTF>4)
+        printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
+
+    // set initial locations of motors -------------------------------------
+    initiallocations();
+    //sets locs
 
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
-
-        // set initial locations of motors -------------------------------------
-        initiallocations();
-        //sets locs
-
-
         // set initial binding status ---------------------------------------
         initialbinding();
         //sets bound and head
@@ -108,6 +110,7 @@ int simulate_cargo()
 
     //setup data collection
     inLoopDataCollection();
+    t_rec=dt_rec;
 
     //Have different options for end condition of the Simulation
     //initially set flag to stop the simualtion to false
@@ -254,8 +257,24 @@ int simulate_cargo()
             }
         } // finished generating reaction rates and finding next event
 
+        //to set motor time step, find number of attached motors
+        nbound=0;
+        for(m=0;m<2;m++){
+            for (n=0;n<N[m];n++){
+                if(bound[m][n]){
+                    nbound++;
+                }
+            }
+        }
+
+        dt_max_MultiMotor=.9*1/(nbound*k_m[0]*muCargoTranslation);
+
         //choose dt max for the current situation
-        dt_max = dt_max_base;
+        if(dt_max_MultiMotor<dt_max_base){
+            dt_max = dt_max_MultiMotor;
+        }else{
+            dt_max = dt_max_base;
+        }
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
@@ -284,115 +303,125 @@ int simulate_cargo()
         calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
-        cargobehavior(); //updates locations
+        if(!graceful_exit){
 
-        //Once the step is complete, set the new status after any changes
-        //that happened during the step
-        if(hit_action){
-            if (hit_action == 1) // stepping
-            {
-                head[hit_m][hit_n][0] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][0];
-                head[hit_m][hit_n][1] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][1];
-                head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
+            cargobehavior(); //updates locations
 
-                if(verboseTF>2){
-                    printf("on step of type%ldmotor%ld, t was %g force was %g pN and rate was %g per second\n",
-                        hit_m,hit_n,t_inst,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
-                }
-            }
-            else if (hit_action == 2) // binding
-            {
-                //set bound status
-                bound[hit_m][hit_n]=hit_k+1;
+            //Once the step is complete, set the new status after any changes
+            //that happened during the step
+            if(hit_action){
+                if (hit_action == 1) // stepping
+                {
+                    head[hit_m][hit_n][0] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][0];
+                    head[hit_m][hit_n][1] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][1];
+                    head[hit_m][hit_n][2] += step_size[hit_m]*MTvec[bound[hit_m][hit_n]-1][2];
 
-                //set head location
-                closestPointOnMT(locs[hit_m][hit_n][0],
-                    locs[hit_m][hit_n][1],locs[hit_m][hit_n][2],hit_k);
-
-                head[hit_m][hit_n][0]=cPoint[0];
-                head[hit_m][hit_n][1]=cPoint[1];
-                head[hit_m][hit_n][2]=cPoint[2];
-
-                if(verboseTF>2){
-                    printf("on binding of type%ldmotor%ld to MT %d, t was %g, MT_dist was %g microns\n",
-                        hit_m,hit_n,bound[hit_m][hit_n],t_inst,MTdist);
-                }
-            }
-            else if (hit_action == 3) // detachment
-            {
-
-                if(verboseTF>2){
-                    printf("on unbinding of type%ldmotor%ld from MT%d, t was %g, force was %g pN and rate was %g per second\n",
-                        hit_m,hit_n,bound[hit_m][hit_n],t_inst,F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
-
-                }
-
-                //set motor to no longer being bound
-                bound[hit_m][hit_n] = 0;
-
-                //set head position to nan
-                head[hit_m][hit_n][0]=NAN;
-                head[hit_m][hit_n][1]=NAN;
-                head[hit_m][hit_n][2]=NAN;
-
-                //set nucleotide status
-                if(NucleotideBehavior){
-                    nuc_ready[hit_m][hit_n]=0;
-                }
-
-
-            }
-            else if(hit_action==4){ //nucleotide exchange
-                nuc_ready[hit_m][hit_n]=1;
-
-                if(verboseTF>2){
-                    printf("on nucleotide exchange, t was %g\n",t_inst);
-                }
-            }
-            else
-            {
-                printf("Should not have gotten here on choosing action in Gillespie\n");
-                graceful_exit=1;
-            }
-        }
-
-        //----------------------------------------------------------------------
-        // Upkeep and recording
-        //----------------------------------------------------------------------
-
-        // update timestep and step number
-        t_inst += dt;
-        step ++;
-
-        //keep track of last bound location
-        Foundbound=0;
-        for(m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                if (bound[m][n]){
-                    Foundbound=1;
-                    for(i=0;i<3;i++){
-                        LastBoundLocation[i]=center[i];
-                    }
-                    for(i=0;i<3;i++){
-                        last_bound_head[m][n][i]=head[m][n][i];
+                    if(verboseTF>2){
+                        printf("Step at %g s:\n    type%ldmotor%ld, force %gpN, rate %g/s\n",
+                            t_inst,hit_m,hit_n,F_m_mag[hit_m][hit_n],step_rate[hit_m][hit_n]);
                     }
                 }
+                else if (hit_action == 2) // binding
+                {
+                    //set bound status
+                    bound[hit_m][hit_n]=hit_k+1;
+
+                    //set head location
+                    closestPointOnMT(locs[hit_m][hit_n][0],
+                        locs[hit_m][hit_n][1],locs[hit_m][hit_n][2],hit_k);
+
+                    head[hit_m][hit_n][0]=cPoint[0];
+                    head[hit_m][hit_n][1]=cPoint[1];
+                    head[hit_m][hit_n][2]=cPoint[2];
+
+                    if(verboseTF>2){
+                        printf("Binding at %g s:\n    type%ldmotor%ld to MT %d, MT_dist %g microns\n",
+                            t_inst,hit_m,hit_n,bound[hit_m][hit_n],MTdist);
+                    }
+                }
+                else if (hit_action == 3) // detachment
+                {
+
+                    if(verboseTF>2){
+                        printf("Unbinding at %g s:\n    type%ldmotor%ld from MT%d, force %g pN, rate %g/s\n",
+                            t_inst,hit_m,hit_n,bound[hit_m][hit_n],F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
+
+                    }
+
+                    //set motor to no longer being bound
+                    bound[hit_m][hit_n] = 0;
+
+                    //set head position to nan
+                    head[hit_m][hit_n][0]=NAN;
+                    head[hit_m][hit_n][1]=NAN;
+                    head[hit_m][hit_n][2]=NAN;
+
+                    //set nucleotide status
+                    if(NucleotideBehavior){
+                        nuc_ready[hit_m][hit_n]=0;
+                    }
+
+
+                }
+                else if(hit_action==4){ //nucleotide exchange
+                    nuc_ready[hit_m][hit_n]=1;
+
+                    if(verboseTF>2){
+                        printf("on nucleotide exchange, t was %g\n",t_inst);
+                    }
+                }
+                else
+                {
+                    printf("Should not have gotten here on choosing action in Gillespie\n");
+                    exit(0);
+                }
             }
-        }
+
+            //----------------------------------------------------------------------
+            // Upkeep and recording
+            //----------------------------------------------------------------------
+
+            // update timestep and step number
+            t_inst += dt;
+            step ++;
+
+            //keep track of last bound location
+            Foundbound=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    if (bound[m][n]){
+                        Foundbound=1;
+                        for(i=0;i<3;i++){
+                            LastBoundLocation[i]=center[i];
+                        }
+                        for(i=0;i<3;i++){
+                            last_bound_head[m][n][i]=head[m][n][i];
+                        }
+                    }
+                }
+            }
+
+            evaluate_stop_conditions();
+
+        }//end of update section, depends on graceful exit
+
+        if (verboseTF>3)
+            printf("\n\n Step done, recording data. Time t_inst = %g, step = %ld\n\n", t_inst, step);
 
         //record data
-        if( (ReturnDetails==1 && hit_action)
-            || ReturnDetails==2
-            || (ReturnDetails==3 && (step-1)%1000==0) ){
+        if( (!graceful_exit && !prematureReturn)
+            &&(    (ReturnDetails==1 && hit_action)
+                || ReturnDetails==2
+                || (ReturnDetails==3 && (step-1)%1000==0) )){
             inLoopDataCollection();
         }
 
-        if (verboseTF>3)
-            printf("Time t_inst = %g, timestep step = %ld\n", t_inst, step);
+        if(ReturnDetails==4 && t_inst>t_rec){
+            t_rec+=dt_rec;
+            inLoopDataCollection();
+        }
 
-        evaluate_stop_conditions();
-
-        if(prematureReturn && ReturnDetails){
+        if(ReturnDetails && (prematureReturn || graceful_exit) ){
             inLoopDataCollection();
         }
 

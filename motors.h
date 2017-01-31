@@ -1,6 +1,6 @@
 
 // Macros
-#define NMOTORSMAX 5
+#define NMOTORSMAX 101
 #define NMTSMAX 10
 #define kBT .00400388
 #define RAND genrand_real3()
@@ -21,11 +21,12 @@ int j;
 int Requirebound;
 int StopOnMotor2Attach;
 int StopOnAllbound;
-int StopOnStep;
+long StopOnStep;
 double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
 int MultiMTassay;
+double ToW_zone;
 int StopOnBeadDissociation;
 double theta_c;
 int success, success_mode, trial_success;
@@ -33,7 +34,7 @@ int success, success_mode, trial_success;
 double timer=0;
 
 // check
-int check_bit;
+int check_bit, check_bit2;
 
 
 /* -------------------------------------------------------------------
@@ -46,6 +47,8 @@ int prematureReturn;
 int FoundNotbound;
 int Foundbound;
 int graceful_exit;
+
+int MTviolationCounter[NMTSMAX];
 
 //Motor Parameters
 
@@ -96,9 +99,10 @@ double muCargoTranslation; //1/6*pi*eta*R
 double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
 
-double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base;
-double dt_default=.0000025;
+double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base, dt_max_MultiMotor;
+double dt_default=.0001;
 double dt_override;
+double nbound;
 
 /* -------------------------------------------------------------------
 Listing of optional arguements to pass in
@@ -175,7 +179,8 @@ int m,n,i,k;
 intial locations
 */
 
-double init_locs[NMOTORSMAX][3]; //initial locations, set by initiallocations
+double initlocs[2][NMOTORSMAX][3]; //initial locations, set by initiallocations
+double initlocsnew[2][NMOTORSMAX][3];
 double uu; //random variables to generate elevations
 double vv; //random variables to generate azimuths
 double az;
@@ -188,6 +193,8 @@ int SetAtBottom;
 double InitAngle;
 
 double innerlimit;
+
+double rotmat[9];
 
 /* -------------------------------------------------------------------
 Initial Binding
@@ -287,6 +294,9 @@ double theta[3], theta1[3];
  */
 
 double LastBoundLocation[3];
+
+double t_rec;
+double dt_rec=.001;
 
 //variables
 int runningInLoop;

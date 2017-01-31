@@ -25,9 +25,9 @@ void writeCenterLocsHeader(){
     fprintf(fInUse, "center_x                center_y                center_z                ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"type%dmotor%d_x           ",m,n);
-            fprintf(fInUse,"type%dmotor%d_y           ",m,n);
-            fprintf(fInUse,"type%dmotor%d_z           ",m,n);
+            fprintf(fInUse,"anchor_type%dmotor%d_x    ",m,n);
+            fprintf(fInUse,"anchor_type%dmotor%d_y    ",m,n);
+            fprintf(fInUse,"anchor_type%dmotor%d_z    ",m,n);
         }
     }
 }
@@ -35,9 +35,9 @@ void writeCenterLocsHeader(){
 void writeHeadHeader(){
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"type%dmotor%d_x           ",m,n);
-            fprintf(fInUse,"type%dmotor%d_y           ",m,n);
-            fprintf(fInUse,"type%dmotor%d_z           ",m,n);
+            fprintf(fInUse,"head_type%dmotor%d_x      ",m,n);
+            fprintf(fInUse,"head_type%dmotor%d_y      ",m,n);
+            fprintf(fInUse,"head_type%dmotor%d_z      ",m,n);
         }
     }
 }
@@ -62,7 +62,7 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R  N[0] Fexternal[0] theta_c last_x                  last_y                  last_z                 ");
+    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R    N[0] Fexternal[0] theta_c last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
 }
 
 void initializeDataCollection()
@@ -243,7 +243,7 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%d         %d     %8g %g     %g    %g   %g  %ld %g %g %+1.16E %+1.16E %+1.16E ",
+    fprintf(fInUse, "%9d %7d %8g %5g %4g %4.3g %.2g  %4ld %12g %7g %-+23.16E %-+23.16E %-+23.16E ",
         prematureReturn,trial_success,
         D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],Ftrap[0],theta_c,
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);

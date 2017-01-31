@@ -14,31 +14,49 @@
 /*******************************************************************************/
 
 #include "motors.h" //header which intializes all variables
+
+//in the preprocessor, select which equation files to include
+//want to do this because the equation files with large numbers of motors
+//take a long time to compile
+#if defined(bead5)
+    #include "beadequations5.c"
+    int available_motors_bead=5;
+#elif defined(bead10)
+    #include "beadequations10.c"
+    int available_motors_bead=10;
+#elif defined(bead20)
+    #include "beadequations20.c"
+    int available_motors_bead=20;
+#elif defined(bead50)
+    #include "beadequations50.c"
+    int available_motors_bead=50;
+#elif defined(bead101)
+    #include "beadequations101.c"
+    int available_motors_bead=101;
+#else
+    #include "beadequations5.c"
+    int available_motors_bead=5;
+#endif
+
+#if defined(free5)
+    #include "stochasticequations5.c"
+    int available_motors_free=5;
+#elif defined(free10)
+    #include "stochasticequations10.c"
+    int available_motors_free=10;
+#elif defined(free20)
+    #include "stochasticequations20.c"
+    int available_motors_free=20;
+#else
+    #include "stochasticequations5.c"
+    int available_motors_free=5;
+#endif
+
 #include "getInputParams.c" //reads parameter file
 #include "dataCollection.c" //writes data to file
 #include "motorHelpers_setup.c" //file with functions for setup
 #include "motorHelpers_rates.c" //functions for finding stepping rates
 #include "stop_conditions.c"
-
-//in the preprocessor, select which equation files to include
-//want to do this because the equation files with large numbers of motors
-//take a long time to compile
-#if (0 <= NMOTORSMAX && NMOTORSMAX <= 5)
-    #include "stochasticequations5.c" //genearated by mathematica
-    #include "beadequations5.c"
-#elif (5 < NMOTORSMAX && NMOTORSMAX <= 10)
-    #include "stochasticequations10.c" //genearated by mathematica
-    #include "beadequations10.c"
-#elif (10 < NMOTORSMAX && NMOTORSMAX <= 20)
-    #include "stochasticequations20.c" //genearated by mathematica
-    #include "beadequations20.c"
-#elif (20 < NMOTORSMAX && NMOTORSMAX <=50)
-    #include "stochasticequations5.c" //genearated by mathematica
-    #include "beadequations50.c"
-#else
-    #include "stochasticequations5.c" //genearated by mathematica
-    #include "beadequations101.c"
-#endif
 
 #include "motorHelpers_sODE.c" //functions for setting up the solve
 #include "simulate_cargo.c" //main simulation
@@ -79,10 +97,18 @@ int main( int argc, char *argv[] )
     }
 
     // Intialize random number generator (twister.c)
-    RanInit(0); //can set RanInit(1) to use same seed every time
-    if(verboseTF>0){
+    #if defined(keepseed)
+        int seed_option=1;
+    #else
+        int seed_option=0;
+    #endif
+    RanInit(seed_option); //can set RanInit(1) to use same seed every time
+
+    if(verboseTF>1){
         //if ever see two that are the same, know iSEED wasn't updated
         printf("The test rand is %f\n",RAND);
+    }else{
+        RAND;
     }
 
     //can bring D_m[0] and eps_0[0] in from the command line here
@@ -134,16 +160,21 @@ int main( int argc, char *argv[] )
 
 
     getInputParams();
-    //Print out last thing we read in
-    //this makes sure everything was read in correctly
-    //(if any are incorrectly read in the last will be too as they are sequential)
-    if(verboseTF>0){
-        printf("Read in StopOnTime as %g\n",StopOnTime);
-    }
+
     //print number of motors and parameters we're running
     if(verboseTF>0){
         printf("Running with %ld kinesins and %ld dyneins\n",N[0],N[1]);
-        printf("Running D = %g, eps_0 = %g, pi_0 = %g\n",D_m[0],eps_0[0],pi_0[0]);
+
+        printf("Parameters for type0 motors are:\n");
+        printf("     D = %g\n",D_m[0]);
+        printf("     eps_0 = %g\n",eps_0[0]);
+        printf("     pi_0 = %g\n",pi_0[0]);
+        printf("Global parameters are:\n");
+        printf("     MT_offset = %g\n",z_MT_offset);
+        printf("     R = %g\n",R);
+        printf("     Trap force x component = %g\n",Ftrap[0]);
+        printf("     Critical Angle theta_c = %g\n",theta_c);
+
         printf("Running %d repeats\n",repeats );
     }
 

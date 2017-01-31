@@ -1,7 +1,23 @@
-all:
-	gcc -O3 driveMotors.c -o motors.x -lm
+bead5:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead5
 
-mult:
-	gcc -O3 driveMotors_mult.c -o motors_mult.x -lm
+bead10:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead10
 
-#dataCollection.c getInputParams.c motorHelpers_rates.c motorHelpers_setup.c motorHelpers_sODE.c motors.h simulate_cargo.c
+bead20:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead20
+
+bead50:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead50
+
+bead101:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead101
+
+free5:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dfree5
+
+free10:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dfree10
+
+free20:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dfree20

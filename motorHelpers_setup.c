@@ -8,6 +8,8 @@ void pickpointsphere();
 void findMTdist();
 void closestPointOnMT(double x,double y,double z,int MTnum);
 void pointToMTdist(double x,double y,double z, int MTnum);
+void makeRotationMatrix(double t0,double t1,double t2);
+void rotateCargo();
 
 
 // void pickpointsphere(){
@@ -68,92 +70,170 @@ void initiallocations(){
         printf("setting initial locations with case %d\n",InitialLocations);
     }
     switch(InitialLocations){
-        case 3:
-            //initial locations set to the top of the sphere
-            for(n=0;n<N[m];n++){
-              init_locs[n][2]=R;
-            }
-            break;
-        case 4:
-            //initial locations set to the bottom of the sphere
-            for(n=0;n<N[m];n++)
-                init_locs[n][2]=-R;
-            break;
+
         case 2:
 
-            //set these to the initial locations, adjust for center of cargo
-            for(n=0;n<N[m];n++){
-                pickpointsphere();
-                for(i=0;i<3;i++){
-                    if(i==0)
-                        init_locs[n][i]=x*R+center[i];
-                    if(i==1)
-                        init_locs[n][i]=y*R+center[i];
-                    if(i==2)
-                        init_locs[n][i]=z*R+center[i];
+            //set random initial locations, adjust for center of cargo
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    pickpointsphere();
+                    for(i=0;i<3;i++){
+                        if(i==0)
+                            initlocs[m][n][i]=x*R+center[i];
+                        if(i==1)
+                            initlocs[m][n][i]=y*R+center[i];
+                        if(i==2)
+                            initlocs[m][n][i]=z*R+center[i];
+                        }
+                }
+            }
+            break;
+
+        case 3:
+            //initial locations set to the top of the sphere
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                  initlocs[m][n][0]=center[0];
+                  initlocs[m][n][1]=center[1];
+                  initlocs[m][n][2]=R+center[2];
+                }
+            }
+            break;
+
+        case 4:
+            //initial locations set to the bottom of the sphere
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    initlocs[m][n][0]=center[0];
+                    initlocs[m][n][1]=center[1];
+                    initlocs[m][n][2]=-R+center[2];
+                }
+            }
+            break;
+
+        case 5:
+            //random initial conditions with cargo rotated so that type0motor0 is on top
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    pickpointsphere();
+                    initlocs[m][n][0]=x*R+center[0];
+                    initlocs[m][n][1]=y*R+center[1];
+                    initlocs[m][n][2]=z*R+center[2];
+                }
+            }
+
+            if(verboseTF>4){
+                printf("Before rotation,initial locations are chosen as:\n");
+                for (m=0;m<2;m++){
+                    for(n=0;n<N[m];n++){
+                        printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
                     }
-            }
-            break;
-
-        case 7: //start at a defined angle
-
-            for(n=0;n<N[m];n++){
-                init_locs[n][0]=R*cos(pi/180*InitAngle)*cos(0);
-                init_locs[n][1]=R*cos(pi/180*InitAngle)*sin(0);
-                init_locs[n][2]=R*sin(pi/180*InitAngle);
+                }
             }
 
+            m=0;
+            n=0;
+            makeRotationMatrix(0,0,1);
+
+            if(verboseTF>5){
+                printf("The rotation matrix that was found is:\n");
+                printf("    %+E %+E %+E\n    %+E %+E %+E\n    %+E %+E %+E\n",
+                    rotmat[0],rotmat[1],rotmat[2],
+                    rotmat[3],rotmat[4],rotmat[5],
+                    rotmat[6],rotmat[7],rotmat[8]);
+            }
+
+            rotateCargo();
+
             break;
 
-    //     case 'LocationsOther'
-    //
-    //         //take input of initial locations as arguement for InitialLocations
-    //         //parameter so we can set them outside the function
-    //
-    //         init_locs=p.Results.OtherInitialLocations{m};
-    //
-    //     otherwise
-    //     error('Not a valid initial location type')
-    // end
+        case 7: //start at a defined angle along the x axis
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    initlocs[m][n][0]=center[0]+R*cos(pi/180*InitAngle)*cos(0);
+                    initlocs[m][n][1]=center[1]+R*cos(pi/180*InitAngle)*sin(0);
+                    initlocs[m][n][2]=center[2]+R*sin(pi/180*InitAngle);
+                }
+            }
+
+            break;
+
         default:
             printf("Not a valid initial location type\n");
             exit(0);
     }//switch
 
+    if(verboseTF>4){
+        printf("Initial locations are chosen as:\n");
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
+            }
+        }
+    }
+
     //if passed the setting to have one of the motors on the bottom
     if(SetAtBottom){
         //if passed 1, want to attach for m=0 (kinesin)
         //if passed 2, attach for m=1 (dynein)
-        if(SetAtBottom==1 && m==0){
-            init_locs[0][0]=center[0];
-            init_locs[0][1]=center[1];
-            init_locs[0][2]=center[2]-R;
+        if(SetAtBottom==1){
+            initlocs[0][0][0]=center[0];
+            initlocs[0][0][1]=center[1];
+            initlocs[0][0][2]=center[2]-R;
         }
-        if(SetAtBottom==2 && m==1){
-            init_locs[0][0]=center[0];
-            init_locs[0][1]=center[1];
-            init_locs[0][2]=center[2]-R;
+        if(SetAtBottom==2){
+            initlocs[1][0][0]=center[0];
+            initlocs[1][0][1]=center[1];
+            initlocs[1][0][2]=center[2]-R;
         }
-        if(SetAtBottom==3 && m==0){
-            init_locs[0][0]=center[0];
-            init_locs[0][1]=center[1];
-            init_locs[0][2]=center[2]+R;
+        if(SetAtBottom==3){
+            initlocs[0][0][0]=center[0];
+            initlocs[0][0][1]=center[1];
+            initlocs[0][0][2]=center[2]+R;
         }
-        if(SetAtBottom==4 && m==1){
-            init_locs[0][0]=center[0];
-            init_locs[0][1]=center[1];
-            init_locs[0][2]=center[2]+R;
+        if(SetAtBottom==4){
+            initlocs[1][0][0]=center[0];
+            initlocs[1][0][1]=center[1];
+            initlocs[1][0][2]=center[2]+R;
         }
     }//set at bottom
 
     //set the generated initial locations to the current location
-    for(n=0;n<N[m];n++){
-        //printf("%d %f %f %f\n",m,init_locs[n][0],init_locs[n][1],init_locs[n][2]);
-        for(i=0;i<3;i++){
-            locs[m][n][i]=init_locs[n][i];
+    for (m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            //printf("%d %f %f %f\n",m,initlocs[n][0],initlocs[n][1],initlocs[n][2]);
+            for(i=0;i<3;i++){
+                locs[m][n][i]=initlocs[m][n][i];
+            }
         }
     }
 } // finished initiallocations
+
+void makeRotationMatrix(double t0,double t1,double t2){
+    rotmat[0] = (pow(R,2) - pow(center[0] - initlocs[m][n][0],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
+    rotmat[1] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
+    rotmat[2] = (center[0] - initlocs[m][n][0])/R;
+    rotmat[3] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
+    rotmat[4] = (pow(R,2) - pow(center[1] - initlocs[m][n][1],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
+    rotmat[5] = (center[1] - initlocs[m][n][1])/R;
+    rotmat[6] = (-center[0] + initlocs[m][n][0])/R;
+    rotmat[7] = (-center[1] + initlocs[m][n][1])/R;
+    rotmat[8] = -((-pow(R,2) + pow(center[0],2) + pow(center[1],2) - 2*center[0]*initlocs[m][n][0] + pow(initlocs[m][n][0],2) - 2*center[1]*initlocs[m][n][1] + pow(initlocs[m][n][1],2) + R*(center[2] - initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2])));
+}
+
+void rotateCargo(){
+    for (m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            initlocsnew[m][n][0] = center[0] + rotmat[0]*(-center[0] + initlocs[m][n][0]) + rotmat[1]*(-center[1] + initlocs[m][n][1]) + rotmat[2]*(-center[2] + initlocs[m][n][2]);
+            initlocsnew[m][n][1] = center[1] + rotmat[3]*(-center[0] + initlocs[m][n][0]) + rotmat[4]*(-center[1] + initlocs[m][n][1]) + rotmat[5]*(-center[2] + initlocs[m][n][2]);
+            initlocsnew[m][n][2] = center[2] + rotmat[6]*(-center[0] + initlocs[m][n][0]) + rotmat[7]*(-center[1] + initlocs[m][n][1]) + rotmat[8]*(-center[2] + initlocs[m][n][2]);
+
+            for(i=0;i<3;i++){
+                initlocs[m][n][i]=initlocsnew[m][n][i];
+            }
+        }
+    }
+}
 
 void vecToClosestPointOnMT(double x,double y,double z, int MTnum){
     //from mathematica file
@@ -254,16 +334,11 @@ void initialbinding(){
                     }
                 }
 
-                //if none availiable, teleport one over
-                // if(done==0){
-                //     locs[0][0][0]=center[0];
-                //     locs[0][0][1]=center[1];
-                //     locs[0][0][2]=center[2]-R;
-                //     bound[0][0]=1;
-                //     if(verboseTF>2){
-                //         printf("Teleported kin to bottom and forced binding\n");
-                //     }
-                // }
+                //stop if one wasn't able to bind
+                if(done==0){
+                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
+                    exit(0);
+                }
             }
 
             break;
@@ -303,14 +378,22 @@ void initialbinding(){
                     }
                 }
 
-                //if none availiable, teleport one over
-                // if(done==0){
-                //     locs[1][0][0]=center[0];
-                //     locs[1][0][1]=center[1];
-                //     locs[1][0][2]=center[2]-R;
-                //     bound[1][0]=1;
-                //     printf("Teleported dyn to attach\n");
-                // }
+                //stop if one wasn't able to bind
+                if(done==0){
+                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
+                    exit(0);
+                }
+            }
+
+            break;
+
+        case 5: //force bind all motors
+
+            findMTdist();
+
+            //loop through motors to assign binding status
+            for(n=0;n<N[m];n++){
+                bound[m][n]=1;
             }
 
             break;

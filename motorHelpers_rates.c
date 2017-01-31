@@ -35,6 +35,10 @@ void motorloading()
                     if(neck_mag[m][n]>L[m]){
                         //find the force exerted by the spring motor
                         F_m_mag[m][n]=k_m[m]*(neck_mag[m][n]-L[m]);
+                        if(F_m_mag[m][n]>50){
+                            printf("\n\n\nError! type%dmotor%d force > 50pN\nExiting gracefully at step %ld\n\n\n",m,n,step);
+                            graceful_exit=1;
+                        }
                         //find the vector components of this force
                         for(i=0;i<3;i++){
                             unit_vec[i]=neck_vec[m][n][i]/neck_mag[m][n];
@@ -43,10 +47,16 @@ void motorloading()
                     }
                     else{ //if not stretched, exerts no force
                         F_m_mag[m][n]=0;
+                        for(i=0;i<3;i++){
+                            F_m_vec[m][n][i]=0;
+                        }
                     }
                 }
                 else{ //if not bound, force does not exist
                     F_m_mag[m][n]=NAN;
+                    for(i=0;i<3;i++){
+                        F_m_vec[m][n][i]=0;
+                    }
                 }
             }
 
@@ -57,6 +67,9 @@ void motorloading()
             for(n=0;n<N[m];n++){
                 if(bound[m][n]){
                     F_m_mag[m][n]=0;
+                    for(i=0;i<3;i++){
+                        F_m_vec[m][n][i]=0;
+                    }
                 }
                 else{
                     F_m_mag[m][n]=NAN;
@@ -67,6 +80,7 @@ void motorloading()
 
         default:
             printf("Invalid MotorLoading Type\n");
+            exit(0);
     }
 
 } // finished motorloading
@@ -339,6 +353,7 @@ void binding_rates() //sets bind_possible and bind_rate
 
         default:
             printf("Not a valid binding type\n");
+            exit(0);
         }
 }
 
@@ -370,5 +385,6 @@ void nucleotide(){
 
         default:
             printf("Not a valid nucleotide behavior\n");
+            exit(0);
     }
 }

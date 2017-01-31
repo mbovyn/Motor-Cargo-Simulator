@@ -5,7 +5,7 @@ void evaluate_stop_conditions(){
 
     //find if we've hit any of the end conditions
 
-    if (Requirebound || MultiMTassay){ // check if there are no motors bound
+    if ((Requirebound || MultiMTassay) && prematureReturn==0){ // check if there are no motors bound
         prematureReturn = 1;
         Foundbound=0;
         for(m=0;m<2 && !Foundbound;m++){
@@ -20,7 +20,7 @@ void evaluate_stop_conditions(){
 
     //for the experiment where we want to stop once the second motor attaches
     //check if second motor is bound
-    if(StopOnMotor2Attach){
+    if(StopOnMotor2Attach && prematureReturn==0){
         if(bound[0][1]){
             prematureReturn=2;
         }
@@ -28,7 +28,7 @@ void evaluate_stop_conditions(){
 
     //for the mean first passage time test where we wait until all motors
     //attach
-    if (StopOnAllbound){ // check if there are motors not bound
+    if (StopOnAllbound && prematureReturn==0){ // check if there are motors not bound
         prematureReturn = 3;
         FoundNotbound=0;
         for(m=0;m<2 && !FoundNotbound;m++){
@@ -42,32 +42,32 @@ void evaluate_stop_conditions(){
         }
     }
 
-    if(StopOnStep){
+    if(StopOnStep && prematureReturn==0){
         if(step>StopOnStep){
             prematureReturn=4;
         }
     }
 
-    if(StopOnTime){
+    if(StopOnTime && prematureReturn==0){
         if(t_inst>StopOnTime){
             prematureReturn=5;
         }
     }
 
-    if(StopOnDistance){
+    if(StopOnDistance && prematureReturn==0){
         if(locs[0][0][0]>StopOnDistance){
             prematureReturn=6;
         }
     }
 
-    if(StopBelowThetaC){
+    if(StopBelowThetaC && prematureReturn==0){
         convert_loc_to_spherical();
         if(locs_sph[0][0][1]<theta_c){
             prematureReturn=7;
         }
     }
 
-    if(MultiMTassay==1){
+    if(MultiMTassay==1 && prematureReturn==0){
 
         //above, we've required at least one motor to be bound
 
@@ -81,11 +81,12 @@ void evaluate_stop_conditions(){
         }
     }
 
-    if(step>100000000){
+    if(step>100000000 && prematureReturn==0){
         prematureReturn=10;
+        printf("\n\nError! Exit by step limit!\n\n");
     }
 
-    if(StopOnBeadDissociation){
+    if(StopOnBeadDissociation && prematureReturn==0){
         prematureReturn=11;
         for(k=0;k<n_MTs;k++){
             pointToMTdist(center[0],center[1],center[2],k);
@@ -95,7 +96,7 @@ void evaluate_stop_conditions(){
         }
     }
 
-    if(MultiMTassay==2){//TOW fraction assay
+    if(MultiMTassay==2 && prematureReturn==0){//TOW fraction assay
 
         //start the timer if we have at least one motor bound to both MTs
         if(anybound(1) && anybound(2) && timer==0){
@@ -117,8 +118,8 @@ void evaluate_stop_conditions(){
             prematureReturn=12;
         }
 
-        //if the cargo has walked past where it can bind the second MT, its a pass
-        if(center[0]>MTpoint[1][0]+R){
+        //if the cargo reaches the end of the ToW zone, its a pass
+        if(center[0]>MTpoint[1][0]+ToW_zone){
             prematureReturn=8;
         }
 

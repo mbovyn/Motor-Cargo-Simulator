@@ -341,12 +341,22 @@ void evaluate_steric(){
             //set that we need the steric spring so we know to use the smaller timestep
             need_steric=1;
 
-            if(MTdist < R-.02){
-                printf("\n\n\nError! MT more than 20nm inside cargo!\nExiting gracefully at step %ld\n\n\n",step);
-                graceful_exit=1;
+            if(MTdist < R-.005){
+
+                MTviolationCounter[k]++;
+                if(verboseTF>3){
+                    printf("MT %d violation at step %ld. Total violations: %d\n",k,step,MTviolationCounter[k]);
+                }
+                if(MTviolationCounter[k]>5){
+                    printf("\n\n\nError! MT %d more than 5nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",k,step);
+                    graceful_exit=1;
+                }
+            }else{
+                MTviolationCounter[k]=0;
             }
 
         }else{
+            MTviolationCounter[k]=0;
             for(i=0;i<3;i++){
                 Fsterick[i]=0;
             }
@@ -390,6 +400,7 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
+            exit(0);
     }
 
     if(verboseTF>4){
@@ -410,6 +421,7 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
+            exit(0);
     }
 
     if(verboseTF>4){
@@ -614,7 +626,7 @@ void compute_next_locations(){
 
             break;
 
-        case 9:
+        case 9: //no anchor diffusion
 
             generate_brownian_displacement_cargo();
             for(i=0;i<3;i++){
@@ -629,7 +641,7 @@ void compute_next_locations(){
             stochastic_equations();
             break;
 
-        case 10:
+        case 10: //bead equations
 
             generate_brownian_displacement_cargo();
             for(i=0;i<3;i++){
@@ -644,7 +656,7 @@ void compute_next_locations(){
             bead_equations();
             break;
 
-        case 11:
+        case 11: //bead equations, deterministic
 
             bead_equations();
             break;
@@ -676,6 +688,7 @@ void compute_next_locations(){
 
         default:
             printf("Bad Motor Diffusion type\n");
+            exit(0);
 
     }
 
@@ -685,26 +698,27 @@ void compute_next_locations(){
 
     //check for error states
 
-    if(fabs(c1[0]-c[0]) > .1
-    || fabs(c1[1]-c[1]) > .1
-    || fabs(c1[2]-c[2]) > .1){
-        printf("\n\n\nError! Cargo moved more than 100nm in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    //cargo moving too far is a sign of instability
+    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
+        printf("\n\n\nError! Cargo moved >R in one time step!\nExiting gracefully at step %ld\n\n\n",step);
         graceful_exit=1;
     }
 
-    if(!graceful_exit && (fabs(theta1[0]-theta[0]) > pi/5
-        || fabs(theta1[0]-theta[0]) > pi/5
-        || fabs(theta1[0]-theta[0]) > pi/5)){
-            printf("\n\n\nError! Cargo rotated more than pi/5 in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    //if rotates greater than pi/5, tan(theta)-theta gets off by >.1
+    //this means the difference in the local cartesian distance and distance on the circle is more than 10% off
+    if(!graceful_exit && sqrt( (theta1[0]-theta[0])*(theta1[0]-theta[0]) + (theta1[1]-theta[1])*(theta1[1]-theta[1]) + (theta1[2]-theta[2])*(theta1[2]-theta[2]) )> pi/10 ){
+            printf("\n\n\nError! Cargo rotated too much in one time step!\nExiting gracefully at step %ld\n\n\n",step);
             graceful_exit=1;
         }
 
+    //if motors move on the cargo more than R*pi/5 radians, local cartesian approximation off by >10%
     for(nn=0;nn<N[0]+N[1];nn++){
         if(!graceful_exit
-            && (fabs(a1[nn][0]-a[nn][0]) > .1
-            || fabs(a1[nn][1]-a[nn][1]) > .1
-            || fabs(a1[nn][2]-a[nn][2]) > .1)){
-            printf("\n\n\nError! Motor number %ld moved more than 100nm in one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
+            && sqrt( (a1[nn][0]-a[nn][0]-(c1[0]-c[0]))*(a1[nn][0]-a[nn][0]-(c1[0]-c[0]))
+            + (a1[nn][1]-a[nn][1]-(c1[1]-c[1]))*(a1[nn][1]-a[nn][1]-(c1[1]-c[1]))
+            + (a1[nn][2]-a[nn][2]-(c1[2]-c[2]))*(a1[nn][2]-a[nn][2]-(c1[2]-c[2])) )
+            > R*pi/10 ){
+            printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
             graceful_exit=1;
         }
     }

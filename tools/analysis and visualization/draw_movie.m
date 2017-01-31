@@ -112,27 +112,27 @@ switch plot_box
     
     case 1 %cargo set at 0 and not moving
         
-        xends=[-(R+max_length) R+max_length];
-        yends=[-(R+max_length) R+max_length];
-        zends=[-(R+max_length+.02) R+max_length];
+        xends=[-(R(1)+max_length) R(1)+max_length];
+        yends=[-(R(1)+max_length) R(1)+max_length];
+        zends=[-(R(1)+max_length+.02) R(1)+max_length];
         
     case 2 %outside of all points to be drawn
 
-        xends=[min(center(:,1))-R-max_length max(center(:,1))+R+max_length];
-        yends=[min(center(:,2))-R-max_length max(center(:,2))+R+max_length];
-        zends=[min(center(:,3))-R-max_length max(center(:,3))+R+max_length];
+        xends=[min(center(:,1))-R(1)-max_length max(center(:,1))+R(1)+max_length];
+        yends=[min(center(:,2))-R(1)-max_length max(center(:,2))+R(1)+max_length];
+        zends=[min(center(:,3))-R(1)-max_length max(center(:,3))+R(1)+max_length];
         
     case 3 %tighter bounds than 2, motor circles may be cut off
 
-        xends=[min(center(:,1))-R max(center(:,1))+R];
-        yends=[min(center(:,2))-R max(center(:,2))+R];
-        zends=[min(center(:,3))-R max(center(:,3))+R];
+        xends=[min(center(:,1))-R(1) max(center(:,1))+R(1)];
+        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
+        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
         
     case 4 % cargo centered
         
-        xends=[-(R+max_length) R+max_length];
-        yends=[-(R+max_length) R+max_length];
-        zends=[-(R+max_length+.02) R+max_length+.02];
+%         xends=[-(R+max_length) R+max_length];
+%         yends=[-(R+max_length) R+max_length];
+%         zends=[-(R+max_length+.02) R+max_length+.02];
         
     otherwise
         
@@ -186,10 +186,10 @@ if ~exist('tan_scaling','var')
         disp('Creating force scaling')
 
         mags_ext=sqrt(sum(Fext.*Fext,2));
-        ext_scaling=R/median(mags_ext(mags_ext>1E-8));
+        ext_scaling=R(1)/max(mags_ext);
 
         mags_steric=sqrt(sum(Fsteric.*Fsteric,2));
-        steric_scaling=R/median(mags_steric(mags_steric>1E-8));
+        steric_scaling=R(1)/max(mags_steric);
 
         mags_tan=zeros(size(Ftangential{1}{1},1),N(1)+N(2));
         mags_rad=zeros(size(Fradial{1}{1},1),N(1)+N(2));
@@ -204,10 +204,10 @@ if ~exist('tan_scaling','var')
         mags_tan=mags_tan(:);
         mags_rad=mags_rad(:);
 
-        tan_scaling=R/median(mags_tan(mags_tan>1E-8));
-        rad_scaling=R_motor(1)/median(mags_rad(mags_rad>1E-8));
+        tan_scaling=R(1)/max(mags_tan);
+        rad_scaling=R(1)/max(mags_rad);
 
-        cargo_scaling=max([ext_scaling,steric_scaling,rad_scaling]);
+        cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
 
         clear mags_ext mags_steric mags_tan mags_rad ...
             ext_scaling steric_scaling rad_scaling
@@ -231,7 +231,7 @@ end
 %% loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
-    h = draw_cargo(center(t,1),center(t,2),center(t,3),R,n_cargo_surf);
+    h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf);
     
     if exist('omega','var')
         if(t>1)
@@ -358,13 +358,6 @@ for t=loop_ts
         end
     end
     
-    %% MTs
-    for i=1:n_MTs
-        
-        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
-        
-    end
-    
     %% if have force vectors, plot out the forces acting on the cargo
     if draw_forces==true
         
@@ -450,13 +443,20 @@ for t=loop_ts
     
     if plot_box==4
         
-        xends=[center(t,1)-(R+max_length) center(t,1)+R+max_length];
-        yends=[center(t,2)-(R+max_length) center(t,2)+R+max_length];
-        zends=[center(t,3)-(R+max_length+.02) center(t,3)+R+max_length+.02];
+        xends=[center(t,1)-(R(1)+max_length) center(t,1)+R(1)+max_length];
+        yends=[center(t,2)-(R(1)+max_length) center(t,2)+R(1)+max_length];
+        zends=[center(t,3)-(R(1)+max_length+.02) center(t,3)+R(1)+max_length+.02];
         
     end
     
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
+    
+        %% MTs
+    for i=1:n_MTs
+        
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
+        
+    end
     
     %% draw and save, prepare for next frame
     
