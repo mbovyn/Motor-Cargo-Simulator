@@ -274,12 +274,14 @@ void cargobehavior()
     }//finished switch
 
     //force anchor back onto cargo surface
-    for(m=0;m<2;m++){
-        for(n=0;n<N[m];n++){
-            convert_loc_to_spherical();
-            convert_loc_sph_to_cart();
-            if(verboseTF>4 && MotorDiffusion==8){
-                printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+    if(MotorDiffusion<10){
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                convert_loc_to_spherical();
+                convert_loc_sph_to_cart();
+                if(verboseTF>4 && MotorDiffusion==8){
+                    printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
             }
         }
     }
@@ -692,8 +694,10 @@ void compute_next_locations(){
 
     }
 
-    for(i=0;i<3;i++){
-        omega[i]=theta1[i]-theta[i];
+    if(MotorDiffusion<10){
+        for(i=0;i<3;i++){
+            omega[i]=theta1[i]-theta[i];
+        }
     }
 
     //check for error states

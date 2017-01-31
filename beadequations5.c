@@ -20,7 +20,7 @@ void bead_equations(){
             omega[1] = theta1[1]-theta[1];
             omega[2] = theta1[2]-theta[2];
 
-            if(omega[0]==0 && omega[1]==0 && omega[2]==0){
+            if(sqrt(omega[0]*omega[0] + omega[1]*omega[1] + omega[2]*omega[2])<1E-12){
 
                 a1[0][0] = -c[0] + c1[0] + a[0][0];
 
@@ -57,7 +57,7 @@ void bead_equations(){
             omega[1] = theta1[1]-theta[1];
             omega[2] = theta1[2]-theta[2];
 
-            if(omega[0]==0 && omega[1]==0 && omega[2]==0){
+            if(sqrt(omega[0]*omega[0] + omega[1]*omega[1] + omega[2]*omega[2])<1E-12){
 
                 a1[0][0] = -c[0] + c1[0] + a[0][0];
 
@@ -106,7 +106,7 @@ void bead_equations(){
             omega[1] = theta1[1]-theta[1];
             omega[2] = theta1[2]-theta[2];
 
-            if(omega[0]==0 && omega[1]==0 && omega[2]==0){
+            if(sqrt(omega[0]*omega[0] + omega[1]*omega[1] + omega[2]*omega[2])<1E-12){
 
                 a1[0][0] = -c[0] + c1[0] + a[0][0];
 
@@ -167,7 +167,7 @@ void bead_equations(){
             omega[1] = theta1[1]-theta[1];
             omega[2] = theta1[2]-theta[2];
 
-            if(omega[0]==0 && omega[1]==0 && omega[2]==0){
+            if(sqrt(omega[0]*omega[0] + omega[1]*omega[1] + omega[2]*omega[2])<1E-12){
 
                 a1[0][0] = -c[0] + c1[0] + a[0][0];
 
@@ -240,7 +240,7 @@ void bead_equations(){
             omega[1] = theta1[1]-theta[1];
             omega[2] = theta1[2]-theta[2];
 
-            if(omega[0]==0 && omega[1]==0 && omega[2]==0){
+            if(sqrt(omega[0]*omega[0] + omega[1]*omega[1] + omega[2]*omega[2])<1E-12){
 
                 a1[0][0] = -c[0] + c1[0] + a[0][0];
 
