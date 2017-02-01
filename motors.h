@@ -290,13 +290,16 @@ double DCargoRotation;
 double theta[3], theta1[3];
 
 /* -------------------------------------------------------------------
- // Stuff for input/output
+ // Stuff for output
  */
 
 double LastBoundLocation[3];
 
 double t_rec;
 double dt_rec=.001;
+
+//quaternians for keeping track of rotation
+double quat[4],quat1[4];
 
 //variables
 int runningInLoop;

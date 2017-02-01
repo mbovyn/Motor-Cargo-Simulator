@@ -1,0 +1,8 @@
+quat1[0] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[0] - (omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+quat1[1] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[1] + (omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+quat1[2] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[2] + (omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+quat1[3] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[3] + (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+
+omega[0] = (2*acos(quat[0])*quat[1])/sqrt(1 - pow(quat[0],2));
+omega[1] = (2*acos(quat[0])*quat[2])/sqrt(1 - pow(quat[0],2));
+omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));

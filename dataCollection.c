@@ -16,6 +16,8 @@ void writeForces();
 void writeSummary();
 void simulationEndDataCollection();
 
+void set_quat_to_identity();
+
 
 void writeBaseHeader(){
     fprintf(fInUse, "repeat       step time                   ");
@@ -273,6 +275,19 @@ void inLoopDataCollection()
         }//ReturnForces
 
         if(ReturnOmega){
+
+            if(ReturnDetails>1){
+                //convert accumlated quaternion to euler vector and reset
+
+                //convert to euler vector (from quaternions.nb)
+                omega[0] = (2*acos(quat[0])*quat[1])/sqrt(1 - pow(quat[0],2));
+                omega[1] = (2*acos(quat[0])*quat[2])/sqrt(1 - pow(quat[0],2));
+                omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));
+
+                //reset quat by setting it to the identity quaternion
+                set_quat_to_identity();
+            }
+
             fInUse=fOmega;
             writeBase();
             writeOmega();
@@ -280,6 +295,13 @@ void inLoopDataCollection()
         }//ReturnOmega
     } //ReturnDetails
 }//inLoopDataCollection
+
+void set_quat_to_identity(){
+    quat[0]=1;
+    quat[1]=0;
+    quat[2]=0;
+    quat[3]=0;
+}
 
 void finalizeDataCollection()
 {

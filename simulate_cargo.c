@@ -17,6 +17,7 @@ int simulate_cargo()
     for(k=0;k<n_MTs;k++){
         MTviolationCounter[k]=0;
     }
+    set_quat_to_identity();
 
     if (verboseTF>4)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
@@ -408,17 +409,31 @@ int simulate_cargo()
         if (verboseTF>3)
             printf("\n\n Step done, recording data. Time t_inst = %g, step = %ld\n\n", t_inst, step);
 
-        //record data
-        if( (!graceful_exit && !prematureReturn)
-            &&(    (ReturnDetails==1 && hit_action)
-                || ReturnDetails==2
-                || (ReturnDetails==3 && (step-1)%1000==0) )){
-            inLoopDataCollection();
+        if(ReturnOmega && ReturnDetails>1){
+            //update quaternion
+
+            //calculate new quaternion (from quaternions.nb)
+            quat1[0] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[0] - (omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+            quat1[1] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[1] + (omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+            quat1[2] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[2] + (omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+            quat1[3] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[3] + (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+            //update
+            for(i=0;i<4;i++){
+                quat[i]=quat1[i];
+            }
+            //reset on writing in inLoopDataCollection
         }
 
-        if(ReturnDetails==4 && t_inst>t_rec){
-            t_rec+=dt_rec;
+        //record data
+        if( (!graceful_exit && !prematureReturn)
+            &&( ReturnDetails==1
+                || (ReturnDetails==2 && hit_action)
+                || (ReturnDetails==3 && (step-1)%1000==0)
+                || (ReturnDetails==4 && t_inst>t_rec) )){
             inLoopDataCollection();
+            if(ReturnDetails==4){
+                t_rec+=dt_rec;
+            }
         }
 
         if(ReturnDetails && (prematureReturn || graceful_exit) ){
