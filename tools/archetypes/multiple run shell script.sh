@@ -2,7 +2,10 @@
 
 #define run name here
 code_dir=~/project_code/Motor_Freedom
-run_name=TOW_fraction
+run_name=demo_mult
+
+#copy the current version of the executable into the local folder
+cp $code_dir/motors.x motors.x
 
 #number of processes we want to run at once
 numCores=4
@@ -10,8 +13,8 @@ numCores=4
 #some counters
 ctr1=0
 
+#values to sweep over
 sweep=($(seq 5 5 25))
-#sweep=15
 
 echo "Running ${#sweep[@]} params"
 
@@ -39,7 +42,7 @@ do
             let talk=0
         fi
 
-		sleep .1s
+		sleep 1s
 	done
     #when this exits, we are at less than the max number of sims
     #so launch a new one and check again
@@ -57,18 +60,17 @@ do
 
     #launch a simulation in the background by adding & after call
     #motors.x          run_name       instance_Name     repeats  verbose D     eps_0  pi_0   z_MT_offset R       N      F_trap theta_c
-    $code_dir/motors.x "${run_name}" "${instance_name}" 10       1       0     0      $param                   &
-    #sleep so as not to go before the ISEED is updated
-    sleep .000001s
+    ./motors.x         "${run_name}" "${instance_name}" 10       1       0     0      $param                   &
 
     #track where we are
     let ctr1++
 	echo "ran $ctr1 of ${#sweep[@]}, param=$param at"
     date +"    %r on %F"
 
-	sleep .01
+    #sleep so as not to go before the ISEED is updated
+	sleep .1
 
-done #first loop
+done
 
 echo finished launching
 
@@ -92,7 +94,7 @@ do
         let talk=0
     fi
 
-    sleep .1s
+    sleep 1s
 done
 
 date +"done at: %r on %F"

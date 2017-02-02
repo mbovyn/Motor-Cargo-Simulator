@@ -222,10 +222,10 @@ Note: steric force spring constant specified in kcMT
 ReturnDetails 2 1 0 1
 /* create text files with records of anchor and head locations
 0: Don’t return any details during simulation
-1: Return details only when something important happens (step, attachment, etc.)
-2: Return details every step
+1: Return details every step
+2: Return details only when something important happens (step, attachment, etc.)
 3: Return details every 100 steps
-4:
+4: Return details every .001 seconds
 5:
 set second value to 1 to return file with head locations, 0 for no
 set third value to 1 to return file with forces, 0 for no

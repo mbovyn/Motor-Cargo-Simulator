@@ -290,10 +290,6 @@ void inLoopDataCollection()
                     omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));
                 }
 
-                if(omega[0]!=omega[0] || omega[1]!=omega[1] || omega[2]!=omega[2]){
-                    printf("omegas are nan!\n    quat is (%g,%g,%g,%g)\n",quat[0],quat[1],quat[2],quat[3]);
-                }
-
                 //reset quat by setting it to the identity quaternion
                 set_quat_to_identity();
             }
