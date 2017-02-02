@@ -300,6 +300,7 @@ double dt_rec=.001;
 
 //quaternians for keeping track of rotation
 double quat[4],quat1[4];
+double alpha;
 
 //variables
 int runningInLoop;

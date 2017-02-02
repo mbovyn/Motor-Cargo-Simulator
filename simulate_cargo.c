@@ -413,10 +413,20 @@ int simulate_cargo()
             //update quaternion
 
             //calculate new quaternion (from quaternions.nb)
-            quat1[0] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[0] - (omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-            quat1[1] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[1] + (omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-            quat1[2] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[2] + (omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-            quat1[3] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[3] + (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+            alpha = sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+
+            if(alpha<1E-10){
+                quat1[0] = (10*(384 - 48*pow(alpha,2) + pow(alpha,4))*quat[0] - (1920 - 80*pow(alpha,2) + pow(alpha,4))*(omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3]))/3840.;
+                quat1[1] = ((1920 - 80*pow(alpha,2) + pow(alpha,4))*omega[0]*quat[0] + 10*(384 - 48*pow(alpha,2) + pow(alpha,4))*quat[1] - (1920 - 80*pow(alpha,2) + pow(alpha,4))*(omega[2]*quat[2] - omega[1]*quat[3]))/3840.;
+                quat1[2] = (omega[1]*quat[0] + omega[2]*quat[1] + 2*quat[2] - omega[0]*quat[3])/2. - (pow(alpha,2)*(omega[1]*quat[0] + omega[2]*quat[1] + 6*quat[2] - omega[0]*quat[3]))/48. + (pow(alpha,4)*(omega[1]*quat[0] + omega[2]*quat[1] + 10*quat[2] - omega[0]*quat[3]))/3840.;
+                quat1[3] = (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 2*quat[3])/2. - (pow(alpha,2)*(omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 6*quat[3]))/48. + (pow(alpha,4)*(omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 10*quat[3]))/3840.;
+            }else{
+                quat1[0] = cos(alpha/2.)*quat[0] + ((-(omega[0]*quat[1]) - omega[1]*quat[2] - omega[2]*quat[3])*sin(alpha/2.))/alpha;
+                quat1[1] = cos(alpha/2.)*quat[1] + ((omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(alpha/2.))/alpha;
+                quat1[2] = cos(alpha/2.)*quat[2] + ((omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(alpha/2.))/alpha;
+                quat1[3] = cos(alpha/2.)*quat[3] + ((omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(alpha/2.))/alpha;
+            }
+
             //update
             for(i=0;i<4;i++){
                 quat[i]=quat1[i];

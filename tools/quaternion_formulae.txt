@@ -1,8 +1,29 @@
-quat1[0] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[0] - (omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-quat1[1] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[1] + (omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-quat1[2] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[2] + (omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
-quat1[3] = (cos(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.)*sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))*quat[3] + (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2))/2.))/sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+Expressions for updating quaternion:
+
+alpha = sqrt(pow(omega[0],2) + pow(omega[1],2) + pow(omega[2],2));
+
+Regular:
+
+quat1[0] = cos(alpha/2.)*quat[0] + ((-(omega[0]*quat[1]) - omega[1]*quat[2] - omega[2]*quat[3])*sin(alpha/2.))/alpha;
+quat1[1] = cos(alpha/2.)*quat[1] + ((omega[0]*quat[0] - omega[2]*quat[2] + omega[1]*quat[3])*sin(alpha/2.))/alpha;
+quat1[2] = cos(alpha/2.)*quat[2] + ((omega[1]*quat[0] + omega[2]*quat[1] - omega[0]*quat[3])*sin(alpha/2.))/alpha;
+quat1[3] = cos(alpha/2.)*quat[3] + ((omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2])*sin(alpha/2.))/alpha;
+
+Small angle:
+
+quat1[0] = (10*(384 - 48*pow(alpha,2) + pow(alpha,4))*quat[0] - (1920 - 80*pow(alpha,2) + pow(alpha,4))*(omega[0]*quat[1] + omega[1]*quat[2] + omega[2]*quat[3]))/3840.;
+quat1[1] = ((1920 - 80*pow(alpha,2) + pow(alpha,4))*omega[0]*quat[0] + 10*(384 - 48*pow(alpha,2) + pow(alpha,4))*quat[1] - (1920 - 80*pow(alpha,2) + pow(alpha,4))*(omega[2]*quat[2] - omega[1]*quat[3]))/3840.;
+quat1[2] = (omega[1]*quat[0] + omega[2]*quat[1] + 2*quat[2] - omega[0]*quat[3])/2. - (pow(alpha,2)*(omega[1]*quat[0] + omega[2]*quat[1] + 6*quat[2] - omega[0]*quat[3]))/48. + (pow(alpha,4)*(omega[1]*quat[0] + omega[2]*quat[1] + 10*quat[2] - omega[0]*quat[3]))/3840.;
+quat1[3] = (omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 2*quat[3])/2. - (pow(alpha,2)*(omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 6*quat[3]))/48. + (pow(alpha,4)*(omega[2]*quat[0] - omega[1]*quat[1] + omega[0]*quat[2] + 10*quat[3]))/3840.;
+
+Regular expression for converting back to EV:
 
 omega[0] = (2*acos(quat[0])*quat[1])/sqrt(1 - pow(quat[0],2));
 omega[1] = (2*acos(quat[0])*quat[2])/sqrt(1 - pow(quat[0],2));
 omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));
+
+Small angle expression for converting back to EV:
+
+omega[0] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[1])/315.;
+omega[1] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[2])/315.;
+omega[2] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[3])/315.;

@@ -72,6 +72,7 @@ if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
     %Vector)
     omega_mag=sqrt(sum(omega.*omega,2));
     EV=[omega(:,1)./omega_mag,omega(:,2)./omega_mag,omega(:,3)./omega_mag,omega_mag*180/pi];
+    EV(isnan(EV))=0;
     %note first value written is 0 vector, so can't be normalized and ends
     %up NaNs
     
