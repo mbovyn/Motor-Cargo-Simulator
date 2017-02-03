@@ -147,6 +147,56 @@ void initiallocations(){
 
             break;
 
+        case 6: //random initial locations, rotated so motor with most close neighbors is on top
+
+            //pick random locations for each of the motors
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    pickpointsphere();
+                    initlocs[m][n][0]=x*R+center[0];
+                    initlocs[m][n][1]=y*R+center[1];
+                    initlocs[m][n][2]=z*R+center[2];
+                }
+            }
+
+            //for each motor (of the first type), find out how many neighbors
+            //it has that can also bind
+            m=0;
+            for(n=0;n<N[m];n++){
+                can_also_bind[n]=0;
+                //for each other motor, find if the distance is less than the
+                //max distance for a motor to also bind
+                for(n2=0;n2<N[m];n2++){
+                    //make sure it doens't count itself
+                    if(n2!=n){
+                        if(sqrt(pow(initlocs[m][n][0]-initlocs[m][n2][0],2)
+                                +pow(initlocs[m][n][1]-initlocs[m][n2][1],2)
+                                +pow(initlocs[m][n][2]-initlocs[m][n2][2],2)) //distance to motor
+                            < 2*R*sqrt((L[m]*(L[m] + 2*R))/pow(L[m] + R,2))     )//geometry calculation in anchor to anchor distance for simultaneous binding.nb
+                        can_also_bind[n]++;
+                    }
+                }
+                printf("motor %d has %d neighbors that can bind\n",n,can_also_bind[n]);
+            }
+
+            //find out which motor has the most neighbors that can also bind
+            most_neighbors=0;
+            for(n=1;n<N[m];n++){
+                if(can_also_bind[n]>can_also_bind[most_neighbors]){
+                    most_neighbors=n;
+                }
+            }
+
+            printf("motor %d has the most neighbors\n",most_neighbors);
+
+            //rotate motor with most neighbors that can bind to the top
+            m=0;
+            n=most_neighbors;
+            makeRotationMatrix(0,0,1);
+            rotateCargo();
+
+            break;
+
         case 7: //start at a defined angle along the x axis
             for (m=0;m<2;m++){
                 for(n=0;n<N[m];n++){

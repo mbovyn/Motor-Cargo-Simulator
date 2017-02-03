@@ -196,6 +196,10 @@ double innerlimit;
 
 double rotmat[9];
 
+int can_also_bind[NMOTORSMAX];
+int n2;
+int most_neighbors;
+
 /* -------------------------------------------------------------------
 Initial Binding
 */
