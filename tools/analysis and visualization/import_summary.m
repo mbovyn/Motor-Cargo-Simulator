@@ -10,6 +10,10 @@
 
 %% Initialize variables.
 filename = [localpath '/' run_name '_Summary.txt'];
+
+if ~exist(filename,'file')
+    error([filename ' doesnt exist!'])
+end
 delimiter = ' ';
 startRow = 2;
 

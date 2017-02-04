@@ -172,7 +172,8 @@ void initiallocations(){
                         if(sqrt(pow(initlocs[m][n][0]-initlocs[m][n2][0],2)
                                 +pow(initlocs[m][n][1]-initlocs[m][n2][1],2)
                                 +pow(initlocs[m][n][2]-initlocs[m][n2][2],2)) //distance to motor
-                            < 2*R*sqrt((L[m]*(L[m] + 2*R))/pow(L[m] + R,2))     )//geometry calculation in anchor to anchor distance for simultaneous binding.nb
+                            //< 2*R*sqrt((L[m]*(L[m] + 2*R))/pow(L[m] + R,2))     )//geometry calculation 1 in anchor to anchor distance for simultaneous binding.nb
+                            < (sqrt(2)*L[m]*R)/sqrt(L[m]*(L[m] + R))     )         //geometry calculation 2 in anchor to anchor distance for simultaneous binding.nb
                         can_also_bind[n]++;
                     }
                 }
@@ -366,21 +367,34 @@ void initialbinding(){
             //attach the one kinesin
             if(m==0){
                 done=0;
-                //loop through motors to assign binding status
-                for(n=0;n<N[m];n++){
-                    //of the motors for which capture is possible, attach only one
-                    if(bind_possible[m][n][0]){
-                        if(done==0){
-                            bound[m][n]=1;
-                            done=1;
+
+                if(InitialLocations==6){
+                    if(bind_possible[m][most_neighbors][0]){
+                        bound[m][most_neighbors]=1;
+                        done=1;
+                    }
+                    if(!done){
+                        printf("\n\n\n Error: Wasn't able to bind motor with most neighbors\n\n\n");
+                        exit(0);
+                    }
+                }else{
+
+                    //loop through motors to assign binding status
+                    for(n=0;n<N[m];n++){
+                        //of the motors for which capture is possible, attach only one
+                        if(bind_possible[m][n][0]){
+                            if(done==0){
+                                bound[m][n]=1;
+                                done=1;
+                            }
+                            //all others don't attach
+                            else{
+                                bound[m][n]=0;
+                            }
                         }
-                        //all others don't attach
                         else{
                             bound[m][n]=0;
                         }
-                    }
-                    else{
-                        bound[m][n]=0;
                     }
                 }
 
