@@ -177,7 +177,7 @@ void initiallocations(){
                         can_also_bind[n]++;
                     }
                 }
-                printf("motor %d has %d neighbors that can bind\n",n,can_also_bind[n]);
+                //printf("motor %d has %d neighbors that can bind\n",n,can_also_bind[n]);
             }
 
             //find out which motor has the most neighbors that can also bind
@@ -188,7 +188,7 @@ void initiallocations(){
                 }
             }
 
-            printf("motor %d has the most neighbors\n",most_neighbors);
+            //printf("motor %d has the most neighbors\n",most_neighbors);
 
             //rotate motor with most neighbors that can bind to the top
             m=0;
