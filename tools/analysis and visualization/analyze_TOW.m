@@ -14,6 +14,7 @@ for i=1:nruns
     Ns(i)=runs(i).N1(1,1);
     
     stayed_on=runs(i).exit_cond==12 | runs(i).exit_cond==8;
+    sum(stayed_on)
     TOWed=sum(runs(i).exit_cond(stayed_on)==12);
     passed=sum(runs(i).exit_cond(stayed_on)==8);
     
@@ -33,7 +34,7 @@ errorbar(Ns,fraction,SEM,'.')
 hold on
 
 if exist('mult','var')
-    lims=[6 24];
+    lims=[6 52];
 else
     lims=[Ns(1)-2 Ns(end)+2];
 end
