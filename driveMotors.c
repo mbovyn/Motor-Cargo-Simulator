@@ -78,8 +78,10 @@ int main( int argc, char *argv[] )
 
     //number of times to repeat simulation - default to 1
     repeats=1;
-    if(argv[3])
+    if(argv[3]){
         repeats=atoi(argv[3]);
+        //printf("read in repeats as %s\n",argv[3]);
+    }
 
     // IF verboseTF = 0, will not output anything
     // IF verboseTF = 1, will echo input parameters and say number of successes
@@ -116,6 +118,8 @@ int main( int argc, char *argv[] )
     D_m[0]=NAN;
     if(argc>5){
         D_m[0]=atof(argv[5]);
+        // printf("read in D as %s\n",argv[5]);
+        // printf("read in D as %f\n",atof(argv[5]));
     }
 
     eps_0[0]=NAN;
@@ -138,9 +142,9 @@ int main( int argc, char *argv[] )
         R=atof(argv[9]);
     }
 
-    N[0]=NAN;
+    N[0]=-1;
     if(argc>10){
-        N[0]=atof(argv[10]);
+        N[0]=atoi(argv[10]);
     }
 
     Ftrap[0]=NAN;
@@ -163,7 +167,7 @@ int main( int argc, char *argv[] )
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
-        printf("Running with %ld kinesins and %ld dyneins\n",N[0],N[1]);
+        printf("Running with %d kinesins and %d dyneins\n",N[0],N[1]);
 
         printf("Parameters for type0 motors are:\n");
         printf("     D = %g\n",D_m[0]);

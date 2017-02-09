@@ -245,7 +245,7 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%9d %7d %8g %5g %4g %4.3g %.2g  %4ld %12g %7g %-+23.16E %-+23.16E %-+23.16E ",
+    fprintf(fInUse, "%9d %7d %8g %5g %4g %4.3g %.2g  %4d %12g %7g %-+23.16E %-+23.16E %-+23.16E ",
         prematureReturn,trial_success,
         D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],Ftrap[0],theta_c,
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);

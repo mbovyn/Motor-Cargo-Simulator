@@ -52,7 +52,7 @@ int MTviolationCounter[NMTSMAX];
 
 //Motor Parameters
 
-long N[2]; //number of motors 4
+int N[2]; //number of motors 4
 
 //Muller Sim
 double F_s[2]; //stall force (pN) 5

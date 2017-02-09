@@ -1,26 +1,26 @@
 #!/bin/bash
 
-code_dir=~/project_code/Motor_Freedom
+#need to set these two things:
+#name of current run (corresponds to param files)
 run_name=demo
+#git repository of the code
+code_dir=~/project_code/Motor_Freedom
 
-#copy the current version of the executable into the local folder
-cp $code_dir/motors.x motors.x
-
-#program chooses to append or open to write based on existance of summary file
-#if there's an old one hanging around, delete it
-fname="${run_name}_Summary.txt"
-if [ -e $fname ] ; then
-    rm $fname
-    echo Script: deleted old summary file
-fi
-
-#run the simulation from the local folder
-#motors.x          run_name      instance_name repeats verbose D eps_0 pi_0 z_MT_offset R N[0] theta_c
-./motors.x         "${run_name}" $run_name      1       2
-
-# generate and save a file that tells the hash of the git commit used to generate the data
+#saves the current directory
 working_dir=$("pwd")
-cd $code_dir
-git log -1 --pretty=format:%H > "${run_name}_CommitUsedHash.txt"
-mv "${run_name}_CommitUsedHash.txt" "$working_dir"
-cd "$working_dir"
+
+#set the parameters to pass in, leave others unset
+repeats=1
+verbose=3
+#D=0
+#eps_0=0
+#pi_0=0
+#z_MT_offset=0
+#R=0
+#N0=0
+#F_trap=0
+#theta_c=0
+
+#source the script that calls the function. See here:
+#http://stackoverflow.com/questions/9772036/pass-all-variables-from-one-shellscript-to-another
+. $code_dir/singlerun.sh

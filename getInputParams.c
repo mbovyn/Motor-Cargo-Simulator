@@ -37,10 +37,12 @@ void getInputParams( void )
     //motor parameters
 
     fgets(tmpString, 100, fParams);
-    if(isnan(N[0]) || N[0]==0){
-        sscanf(tmpString,"%s %ld %ld", blah,&N[0], &N[1]);
-    }else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf %ld", blah,&trash, &N[1]);
+    //can pass in N[0] from call
+    //value is first set to -1. If this isn't changed, read in from file
+    if(N[0]<0){
+        sscanf(tmpString,"%s %d %d", blah,&N[0], &N[1]);
+    }else{//the value was set in command line - trash the value from the file
+        sscanf(tmpString,"%s %lf %d", blah,&trash, &N[1]);
     }
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
@@ -52,14 +54,14 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Can input eps_0[0] from command line
     //only read if its still set to default nan value
-    if(isnan(eps_0[0]) || eps_0[0]==0){
+    if(isnan(eps_0[0])){
         sscanf(tmpString,"%s %lf %lf", blah,&eps_0[0], &eps_0[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %lf %lf", blah,&trash, &eps_0[1]);
     }
     fgets(tmpString, 100, fParams);
-    if(isnan(pi_0[0]) || pi_0[0]==0){
+    if(isnan(pi_0[0])){
         sscanf(tmpString,"%s %lf %lf", blah,&pi_0[0], &pi_0[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
@@ -90,7 +92,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Can input D_m[0] from command line
     //only read if its still set to default nan value
-    if(isnan(D_m[0]) || D_m[0]==0){
+    if(isnan(D_m[0])){
         sscanf(tmpString,"%s %lf %lf", blah,&D_m[0], &D_m[1]);
     }
     else{//if not NAN, the value was set in command line so trash it
@@ -109,7 +111,7 @@ void getInputParams( void )
         printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
     }
     fgets(tmpString, 100, fParams);
-    if(isnan(R) || R==0){
+    if(isnan(R)){
         sscanf(tmpString,"%s %lf", blah,&R);
     }
     else{//if not NAN, the value was set in command line so trash it
@@ -322,7 +324,7 @@ void getInputParams( void )
     //External Force
 
     fgets(tmpString, 100, fParams);
-    if(isnan(Ftrap[0]) || Ftrap[0]==0){
+    if(isnan(Ftrap[0])){
         sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
     }
     else{//if not NAN, the value was set in command line so trash it
