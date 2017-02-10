@@ -64,7 +64,7 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0 z_MT  R    N[0] Fexternal[0] theta_c last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
+    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0  z_MT   R     N[0] Fexternal[0] theta_c MT2vecx   MT2vecy   MT2vecz   last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
 }
 
 void initializeDataCollection()
@@ -245,9 +245,10 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%9d %7d %8g %5g %4g %4.3g %.2g  %4d %12g %7g %-+23.16E %-+23.16E %-+23.16E ",
+    fprintf(fInUse, "%9d %7d %8g %5g %4g %+4.3g %.2g  %4d %12g %7g %-+6.6f %-+6.6f %-+6.6f %-+23.16E %-+23.16E %-+23.16E ",
         prematureReturn,trial_success,
         D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],Ftrap[0],theta_c,
+        MTvec[1][0],MTvec[1][1],MTvec[1][2],
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
 }
 

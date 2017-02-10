@@ -27,6 +27,7 @@ double StopOnDistance;
 int StopBelowThetaC;
 int MultiMTassay;
 double ToW_zone;
+double MT_angle;
 int StopOnBeadDissociation;
 double theta_c;
 int success, success_mode, trial_success;

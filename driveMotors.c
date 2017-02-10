@@ -157,6 +157,11 @@ int main( int argc, char *argv[] )
         theta_c=atof(argv[12]);
     }
 
+    MT_angle=NAN;
+    if(argc>13){
+        MT_angle=atof(argv[13]);
+    }
+
     // load parameters
 
     if (verboseTF>4)

@@ -509,8 +509,18 @@ void getInputParams( void )
         MTpoint[0][2]+=z_MT_offset;
     }
 
+    //if MT_angle is input, override MTvec
+    if(!isnan(MT_angle)){
+        //assumes primary MT in (1,0,0) direction
+        //angle for second MT is ccw from that (given in degrees for simplicity of input)
+        MT_angle*=pi/180;
+        MTvec[1][0]=cos(MT_angle);
+        MTvec[1][1]=sin(MT_angle);
+        MTvec[1][2]=0;
+    }
+
     //print out what we have
-    if(verboseTF>2){
+    if(verboseTF>1){
         printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
         for(i=0;i<n_MTs;i++){
             printf("     (%g,%g,%g) (%g,%g,%g) %g\n",

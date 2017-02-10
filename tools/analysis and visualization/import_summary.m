@@ -33,7 +33,7 @@ startRow = 2;
 % For more information, see the TEXTSCAN documentation.
 %formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
-num=16;
+num=19;
 
 %piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
 piece1=repmat('%f',1,num);
@@ -88,6 +88,8 @@ R = dataArray{:,10};
 N1 = dataArray{:,11};
 F1 = dataArray{:,12};
 theta_c = dataArray{:,13};
+
+MTvec{2}=[dataArray{:,14} dataArray{:,15} dataArray{:,16}];
 
 last_bound_center = [dataArray{:, num-2} dataArray{:, num-1} dataArray{:, num}];
 
