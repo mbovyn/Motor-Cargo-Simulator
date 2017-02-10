@@ -164,7 +164,7 @@ int main( int argc, char *argv[] )
 
     // load parameters
 
-    if (verboseTF>4)
+    if (verboseTF>3)
         printf("\nReading in Parameters\n\n");
 
 

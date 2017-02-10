@@ -107,9 +107,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf %lf", blah,
         &center_initial[0], &center_initial[1],&center_initial[2]);
-    if(verboseTF>1){
-        printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
-    }
+
     fgets(tmpString, 100, fParams);
     if(isnan(R)){
         sscanf(tmpString,"%s %lf", blah,&R);
@@ -499,11 +497,6 @@ void getInputParams( void )
             &R_MT[i]);
     }
 
-    //set correct inital center for ToW assay
-    if(ToW_zone){
-        center_initial[0]=MTpoint[0][0]-ToW_zone;
-    }
-
     //set offset if one is input
     if(!isnan(z_MT_offset)){
         MTpoint[0][2]+=z_MT_offset;
@@ -517,6 +510,20 @@ void getInputParams( void )
         MTvec[1][0]=cos(MT_angle);
         MTvec[1][1]=sin(MT_angle);
         MTvec[1][2]=0;
+
+        //set correct ToW_zone for this angle and separation distance
+        //determined in ToWzone.nb
+        ToW_zone=sqrt((2*L[0] + 2*R - fabs(MTpoint[0][2]-MTpoint[1][2]))*(2*L[0] + 2*R + fabs(MTpoint[0][2]-MTpoint[1][2])))/sin(MT_angle);
+        printf("L[0]= %g, R= %g, s= %g\n",L[0],R,fabs(MTpoint[0][2]-MTpoint[1][2]));
+    }
+
+    //set correct inital center for ToW assay
+    if(ToW_zone){
+        center_initial[0]=MTpoint[0][0]-ToW_zone;
+    }
+
+    if(verboseTF>1){
+        printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
     }
 
     //print out what we have
