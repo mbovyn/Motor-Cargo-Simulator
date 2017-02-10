@@ -219,7 +219,7 @@ Note: steric force spring constant specified in kcMT
 
 //Output
 
-ReturnDetails 2 1 0 1
+ReturnDetails 4 1 0 1
 /* create text files with records of anchor and head locations
 0: Don’t return any details during simulation
 1: Return details every step

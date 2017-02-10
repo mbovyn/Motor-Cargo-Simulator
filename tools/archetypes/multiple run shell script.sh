@@ -24,5 +24,6 @@ pi_0=param
 #N0=0
 #F_trap=0
 #theta_c=0
+#MT_angle=90
 
 . $code_dir/OneParamSweep.sh

@@ -20,6 +20,7 @@ verbose=3
 #N0=0
 #F_trap=0
 #theta_c=0
+#MT_angle=90
 
 #source the script that calls the function. See here:
 #http://stackoverflow.com/questions/9772036/pass-all-variables-from-one-shellscript-to-another
