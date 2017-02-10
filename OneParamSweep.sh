@@ -66,7 +66,7 @@ do
     #the call ${!pi_0} translates to $param, so you get 10 for the first loop
 
     #motors.x   run_name       instance_Name       repeats       verbose       D          eps_0          pi_0          z_MT_offset          R          N           F_trap          theta_c          MT_angle &
-    ./motors.x  "${run_name}"  "${instance_name}"  ${repeats:-1} ${verbose:-0} ${!D:-NAN} ${!eps_0:-NAN} ${!pi_0:-NAN} ${!z_MT_offset:-NAN} ${!R:-NAN} ${!N0:--1}  ${!F_trap:-NAN} ${!theta_c:-NAN} ${MT_angle:-NAN} &
+    ./motors.x  "${run_name}"  "${instance_name}"  ${repeats:-1} ${verbose:-0} ${!D:-NAN} ${!eps_0:-NAN} ${!pi_0:-NAN} ${!z_MT_offset:-NAN} ${!R:-NAN} ${!N0:--1}  ${!F_trap:-NAN} ${!theta_c:-NAN} ${!MT_angle:-NAN} &
 
     #track where we are
     let ctr1++
