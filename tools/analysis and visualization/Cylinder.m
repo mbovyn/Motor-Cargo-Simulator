@@ -101,7 +101,7 @@ else
     EndPlate2=[];
 end
 
-
+set(Cylinder,'EdgeColor','k')
 set(Cylinder,'EdgeAlpha',alpha)
 
  end

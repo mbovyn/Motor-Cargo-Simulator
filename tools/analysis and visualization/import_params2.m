@@ -14,6 +14,10 @@ if exist('param_name','var')
 else
     filename = [localpath '/' run_name '_params.txt'];
 end
+
+if ~exist(filename,'file')
+    error(['Cant find ' filename])
+end
 delimiter = ' ';
 startRow = [11,13,15,16,17,23,25,27];
 endRow = [11,13,15,16,17,23,25,27];
