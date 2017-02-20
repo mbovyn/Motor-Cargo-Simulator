@@ -134,6 +134,11 @@ switch plot_box
 %         xends=[-(R+max_length) R+max_length];
 %         yends=[-(R+max_length) R+max_length];
 %         zends=[-(R+max_length+.02) R+max_length+.02];
+
+    case 5 % only set y and z ends, leave x to be set in calling script
+        
+        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
+        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
         
     otherwise
         
@@ -162,18 +167,24 @@ create_attach_rec
 %--------------------------------------------------------------------------
 
 %create a figure which we'll update
-fig=figure('Position', [150, 150, 750, 750]);
+
 
 %if we want to save the MPEG
 if SaveMPEG~=false
     
+    fig=figure('Position', [150, 150, 400, 400]);
+    
     M(frames)=struct('cdata',[],'colormap',[]);
 
     vidObj = VideoWriter([localpath '/' SaveMPEG]);
-    vidObj.FrameRate=20;
+    vidObj.FrameRate=12;
     vidObj.Quality=75;
     
     open(vidObj);
+    
+else
+    
+    fig=figure('Position', [150, 150, 700, 700]);
 
 end
 
