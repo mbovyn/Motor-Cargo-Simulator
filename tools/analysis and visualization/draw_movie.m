@@ -293,9 +293,9 @@ for t=loop_ts
 %                     zm*2*R_MT+loc_head(n,3));
 
                 h_head=surf(...
-                    xm*.005+loc_head(n,1),...
-                    ym*.005+loc_head(n,2),...
-                    zm*.005+loc_head(n,3));
+                    xm*.015+loc_head(n,1),...
+                    ym*.015+loc_head(n,2),...
+                    zm*.015+loc_head(n,3));
 
                 if m==1
                     set(h_head,'EdgeColor','b');   
@@ -316,7 +316,7 @@ for t=loop_ts
                 %plot a line connecting the two
                 h_neck=plot3([loc_head(n,1) loc(n,1)],...
                 [loc_head(n,2) loc(n,2)],...
-                [loc_head(n,3) loc(n,3)],'k','LineWidth',3);
+                [loc_head(n,3) loc(n,3)],'m','LineWidth',4);
             
                 if draw_detail==true
                     if stretch(n)==1
@@ -425,7 +425,7 @@ for t=loop_ts
         %display current simulation time
         %text(-.4,.4,.4,['t=' num2str(t_arr(t))])
         
-        title(sprintf([titlestring '\n t=' sprintf('%0.3f',t_arr(t))]))
+        title(sprintf([titlestring '\n t=' sprintf('%0.3f',t_arr(t)) ' s']))
     else
         title(titlestring)
     end
@@ -441,10 +441,10 @@ for t=loop_ts
         view(init_view(1),init_view(2));
     end
     
-    if ~isnan(theta_c)
-        %set view angle
-        view(0,0)
-    end
+%     if ~isnan(theta_c)
+%         %set view angle
+%         view(0,0)
+%     end
     
     if t>start_frame
         view(az,el)

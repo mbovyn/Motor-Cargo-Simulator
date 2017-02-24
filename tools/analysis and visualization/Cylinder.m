@@ -1,4 +1,4 @@
- function [Cylinder EndPlate1 EndPlate2] = Cylinder(X1,X2,r,n,cyl_color,closed,alpha)
+ function [Cylinder EndPlate1 EndPlate2] = Cylinder(X1,X2,r,n,cyl_color,closed,edgealpha,facealpha)
 %
 % This function constructs a cylinder connecting two center points 
 % 
@@ -102,6 +102,7 @@ else
 end
 
 set(Cylinder,'EdgeColor','k')
-set(Cylinder,'EdgeAlpha',alpha)
+set(Cylinder,'EdgeAlpha',edgealpha)
+set(Cylinder,'FaceAlpha',facealpha)
 
  end

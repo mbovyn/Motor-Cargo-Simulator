@@ -18,7 +18,7 @@ function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT )
         end1(1)=-end1(1);
     end
 
-    [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT,20,'g',0,.3);
+    [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT,20,'g',0,.3,.5);
 
     text(end2(1)+.02*MTvec(1),end2(2)+.02*MTvec(2),end2(3)+.02*MTvec(3)...
         ,'(+)','FontWeight','bold'...
