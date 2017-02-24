@@ -71,13 +71,54 @@ void evaluate_stop_conditions(){
 
         //above, we've required at least one motor to be bound
 
-        //pass if we make it past the point where a motor can attach to the second MT
-        if(center[0]>MTpoint[1][0]+R){
-            prematureReturn=8;
+        //start the timer if we have at least one motor bound to both MTs
+        if(anybound(1) && anybound(2) && timer==0){
+            timer=dt;
         }
 
-        if(center[1]>R+L[0]){
-            prematureReturn=9;
+        //increment the timer if still have both MTs bound
+        if(anybound(1) && anybound(2) && timer>0){
+            timer+=dt;
+        }
+
+        //reset the timer if either MT becomes unbound
+        if( (!anybound(1) || !anybound(2)) && timer>0){
+            timer=0;
+        }
+
+        //if both MTs are bound for more than a quarter of a second, we have a TOW
+        if(timer>.25 && !ToW){
+            ToW=1;
+            if(verboseTF>1){
+                printf("Cargo underwent tug of war!\n");
+            }
+        }
+
+        //if the cargo goes outside the ToW zone, end the sim
+        if(center[0]>MTpoint[1][0]+ToW_zone ||
+            (center[0]<MTpoint[1][0]-ToW_zone && t_inst>1) ||
+            center[1]>MTpoint[1][1]+ToW_zone ||
+            center[1]<MTpoint[1][1]-ToW_zone ){
+
+            if(verboseTF>1){
+                printf("Exited ToW zone with center at (%g,%g,%g)\n",center[0],center[1],center[2]);
+            }
+
+            //if cargo is bound to the first MT, its a pass
+            if(anybound(1)){
+                prematureReturn=8;
+            } else if(anybound(2)) {
+                prematureReturn=9;
+            } else {
+                graceful_exit=1;
+                printf("Something went wrong, exited ToW zone, but not bound to either MT");
+            }
+
+        }
+
+        //if the cargo reaches the end of the ToW zone, its a pass
+        if(center[0]>MTpoint[1][0]+ToW_zone){
+            prematureReturn=8;
         }
     }
 

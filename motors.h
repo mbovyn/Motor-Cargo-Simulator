@@ -30,7 +30,7 @@ double ToW_zone;
 double MT_angle;
 int StopOnBeadDissociation;
 double theta_c;
-int success, success_mode, trial_success;
+int success, success_mode, trial_success, ToW;
 
 double timer=0;
 

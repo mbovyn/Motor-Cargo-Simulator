@@ -516,7 +516,7 @@ int simulate_cargo()
         trial_success=0;
         if(success_mode==1){
             switch(success){
-                case 1:
+                case 1: //success if type0motor0bound
 
                     if(bound[0][0]){
                         successes++;
@@ -525,9 +525,18 @@ int simulate_cargo()
 
                     break;
 
-                case 2:
+                case 2: //success if went >10 microns (assuming you start at 0)
 
                     if(center[0]>10){
+                        successes++;
+                        trial_success=1;
+                    }
+
+                    break;
+
+                case 3: //success if cargo underwent ToW
+
+                    if(ToW){
                         successes++;
                         trial_success=1;
                     }

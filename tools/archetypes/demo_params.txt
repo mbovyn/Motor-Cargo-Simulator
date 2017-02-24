@@ -246,16 +246,16 @@ StopOnStep 0                //0 for don’t stop, otherwise enter step
 StopOnTime 0                //0 for don’t stop, otherwise enter time
 StopOnDistance 0            //0 for don’t stop, otherwise enter distance in microns
 StopBelowThetaC 0 -1        //2nd value elevation in radians -pi/2 to pi/2
-multiMT_assay 0 NAN         //1 for switch, 2 for ToW, 2nd argument is ToW zone
+multiMT_assay 0             //1 for switch, 2 for ToW
 StopOnBeadDissociation 1    //stop if bead is > 500nm from all MTs
 
 //Success Conditions
 Success 0 1
 /*success success_mode - if mode=0, success if result==success
 0: Nothing counts as success
-1: Success if type0motor0 is bound
-2:
-3:
+1: type0motor0 is bound
+2: went > 10 microns
+3: underwent a tug of war
 4:
 5:
 6:

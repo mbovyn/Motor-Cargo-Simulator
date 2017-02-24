@@ -425,7 +425,7 @@ void getInputParams( void )
     }
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d %lf",blah,&MultiMTassay,&ToW_zone);
+    sscanf(tmpString,"%s %d",blah,&MultiMTassay);
 
     if(MultiMTassay && verboseTF>1){
         printf("     MT assay conditions\n");
@@ -502,14 +502,28 @@ void getInputParams( void )
         MTpoint[0][2]+=z_MT_offset;
     }
 
-    //if MT_angle is input, override MTvec
-    if(!isnan(MT_angle)){
-        //assumes primary MT in (1,0,0) direction
-        //angle for second MT is ccw from that (given in degrees for simplicity of input)
-        MT_angle*=pi/180;
-        MTvec[1][0]=cos(MT_angle);
-        MTvec[1][1]=sin(MT_angle);
-        MTvec[1][2]=0;
+    //if we're doing an MT assay, find the ToW zone distance
+    if(MultiMTassay){
+
+        //enforce assumed MTvec
+        MTvec[0][0]=1;
+        MTvec[0][1]=0;
+        MTvec[0][2]=0;
+
+        //if MT_angle is input, override MTvec
+        if(!isnan(MT_angle)){
+            //assumes primary MT in (1,0,0) direction
+            //angle for second MT is ccw from that (given in degrees for simplicity of input)
+            MT_angle*=pi/180;
+            MTvec[1][0]=cos(MT_angle);
+            MTvec[1][1]=sin(MT_angle);
+            MTvec[1][2]=0;
+
+        }else{//find from input MTvec
+            //reduced from acos( MTvec[0] . MTvec[1] )
+            // assuming MTvec[1] = (1,0,0)
+            MT_angle=acos(MTvec[1][0]);
+        }
 
         //set correct ToW_zone for this angle and separation distance
         //determined in ToWzone.nb
@@ -518,6 +532,7 @@ void getInputParams( void )
     }
 
     //set correct inital center for ToW assay
+    //assumes MT_vec[0]=(1,0,0)
     if(!isnan(ToW_zone)){
         center_initial[0]=MTpoint[0][0]-ToW_zone;
     }

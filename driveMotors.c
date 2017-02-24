@@ -210,6 +210,12 @@ int main( int argc, char *argv[] )
                 case 1:
                     printf("type0motor0 being bound at the last step\n");
                     break;
+                case 2:
+                    printf("went more than 10 microns\n");
+                    break;
+                case 3:
+                    printf("underwent tug of war\n");
+                    break;
                 default:
                     printf("not defined\n");
             }
