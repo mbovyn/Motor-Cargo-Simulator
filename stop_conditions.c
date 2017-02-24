@@ -116,10 +116,6 @@ void evaluate_stop_conditions(){
 
         }
 
-        //if the cargo reaches the end of the ToW zone, its a pass
-        if(center[0]>MTpoint[1][0]+ToW_zone){
-            prematureReturn=8;
-        }
     }
 
     if(step>100000000 && prematureReturn==0){
