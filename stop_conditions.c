@@ -6,6 +6,7 @@ void evaluate_stop_conditions(){
     //find if we've hit any of the end conditions
 
     if ((Requirebound || MultiMTassay) && prematureReturn==0){ // check if there are no motors bound
+
         prematureReturn = 1;
         Foundbound=0;
         for(m=0;m<2 && !Foundbound;m++){
@@ -14,6 +15,23 @@ void evaluate_stop_conditions(){
                     prematureReturn = 0;
                     Foundbound=1;
                 }
+            }
+        }
+
+        //If the cargo ToWed, then fell off, count it as a pass or switch
+        if(prematureReturn == 1 && MultiMTassay==1 && ToW){
+            if(activeMT==1 && center[0]>0){
+                //if was walking on first MT (and had passed the cross point), pass
+                prematureReturn=13;
+            }else if(activeMT==2){
+                //if was walking on second MT, switch
+                prematureReturn=14;
+            }else{
+
+                //leave it as just a detachment
+                
+                // printf("\n\nError in pass or switch determination after ToW\n\n");
+                // graceful_exit=1;
             }
         }
     }

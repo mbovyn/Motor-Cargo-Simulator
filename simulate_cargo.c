@@ -402,6 +402,22 @@ int simulate_cargo()
                 }
             }
 
+            //keep track of which MT the cargo is walking on
+            //want to do this to know what it's state was before falling off
+            if(n_MTs==2){//only if there are 2 MTs
+                if(anybound(1) && !anybound(2)){
+                    //cargo walking on first MT
+                    activeMT=1;
+                }else if(!anybound(1) && anybound(2)){
+                    //cargo walking on second MT
+                    activeMT=2;
+                }else if(anybound(1) && anybound(2)){
+                    //cargo walking on both MTs
+                    activeMT=0;
+                }
+                //don't do anything if cargo is walking on neither MT
+            }
+
             evaluate_stop_conditions();
 
         }//end of update section, depends on graceful exit
@@ -504,6 +520,12 @@ int simulate_cargo()
                     break;
                 case 12:
                     printf("TOW condition for multiple MT assay\n");
+                    break;
+                case 13:
+                    printf("Pass condition, but fell off before leaving ToW zone\n");
+                    break;
+                case 14:
+                    printf("Switch condition, but fell off before leaving ToW zone\n");
                     break;
                 default:
                     printf("Missed case on reporting end of sim condition\n");

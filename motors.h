@@ -92,6 +92,7 @@ double kcMT; //steric spring to keep cargo out of MT (pN/micron) 400
 int n_MTs;
 double MTpoint[NMTSMAX][3];
 double MTvec[NMTSMAX][3];
+int activeMT;
 
 //Calculated Parameters
 
