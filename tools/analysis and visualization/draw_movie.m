@@ -470,6 +470,14 @@ for t=loop_ts
         
     end
     
+    if exist('draw_sep_dist_line','var')
+        
+        plot3([MTpt{1}(1) MTpt{2}(1)],...
+            [MTpt{1}(2) MTpt{2}(2)],...
+            [MTpt{1}(3) MTpt{2}(3)],'k-.','LineWidth',2)
+        
+    end
+    
     %% draw and save, prepare for next frame
     
     drawnow

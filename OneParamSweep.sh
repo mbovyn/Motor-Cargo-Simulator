@@ -35,7 +35,7 @@ do
             let talk=0
         fi
 
-		sleep 1s
+		sleep 5s
 	done
     #when this exits, we are at less than the max number of sims
     #so launch a new one and check again
@@ -74,7 +74,7 @@ do
     date +"    %r on %F"
 
     #sleep so as not to go before the ISEED is updated
-	sleep .1
+	sleep 1s
 
 done
 
