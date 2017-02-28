@@ -20,22 +20,12 @@ do
 
     #find the number of simulations currently running
     numInstances=$( pgrep motors | wc -l )
-	#echo "    starting, have $numInstances running"
 
-    talk=1
     #if we are at the max, wait and check every 5 seconds
 	while [ "$numInstances" -ge "$numCores" ] # number of cores to use
 	do
-
-		numInstances=$( pgrep motors | wc -l )
-
-        if [ "$talk" -eq "1" ]
-        then
-            #echo "    waiting, have $numInstances running"
-            let talk=0
-        fi
-
 		sleep 5s
+        numInstances=$( pgrep motors | wc -l )
 	done
     #when this exits, we are at less than the max number of sims
     #so launch a new one and check again
