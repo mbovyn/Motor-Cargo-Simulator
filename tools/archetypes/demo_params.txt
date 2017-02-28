@@ -104,8 +104,8 @@ Binding 1 .5
 1: set given binding rate if in range
 2: motors don’t bind
 3: always bind if in range
-4: bind if below theta_c (for MFP test)
-5: (not implemented yet) set binding rate if between L and inner limit (fraction*L)
+4: (not implemented yet) set binding rate if between L and inner limit (fraction*L)
+5: Normal binding, but excluded in region for 0nm MT crossings
 6:
 7:
 8:
@@ -133,7 +133,7 @@ Stepping 2 999999999
 2: Stepping rate depends on force (Ambarish)
 3: no stepping
 4: override stepping rate with second input (999999999 for always step)
-5: 
+5: Don’t step into excluded in region for 0nm MT crossings
 6:
 7:
 8:

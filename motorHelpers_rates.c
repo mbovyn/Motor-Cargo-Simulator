@@ -7,6 +7,7 @@ void binding_rates();
 void nucleotide();
 //helper helpers
 void convert_loc_to_spherical();
+void calculate_stepping_rate();
 
 void motorloading()
 {
@@ -109,32 +110,7 @@ void stepping_rates()
         case 2: //stepping rate according to Ambarish
 
             for(n=0;n<N[m];n++){
-                if (bound[m][n]){
-                    if(F_m_mag[m][n]==0){ //no force
-
-                        step_possible[m][n]=1;
-                        step_rate[m][n]=unloaded_step_rate[m];
-
-                    }else if(force_in_MT_direction()){ //force is assisting
-
-                        step_possible[m][n]=1;
-                        step_rate[m][n]=unloaded_step_rate[m];
-
-                        //printf("stepping under assisting force\n");
-
-                    }else if(F_m_mag[m][n]/F_s[m]<1){ //force is hindering and below stall
-
-                        step_possible[m][n]=1;
-                        step_rate[m][n]=unloaded_step_rate[m]*(1-pow(F_m_mag[m][n]/F_s[m],w[m]));
-
-                        //printf("stepping under hindering force below stall\n");
-
-                    }else{ //force is hindering and greater than stall force
-                        step_possible[m][n]=0;
-                    }
-                }else{ //motor isn't bound
-                    step_possible[m][n]=0;
-                }
+                calculate_stepping_rate();
             }
 
             break;
@@ -159,11 +135,57 @@ void stepping_rates()
 
             break;
 
+        case 5: //stepping stopped at 0
+
+            for(n=0;n<N[m];n++){
+                //if head is in a spot where it wouldn't step into the forbidden zone
+                if( !(bound[m][n]==1) ||
+                    ( head[m][n][0]<-.012-.008 || head[m][n][0]>.012 )  ){
+                        calculate_stepping_rate();
+                }else{
+                    //if it would step into forbidden zone, set step rate to 0
+                    step_rate[m][n]=0;
+                }
+            }
+
+            break;
+
         default:
             printf("Invalid stepping rate type\n");
             exit(0);
     }
 } // finished stepping
+
+void calculate_stepping_rate(){
+
+    if (bound[m][n]){
+        if(F_m_mag[m][n]==0){ //no force
+
+            step_possible[m][n]=1;
+            step_rate[m][n]=unloaded_step_rate[m];
+
+        }else if(force_in_MT_direction()){ //force is assisting
+
+            step_possible[m][n]=1;
+            step_rate[m][n]=unloaded_step_rate[m];
+
+            //printf("stepping under assisting force\n");
+
+        }else if(F_m_mag[m][n]/F_s[m]<1){ //force is hindering and below stall
+
+            step_possible[m][n]=1;
+            step_rate[m][n]=unloaded_step_rate[m]*(1-pow(F_m_mag[m][n]/F_s[m],w[m]));
+
+            //printf("stepping under hindering force below stall\n");
+
+        }else{ //force is hindering and greater than stall force
+            step_possible[m][n]=0;
+        }
+    }else{ //motor isn't bound
+        step_possible[m][n]=0;
+    }
+
+}
 
 void unbinding_rates()
 {
@@ -317,28 +339,7 @@ void binding_rates() //sets bind_possible and bind_rate
 
             break;
 
-        case 4: //motors bind if below a certain latitude (for MFP test)
-        //1 MT only
-
-            for(n=0;n<N[m];n++){
-                convert_loc_to_spherical();
-                if(!bound[m][n]){
-                    if(locs_sph[m][n][1]<theta_c){
-                        bind_possible[m][n][0]=1;
-                        bind_rate[m][n][0]=INF;
-                    }
-                    else{
-                        bind_possible[m][n][0]=0;
-                    }
-                }
-                else{
-                    bind_possible[m][n][0]=0;
-                }
-            }
-
-            break;
-
-        case 5: //motors can bind if in range, but not if they're too close
+        case 4: //motors can bind if in range, but not if they're too close
 
             // findMTdist();
             // for(n=0;n<N[m];n++){
@@ -346,8 +347,37 @@ void binding_rates() //sets bind_possible and bind_rate
             //         bind_rate[m][n]=pi_0[m];
             //     }
             // }
+            //
+            // break;
 
             printf("Code needs to be reconfigured to exclude binding when too close\n");
+            exit(0);
+
+        case 5: //can't bind in forbidden zone
+
+            //stop it from binding if it would be in excluded zone
+            //first MT only
+            if(bind_possible[m][n][0]){
+                closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],0);
+                if(cPoint[0]>-.012 && cPoint[0] <.012){
+                    bind_possible[m][n][0]=0;
+                    if(verboseTF>2){
+                        printf("\nStopped type%dmotor%d binding through MT at %g\n",m,n,t_inst);
+                    }
+                }
+            }
+
+            //find if motor can bind normally
+            findMTdist();
+            for(k=0;k<n_MTs;k++){
+                for(n=0;n<N[m];n++){
+                    if(bind_possible[m][n][k]){
+                        bind_rate[m][n][k]=pi_0[m];
+                    }
+                }
+            }
+
+
 
             break;
 
