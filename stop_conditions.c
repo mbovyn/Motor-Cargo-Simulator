@@ -93,6 +93,16 @@ void evaluate_stop_conditions(){
         //start the timer if we have at least one motor bound to both MTs
         if(anybound(1) && anybound(2) && timer==0){
             timer=dt;
+
+            //if we haven't yet undergone a ToW event, mark the time
+            if(!ToW){
+                ToW_start=t_inst;
+            }else if(t_inst<ToW_end+.25){//if we have, check if it has been <.25s since the end of the last TOW
+                //if it hasn't, don't update the start time as we count it as one ToW
+            }else{//if it has been more than .25s since the end of the last ToW, it's a new event
+                //reset start time
+                ToW_start=t_inst;
+            }
         }
 
         //increment the timer if still have both MTs bound
@@ -102,19 +112,26 @@ void evaluate_stop_conditions(){
 
         //reset the timer if either MT becomes unbound
         if( (!anybound(1) || !anybound(2)) && timer>0){
+
+            ToW_end=t_inst;
+
             if(ToW){
                 if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
                     if(verboseTF>1){
-                        printf("ToW time: %g (not first ToW, setting to NAN)\n",timer);
+                        printf("Micro ToW time: %g\n",timer);
+                        printf("    Macro ToW time: %g\n",ToW_end-ToW_start);
                     }
-                    ToWtime=NAN; //set ToW time to NAN
+                    ToWtime=ToW_end-ToW_start; //set ToW time to NAN
                 }else{ //first ToW event
                     ToWtime=timer; //save value of timer as ToW time
                     if(verboseTF>1){
-                        printf("ToW time: %g\n",ToWtime);
+                        printf("Micro ToW time: %g\n",ToWtime);
                     }
                 }
             }
+
+
+
             timer=0;
         }
 

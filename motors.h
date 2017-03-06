@@ -51,6 +51,7 @@ int graceful_exit;
 int out_of_ToW_zone;
 double s;
 double ToWtime;
+double ToW_start, ToW_end;
 
 int MTviolationCounter[NMTSMAX];
 
