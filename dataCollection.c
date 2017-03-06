@@ -27,9 +27,9 @@ void writeCenterLocsHeader(){
     fprintf(fInUse, "center_x                center_y                center_z                ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"anchor_type%dmotor%d_x    ",m,n);
-            fprintf(fInUse,"anchor_type%dmotor%d_y    ",m,n);
-            fprintf(fInUse,"anchor_type%dmotor%d_z    ",m,n);
+            fprintf(fInUse,"anchor_type%02dmotor%02d_x  ",m,n);
+            fprintf(fInUse,"anchor_type%02dmotor%02d_y  ",m,n);
+            fprintf(fInUse,"anchor_type%02dmotor%02d_z  ",m,n);
         }
     }
 }
@@ -37,9 +37,9 @@ void writeCenterLocsHeader(){
 void writeHeadHeader(){
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"head_type%02dmotor%02d_x      ",m,n);
-            fprintf(fInUse,"head_type%02dmotor%02d_y      ",m,n);
-            fprintf(fInUse,"head_type%02dmotor%02d_z      ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_x    ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_y    ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_z    ",m,n);
         }
     }
     for(m = 0; m<2; m++){
@@ -54,12 +54,12 @@ void writeForcesHeader(){
     fprintf(fInUse, "steric_x      steric_y      steric_z      ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"Radial_%d_%d_x  ",m,n);
-            fprintf(fInUse,"Radial_%d_%d_y  ",m,n);
-            fprintf(fInUse,"Radial_%d_%d_z  ",m,n);
-            fprintf(fInUse,"Tangent_%d_%d_x ",m,n);
-            fprintf(fInUse,"Tangent_%d_%d_y ",m,n);
-            fprintf(fInUse,"Tangent_%d_%d_z ",m,n);
+            fprintf(fInUse,"Radial_%02d_%02d_x  ",m,n);
+            fprintf(fInUse,"Radial_%02d_%02d_y  ",m,n);
+            fprintf(fInUse,"Radial_%02d_%02d_z  ",m,n);
+            fprintf(fInUse,"Tangent_%02d_%02d_x ",m,n);
+            fprintf(fInUse,"Tangent_%02d_%02d_y ",m,n);
+            fprintf(fInUse,"Tangent_%02d_%02d_z ",m,n);
         }
     }
 }
@@ -69,7 +69,7 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0  z_MT   R     N[0] Fexternal[0] theta_c MT2vecx   MT2vecy   MT2vecz   last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
+    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0   z_MT   R  N[0] Fexternal[0] theta_c MT2vecx   MT2vecy   MT2vecz   last_attached_center_x  last_attached_center_y  last_attached_center_z  ToW_time                ");
 }
 
 void initializeDataCollection()
@@ -170,19 +170,19 @@ void initializeDataCollection()
 } //initializeDataCollection
 
 void writeBase(){
-    fprintf(fInUse, "%4d   %10ld %1.16E ",j+1,step,t_inst);
+    fprintf(fInUse, "%4d   %10ld %.16E ",j+1,step,t_inst);
 }
 
 void writeCenterLocs(){
     //write cargo center and anchor locations
-    fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
+    fprintf(fInUse, "%+.16E %+.16E %+.16E ",
             center[0],
             center[1],
             center[2]
             );
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fInUse, "%+1.16E %+1.16E %+1.16E ",
+            fprintf(fInUse, "%+23.16E %+23.16E %+23.16E ",
                 locs[m][n][0],
                 locs[m][n][1],
                 locs[m][n][2]
@@ -195,7 +195,7 @@ void writeHead(){
     //write line of head locations
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"%-+25.16E %-+25.16E %-+25.16E ",
+            fprintf(fInUse,"%-+23.16E %-+23.16E %-+23.16E ",
                 head[m][n][0],
                 head[m][n][1],
                 head[m][n][2]
@@ -255,11 +255,12 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%9d %7d %8g %5g %4g %+4.3g %.2g  %4d %12g %7g %-+6.6f %-+6.6f %-+6.6f %-+23.16E %-+23.16E %-+23.16E ",
+    fprintf(fInUse, "%9d %7d %8g %5g %4g %+4.3g %.2g  %4d %12g %7g %-+6.6f %-+6.6f %-+6.6f %-+23.16E %-+23.16E %-+23.16E %23.16E ",
         prematureReturn,trial_success,
         D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],Ftrap[0],theta_c,
         MTvec[1][0],MTvec[1][1],MTvec[1][2],
-        LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
+        LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2],
+        ToWtime);
 }
 
 void inLoopDataCollection()

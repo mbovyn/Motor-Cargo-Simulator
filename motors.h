@@ -50,6 +50,7 @@ int Foundbound;
 int graceful_exit;
 int out_of_ToW_zone;
 double s;
+double ToWtime;
 
 int MTviolationCounter[NMTSMAX];
 

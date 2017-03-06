@@ -19,6 +19,7 @@ int simulate_cargo()
     }
     set_quat_to_identity();
     ToW=0;
+    ToWtime=0;
 
     if (verboseTF>4)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
