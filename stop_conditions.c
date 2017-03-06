@@ -1,4 +1,5 @@
 void evaluate_stop_conditions();
+int any_motor_past_ToW_zone();
 int anybound(int MTnum);
 
 void evaluate_stop_conditions(){
@@ -29,7 +30,7 @@ void evaluate_stop_conditions(){
             }else{
 
                 //leave it as just a detachment
-                
+
                 // printf("\n\nError in pass or switch determination after ToW\n\n");
                 // graceful_exit=1;
             }
@@ -113,23 +114,23 @@ void evaluate_stop_conditions(){
         }
 
         //if the cargo goes outside the ToW zone, end the sim
-        if(center[0]>MTpoint[1][0]+ToW_zone ||
-            (center[0]<MTpoint[1][0]-ToW_zone && t_inst>1) ||
-            center[1]>MTpoint[1][1]+ToW_zone ||
-            center[1]<MTpoint[1][1]-ToW_zone ){
+        if(any_motor_past_ToW_zone()){
 
             if(verboseTF>1){
-                printf("Exited ToW zone with center at (%g,%g,%g)\n",center[0],center[1],center[2]);
+                printf("Exited ToW zone by motor %d out of ToW zone with center at (%g,%g,%g)\n",any_motor_past_ToW_zone(),center[0],center[1],center[2]);
             }
 
             //if cargo is bound to the first MT, its a pass
-            if(anybound(1)){
+            if(anybound(1) && anybound(2)){
+                graceful_exit=1;
+                printf("Something went wrong, exited ToW zone, but motors bound to both MTs\n");
+            }else if(anybound(1)){ //motors bound to 1st MT, it's a pass
                 prematureReturn=8;
-            } else if(anybound(2)) {
+            }else if(anybound(2)) { //motors bound to 2nd MT, it's a switch
                 prematureReturn=9;
             } else {
                 graceful_exit=1;
-                printf("Something went wrong, exited ToW zone, but not bound to either MT");
+                printf("Something went wrong, exited ToW zone, but not bound to either MT\n");
             }
 
         }
@@ -174,11 +175,42 @@ void evaluate_stop_conditions(){
         }
 
         //if the cargo reaches the end of the ToW zone, its a pass
-        if(center[0]>MTpoint[1][0]+ToW_zone){
-            prematureReturn=8;
+        if(any_motor_past_ToW_zone()){
+
+            if(verboseTF>1){
+                printf("Exited ToW zone with center at (%g,%g,%g)\n",center[0],center[1],center[2]);
+            }
+
+            //find out if it's a pass or switch
+            if(anybound(1) && anybound(2)){
+                graceful_exit=1;
+                printf("Something went wrong, exited ToW zone, but motors bound to both MTs");
+            }else if(anybound(1)){ //motors bound to 1st MT, it's a pass
+                prematureReturn=8;
+            } else {
+                graceful_exit=1;
+                printf("Something went wrong, exited ToW zone, but not a pass");
+            }
+
         }
 
     }
+}
+
+int any_motor_past_ToW_zone(){
+    out_of_ToW_zone=0;
+    for(m=0;m<2 && !out_of_ToW_zone;m++){
+        for(n=0;n<N[m] && !out_of_ToW_zone;n++){
+            if(head[m][n][0]>MTpoint[1][0]+ToW_zone ||
+                (head[m][n][0]<MTpoint[1][0]-ToW_zone && t_inst>1) ||
+                head[m][n][1]>MTpoint[1][1]+ToW_zone ||
+                head[m][n][1]<MTpoint[1][1]-ToW_zone ){
+                    out_of_ToW_zone=n;
+            }
+        }
+    }
+
+    return(out_of_ToW_zone);
 }
 
 int anybound(int MTnum){

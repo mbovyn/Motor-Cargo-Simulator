@@ -48,6 +48,8 @@ int prematureReturn;
 int FoundNotbound;
 int Foundbound;
 int graceful_exit;
+int out_of_ToW_zone;
+double s;
 
 int MTviolationCounter[NMTSMAX];
 
