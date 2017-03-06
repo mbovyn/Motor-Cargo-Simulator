@@ -104,6 +104,9 @@ void evaluate_stop_conditions(){
         if( (!anybound(1) || !anybound(2)) && timer>0){
             if(ToW){
                 if(ToWtime>dt_max_Steric){//if there was already a ToW event
+                    if(verboseTF>1){
+                        printf("ToW time: %g (not first ToW, setting to NAN)\n",timer);
+                    }
                     ToWtime=NAN; //set ToW time to NAN
                 }else{ //first ToW event
                     ToWtime=timer; //save value of timer as ToW time

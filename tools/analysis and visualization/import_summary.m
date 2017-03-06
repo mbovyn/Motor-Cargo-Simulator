@@ -33,7 +33,7 @@ startRow = 2;
 % For more information, see the TEXTSCAN documentation.
 %formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
-num=19;
+num=20;
 
 %piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
 piece1=repmat('%f',1,num);
@@ -70,9 +70,9 @@ fclose(fileID);
 
 %% Allocate imported array to column variable names
 
-for importi=1:num
-    dataArray{:,importi}=dataArray{:,importi}(~isnan(dataArray{:,importi}));
-end
+% for importi=1:num
+%     dataArray{:,importi}=dataArray{:,importi}(~isnan(dataArray{:,importi}));
+% end
 
 repeat = dataArray{:,1};
 step = dataArray{:, 2};
@@ -90,6 +90,8 @@ F1 = dataArray{:,12};
 theta_c = dataArray{:,13};
 
 MTvec{2}=[dataArray{:,14} dataArray{:,15} dataArray{:,16}];
+
+ToW_time = dataArray{:,17};
 
 last_bound_center = [dataArray{:, num-2} dataArray{:, num-1} dataArray{:, num}];
 
