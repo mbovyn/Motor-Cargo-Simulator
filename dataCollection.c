@@ -37,9 +37,14 @@ void writeCenterLocsHeader(){
 void writeHeadHeader(){
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"head_type%dmotor%d_x      ",m,n);
-            fprintf(fInUse,"head_type%dmotor%d_y      ",m,n);
-            fprintf(fInUse,"head_type%dmotor%d_z      ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_x      ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_y      ",m,n);
+            fprintf(fInUse,"head_type%02dmotor%02d_z      ",m,n);
+        }
+    }
+    for(m = 0; m<2; m++){
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"bound_type%02dmotor%02d ",m,n);
         }
     }
 }
@@ -190,11 +195,16 @@ void writeHead(){
     //write line of head locations
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
-            fprintf(fInUse,"%+1.16E %+1.16E %+1.16E ",
+            fprintf(fInUse,"%-+25.16E %-+25.16E %-+25.16E ",
                 head[m][n][0],
                 head[m][n][1],
                 head[m][n][2]
                 );
+        }
+    }
+    for (m = 0; m<2; m++) {
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"%-19d ",bound[m][n]);
         }
     }
 }//writeHead
