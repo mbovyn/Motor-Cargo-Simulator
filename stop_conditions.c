@@ -103,7 +103,7 @@ void evaluate_stop_conditions(){
         //reset the timer if either MT becomes unbound
         if( (!anybound(1) || !anybound(2)) && timer>0){
             if(ToW){
-                if(ToWtime>dt_max_Steric){//if there was already a ToW event
+                if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
                     if(verboseTF>1){
                         printf("ToW time: %g (not first ToW, setting to NAN)\n",timer);
                     }
