@@ -95,6 +95,7 @@ void evaluate_stop_conditions(){
         if(timer==0 &&
             ((anybound(1) && anybound(2)) ||
             (Stepping==5 && anystopped())) ){
+
             timer=dt;
 
             //if we haven't yet undergone a ToW event, mark the time
@@ -122,6 +123,8 @@ void evaluate_stop_conditions(){
 
             ToW_end=t_inst;
 
+            //printf("stopping tow\n" );
+
             if(ToW){
                 if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
                     if(verboseTF>1){
@@ -137,6 +140,9 @@ void evaluate_stop_conditions(){
                 }
             }else{//Too fast to be considered a ToW event
                 //don't record anything
+                if(verboseTF>1){
+                    printf("Dropping ToW event because it was too short\n");
+                }
             }
 
             timer=0;

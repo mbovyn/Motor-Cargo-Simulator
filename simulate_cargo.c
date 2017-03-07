@@ -356,6 +356,7 @@ int simulate_cargo()
 
                     if(Stepping==5){
                         step_stopped[hit_m][hit_n]=0;
+                        //printf("resetting step stop for motor %ld\n", hit_n);
                     }
 
                     //set head position to nan
