@@ -354,6 +354,10 @@ int simulate_cargo()
                     //set motor to no longer being bound
                     bound[hit_m][hit_n] = 0;
 
+                    if(Stepping==5){
+                        step_stopped[hit_m][hit_n]=0;
+                    }
+
                     //set head position to nan
                     head[hit_m][hit_n][0]=NAN;
                     head[hit_m][hit_n][1]=NAN;

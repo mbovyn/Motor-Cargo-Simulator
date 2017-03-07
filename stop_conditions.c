@@ -1,5 +1,6 @@
 void evaluate_stop_conditions();
 int any_motor_past_ToW_zone();
+int anystopped();
 int anybound(int MTnum);
 
 void evaluate_stop_conditions(){
@@ -91,7 +92,9 @@ void evaluate_stop_conditions(){
         //above, we've required at least one motor to be bound
 
         //start the timer if we have at least one motor bound to both MTs
-        if(anybound(1) && anybound(2) && timer==0){
+        if(timer==0 &&
+            ((anybound(1) && anybound(2)) ||
+            (Stepping==5 && anystopped())) ){
             timer=dt;
 
             //if we haven't yet undergone a ToW event, mark the time
@@ -106,12 +109,16 @@ void evaluate_stop_conditions(){
         }
 
         //increment the timer if still have both MTs bound
-        if(anybound(1) && anybound(2) && timer>0){
+        if(timer>0 &&
+            ((anybound(1) && anybound(2)) ||
+            (Stepping==5 && anystopped())) ){
             timer+=dt;
         }
 
         //reset the timer if either MT becomes unbound
-        if( (!anybound(1) || !anybound(2)) && timer>0){
+        if(timer>0 &&
+            ( (Stepping!=5 && (!anybound(1) || !anybound(2))) ||
+            (Stepping==5 && (!anybound(1) || !anybound(2)) && !anystopped()))){
 
             ToW_end=t_inst;
 
@@ -119,7 +126,7 @@ void evaluate_stop_conditions(){
                 if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
                     if(verboseTF>1){
                         printf("Micro ToW time: %g\n",timer);
-                        printf("    Macro ToW time: %g\n",ToW_end-ToW_start);
+                        printf("    Macro ToW time: %g\n    started at %g\n    ended at %g\n",ToW_end-ToW_start,ToW_start,ToW_end);
                     }
                     ToWtime=ToW_end-ToW_start; //set ToW time to NAN
                 }else{ //first ToW event
@@ -128,9 +135,9 @@ void evaluate_stop_conditions(){
                         printf("Micro ToW time: %g\n",ToWtime);
                     }
                 }
+            }else{//Too fast to be considered a ToW event
+                //don't record anything
             }
-
-
 
             timer=0;
         }
@@ -241,6 +248,20 @@ int any_motor_past_ToW_zone(){
     }
 
     return(out_of_ToW_zone);
+}
+
+int anystopped(){
+    stopped=0;
+    for(m=0;m<2 && !stopped;m++){
+        for(n=0;n<N[m] && !stopped;n++){
+
+            if(step_stopped[m][n]){
+                stopped=1;
+            }
+
+        }
+    }
+    return(stopped);
 }
 
 int anybound(int MTnum){

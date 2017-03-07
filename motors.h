@@ -52,6 +52,8 @@ int out_of_ToW_zone;
 double s;
 double ToWtime;
 double ToW_start, ToW_end;
+int step_stopped[2][NMOTORSMAX];
+int stopped;
 
 int MTviolationCounter[NMTSMAX];
 

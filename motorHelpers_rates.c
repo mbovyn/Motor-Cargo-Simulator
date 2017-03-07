@@ -142,9 +142,11 @@ void stepping_rates()
                 if( !(bound[m][n]==1) ||
                     ( head[m][n][0]<-.012-.008 || head[m][n][0]>.012 )  ){
                         calculate_stepping_rate();
+                        step_stopped[m][n]=0;
                 }else{
                     //if it would step into forbidden zone, set step rate to 0
                     step_rate[m][n]=0;
+                    step_stopped[m][n]=1;
                 }
             }
 
