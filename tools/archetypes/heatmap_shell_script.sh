@@ -10,7 +10,7 @@ code_dir=~/project_code/Motor_Freedom
 working_dir=$("pwd")
 
 #values to sweep over
-sweep1=($(seq 5 5 25))
+sweep1=($(seq 5 5 30))
 sweep2=($(seq 1.2 -.2 .4))
 
 #set the parameters to pass in, leave others unset

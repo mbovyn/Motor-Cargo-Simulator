@@ -22,7 +22,7 @@ date +"    started at: %r on %F"
 for param1 in ${sweep1[*]};
 do
 
-    let ctr2++
+    let ctr1++
 
     for param2 in ${sweep2[*]};
     do
@@ -41,7 +41,7 @@ do
 
         #program chooses to append or open to write based on existance of summary file
         #if there's an old one hanging around, delete it
-        let ctr1++
+        let ctr2++
         instance_name="${run_name}.${ctr1}.${ctr2}"
 
         fname="${instance_name}_Summary.txt"
@@ -70,7 +70,7 @@ do
 
 
         #track where we are
-        
+
     	echo "ran $ctr1,$ctr2 of ${#sweep1[@]} x ${#sweep2[@]}, params $param1,$param2 at"
         date +"    %r on %F"
 
@@ -79,7 +79,7 @@ do
 
     done
 
-    let ctr1=0
+    let ctr2=0
 
 done
 
