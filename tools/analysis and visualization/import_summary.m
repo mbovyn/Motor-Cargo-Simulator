@@ -56,7 +56,7 @@ fclose(fileID);
 
 fileID = fopen(filename,'r');
 
-piece1=repmat('%f',1,num+3+2*3*(N1(1)+N(2)));
+piece1=repmat('%f',1,num+3+2*3*(N1(1)+N(2))+(N1(1)+N(2)));
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -131,6 +131,23 @@ for m=1:2
             column=last_locs_col+1+N(1)*3+(n-1)*3;
         end
         head_final{m}{n}=[dataArray{:,column:column+2}];
+    end
+end
+
+last_head_col=num+4+3*(N(1)+N(2))-1+ 3*(N(1)+N(2));
+
+bound_final=cell(2,1);
+bound_final{1}=cell(N(1),1);
+bound_final{2}=cell(N(2),2);
+
+for m=1:2
+    for n=1:N(m)
+        if m==1
+            column=last_head_col+1+(n-1);
+        else
+            column=last_head_col+1+N(1)+(n-1);
+        end
+        bound_final{m}{n}=[dataArray{:,column}];
     end
 end
 

@@ -10,6 +10,7 @@ int simulate_cargo()
         printf("\nPerforming setup step\n\n");
 
     //set current center to center that was passed in
+    //wipe variables which don't reset otherwise
     for(i=0;i<3;i++){
         center[i]=center_initial[i];
         LastBoundLocation[i]=NAN;
@@ -20,6 +21,13 @@ int simulate_cargo()
     set_quat_to_identity();
     ToW=0;
     ToWtime=0;
+    for (m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            for(i=0;i<3;i++){
+                last_bound_head[m][n][i]=NAN;
+            }
+        }
+    }
 
     if (verboseTF>4)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);

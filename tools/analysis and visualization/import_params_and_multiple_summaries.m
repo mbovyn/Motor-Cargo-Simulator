@@ -38,7 +38,8 @@ if ~exist('summaries_imported','var')
         runs(runno).locs_final = locs_final;
         runs(runno).head_final = head_final;
         runs(runno).MTvec=MTvec{2};
-        runs(runno).ToWtime=ToWtime;
+        runs(runno).ToW_time=ToW_time;
+        runs(runno).bound_final=bound_final;
     end
     
     clear runno    
