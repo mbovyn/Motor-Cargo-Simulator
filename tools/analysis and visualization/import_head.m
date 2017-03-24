@@ -20,7 +20,7 @@ startRow = 2;
 %need a %f for each column of numbers to read in
 %step, time, center x,y,z = 5
 %x,y,z for each motor = 3*(N_k+N_d)
-piece1=repmat('%f',1,3+3*(N(1)+N(2)));
+piece1=repmat('%f',1,3+3*(N(1)+N(2))+(N(1)+N(2)));
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -49,6 +49,11 @@ step = dataArray{:, 2};
 t_arr = dataArray{:, 3};
 
 head_rec=cell(2,size(step,1));
+
+last=3+3*(N(1)+N(2))+(N(1)+N(2));
+
+bound{1}=[dataArray{:,last-(N(1)+N(2))+1:last-N(2)}];
+bound{2}=[dataArray{:,last-N(2)+1:last}];
 
 %% 
 
