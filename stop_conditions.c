@@ -227,12 +227,14 @@ void evaluate_stop_conditions(){
             //find out if it's a pass or switch
             if(anybound(1) && anybound(2)){
                 graceful_exit=1;
-                printf("Something went wrong, exited ToW zone, but motors bound to both MTs");
+                printf("Something went wrong, exited ToW zone, but motors bound to both MTs\n");
             }else if(anybound(1)){ //motors bound to 1st MT, it's a pass
                 prematureReturn=8;
+            }else if(anybound(2)){ //no ToW switch
+                prematureReturn=12;
             } else {
                 graceful_exit=1;
-                printf("Something went wrong, exited ToW zone, but not a pass");
+                printf("Something went wrong, exited ToW zone, but no motors bound\n");
             }
 
         }
