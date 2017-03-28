@@ -18,14 +18,14 @@ end
 
 %%
 
-%experimental_CI=1.96*sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
+experimental_CI=1.96*sqrt(experimental_fraction*(1-experimental_fraction)/experimental_n);
 
 fraction=fraction';
-%frac_error=abs(fraction-experimental_fraction);
+frac_error=abs(fraction-experimental_fraction);
 
 figure
-imagesc(fraction);
-%hold on
+imagesc(frac_error);
+hold on
 
 set(gca,'Ydir','normal')
 set(gca,'XTick',1:length(pi_0))
@@ -33,12 +33,12 @@ set(gca,'YTick',1:length(N))
 set(gca,'XTickLabel',pi_0(:,1))
 set(gca,'YTickLabel',N(1,:))
 
-%within_CI=(fraction>(experimental_fraction-experimental_CI)) & ...
-%    (fraction<(experimental_fraction+experimental_CI));
+within_CI=(fraction>(experimental_fraction-experimental_CI)) & ...
+    (fraction<(experimental_fraction+experimental_CI));
 
 h=colorbar();
-%caxis([min(frac_error(within_CI)) max(frac_error(within_CI))])
-ylabel(h,'Fraction')
+caxis([min(frac_error(within_CI)) max(frac_error(within_CI))])
+ylabel(h,'Error')
 
 xlabel('On Rate (1/s)')
 ylabel('Number of Motors')
@@ -47,10 +47,10 @@ title(titlestr)
 %%
 
 
-% black = cat(3, zeros(size(fraction)), zeros(size(fraction)), zeros(size(fraction)));
-% hb=imagesc(black);
-% alpha_data = ~ within_CI;
-% set(hb, 'AlphaData', alpha_data);
+black = cat(3, zeros(size(fraction)), zeros(size(fraction)), zeros(size(fraction)));
+hb=imagesc(black);
+alpha_data = ~ within_CI;
+set(hb, 'AlphaData', alpha_data);
 
 
 
