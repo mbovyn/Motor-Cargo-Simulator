@@ -505,10 +505,18 @@ void getInputParams( void )
     //if we're doing an MT assay, find the ToW zone distance
     if(MultiMTassay){
 
+        if(verboseTF>1){
+            printf("Multi MT assay detected\n");
+        }
+
         //enforce assumed MTvec
         MTvec[0][0]=1;
         MTvec[0][1]=0;
         MTvec[0][2]=0;
+
+        if(verboseTF>1){
+            printf("    Forcing first MTvec to (%g,%g,%g)\n",MTvec[0][0],MTvec[0][1],MTvec[0][2]);
+        }
 
         //if MT_angle is input, override MTvec
         if(!isnan(MT_angle)){
@@ -519,10 +527,22 @@ void getInputParams( void )
             MTvec[1][1]=sin(MT_angle);
             MTvec[1][2]=0;
 
+            if(verboseTF>1){
+                printf("    MT_angle given,forcing second MTvec to ");
+            }
+
         }else{//find from input MTvec
             //reduced from acos( MTvec[0] . MTvec[1] )
             // assuming MTvec[1] = (1,0,0)
             MT_angle=acos(MTvec[1][0]);
+
+            if(verboseTF>1){
+                printf("    MTvec given as ");
+            }
+        }
+
+        if(verboseTF>1){
+            printf("(%g,%g,%g). MT angle is %g degrees\n",MTvec[1][0],MTvec[1][1],MTvec[1][2],MT_angle*180/pi);
         }
 
         //set correct ToW_zone for this angle and separation distance
@@ -532,17 +552,21 @@ void getInputParams( void )
         //expression from notebook, + 50nm for safety factor
         ToW_zone=.05+sqrt((2*L[0] + 2*R - s)*(2*L[0] + 2*R + s))/sin(MT_angle);
         // printf("L[0]= %g, R= %g, s= %g\n",L[0],R,s);
-        // printf("ToW zone is %g\n",ToW_zone);
-    }
+        if(verboseTF>1){
+            printf("    ToW zone is %g microns\n",ToW_zone);
+        }
 
-    //set correct inital center for ToW assay
-    //assumes MT_vec[0]=(1,0,0)
-    if(!isnan(ToW_zone)){
+
+        //set correct inital center for ToW assay
+        if(verboseTF>1){
+            printf("    Moving initial cargo center from (%g,%g,%g) ",center_initial[0],center_initial[1],center_initial[2]);
+        }
+
         center_initial[0]=MTpoint[0][0]-ToW_zone;
-    }
 
-    if(verboseTF>1){
-        printf("Initial cargo center is(%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
+        if(verboseTF>1){
+            printf("to (%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
+        }
     }
 
     //print out what we have

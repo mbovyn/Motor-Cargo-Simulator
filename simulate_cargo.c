@@ -29,7 +29,7 @@ int simulate_cargo()
         }
     }
 
-    if (verboseTF>4)
+    if (verboseTF>1)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
 
     // set initial locations of motors -------------------------------------
