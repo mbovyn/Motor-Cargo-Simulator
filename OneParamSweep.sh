@@ -19,13 +19,13 @@ for param in ${sweep[*]};
 do
 
     #find the number of simulations currently running
-    numInstances=$( pgrep motors | wc -l )
+    numInstances=$( jobs | wc -l )
 
     #if we are at the max, wait and check every 5 seconds
 	while [ "$numInstances" -ge "$numCores" ] # number of cores to use
 	do
 		sleep 5s
-        numInstances=$( pgrep motors | wc -l )
+        numInstances=$( jobs | wc -l )
 	done
     #when this exits, we are at less than the max number of sims
     #so launch a new one and check again
@@ -71,11 +71,11 @@ done
 echo finished launching
 
 let talk=1
-numInstances=$( pgrep motors | wc -l )
+numInstances=$( jobs | wc -l )
 while [ "$numInstances" -gt "0" ]
 do
 
-    numInstancesnew=$( pgrep motors | wc -l )
+    numInstancesnew=$( jobs | wc -l )
 
     if [ "$numInstancesnew" -lt "$numInstances" ]
     then
