@@ -70,6 +70,9 @@ done
 
 echo finished launching
 
+#use jobs to monitor only processes launched by this bash instance
+#https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
+
 let talk=1
 numInstances=$( jobs | wc -l )
 while [ "$numInstances" -gt "0" ]
