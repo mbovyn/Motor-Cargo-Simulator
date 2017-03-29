@@ -28,13 +28,13 @@ do
     do
 
         #find the number of simulations currently running
-        numInstances=$( jobs | wc -l )
+        numInstances=$( pgrep motors | wc -l )
 
         #if we are at the max, wait and check every 5 seconds
     	while [ "$numInstances" -ge "$numCores" ] # number of cores to use
     	do
     		sleep 5s
-            numInstances=$( jobs | wc -l )
+            numInstances=$( pgrep motors | wc -l )
     	done
         #when this exits, we are at less than the max number of sims
         #so launch a new one and check again
