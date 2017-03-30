@@ -75,7 +75,7 @@ do
         date +"    %r on %F"
 
         #sleep so as not to go before the ISEED is updated
-    	sleep 1s
+    	sleep .1s
 
     done
 
@@ -89,11 +89,11 @@ echo finished launching
 #https://www.digitalocean.com/community/tutorials/how-to-use-bash-s-job-control-to-manage-foreground-and-background-processes
 
 let talk=1
-numInstances=$( jobs | wc -l )
+numInstances=$( jobs -r | wc -l )
 while [ "$numInstances" -gt "0" ]
 do
 
-    numInstancesnew=$( jobs | wc -l )
+    numInstancesnew=$( jobs -r | wc -l )
 
     if [ "$numInstancesnew" -lt "$numInstances" ]
     then
