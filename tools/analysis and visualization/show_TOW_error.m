@@ -13,9 +13,11 @@ set(gca,'YTick',1:length(N_axis{1}))
 
 if(small)
     
-    small_y_tick_labels=num2cell(N_axis{1}(1,:));
-    small_y_tick_labels(2:2:length(small_y_tick_labels))=repmat({''},numel(2:2:length(small_y_tick_labels)),1);
-    y_tick_labels=small_y_tick_labels;
+%     small_y_tick_labels=num2cell(N_axis{1}(1,:));
+%     small_y_tick_labels(2:2:length(small_y_tick_labels))=repmat({''},numel(2:2:length(small_y_tick_labels)),1);
+%     y_tick_labels=small_y_tick_labels;
+    
+    y_tick_labels=N_axis{1}(1,:);
     
 else
     

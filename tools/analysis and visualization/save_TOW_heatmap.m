@@ -5,10 +5,10 @@ fig = gcf;
 fig.PaperUnits = 'centimeters';
 
 if(small)
-    fig.PaperPosition = [0 0 8 4];
-    fig.PaperSize = [8 4];
+    fig.PaperPosition = [0 0 7.8 5.3];
+    fig.PaperSize = [7.8 5.3];
 else
-    fig.PaperPosition = [0 0 8 8];
-    fig.PaperSize = [8 8];
+    fig.PaperPosition = [0 0 8 11];
+    fig.PaperSize = [8 11];
 end
 print(filename,'-dpdf')
