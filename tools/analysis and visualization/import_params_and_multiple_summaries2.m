@@ -46,6 +46,7 @@ if ~exist('summaries_imported','var')
     end
     
     clear runno1 runno2
+    run_name=base_run_name;
     summaries_imported=true;
     
 end
