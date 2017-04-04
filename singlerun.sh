@@ -7,11 +7,11 @@ cp $code_dir/motors.x motors.x
 #program chooses to append or open to write based on existance of summary file
 #if there's an old one hanging around, delete it
 fname="${run_name}_Summary.txt"
-if [ -e $fname ] ; then
+if [ -e $fname -a ${keep_old:-0} -eq 0 ] ; then
     rm $fname
     echo Script: deleted old summary file
 else
-    echo Script: no summary file
+    echo Script: didnt delete summary file
 fi
 
 #run the simulation from the local folder
