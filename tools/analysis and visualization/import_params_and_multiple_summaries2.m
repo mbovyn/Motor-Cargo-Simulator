@@ -41,6 +41,7 @@ if ~exist('summaries_imported','var')
             runs(runno1,runno2).head_final = head_final;
             runs(runno1,runno2).MTvec=MTvec{2};
             runs(runno1,runno2).ToW_time=ToW_time;
+            runs(runno1,runno2).bound_final=bound_final;
             
         end
     end
