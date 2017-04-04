@@ -8,7 +8,7 @@ cp $code_dir/motors.x motors.x
 numCores=4
 
 #counter
-ctr1=0
+ctr1=${ctr1passthrough:-0}
 
 echo "Running ${#sweep[@]} params"
 

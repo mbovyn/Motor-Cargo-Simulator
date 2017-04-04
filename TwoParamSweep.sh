@@ -11,8 +11,9 @@ cp $code_dir/motors.x motors.x
 numCores=4
 
 #counter
-ctr1=0
-ctr2=0
+#should pass 1 less than desired ctr
+ctr1=${ctr1passthrough:-0}
+ctr2=${ctr2passthrough:-0}
 
 echo "Running ${#sweep1[@]} x ${#sweep2[@]} params"
 
