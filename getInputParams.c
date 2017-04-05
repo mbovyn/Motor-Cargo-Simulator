@@ -548,9 +548,12 @@ void getInputParams( void )
         //set correct ToW_zone for this angle and separation distance
         //determined in ToWzone.nb
         //distance between nearest points on MT is difference in centers-(sum of MT radii)
-        s=fabs(MTpoint[0][2]-MTpoint[1][2])-R_MT[0]-R_MT[1];
-        //expression from notebook, + 50nm for safety factor
-        ToW_zone=.05+sqrt((2*L[0] + 2*R - s)*(2*L[0] + 2*R + s))/sin(MT_angle);
+        //s=fabs(MTpoint[0][2]-MTpoint[1][2])-R_MT[0]-R_MT[1];
+        s=fabs(MTpoint[0][2]-MTpoint[1][2]);
+        //expression from notebook
+        //+ 20nm for safety factor for stretch in motors
+        //ToW_zone=.05+sqrt((2*L[0] + 2*R - s)*(2*L[0] + 2*R + s))/sin(MT_angle);
+        ToW_zone=sqrt(pow(2*(L[0]+.02) + 2*R + sqrt(2)*R_MT[0]+R_MT[1],2) - pow(s,2))/sin(MT_angle);
         // printf("L[0]= %g, R= %g, s= %g\n",L[0],R,s);
         if(verboseTF>1){
             printf("    ToW zone is %g microns\n",ToW_zone);
