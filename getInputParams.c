@@ -29,7 +29,7 @@ void getInputParams( void )
 
     //Go through each line and find the values of the input paramters
     //skip the first few
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
     {
       fgets(tmpString, 100, fParams);
     }
@@ -223,7 +223,7 @@ void getInputParams( void )
 
     /************ Simulation Keywords FROM FILE *******************/
 
-    for(int n_lines=1;n_lines<=5;n_lines++)
+    for(n_lines=1;n_lines<=5;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //Initial Locations
@@ -231,7 +231,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %d %lf",blah,&InitialLocations,&SetAtBottom,&InitAngle);
 
-    for(int n_lines=1;n_lines<=16;n_lines++)
+    for(n_lines=1;n_lines<=16;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //Motor Diffusion
@@ -252,7 +252,7 @@ void getInputParams( void )
         }
     }
 
-    for(int n_lines=1;n_lines<=20;n_lines++)
+    for(n_lines=1;n_lines<=20;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //InitialBinding
@@ -260,7 +260,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&InitialBinding,&initial_head);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
     fgets(tmpString, 100, fParams);
 
     //Binding
@@ -268,7 +268,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&Binding,&innerlimit);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
     fgets(tmpString, 100, fParams);
 
     //Unbinding
@@ -276,7 +276,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&Unbinding);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //Stepping
@@ -284,7 +284,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&Stepping,&input_step_rate);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //initial nucleotide Behavior
@@ -292,7 +292,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&InitialNucleotideBehavior);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //Nucleotide
@@ -300,7 +300,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf %lf",blah,&NucleotideBehavior,&base_exchange_rate[0],&base_exchange_rate[1]);
 
-    for(int n_lines=1;n_lines<=17;n_lines++)
+    for(n_lines=1;n_lines<=17;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //Motor Loading
@@ -308,7 +308,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&MotorLoading);
 
-    for(int n_lines=1;n_lines<=7;n_lines++)
+    for(n_lines=1;n_lines<=7;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //CargoBehavior
@@ -316,7 +316,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&CargoBehavior);
 
-    for(int n_lines=1;n_lines<=13;n_lines++)
+    for(n_lines=1;n_lines<=13;n_lines++)
     fgets(tmpString, 100, fParams);
 
     //External Force
@@ -329,7 +329,7 @@ void getInputParams( void )
         sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&trash,&Ftrap[1],&Ftrap[2]);
     }
 
-    for(int n_lines=1;n_lines<=6;n_lines++)
+    for(n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //ExternalTorque
@@ -337,7 +337,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_torque,&TorqeExt[0],&TorqeExt[1],&TorqeExt[2]);
 
-    for(int n_lines=1;n_lines<=6;n_lines++)
+    for(n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //Use Steric
@@ -345,7 +345,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&UseSteric);
 
-    for(int n_lines=1;n_lines<=9;n_lines++)
+    for(n_lines=1;n_lines<=9;n_lines++)
     fgets(tmpString, 100, fParams);
 
     //ReturnDetails
@@ -353,7 +353,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega);
 
-    for(int n_lines=1;n_lines<=12;n_lines++)
+    for(n_lines=1;n_lines<=12;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //ReturnFinalState
@@ -361,7 +361,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&ReturnFinalState);
 
-    for(int n_lines=1;n_lines<=6;n_lines++)
+    for(n_lines=1;n_lines<=6;n_lines++)
       fgets(tmpString, 100, fParams);
 
     //End conditions
@@ -447,7 +447,7 @@ void getInputParams( void )
 
     //debugging
 
-    for(int n_lines=1;n_lines<=15;n_lines++)
+    for(n_lines=1;n_lines<=15;n_lines++)
       fgets(tmpString, 100, fParams);
 
     sscanf(tmpString,"%s %lf",blah,&dt_override);
@@ -483,7 +483,7 @@ void getInputParams( void )
     //Read in MT params from MTparams file
 
     //skip the header lines
-    for(int n_lines=1;n_lines<=5;n_lines++)
+    for(n_lines=1;n_lines<=5;n_lines++)
     {
       fgets(tmpString, 100, fMTParams);
     }

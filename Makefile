@@ -21,3 +21,9 @@ free10:
 
 free20:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dfree20
+
+hpc:
+	chmod 777 makePubs.pl
+	./makePubs.pl
+	chmod 777 submit.pl
+	./submit.pl
