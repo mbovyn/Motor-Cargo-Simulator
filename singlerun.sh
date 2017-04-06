@@ -14,6 +14,8 @@ else
     echo Script: didnt delete summary file
 fi
 
+date +"started at: %r on %F"
+
 #run the simulation from the local folder
 
 #if a parameter is set in calling script, pass it to the program
@@ -27,6 +29,7 @@ fi
 ./motors.x  $run_name  $run_name      ${repeats:-1} ${verbose:-0} ${D:-NAN} ${eps_0:-NAN} ${pi_0:-NAN} ${z_MT_offset:-NAN} ${R:-NAN} ${N0:--1}  ${F_trap:-NAN} ${theta_c:-NAN} ${MT_angle:-NAN}
 
 #notify
+date +"done at: %r on %F"
 osascript -e 'display notification "Simulation Complete" with title "Done!"'
 
 # generate and save a file that tells the hash of the git commit used to generate the data
