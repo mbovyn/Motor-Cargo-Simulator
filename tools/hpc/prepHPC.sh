@@ -6,6 +6,7 @@ working_dir=$("pwd")
 #copy code to current folder
 cp $code_dir/*.c .
 cp $code_dir/*.h .
+cp -n $code_dir/tools/hpc/make_and_submit_Pubs.pl .
 
 #get commit hash
 cd $code_dir
