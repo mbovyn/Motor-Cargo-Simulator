@@ -2,7 +2,7 @@
 
 #copy the current version of the executable into the local folder
 cd "$working_dir"
-cp $code_dir/motors.x motors.x
+cp $code_dir/motors.x .
 
 #program chooses to append or open to write based on existance of summary file
 #if there's an old one hanging around, delete it
