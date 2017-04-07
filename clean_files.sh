@@ -14,7 +14,7 @@ do
     fname="${run_name}$ending"
     if [ -e $fname -a ${keep_old:-0} -eq 0 ] ; then
         rm $fname
-        echo Script: deleted $fname
+        echo "    Script: deleted $fname"
     else
         if [ ${keep_old:-0} -eq 1 ] ; then
             echo "    Script: didn't delete $fname, keeping old"
