@@ -235,7 +235,16 @@ void RanInit(int repeatable)
   FILE *ip, *ip2; // ISEED files
   long iseed;
 
-  ip =fopen("ISEED","r");//open the seed and read it in
+  //check if iseed exists MB
+  if( access( "ISEED", F_OK ) != -1 ) {
+      //file exists
+      ip =fopen("ISEED","r");//open the seed
+  } else {
+      // file doesn't exist
+      printf("\nError! Couldn't open ISEED\n");
+      exit(1);
+  }
+  //read seed in
   fscanf(ip,"%lx",&iseed);
   fclose(ip);
 
