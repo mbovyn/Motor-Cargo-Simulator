@@ -66,7 +66,7 @@ void initiallocations(){
     //uses only parameters to generate initial locations
     //sets locs
 
-    if(verboseTF>4){
+    if(verboseTF>2){
         printf("setting initial locations with case %d\n",InitialLocations);
     }
     switch(InitialLocations){
@@ -122,7 +122,7 @@ void initiallocations(){
                 }
             }
 
-            if(verboseTF>4){
+            if(verboseTF>3){
                 printf("Before rotation,initial locations are chosen as:\n");
                 for (m=0;m<2;m++){
                     for(n=0;n<N[m];n++){
@@ -135,7 +135,7 @@ void initiallocations(){
             n=0;
             makeRotationMatrix(0,0,1);
 
-            if(verboseTF>5){
+            if(verboseTF>3){
                 printf("The rotation matrix that was found is:\n");
                 printf("    %+E %+E %+E\n    %+E %+E %+E\n    %+E %+E %+E\n",
                     rotmat[0],rotmat[1],rotmat[2],
@@ -211,10 +211,10 @@ void initiallocations(){
 
         default:
             printf("Not a valid initial location type\n");
-            exit(0);
+            exit(4);
     }//switch
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("Initial locations are chosen as:\n");
         for (m=0;m<2;m++){
             for(n=0;n<N[m];n++){
@@ -331,7 +331,7 @@ void findMTdist(){
 
 void initialbinding(){
 
-    if(verboseTF>4){
+    if(verboseTF>2){
         printf("setting initial binding with case %d\n",InitialBinding);
     }
 
@@ -375,7 +375,7 @@ void initialbinding(){
                     }
                     if(!done){
                         printf("\n\n\n Error: Wasn't able to bind motor with most neighbors\n\n\n");
-                        exit(0);
+                        exit(4);
                     }
                 }else{
 
@@ -401,7 +401,7 @@ void initialbinding(){
                 //stop if one wasn't able to bind
                 if(done==0){
                     printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
-                    exit(0);
+                    exit(4);
                 }
             }
 
@@ -445,7 +445,7 @@ void initialbinding(){
                 //stop if one wasn't able to bind
                 if(done==0){
                     printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
-                    exit(0);
+                    exit(4);
                 }
             }
 
@@ -464,7 +464,7 @@ void initialbinding(){
 
         default:
             printf("Not a valid initial binding type\n");
-            exit(0);
+            exit(4);
     }
 
     //set head locations to reflect binding status
@@ -499,7 +499,7 @@ void initialbinding(){
         head[1][0][1]=cPoint[1];
         head[1][0][2]=cPoint[2];
     }
-}
+}//end initial binding
 
 void closestPointOnMT(double x,double y,double z,int MTnum){
     //find the closest point on the MT to the point given
@@ -514,7 +514,7 @@ void closestPointOnMT(double x,double y,double z,int MTnum){
 
 void initialnucleotide(){
 
-    if(verboseTF>4){
+    if(verboseTF>2){
         printf("setting initial nucleotide with case %d\n",InitialNucleotideBehavior);
     }
 
@@ -534,6 +534,6 @@ void initialnucleotide(){
 
         default:
             printf("Invalid Initial Nucleotide Behavior setting\n");
-            exit(0);
+            exit(4);
     }
 }//finished initialnucleotide

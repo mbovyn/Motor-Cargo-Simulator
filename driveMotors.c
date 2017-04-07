@@ -1,5 +1,11 @@
 /*** Matt Bovyn mbovyn@uci.edu  ***/
 
+//Error codes:
+//1: Unable to open one of the input files
+//2: Unsupported compile parameters
+//3: Mismatch between parameter file and read in functions
+//4: Bad input from parameter file
+
 //Basic librarys and functions to include
 #include <math.h>
 #include <stdlib.h>
@@ -84,15 +90,21 @@ int main( int argc, char *argv[] )
     }
 
     // IF verboseTF = 0, will not output anything
-    // IF verboseTF = 1, will echo input parameters and say number of successes
-    // if =2, will additionally every simulation - stop condition
-    // if =3, will output a bunch of error checking things and important events
+    // IF verboseTF = 1, will output running params
+    // if =2, will say more and additionally output a few lines per repeat
+    // if =3, will additionally output important events but not every time step
+    //        will also output lines to follow what's going on
     // if =4, will output every time step
+    // if =5, will output every time certain functions are called
     verboseTF = 0;
     if(argv[4]) // Verbose Output
         verboseTF = atoi(argv[4]);
 
-    if (verboseTF>4){
+    if(verboseTF>1){
+        printf("Run name:      %s\nInstance name: %s\n",paramFileName,runName);
+    }
+
+    if (verboseTF>2){
         printf("\n-------------------------------------------------\n");
         printf("\nBeginning new run\n\n");
         printf("-------------------------------------------------\n\n");
@@ -108,18 +120,21 @@ int main( int argc, char *argv[] )
 
     if(verboseTF>1){
         //if ever see two that are the same, know iSEED wasn't updated
-        printf("The test rand is %f\n",RAND);
+        if(seed_option){
+            printf("Random Seed won't be updated\n");
+        } else {
+            printf("Random Seed will be updated\n");
+        }
+        printf("    The test rand is %f\n",RAND);
     }else{
         RAND;
     }
 
-    //can bring D_m[0] and eps_0[0] in from the command line here
+    //can bring params in from the command line here
     //if they are not input they are read from the parameter file
     D_m[0]=NAN;
     if(argc>5){
         D_m[0]=atof(argv[5]);
-        // printf("read in D as %s\n",argv[5]);
-        // printf("read in D as %f\n",atof(argv[5]));
     }
 
     eps_0[0]=NAN;
@@ -164,11 +179,14 @@ int main( int argc, char *argv[] )
 
     // load parameters
 
-    if (verboseTF>3)
+    if (verboseTF>2)
         printf("\nReading in Parameters\n\n");
 
 
     getInputParams();
+
+    if (verboseTF>1)
+        printf("Initial location passed in is (%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
@@ -183,20 +201,22 @@ int main( int argc, char *argv[] )
         printf("     R = %g\n",R);
         printf("     Trap force x component = %g\n",Ftrap[0]);
         printf("     Critical Angle theta_c = %g\n",theta_c);
+        printf("     MT Angle = %g\n",MT_angle);
 
-        printf("Running %d repeats\n",repeats );
+        printf("Running %d repeats\n\n",repeats );
     }
 
+    //set up for data collection
     initializeDataCollection();
 
     //call simulation function in loop
-
     for(j=0;j<repeats;j++){
 
         result=simulate_cargo();
 
     }
 
+    //close files
     finalizeDataCollection();
 
     //print the final score

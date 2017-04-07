@@ -6,7 +6,7 @@ int simulate_cargo()
     // Hybrid fixed time step / gillespie with stochastic steppers
 
     // Setup
-    if (verboseTF>4)
+    if (verboseTF>2)
         printf("\nPerforming setup step\n\n");
 
     //set current center to center that was passed in
@@ -29,7 +29,7 @@ int simulate_cargo()
         }
     }
 
-    if (verboseTF>1)
+    if (verboseTF>2)
         printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
 
     // set initial locations of motors -------------------------------------
@@ -61,7 +61,7 @@ int simulate_cargo()
     calculate_forces();
     set_brownian_forces_to_0();
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("The initial locations of the anchors are set to:\n");
         for (m=0;m<2;m++){
             for(n=0;n<N[m];n++){
@@ -112,7 +112,7 @@ int simulate_cargo()
 
     //simulate forward in time
 
-    if (verboseTF>4)
+    if (verboseTF>2)
         printf("\nBeginning Simulation\n\n");
 
     //set initial values
@@ -160,7 +160,7 @@ int simulate_cargo()
 
         } //end of 2nd loop over motor types _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 
-        if(verboseTF>4){
+        if(verboseTF>3){
 
             printf("At step %ld -----------------------------------------------\n",step);
             printf("The forces exerted by the motors are:\n");
@@ -545,7 +545,7 @@ int simulate_cargo()
                 default:
                     printf("Missed case on reporting end of sim condition\n");
             }
-            printf("Cargo location was (%g,%g,%g)\n",center[0],center[1],center[2] );
+            printf("Cargo location was (%g,%g,%g)\n\n",center[0],center[1],center[2] );
         }
 
         //count up number of results we've labeled as success for this trial

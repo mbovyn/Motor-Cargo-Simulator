@@ -13,12 +13,27 @@ void getInputParams( void )
     strcpy(MTparamFileName,paramFileName);
     strcat(MTparamFileName,"_MT_params");
     strcat(MTparamFileName,".txt");
-    fMTParams = fopen(MTparamFileName, "r");
+    if( access( MTparamFileName, F_OK ) != -1 ) {
+        //file exists
+        fMTParams = fopen(MTparamFileName, "r");
+    } else {
+        // file doesn't exist
+        printf("\n\nError! Couldn't open MT params file called:\n%s\n",MTparamFileName);
+        exit(1);
+    }
+
 
     //open the param file
     strcat(paramFileName,"_params");
     strcat(paramFileName,".txt");
-    fParams = fopen(paramFileName, "r");
+    if( access( paramFileName, F_OK ) != -1 ) {
+        //file exists
+        fParams = fopen(paramFileName, "r");
+    } else {
+        // file doesn't exist
+        printf("\n\nError! Couldn't open params file called:\n%s\n",paramFileName);
+        exit(1);
+    }
 
     //My approach: use fgets() to scan each line into the temporary string
     //then use sscanf() to find the values
@@ -161,7 +176,7 @@ void getInputParams( void )
         dt_max_Motor=.9*1/(k_m[1]*muCargoTranslation);
     }
     if(dt_max_Motor==0){
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("dt_max for motor springs is 0 (no motors?) - setting to default.\n");
         }
         dt_max_Motor=dt_default;
@@ -183,7 +198,7 @@ void getInputParams( void )
         dt_max_Diffusion=.01*pow(R,2)/D_m[1];
     }
     if(dt_max_Diffusion==0){
-        if(verboseTF>2){
+        if(verboseTF>1){
             printf("dt_max for diffusion is 0 (no motors?) - setting to default.\n");
         }
         dt_max_Diffusion=dt_default;
@@ -210,9 +225,6 @@ void getInputParams( void )
             printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
         }
     }
-
-
-
 
     //all of this may not have been necessay since dt_max_Motor is also a
     //function of D_m. May always be lower at measured k_m of 320 pN/micron
@@ -241,14 +253,14 @@ void getInputParams( void )
 
     if(MotorDiffusion<10){
         if(N[0]+N[1] > available_motors_free){
-            printf("\n\n\nError! Exiting!\nAsked for unsupported number of free motors\nCompile with different keyword to include more\n\n\n");
-            exit(0);
+            printf("\n\nError! Exiting!\nAsked for unsupported number of free motors\nCompile with different keyword to include more\n\n");
+            exit(2);
         }
     }else{
         if((N[0]+N[1] > available_motors_bead)
         || ((available_motors_bead==101 && (N[0]+N[1]-1)%10!=0) && !(N[0]+N[1]==0))){
-            printf("\n\n\nError! Exiting!\nAsked for unsupported number of bead motors\nCompile with different keyword\n\n\n");
-            exit(0);
+            printf("\n\nError! Exiting!\nAsked for unsupported number of bead motors\nCompile with different keyword\n\n");
+            exit(2);
         }
     }
 
@@ -470,13 +482,13 @@ void getInputParams( void )
 
     if(check_bit!=732 || check_bit2!=576){
         printf("\n\n\nError! Exiting!\n\n\nCheck bit incorrect, mismatch between paramers file and read in code\n");
-        exit(0);
+        exit(3);
     }
 
     //close file
     fclose(fParams);
 
-    if(verboseTF>4){
+    if(verboseTF>2){
         printf("read in all params from params file\n");
     }
 
