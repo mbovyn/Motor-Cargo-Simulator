@@ -7,7 +7,12 @@ working_dir=$("pwd")
 cp $code_dir/*.c .
 cp $code_dir/*.h .
 cp $code_dir/Makefile .
+#copy the script if it doesn't already exist
 cp -n $code_dir/tools/hpc/make_and_submit_Pubs.pl .
+
+#make the folders
+mkdir pubs
+mkdir logs
 
 #get commit hash
 cd $code_dir
