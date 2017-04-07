@@ -76,7 +76,7 @@ fclose(fileID);
 
 repeat = dataArray{:,1};
 step = dataArray{:, 2};
-t_arr = dataArray{:, 3};
+t_final = dataArray{:, 3};
 exit_cond = dataArray{:, 4};
 success = dataArray{:,5};
 success=logical(success);
