@@ -4,15 +4,8 @@
 cd "$working_dir"
 cp $code_dir/motors.x .
 
-#program chooses to append or open to write based on existance of summary file
-#if there's an old one hanging around, delete it
-fname="${run_name}_Summary.txt"
-if [ -e $fname -a ${keep_old:-0} -eq 0 ] ; then
-    rm $fname
-    echo Script: deleted old summary file
-else
-    echo Script: didnt delete summary file
-fi
+#clean up existing files
+. $code_dir/clean_files.sh
 
 date +"started at: %r on %F"
 
