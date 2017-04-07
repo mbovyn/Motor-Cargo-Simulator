@@ -389,7 +389,7 @@ int simulate_cargo()
                 else
                 {
                     printf("Should not have gotten here on choosing action in Gillespie\n");
-                    exit(0);
+                    exit(5);
                 }
             }
 
@@ -490,7 +490,7 @@ int simulate_cargo()
     if(graceful_exit){
 
         write_error();
-        return 0;
+        return 6;
 
     } else {
 

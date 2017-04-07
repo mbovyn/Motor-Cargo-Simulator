@@ -271,6 +271,7 @@ void cargobehavior()
 
         default:
             printf("bad value for CargoBehavior\n" );
+            exit(4);
     }//finished switch
 
     //force anchor back onto cargo surface
@@ -328,7 +329,7 @@ void evaluate_steric(){
         Fsteric[i]=0;
     }
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("The steric force was found to be:\n");
     }
 
@@ -346,7 +347,7 @@ void evaluate_steric(){
             if(MTdist < R-.005){
 
                 MTviolationCounter[k]++;
-                if(verboseTF>3){
+                if(verboseTF>4){
                     printf("MT %d violation at step %ld. Total violations: %d\n",k,step,MTviolationCounter[k]);
                 }
                 if(MTviolationCounter[k]>5){
@@ -377,7 +378,7 @@ void evaluate_steric(){
 
     }// loop over MTs
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("    Total: (%g,%g,%g)\n",
             Fsteric[0],Fsteric[1],Fsteric[2]);
     }
@@ -402,10 +403,10 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
-            exit(0);
+            exit(4);
     }
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("The external force on the cargo is: (%g,%g,%g)\n",
             Ftrap[0],Ftrap[1],Ftrap[2]);
     }
@@ -423,10 +424,10 @@ void calculate_forces()
             break;
         default:
             printf("bad value for external_force\n");
-            exit(0);
+            exit(4);
     }
 
-    if(verboseTF>4){
+    if(verboseTF>3){
         printf("The external torque on the cargo is: (%g,%g,%g)\n",
             TorqeExt[0],TorqeExt[1],TorqeExt[2]);
     }
@@ -470,7 +471,7 @@ void calculate_forces()
             nn++;
         }
     }
-}
+}//end calculate forces
 
 void set_brownian_forces_to_0(){
 
@@ -570,7 +571,7 @@ void compute_next_locations(){
 
 
             stochastic_equations();
-            if(verboseTF>4){
+            if(verboseTF>3){
                 printf("locs update is (%lf %lf %lf)\n",a1[0][0],a1[0][1],a1[0][2]);
             }
             break;
@@ -622,7 +623,7 @@ void compute_next_locations(){
 
             stochastic_equations();
 
-            if(verboseTF>4){
+            if(verboseTF>3){
                 printf("stochastic, locs update is (%lf %lf %lf)\n",a1[0][0],a1[0][1],a1[0][2] );
             }
 
@@ -690,7 +691,7 @@ void compute_next_locations(){
 
         default:
             printf("Bad Motor Diffusion type\n");
-            exit(0);
+            exit(4);
 
     }
 

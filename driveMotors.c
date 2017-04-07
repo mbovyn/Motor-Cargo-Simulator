@@ -5,6 +5,8 @@
 //2: Unsupported compile parameters
 //3: Mismatch between parameter file and read in functions
 //4: Bad input from parameter file
+//5: Bad Gillespie result
+//6: Graceful exit for one reason or another
 
 //Basic librarys and functions to include
 #include <math.h>
