@@ -170,6 +170,8 @@ void evaluate_stop_conditions(){
             }else if(anybound(1)){ //motors bound to 1st MT, it's a pass
                 prematureReturn=8;
             }else if(anybound(2)) { //motors bound to 2nd MT, it's a switch
+                //all switches are counted as ToWs
+                ToW=1;
                 prematureReturn=9;
             } else {
                 graceful_exit=1;
