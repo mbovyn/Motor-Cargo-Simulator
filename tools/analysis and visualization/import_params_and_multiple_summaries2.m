@@ -24,7 +24,7 @@ if ~exist('summaries_imported','var')
 
             runs(runno1,runno2).repeat=repeat;
             runs(runno1,runno2).step = step;
-            runs(runno1,runno2).t_arr = t_arr;
+            runs(runno1,runno2).t_final = t_final;
             runs(runno1,runno2).exit_cond = exit_cond;
             runs(runno1,runno2).success = success;
             runs(runno1,runno2).D_anchor = D_anchor;
