@@ -22,7 +22,7 @@ if ~exist('summaries_imported','var')
         
         runs(runno).repeat=repeat;
         runs(runno).step = step;
-        runs(runno).t_arr = t_arr;
+        runs(runno).t_final = t_final;
         runs(runno).exit_cond = exit_cond;
         runs(runno).success = success;
         runs(runno).D_anchor = D_anchor;
