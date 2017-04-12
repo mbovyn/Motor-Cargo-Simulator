@@ -40,6 +40,11 @@ our $NANpassthrough="NAN";
 my $set_this="param1";
 my $set_this="param2";
 
+#in case another, non-sweep value needs to passed through
+#our $otherpassthrough=150;
+#overwrite previous value
+#my $MT_angle="otherpassthrough";
+
 
 #need to change values in here --------------------------------------------
 
