@@ -7,6 +7,8 @@
 my $run_name = "set this!";
 #define directory name to find executable and write to
 my $dir_name = "set this!";
+#base name for HPC (needs to be short)
+my $hpc_name = "set this!";
 
 #define base, max and increment values
 my $val1Base = "set this!";
@@ -63,11 +65,13 @@ while ( $val1 <= $val1Max )
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
         #pub file name
         my $file_name=$instance_name . ".pub";
+        #hpc run name
+        my $hpc_instance_name = $hpc_name . "." . $ctr1 . "." . $ctr2;
         #open file for writing and print the following
         open (FOOD, ">pubs/$file_name" );
         print FOOD << "EOF";
 #!/bin/bash
-#\$ -N $instance_name
+#\$ -N $hpc_instance_name
 #\$ -q bio,abio,free64,pub64
 #\$ -ckpt blcr
 #\$ -e logs/$instance_name.err
