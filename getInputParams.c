@@ -511,7 +511,11 @@ void getInputParams( void )
 
     //set offset if one is input
     if(!isnan(z_MT_offset)){
-        MTpoint[0][2]+=z_MT_offset;
+        if(MultiMTassay){
+            MTpoint[1][2]=-z_MT_offset;
+        } else {
+            MTpoint[0][2]+=z_MT_offset;
+        }
     }
 
     //if we're doing an MT assay, find the ToW zone distance
