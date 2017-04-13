@@ -37,6 +37,7 @@ our $neg1passthrough=-1;
 our $NANpassthrough="NAN";
 
 #set params to be swept to param1 and param2 here
+#if only sweeping one parameter, set first to $throwaway
 my $set_this="param1";
 my $set_this="param2";
 
@@ -49,6 +50,18 @@ my $set_this="param2";
 #need to change values in here --------------------------------------------
 
 # make pubs ###########################################################
+
+#check if all necessary files exist
+if (! -f $run_name . "_params.txt"){die "Error: Params file missing\n"};
+if (! -f $run_name . "_MT_params.txt"){die "Error: MT params file missing\n"};
+if (! -f "ISEED"){die "Error: ISEED missing\n"};
+if (! -f "motors.x"){die "Error: Execuable missing\n"};
+
+#check if counter values are set (otherwise loop is infinite)
+$val1Max != 0 || die "Error: val1max string or 0\n";
+$val2Max != 0 || die "Error: val2max string or 0\n";
+$val1increment != 0 || die "Error: val1increment string or 0\n";
+$val2increment != 0 || die "Error: val2increment string or 0\n";
 
 #define begining values
 my $ctr1=1;

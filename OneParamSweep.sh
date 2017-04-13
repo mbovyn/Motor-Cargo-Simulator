@@ -35,7 +35,7 @@ do
     instance_name="${run_name}.${ctr1}"
 
     fname="${instance_name}_Summary.txt"
-    if [ -e $fname -a ${keep_old:-0} -eq 0 ] ; then
+    if [ -f $fname -a ${keep_old:-0} -eq 0 ] ; then
         rm $fname
         echo "    deleted old summary file $fname"
     fi

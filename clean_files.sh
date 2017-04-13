@@ -12,7 +12,7 @@ file_endings=(_Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega
 for ending in ${file_endings[*]}
 do
     fname="${run_name}$ending"
-    if [ -e $fname -a ${keep_old:-0} -eq 0 ] ; then
+    if [ -f $fname -a ${keep_old:-0} -eq 0 ] ; then
         rm $fname
         echo "    Script: deleted $fname"
     else
