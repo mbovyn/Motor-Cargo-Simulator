@@ -400,8 +400,22 @@ void initialbinding(){
 
                 //stop if one wasn't able to bind
                 if(done==0){
-                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
-                    exit(4);
+                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n");
+                    printf("Center was (%g,%g,%g)\n",center[0],center[1],center[2]);
+                    printf("InitialLocations was %d\n",InitialLocations);
+                    printf("Anchor locations were:\n");
+                    for(m=0;m<2;m++){
+                        for(n=0;n<N[m];n++){
+                            printf("type%dmotor%d: (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2] );
+                        }
+                    }
+                    printf("\n\n");
+                    if(j==0){
+                        exit(4);
+                    } else {
+                        graceful_exit=1;
+                    }
+
                 }
             }
 
