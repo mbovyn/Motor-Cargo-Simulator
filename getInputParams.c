@@ -512,7 +512,13 @@ void getInputParams( void )
     //set offset if one is input
     if(!isnan(z_MT_offset)){
         if(MultiMTassay){
+            if(verboseTF>1){
+                printf("z_MT_offset input. Moving MT2 z from %g",MTpoint[1][2]);
+            }
             MTpoint[1][2]=-z_MT_offset;
+            if(verboseTF>1){
+                printf("Moving MT2 z to %g",MTpoint[1][2]);
+            }
         } else {
             MTpoint[0][2]+=z_MT_offset;
         }
