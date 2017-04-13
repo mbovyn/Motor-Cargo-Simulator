@@ -27,12 +27,11 @@ long StopOnStep;
 double StopOnTime;
 double StopOnDistance;
 int StopBelowThetaC;
-int MultiMTassay;
-double ToW_zone;
+
 double MT_angle;
 int StopOnBeadDissociation;
 double theta_c;
-int success, success_mode, trial_success, ToW;
+int success, success_mode, trial_success;
 
 double timer=0;
 
@@ -50,10 +49,9 @@ int prematureReturn;
 int FoundNotbound;
 int Foundbound;
 int graceful_exit;
-int out_of_ToW_zone;
+
 double s;
-double ToWtime;
-double ToW_start, ToW_end;
+
 int step_stopped[2][NMOTORSMAX];
 int stopped;
 
@@ -302,6 +300,37 @@ double DCargoRotation;
 
 //bead
 double theta[3], theta1[3];
+
+/* -------------------------------------------------------------------
+ToW / switch tracking for multi MT assays
+*/
+
+//simulation end option
+int MultiMTassay;
+
+//length of ToW zone
+double ToW_zone;
+//flag for out of ToW zone
+int out_of_ToW_zone;
+//flag for underwent ToW
+int ToW;
+//flag for currently undergoing ToW
+int ToWing;
+//total time of ToW
+double ToWtime;
+//start and end
+double ToW_start, ToW_end;
+
+//total motor impulse for each motors team (F*dt)
+double F_ToW[2], F2_ToW[2];
+double F_ToW_vec[NMTSMAX][3];
+double n_ToW[2];
+//impulse on MTs
+double FMT_ToW[2], F2MT_ToW[2];
+
+//output file
+char ToWName[100];
+FILE *fToW;
 
 /* -------------------------------------------------------------------
  // Stuff for output

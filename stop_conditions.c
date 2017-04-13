@@ -96,6 +96,7 @@ void evaluate_stop_conditions(){
             ((anybound(1) && anybound(2)) ||
             (Stepping==5 && anystopped())) ){
 
+            ToWing=1;
             timer=dt;
 
             //if we haven't yet undergone a ToW event, mark the time
@@ -122,6 +123,8 @@ void evaluate_stop_conditions(){
             (Stepping==5 && (!anybound(1) || !anybound(2)) && !anystopped()))){
 
             ToW_end=t_inst;
+
+            ToWing=0;
 
             //printf("stopping tow\n" );
 

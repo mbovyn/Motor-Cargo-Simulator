@@ -517,7 +517,7 @@ void getInputParams( void )
             }
             MTpoint[1][2]=-z_MT_offset;
             if(verboseTF>1){
-                printf("Moving MT2 z to %g",MTpoint[1][2]);
+                printf(" to %g\n",MTpoint[1][2]);
             }
         } else {
             MTpoint[0][2]+=z_MT_offset;

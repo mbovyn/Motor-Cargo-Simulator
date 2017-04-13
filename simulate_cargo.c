@@ -21,6 +21,13 @@ int simulate_cargo()
     set_quat_to_identity();
     ToW=0;
     ToWtime=0;
+    ToWing=0;
+    for(i=0;i<2;i++){
+        F_ToW[i]=0;
+        F2_ToW[i]=0;
+        FMT_ToW[i]=0;
+        F2MT_ToW[i]=0;
+    }
     for (m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
@@ -431,6 +438,31 @@ int simulate_cargo()
                     activeMT=0;
                 }
                 //don't do anything if cargo is walking on neither MT
+            }
+
+            //keep track of ToW forces
+            if(MultiMTassay){
+                if(ToWing){
+                    //motors bound to first MT
+                    for(m=0;m<2;m++){
+                        for (n=0;n<N[m];n++){
+                            for(k=0;k<n_MTs;k++){
+                                if(bound[m][n]==k+1){
+                                    F_ToW[k]+=F_m_mag[m][n]*dt;
+                                    F2_ToW[k]+=pow(F_m_mag[m][n],2)*dt;
+                                    n_ToW[k]+=1*dt;
+                                    for(i=0;i<3;i++){
+                                        F_ToW_vec[k][i]+=F_m_vec[m][n][i]*dt;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //for(k=1;k<n_MTs;k++){
+                        FMT_ToW[0]+=sqrt(Fsteric[0]*Fsteric[0]+Fsteric[1]*Fsteric[1]+Fsteric[2]*Fsteric[2]);
+                    //}
+                }
             }
 
             evaluate_stop_conditions();

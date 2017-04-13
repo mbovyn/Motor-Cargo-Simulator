@@ -5,7 +5,7 @@
 #if given keep_old=1, don't delete them
 
 #all files code creates
-file_endings=(_Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt)
+file_endings=(_Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
 
 #for each ending, check if the file exists and delete it
 #unless keeping old files

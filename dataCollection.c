@@ -8,6 +8,7 @@ void writeCenterLocsHeader();
 void writeHeadHeader();
 void writeForcesHeader();
 void writeSummaryHeader();
+void writeToWHeader();
 
 void writeBase();
 void writeCenterLocs();
@@ -72,6 +73,10 @@ void writeSummaryHeader(){
     fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0   z_MT   R  N[0] Fexternal[0] theta_c MT2vecx   MT2vecy   MT2vecz   ToW_time               last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
 }
 
+void writeToWHeader(){
+    fprintf(fInUse, "ToW_time F_ToW[0] F_ToW[1] F2_ToW[0] F2_ToW[1] FMT_ToW[0] FMT_ToW[1] F2MT_ToW[0] F2MT_ToW[1] n_ToW[0] n_ToW[1]");
+}
+
 void initializeDataCollection()
 {
 
@@ -94,6 +99,28 @@ void initializeDataCollection()
         writeCenterLocsHeader();
         writeHeadHeader();
         fprintf(fSummary, "\n");
+    }
+
+    if(MultiMTassay){
+
+        //open summary file
+        strcpy(ToWName,runName);
+        strcat(ToWName,"_ToW");
+        strcat(ToWName,".txt");
+
+        //if file exists from another call, open it
+        //otherwise, create it and write the header
+        if( access( ToWName, F_OK ) != -1 ) {
+            //file exists
+            fToW = fopen(ToWName, "a");
+        } else {
+            // file doesn't exist
+            fToW = fopen(ToWName, "w");
+            fInUse=fToW;
+            writeBaseHeader();
+            writeToWHeader();
+            fprintf(fToW, "\n");
+        }
     }
 
     if (ReturnDetails){
@@ -263,6 +290,13 @@ void writeSummary(){
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
 }
 
+void writeToW(){
+    fprintf(fInUse, "%-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E",
+        ToWtime, F_ToW[0], F_ToW[1], F2_ToW[0], F2_ToW[1],
+        FMT_ToW[0], FMT_ToW[1], F2MT_ToW[0], F2MT_ToW[1],
+        n_ToW[0], n_ToW[1]);
+}
+
 void inLoopDataCollection()
 {
     if (ReturnDetails)
@@ -311,6 +345,13 @@ void inLoopDataCollection()
             writeOmega();
             fprintf(fOmega, "\n");
         }//ReturnOmega
+
+        if(MultiMTassay){
+            fInUse=fToW;
+            writeBase();
+            writeToW();
+            fprintf(fToW, "\n");
+        }
     } //ReturnDetails
 }//inLoopDataCollection
 
@@ -342,6 +383,10 @@ void finalizeDataCollection()
 
     //close summary file
     fclose(fSummary);
+
+    if(MultiMTassay){
+        fclose(fToW);
+    }
 }
 
 void simulationEndDataCollection(){
@@ -359,6 +404,13 @@ void simulationEndDataCollection(){
     }
     writeHead();
     fprintf(fSummary, "\n");
+
+    if(MultiMTassay){
+        fInUse=fToW;
+        writeBase();
+        writeToW();
+        fprintf(fToW, "\n");
+    }
 }
 
 void write_error(){
