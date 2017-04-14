@@ -98,16 +98,17 @@ void evaluate_stop_conditions(){
 
             ToWing=1;
             timer=dt;
+            ToW_start=t_inst;
 
             //if we haven't yet undergone a ToW event, mark the time
-            if(!ToW){
-                ToW_start=t_inst;
-            }else if(t_inst<ToW_end+.25){//if we have, check if it has been <.25s since the end of the last TOW
-                //if it hasn't, don't update the start time as we count it as one ToW
-            }else{//if it has been more than .25s since the end of the last ToW, it's a new event
-                //reset start time
-                ToW_start=t_inst;
-            }
+            // if(!ToW){
+            //     ToW_start=t_inst;
+            // }else if(t_inst<ToW_end+.25){//if we have, check if it has been <.25s since the end of the last TOW
+            //     //if it hasn't, don't update the start time as we count it as one ToW
+            // }else{//if it has been more than .25s since the end of the last ToW, it's a new event
+            //     //reset start time
+            //     ToW_start=t_inst;
+            // }
         }
 
         //increment the timer if still have both MTs bound
@@ -123,30 +124,30 @@ void evaluate_stop_conditions(){
             (Stepping==5 && (!anybound(1) || !anybound(2)) && !anystopped()))){
 
             ToW_end=t_inst;
-
+            ToWtime+=ToW_end-ToW_start;
             ToWing=0;
 
             //printf("stopping tow\n" );
 
-            if(ToW){
-                if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
-                    if(verboseTF>1){
-                        printf("Micro ToW time: %g\n",timer);
-                        printf("    Macro ToW time: %g\n    started at %g\n    ended at %g\n",ToW_end-ToW_start,ToW_start,ToW_end);
-                    }
-                    ToWtime=ToW_end-ToW_start; //set ToW time to NAN
-                }else{ //first ToW event
-                    ToWtime=timer; //save value of timer as ToW time
-                    if(verboseTF>1){
-                        printf("Micro ToW time: %g\n",ToWtime);
-                    }
-                }
-            }else{//Too fast to be considered a ToW event
-                //don't record anything
-                if(verboseTF>1){
-                    printf("Dropping ToW event because it was too short\n");
-                }
-            }
+            // if(ToW){
+            //     if(ToWtime>dt_max_Steric || isnan(ToWtime)){//if there was already a ToW event
+            //         if(verboseTF>1){
+            //             printf("Micro ToW time: %g\n",timer);
+            //             printf("    Macro ToW time: %g\n    started at %g\n    ended at %g\n",ToW_end-ToW_start,ToW_start,ToW_end);
+            //         }
+            //         ToWtime=ToW_end-ToW_start; //set ToW time to NAN
+            //     }else{ //first ToW event
+            //         ToWtime=timer; //save value of timer as ToW time
+            //         if(verboseTF>1){
+            //             printf("Micro ToW time: %g\n",ToWtime);
+            //         }
+            //     }
+            // }else{//Too fast to be considered a ToW event
+            //     //don't record anything
+            //     if(verboseTF>1){
+            //         printf("Dropping ToW event because it was too short\n");
+            //     }
+            // }
 
             timer=0;
         }

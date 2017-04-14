@@ -22,11 +22,18 @@ int simulate_cargo()
     ToW=0;
     ToWtime=0;
     ToWing=0;
-    for(i=0;i<2;i++){
-        F_ToW[i]=0;
-        F2_ToW[i]=0;
-        FMT_ToW[i]=0;
-        F2MT_ToW[i]=0;
+    for(k=0;k<n_MTs;k++){
+        F_ToW[k]=0;
+        F2_ToW[k]=0;
+        FMT_ToW[k]=0;
+        F2MT_ToW[k]=0;
+        FH_ToW[k]=0;
+        F2H_ToW[k]=0;
+        Fteam_ToW[k]=0;
+        FonMT_ToW[0][k]=0;
+        FonMT_ToW[1][k]=0;
+        FonOT_ToW[k]=0;
+        n_ToW[k]=0;
     }
     for (m=0;m<2;m++){
         for(n=0;n<N[m];n++){
