@@ -338,9 +338,9 @@ void evaluate_steric(){
         pointToMTdist(center[0],center[1],center[2],k);
         if(MTdist<R){
             //implement the steric force
-            Fsterick[0]=-kcMT*(R*cVector[0]/MTdist - cVector[0]);
-            Fsterick[1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
-            Fsterick[2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
+            Fsterick[k][0]=-kcMT*(R*cVector[0]/MTdist - cVector[0]);
+            Fsterick[k][1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
+            Fsterick[k][2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
             //set that we need the steric spring so we know to use the smaller timestep
             need_steric=1;
 
@@ -361,19 +361,19 @@ void evaluate_steric(){
         }else{
             MTviolationCounter[k]=0;
             for(i=0;i<3;i++){
-                Fsterick[i]=0;
+                Fsterick[k][i]=0;
             }
         }
 
         if(verboseTF>4){
             printf("    MT %d: (%g,%g,%g)\n",
-                k+1,Fsterick[0],Fsterick[1],Fsterick[2]);
+                k+1,Fsterick[k][0],Fsterick[k][1],Fsterick[k][2]);
 
         }
 
         //add up forces from each MT into one total steric force
         for(i=0;i<3;i++){
-            Fsteric[i]+=Fsterick[i];
+            Fsteric[i]+=Fsterick[k][i];
         }
 
     }// loop over MTs

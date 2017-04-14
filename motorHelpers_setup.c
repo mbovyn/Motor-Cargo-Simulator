@@ -406,7 +406,7 @@ void initialbinding(){
                     printf("Anchor locations were:\n");
                     for(m=0;m<2;m++){
                         for(n=0;n<N[m];n++){
-                            printf("type%dmotor%d: (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2] );
+                            printf("type%dmotor%d: (%g,%g,%g)\n",m,n,locs[m][n][0],locs[m][n][1],locs[m][n][2] );
                         }
                     }
                     printf("\n\n");

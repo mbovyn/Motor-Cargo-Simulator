@@ -321,6 +321,89 @@ int simulate_cargo()
         calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
+        //keep track of ToW forces
+        if(MultiMTassay){
+            if(ToWing){
+
+                //reset vector sum of forces for this step
+                for(k=0;k<n_MTs;k++){
+                    for(i=0;i<3;i++){
+                        F_ToW_vec[k][i]=0;
+                    }
+                }
+
+                //motors bound to first MT
+                for(m=0;m<2;m++){
+                    for (n=0;n<N[m];n++){
+                        for(k=0;k<n_MTs;k++){
+                            if(bound[m][n]==k+1){
+                                F_ToW[k]+=F_m_mag[m][n]*dt;
+                                F2_ToW[k]+=pow(F_m_mag[m][n],2)*dt;
+                                n_ToW[k]+=1*dt;
+
+                                //vector sum of all forces of motors bound to MT k
+                                //for this step
+                                for(i=0;i<3;i++){
+                                    F_ToW_vec[k][i]+=F_m_vec[m][n][i];
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+
+                for(k=0;k<n_MTs;k++){
+
+                    //MT forces
+                    //find magnitude of the steric force
+                    Fsterick_mag[k]=sqrt(Fsterick[k][0]*Fsterick[k][0]+Fsterick[k][1]*Fsterick[k][1]+Fsterick[k][2]*Fsterick[k][2]);
+                    //impulse exerted by MT
+                    FMT_ToW[k]+=Fsterick_mag[k]*dt;
+
+                    //impulse on bead handle
+                    //(dot product of sum of motor forces with MTvec)
+                    FH_ToW[k]+=(F_ToW_vec[k][0]*MTvec[k][0] + F_ToW_vec[k][1]*MTvec[k][1] + F_ToW_vec[k][2]*MTvec[k][2])*dt;
+
+                    //magnitude of motor team force
+                    F_ToW_mag[k]=sqrt(F_ToW_vec[k][0]*F_ToW_vec[k][0] + F_ToW_vec[k][1]*F_ToW_vec[k][1] + F_ToW_vec[k][2]*F_ToW_vec[k][2]);
+                    //impulse of motor team
+                    Fteam_ToW[k]+=F_ToW_mag[k]*dt;
+
+                    //force of motors trying to pull cargo into MT
+                    //F_ToW_vec . Fsterick (unit vectors)
+                    if(Fsterick_mag[k]>0){
+                        FonMT_ToW[0][k]+=(F_ToW_vec[0][0] * Fsterick[k][0]/Fsterick_mag[k]
+                            + F_ToW_vec[0][1] * Fsterick[k][1]/Fsterick_mag[k]
+                            + F_ToW_vec[0][2] * Fsterick[k][2]/Fsterick_mag[k])*dt;
+                        FonMT_ToW[1][k]+=(F_ToW_vec[1][0] * Fsterick[k][0]/Fsterick_mag[k]
+                            + F_ToW_vec[1][1] * Fsterick[k][1]/Fsterick_mag[k]
+                            + F_ToW_vec[1][2] * Fsterick[k][2]/Fsterick_mag[k])*dt;
+                    } else {
+                        FonMT_ToW[0][k]+=0;
+                        FonMT_ToW[1][k]+=0;
+                    }
+
+                }
+                //force pulling on the other motor team
+                if(F_ToW_mag[1]>0){
+                    FonOT_ToW[0]+=(F_ToW_vec[0][0] * F_ToW_vec[1][0]/F_ToW_mag[1]
+                        + F_ToW_vec[0][1] * F_ToW_vec[1][1]/F_ToW_mag[1]
+                        + F_ToW_vec[0][2] * F_ToW_vec[1][2]/F_ToW_mag[1])*dt;
+                } else {
+                    FonOT_ToW[0]+=0;
+                }
+                if(F_ToW_mag[0]>0){
+                    FonOT_ToW[1]+=(F_ToW_vec[1][0] * F_ToW_vec[0][0]/F_ToW_mag[0]
+                        + F_ToW_vec[1][1] * F_ToW_vec[0][1]/F_ToW_mag[0]
+                        + F_ToW_vec[1][2] * F_ToW_vec[0][2]/F_ToW_mag[0])*dt;
+                } else {
+                    FonOT_ToW[1]+=0;
+                }
+
+            }
+        }
+
         if(!graceful_exit){
 
             cargobehavior(); //updates locations
@@ -438,31 +521,6 @@ int simulate_cargo()
                     activeMT=0;
                 }
                 //don't do anything if cargo is walking on neither MT
-            }
-
-            //keep track of ToW forces
-            if(MultiMTassay){
-                if(ToWing){
-                    //motors bound to first MT
-                    for(m=0;m<2;m++){
-                        for (n=0;n<N[m];n++){
-                            for(k=0;k<n_MTs;k++){
-                                if(bound[m][n]==k+1){
-                                    F_ToW[k]+=F_m_mag[m][n]*dt;
-                                    F2_ToW[k]+=pow(F_m_mag[m][n],2)*dt;
-                                    n_ToW[k]+=1*dt;
-                                    for(i=0;i<3;i++){
-                                        F_ToW_vec[k][i]+=F_m_vec[m][n][i]*dt;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    //for(k=1;k<n_MTs;k++){
-                        FMT_ToW[0]+=sqrt(Fsteric[0]*Fsteric[0]+Fsteric[1]*Fsteric[1]+Fsteric[2]*Fsteric[2]);
-                    //}
-                }
             }
 
             evaluate_stop_conditions();

@@ -283,7 +283,7 @@ double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
 double Fsteric[3];
-double Fsterick[3];
+double Fsterick[NMTSMAX][3];
 double TorqeExt[3];
 
 //setup
@@ -323,10 +323,19 @@ double ToW_start, ToW_end;
 
 //total motor impulse for each motors team (F*dt)
 double F_ToW[2], F2_ToW[2];
-double F_ToW_vec[NMTSMAX][3];
+double F_ToW_mag[2];
+double F_ToW_vec[2][3];
 double n_ToW[2];
-//impulse on MTs
+//impulse from MTs
 double FMT_ToW[2], F2MT_ToW[2];
+//impulses on bead handles
+double FH_ToW[2],F2H_ToW[2];
+//impulse of motor team on MT
+double Fsterick_mag[NMTSMAX];
+double Fteam_ToW[2];
+double FonMT_ToW[2][2];
+//impulse on other team
+double FonOT_ToW[2];
 
 //output file
 char ToWName[100];
