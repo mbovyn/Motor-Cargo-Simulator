@@ -34,7 +34,10 @@ int simulate_cargo()
         FonMT_ToW[1][k]=0;
         FonOT_ToW[k]=0;
         n_ToW[k]=0;
+
+        off_count[k]=0;
     }
+
     for (m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
@@ -452,9 +455,11 @@ int simulate_cargo()
 
                     if(verboseTF>2){
                         printf("Unbinding at %g s:\n    type%ldmotor%ld from MT%d, force %g pN, rate %g/s\n",
-                            t_inst,hit_m,hit_n,bound[hit_m][hit_n],F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
+                            t_inst,hit_m,hit_n,bound[hit_m][hit_n]-1,F_m_mag[hit_m][hit_n],unbind_rate[hit_m][hit_n]);
 
                     }
+
+                    off_count[bound[hit_m][hit_n]-1]+=1;
 
                     //set motor to no longer being bound
                     bound[hit_m][hit_n] = 0;

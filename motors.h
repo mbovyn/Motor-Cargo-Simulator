@@ -337,6 +337,9 @@ double FonMT_ToW[2][2];
 //impulse on other team
 double FonOT_ToW[2];
 
+//number of detachments from each MT
+int off_count[NMTSMAX];
+
 //output file
 char ToWName[100];
 FILE *fToW;
