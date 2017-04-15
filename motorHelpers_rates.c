@@ -139,7 +139,7 @@ void stepping_rates()
 
             for(n=0;n<N[m];n++){
                 //if head is in a spot where it wouldn't step into the forbidden zone
-                if( !(bound[m][n]==1) ||
+                if( !(bound[m][n]==1) || center[2]>0 ||
                     ( head[m][n][0]<-.012-.008 || head[m][n][0]>.012 )  ){
                         calculate_stepping_rate();
                         step_stopped[m][n]=0;
