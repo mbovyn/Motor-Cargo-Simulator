@@ -19,7 +19,7 @@ if ~exist('summaries_imported','var')
         
         for runno2=1:nruns(2)
         
-            run_name=[base_run_name '.' int2str(runno1) '.' int2str(runno2)];
+            run_name=[base_run_name '.' int2str(runno1-1) '.' int2str(runno2)];
             run([analysispath '/import_summary.m'])
 
             runs(runno1,runno2).repeat=repeat;
