@@ -34,8 +34,8 @@ for i=1:nruns(1)
         theta(i,j)=180-acosd(dot(runs(i,j).MTvec(1,:),[1 0 0]));
 
         %ToW if
-        %ToW timer >0 or switch
-        towed{i,j}=runs(i,j).ToW_time>.1 | runs(i,j).exit_cond==9 | ...
+        %ToW status or switch (should be redundant)
+        towed{i,j}=runs(i,j).success==1 | runs(i,j).exit_cond==9 | ...
             runs(i,j).exit_cond==14;
         %passed{i,j}=runs(i,j).exit_cond==8 | runs(i,j).exit_cond==13;
         switched{i,j}=runs(i,j).exit_cond==9 | runs(i,j).exit_cond==14;
