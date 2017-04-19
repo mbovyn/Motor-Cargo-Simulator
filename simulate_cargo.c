@@ -9,6 +9,10 @@ int simulate_cargo()
     if (verboseTF>2)
         printf("\nPerforming setup step\n\n");
 
+    if(verboseTF>1){
+        printf("Starting repeat %d\n",j);
+    }
+
     //set current center to center that was passed in
     //wipe variables which don't reset otherwise
     for(i=0;i<3;i++){
@@ -19,6 +23,7 @@ int simulate_cargo()
         MTviolationCounter[k]=0;
     }
     set_quat_to_identity();
+    timer=0;
     ToW=0;
     ToWs=0;
     ToWtime=0;
@@ -411,6 +416,9 @@ int simulate_cargo()
                 } else {
                     FonOT_ToW[1]+=0;
                 }
+                //MT Force blocking (directed against) cargo progress
+                FMTb_ToW[0]+=(Fsterick[0][0]*MTvec[1][0] + Fsterick[0][1]*MTvec[1][1] + Fsterick[0][2]*MTvec[1][2])*dt;
+                FMTb_ToW[1]+=(Fsterick[1][0]*MTvec[0][0] + Fsterick[1][1]*MTvec[0][1] + Fsterick[1][2]*MTvec[0][2])*dt;
 
             }
         }
@@ -593,6 +601,7 @@ int simulate_cargo()
     if(graceful_exit){
 
         write_error();
+        printf("\n");
         return 6;
 
     } else {
