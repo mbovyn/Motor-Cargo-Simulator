@@ -20,6 +20,7 @@ int simulate_cargo()
     }
     set_quat_to_identity();
     ToW=0;
+    ToWs=0;
     ToWtime=0;
     ToWing=0;
     for(k=0;k<n_MTs;k++){

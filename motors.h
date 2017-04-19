@@ -314,6 +314,7 @@ double ToW_zone;
 int out_of_ToW_zone;
 //flag for underwent ToW
 int ToW;
+int ToWs;
 //flag for currently undergoing ToW
 int ToWing;
 //total time of ToW

@@ -99,6 +99,7 @@ void evaluate_stop_conditions(){
             ToWing=1;
             timer=dt;
             ToW_start=t_inst;
+            ToWs+=1;
 
             //if we haven't yet undergone a ToW event, mark the time
             // if(!ToW){
@@ -175,7 +176,8 @@ void evaluate_stop_conditions(){
                 prematureReturn=8;
             }else if(anybound(2)) { //motors bound to 2nd MT, it's a switch
                 //all switches are counted as ToWs
-                ToW=1;
+                //ToW=1;
+                //(take care of this in analysis)
                 prematureReturn=9;
             } else {
                 graceful_exit=1;
