@@ -47,7 +47,7 @@ startRow = 2;
 %   column27: double (%f)
 %	column28: double (%f)
 % For more information, see the TEXTSCAN documentation.
-formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
+formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
 %% Open the text file.
 fileID = fopen(filename,'r');
@@ -72,32 +72,33 @@ repeat = dataArray{:, 1};
 step = dataArray{:, 2};
 t_arr = dataArray{:, 3};
 ToW_time = dataArray{:, 4};
-F_ToW0 = dataArray{:, 5};
-F_ToW1 = dataArray{:, 6};
-F2_ToW0 = dataArray{:, 7};
-F2_ToW1 = dataArray{:, 8};
-FMT_ToW0 = dataArray{:, 9};
-FMT_ToW1 = dataArray{:, 10};
-F2MT_ToW0 = dataArray{:, 11};
-F2MT_ToW1 = dataArray{:, 12};
-FMTb_ToW0 = dataArray{:, 13};
-FMTb_ToW1 = dataArray{:, 14};
-FH_ToW0 = dataArray{:, 15};
-FH_ToW1 = dataArray{:, 16};
-F2H_ToW0 = dataArray{:, 17};
-F2H_ToW1 = dataArray{:, 18};
-Fteam_ToW0 = dataArray{:, 19};
-Fteam_ToW1 = dataArray{:, 20};
-FonMT_ToW00 = dataArray{:, 21};
-FonMT_ToW01 = dataArray{:, 22};
-FonMT_ToW10 = dataArray{:, 23};
-FonMT_ToW11 = dataArray{:, 24};
-FonOT_ToW0 = dataArray{:, 25};
-FonOT_ToW1 = dataArray{:, 26};
-n_ToW0 = dataArray{:, 27};
-n_ToW1 = dataArray{:, 28};
-off_count0 = dataArray{:, 29};
-off_count1 = dataArray{:, 30};
+ToWs = dataArray{:, 5};
+F_ToW0 = dataArray{:, 6};
+F_ToW1 = dataArray{:, 7};
+F2_ToW0 = dataArray{:, 8};
+F2_ToW1 = dataArray{:, 9};
+FMT_ToW0 = dataArray{:, 10};
+FMT_ToW1 = dataArray{:, 11};
+F2MT_ToW0 = dataArray{:, 12};
+F2MT_ToW1 = dataArray{:, 13};
+FMTb_ToW0 = dataArray{:, 14};
+FMTb_ToW1 = dataArray{:, 15};
+FH_ToW0 = dataArray{:, 16};
+FH_ToW1 = dataArray{:, 17};
+F2H_ToW0 = dataArray{:, 18};
+F2H_ToW1 = dataArray{:, 19};
+Fteam_ToW0 = dataArray{:, 20};
+Fteam_ToW1 = dataArray{:, 21};
+FonMT_ToW00 = dataArray{:, 22};
+FonMT_ToW01 = dataArray{:, 23};
+FonMT_ToW10 = dataArray{:, 24};
+FonMT_ToW11 = dataArray{:, 25};
+FonOT_ToW0 = dataArray{:, 26};
+FonOT_ToW1 = dataArray{:, 27};
+n_ToW0 = dataArray{:, 28};
+n_ToW1 = dataArray{:, 29};
+off_count0 = dataArray{:, 30};
+off_count1 = dataArray{:, 31};
 
 
 %% Clear temporary variables
