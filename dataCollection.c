@@ -74,7 +74,7 @@ void writeSummaryHeader(){
 }
 
 void writeToWHeader(){
-    fprintf(fInUse, "ToW_time F_ToW[0] F_ToW[1] F2_ToW[0] F2_ToW[1] FMT_ToW[0] FMT_ToW[1] F2MT_ToW[0] F2MT_ToW[1] FH_ToW[0] FH_ToW[1] F2H_ToW[0] F2H_ToW[1] Fteam_ToW[0] Fteam_ToW[1] FonMT_ToW[0][0] FonMT_ToW[0][1] FonMT_ToW[1][0] FonMT_ToW[1][1] FonOT_ToW[0] FonOT_ToW[1] n_ToW[0] n_ToW[1] off_count[0] off_count[1]");
+    fprintf(fInUse, "ToW_time F_ToW[0] F_ToW[1] F2_ToW[0] F2_ToW[1] FMT_ToW[0] FMT_ToW[1] F2MT_ToW[0] F2MT_ToW[1] FMTb_ToW[0] FMTb_ToW[1] FH_ToW[0] FH_ToW[1] F2H_ToW[0] F2H_ToW[1] Fteam_ToW[0] Fteam_ToW[1] FonMT_ToW[0][0] FonMT_ToW[0][1] FonMT_ToW[1][0] FonMT_ToW[1][1] FonOT_ToW[0] FonOT_ToW[1] n_ToW[0] n_ToW[1] off_count[0] off_count[1]");
 }
 
 void initializeDataCollection()
@@ -291,9 +291,10 @@ void writeSummary(){
 }
 
 void writeToW(){
-    fprintf(fInUse, "%-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d",
+    fprintf(fInUse, "%-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d",
         ToWtime, F_ToW[0], F_ToW[1], F2_ToW[0], F2_ToW[1],
         FMT_ToW[0], FMT_ToW[1], F2MT_ToW[0], F2MT_ToW[1],
+        FMTb_ToW[0], FMTb_ToW[1],
         FH_ToW[0], FH_ToW[1], F2H_ToW[0], F2H_ToW[1],
         Fteam_ToW[0], Fteam_ToW[1],
         FonMT_ToW[0][0], FonMT_ToW[0][1], FonMT_ToW[1][0], FonMT_ToW[1][1],
@@ -410,7 +411,7 @@ void simulationEndDataCollection(){
     writeHead();
     fprintf(fSummary, "\n");
 
-    if(MultiMTassay){
+    if(MultiMTassay && ReturnDetails==0){
         fInUse=fToW;
         writeBase();
         writeToW();
@@ -442,4 +443,12 @@ void write_error(){
         }
     }
     fprintf(fSummary, "\n");
+
+    if(MultiMTassay && ReturnDetails==0){
+        fInUse=fToW;
+        writeBase();
+        ToWtime=NAN;
+        writeToW();
+        fprintf(fToW, "\n");
+    }
 }

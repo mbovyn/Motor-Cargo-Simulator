@@ -415,6 +415,9 @@ int simulate_cargo()
                 } else {
                     FonOT_ToW[1]+=0;
                 }
+                //MT Force blocking (directed against) cargo progress
+                FMTb_ToW[0]+=(Fsterick[0][0]*MTvec[1][0] + Fsterick[0][1]*MTvec[1][1] + Fsterick[0][2]*MTvec[1][2])*dt;
+                FMTb_ToW[1]+=(Fsterick[1][0]*MTvec[0][0] + Fsterick[1][1]*MTvec[0][1] + Fsterick[1][2]*MTvec[0][2])*dt;
 
             }
         }

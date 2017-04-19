@@ -328,6 +328,7 @@ double F_ToW_vec[2][3];
 double n_ToW[2];
 //impulse from MTs
 double FMT_ToW[2], F2MT_ToW[2];
+double FMTb_ToW[2];
 //impulses on bead handles
 double FH_ToW[2],F2H_ToW[2];
 //impulse of motor team on MT
