@@ -99,6 +99,9 @@ void evaluate_stop_conditions(){
             ToWing=1;
             timer=dt;
             ToW_start=t_inst;
+            if(verboseTF>1){
+                printf("ToW started at %g s\n",ToW_start);
+            }
 
             //if we haven't yet undergone a ToW event, mark the time
             // if(!ToW){
@@ -125,6 +128,14 @@ void evaluate_stop_conditions(){
 
             ToW_end=t_inst;
             ToWtime+=ToW_end-ToW_start;
+            if(ToW_end-ToW_start<0 || ToWtime <0){
+                printf("\n\nError!!!! ToW time negative\n\n");
+                printf("ToW stoped at %g s\n    This ToW started at %g s\n    Adding %g s to ToW time\nToW time now %g s\n",ToW_end,ToW_start,ToW_end-ToW_start,ToWtime);
+                graceful_exit=1;
+            }
+            if(verboseTF>1){
+                printf("ToW stoped at %g s\n    This ToW started at %g s\n    Adding %g s to ToW time\nToW time now %g s\n",ToW_end,ToW_start,ToW_end-ToW_start,ToWtime);
+            }
             ToWing=0;
 
             //printf("stopping tow\n" );
