@@ -1,4 +1,4 @@
-function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT )
+function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT,varargin )
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -127,7 +127,25 @@ function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT )
 %         end2(1)=-end2(1);
 %     end
 
-    [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT,20,'g',0,.3,.5);
+    if any(strcmp('Color',varargin))
+        c=varargin{find(strcmp('Color',varargin))+1};
+    else
+        c='g';
+    end
+    
+    if any(strcmp('FaceAlpha',varargin))
+        fa=varargin{find(strcmp('FaceAlpha',varargin))+1};
+    else
+        fa=.5;
+    end
+    
+    if any(strcmp('EdgeAlpha',varargin))
+        ea=varargin{find(strcmp('EdgeAlpha',varargin))+1};
+    else
+        ea=.3;
+    end
+    
+    [h_cyl,h_cap1,h_cap2]=Cylinder(end1,end2,R_MT,20,c,0,ea,fa);
 
     text(end2(1)+.02*MTvec(1),end2(2)+.02*MTvec(2),end2(3)+.02*MTvec(3)...
         ,'(+)','FontWeight','bold'...
