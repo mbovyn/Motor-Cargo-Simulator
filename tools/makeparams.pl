@@ -19,7 +19,7 @@ my $val2increment = "set this!";
 
 #defaults (leave these)
 my $L = "LPassthrough";
-my $eta = "etaPassthrough"
+my $eta = "etaPassthrough";
 #values to be passed through
 our $LPassthrough=.08;
 our $etaPassthrough=8.9E-4;
@@ -64,7 +64,7 @@ while ( $val1 <= $val1Max )
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
         #pub file name
-        my $file_name=$instance_name . ".txt";
+        my $file_name=$instance_name . "_params.txt";
         #open file for writing and print the following
         open (FOOD, ">$file_name" );
         print FOOD << "EOF";

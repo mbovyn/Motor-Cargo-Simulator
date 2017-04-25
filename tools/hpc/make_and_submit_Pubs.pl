@@ -93,8 +93,7 @@ while ( $val1 <= $val1Max )
             #check if all necessary files exist
             if (! -f $instance_name . "_params.txt"){die "Error: Params file $instance_name _params.txt missing\n"};
             if (! -f $instance_name . "_MT_params.txt"){die "Error: MT params file $instance_name _MT_params.txt missing\n"};
-            our $entry="$instance_name";
-            print "$instance_name\n"};
+            our $entry="$instance_name";};
         #open file for writing and print the following
         open (FOOD, ">pubs/$file_name" );
         print FOOD << "EOF";
