@@ -5,6 +5,7 @@
 
 #define run name (match parameter files)
 my $run_name = "set this!";
+my $param_file_sweep=1;
 #define directory name to find executable and write to
 my $dir_name = "set this!";
 #base name for HPC (needs to be short)
@@ -52,10 +53,11 @@ my $set_this="param2";
 # make pubs ###########################################################
 
 #check if all necessary files exist
-if (! -f $run_name . "_params.txt"){die "Error: Params file missing\n"};
-if (! -f $run_name . "_MT_params.txt"){die "Error: MT params file missing\n"};
-if (! -f "ISEED"){die "Error: ISEED missing\n"};
-if (! -f "motors.x"){die "Error: Execuable missing\n"};
+if($param_file_sweep != 1){
+    if (! -f $run_name . "_params.txt"){die "Error: Params file missing\n"};
+    if (! -f $run_name . "_MT_params.txt"){die "Error: MT params file missing\n"};
+    if (! -f "ISEED"){die "Error: ISEED missing\n"};
+    if (! -f "motors.x"){die "Error: Execuable missing\n"};}
 
 #check if counter values are set (otherwise loop is infinite)
 $val1Max != 0 || die "Error: val1max string or 0\n";
@@ -85,6 +87,14 @@ while ( $val1 <= $val1Max )
         my $file_name=$instance_name . ".pub";
         #hpc run name
         my $hpc_instance_name = $hpc_name . "." . $ctr1 . "." . $ctr2;
+        #input correct info for param sweep via files
+        our $entry=$run_name;
+        if($param_file_sweep == 1){
+            #check if all necessary files exist
+            if (! -f $instance_name . "_params.txt"){die "Error: Params file $instance_name _params.txt missing\n"};
+            if (! -f $instance_name . "_MT_params.txt"){die "Error: MT params file $instance_name _MT_params.txt missing\n"};
+            our $entry="$instance_name";
+            print "$instance_name\n"};
         #open file for writing and print the following
         open (FOOD, ">pubs/$file_name" );
         print FOOD << "EOF";
@@ -103,7 +113,7 @@ echo Directory is `pwd`
 
 # Run executable
 #motors.x   run_name   instance_name  repeat   verbose D   eps_0   pi_0   z_MT_offset   R   N[0] F_trap   theta_c   MT_angle
-./motors.x  $run_name  $instance_name $repeats 2       $$D $$eps_0 $$pi_0 $$z_MT_offset $$R $$N0 $$F_trap $$theta_c $$MT_angle
+./motors.x  $entry  $instance_name $repeats 2       $$D $$eps_0 $$pi_0 $$z_MT_offset $$R $$N0 $$F_trap $$theta_c $$MT_angle
 
 echo Finished at `date`
 
