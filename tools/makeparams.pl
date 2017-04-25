@@ -13,6 +13,10 @@ my $val1Max = "set this!";
 my $val2Max = "set this!";
 my $val1increment = "set this!";
 my $val2increment = "set this!";
+#set to 1 if doing a log sweep
+#values above are used as powers of 10 (10^$val1Base, etc.)
+my $sweep1log=0;
+my $sweep2log=0;
 
 #variable business using symbolic reference
 #http://www.perlmonks.org/?node_id=724856
@@ -54,12 +58,21 @@ my $val2=$val2Base;
 while ( $val1 <= $val1Max )
 {
 
-    our $param1 = $val1;
+    if($sweep1log){
+        our $param1 = 10**$val1;
+    } else {
+        our $param1 = $val1;
+    }
+
 
     while ( $val2 <= $val2Max )
     {
 
-        our $param2 = $val2;
+        if($sweep2log){
+            our $param2 = 10**$val2;
+        } else {
+            our $param2 = $val2;
+        }
 
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
