@@ -32,11 +32,14 @@ for i=1:nruns(1)
         %(first MT always set to [1 0 0] unit vector, second MTvec only one
         %passed out)
         theta(i,j)=180-acosd(dot(runs(i,j).MTvec(1,:),[1 0 0]));
+        
+        valid=runs(i,j).exit_cond>0;
 
         %ToW if
         %ToW status or switch (should be redundant)
-        towed{i,j}=runs(i,j).success==1 | runs(i,j).exit_cond==9 | ...
-            runs(i,j).exit_cond==14;
+        towed{i,j}=valid & (runs(i,j).success==1 | ...
+            runs(i,j).exit_cond==9 | ...
+            runs(i,j).exit_cond==14);
         %passed{i,j}=runs(i,j).exit_cond==8 | runs(i,j).exit_cond==13;
         switched{i,j}=runs(i,j).exit_cond==9 | runs(i,j).exit_cond==14;
 
