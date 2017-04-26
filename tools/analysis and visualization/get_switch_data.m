@@ -36,7 +36,7 @@ for i=1:nruns(1)
         valid=runs(i,j).exit_cond>0;
 
         %ToW if
-        %ToW status or switch (should be redundant)
+        %ToW status or switch
         towed{i,j}=valid & (runs(i,j).success==1 | ...
             runs(i,j).exit_cond==9 | ...
             runs(i,j).exit_cond==14);
