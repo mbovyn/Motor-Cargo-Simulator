@@ -172,13 +172,13 @@ create_attach_rec
 %if we want to save the MPEG
 if SaveMPEG~=false
     
-    fig=figure('Position', [150, 150, 400, 400]);
+    fig=figure('Position', [150, 150, 500, 500]);
     
     M(frames)=struct('cdata',[],'colormap',[]);
 
     vidObj = VideoWriter([localpath '/' SaveMPEG]);
     vidObj.FrameRate=12;
-    vidObj.Quality=75;
+    vidObj.Quality=100;
     
     open(vidObj);
     
