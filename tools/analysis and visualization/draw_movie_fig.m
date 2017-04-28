@@ -313,7 +313,13 @@ for t=loop_ts
                 
                 set(h_motor,'EdgeColor','none');
                 set(h_motor,'EdgeAlpha',1);
-                set(h_motor,'FaceColor',[0 .9 0]);
+                if bound{m}(t,n)==1
+                    set(h_motor,'FaceColor','c');
+                elseif bound{m}(t,n)==2
+                    set(h_motor,'FaceColor','m');
+                else
+                    error('motor Not bound to 1 or 2')
+                end
 
 %                 h_head=surf(...
 %                     xm*2*R_MT+loc_head(n,1),...
@@ -322,7 +328,8 @@ for t=loop_ts
 
                 h_head=surf(...
                     xm*.02+loc_head(n,1),...
-                    ym*.02+loc_head(n,2),...
+                    ym*.02+loc_head(n,2)+.012,...
+                    ...ym*.02+loc_head(n,2),...
                     zm*.02+loc_head(n,3));
 
                 if m==1
@@ -334,7 +341,13 @@ for t=loop_ts
                 end
 
                 if m==1
-                    set(h_head,'FaceColor',[0 .9 0]);
+                    if bound{m}(t,n)==1
+                        set(h_head,'FaceColor','c');
+                    elseif bound{m}(t,n)==2
+                        set(h_head,'FaceColor','m');
+                    else
+                        error('Head Not bound to 1 or 2')
+                    end
                 elseif m==2
                     set(h_head,'FaceColor','r');
                 else
@@ -344,7 +357,15 @@ for t=loop_ts
                 %plot a line connecting the two
                 h_neck=plot3([loc_head(n,1) loc(n,1)],...
                 [loc_head(n,2) loc(n,2)],...
-                [loc_head(n,3) loc(n,3)],'Color',[0 .9 0],'LineWidth',2);
+                [loc_head(n,3) loc(n,3)],'LineWidth',2);
+            
+                if bound{m}(t,n)==1
+                    set(h_neck,'Color','c');
+                elseif bound{m}(t,n)==2
+                    set(h_neck,'Color','m');
+                else
+                    error('Neck Not bound to 1 or 2')
+                end
             
                 if draw_detail==true
                     if stretch(n)==1
@@ -502,8 +523,12 @@ for t=loop_ts
         %% MTs
     %for i=1:n_MTs
         
-        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{1},MTvec{1},R_MT(1),'Color','b','FaceAlpha',1,'EdgeAlpha',0);
-        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{2},MTvec{2},R_MT(2),'Color','r','FaceAlpha',1,'EdgeAlpha',0);
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
+            MTpt{1},MTvec{1},R_MT(1),...
+            'Color',[0 0 .6],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
+            MTpt{2},MTvec{2},R_MT(2),...
+            'Color',[.6 0 0],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
         
     %end
     
