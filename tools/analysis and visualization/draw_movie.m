@@ -172,13 +172,13 @@ create_attach_rec
 %if we want to save the MPEG
 if SaveMPEG~=false
     
-    fig=figure('Position', [150, 150, 400, 400]);
+    fig=figure('Position', [150, 150, 500, 500]);
     
     M(frames)=struct('cdata',[],'colormap',[]);
 
     vidObj = VideoWriter([localpath '/' SaveMPEG]);
     vidObj.FrameRate=12;
-    vidObj.Quality=75;
+    vidObj.Quality=100;
     
     open(vidObj);
     
@@ -243,7 +243,22 @@ end
 %% loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
-    h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf);
+    
+    if exist('makeFig','var')
+        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf,'Color','w','Alpha',1);
+        
+        h.FaceLighting = 'gouraud';
+        h.AmbientStrength = 0.3;
+        h.DiffuseStrength = 0.8;
+        h.SpecularStrength = 0.3;
+        h.SpecularExponent = 25;
+        h.BackFaceLighting = 'unlit';
+        
+    else
+        
+        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf);
+        
+    end
     
     if exist('omega','var')
         if(t>1)
@@ -269,77 +284,68 @@ for t=loop_ts
         %plot a sphere for each motor
         for n=1:N(m)
 
-            [xm,ym,zm]=sphere;
+            [ h_motor,h_head,h_stalk ] = draw_motor( ...
+                m,att(n),R_motor(m),loc(n,:),loc_head(n,:)...
+                );
             
-            if isempty(att) || ~att(n)
-            
-                h_motor=surf(...
-                    xm*R_motor(m)+loc(n,1),...
-                    ym*R_motor(m)+loc(n,2),...
-                    zm*R_motor(m)+loc(n,3));
-
-                set(h_motor,'EdgeColor','k');
-     
-            elseif att(n)
+            if exist('makeFig','var')
                 
-                h_motor=surf(...
-                    xm*.1*R_motor(m)+loc(n,1),...
-                    ym*.1*R_motor(m)+loc(n,2),...
-                    zm*.1*R_motor(m)+loc(n,3));
+                if ~att(n)
+                    set(h_motor,'FaceColor',[0 .6 0]);
+                    set(h_motor,'FaceAlpha',.8)
+                    set(h_motor,'EdgeAlpha',0)
 
-%                 h_head=surf(...
-%                     xm*2*R_MT+loc_head(n,1),...
-%                     ym*2*R_MT+loc_head(n,2),...
-%                     zm*2*R_MT+loc_head(n,3));
-
-                h_head=surf(...
-                    xm*.015+loc_head(n,1),...
-                    ym*.015+loc_head(n,2),...
-                    zm*.015+loc_head(n,3));
-
-                if m==1
-                    set(h_head,'EdgeColor','b');   
-                elseif m==2
-                    set(h_head,'EdgeColor','r');
+                    h_motor.FaceLighting = 'gouraud';
+                    h_motor.AmbientStrength = 0.5;
+                    h_motor.DiffuseStrength = 0.8;
+                    h_motor.SpecularStrength = 0.3;
+                    h_motor.SpecularExponent = 25;
+                    h_motor.BackFaceLighting = 'unlit';
                 else
-                   error('Error setting head edge color');
-                end
-
-                if m==1
-                    set(h_head,'FaceColor','b');
-                elseif m==2
-                    set(h_head,'FaceColor','r');
-                else
-                   error('Error setting head face color');
-                end
-
-                %plot a line connecting the two
-                h_neck=plot3([loc_head(n,1) loc(n,1)],...
-                [loc_head(n,2) loc(n,2)],...
-                [loc_head(n,3) loc(n,3)],'m','LineWidth',4);
-            
-                if draw_detail==true
-                    if stretch(n)==1
-                        set(h_head,'EdgeColor','m');
+                
+                    set(h_motor,'EdgeColor','none');
+                    %set(h_motor,'EdgeAlpha',1);
+                    if bound{m}(t,n)==1
+                        set(h_motor,'FaceColor','c');
+                    elseif bound{m}(t,n)==2
+                        set(h_motor,'FaceColor','m');
+                    else
+                        error('motor Not bound to 1 or 2')
                     end
+                    
+                    set(h_head,'EdgeColor','none');
+                    if bound{m}(t,n)==1
+                        set(h_head,'FaceColor','c');
+                    elseif bound{m}(t,n)==2
+                        set(h_head,'FaceColor','m');
+                    else
+                        error('Head Not bound to 1 or 2')
+                    end
+                    
+                    set(h_stalk,'LineWidth',2);
+                    if bound{m}(t,n)==1
+                        set(h_stalk,'Color','c');
+                    elseif bound{m}(t,n)==2
+                        set(h_stalk,'Color','m');
+                    else
+                        error('Neck Not bound to 1 or 2')
+                    end
+
+                    h_motor.FaceLighting = 'gouraud';
+                    h_motor.AmbientStrength = 0.5;
+                    h_motor.DiffuseStrength = 0.8;
+                    h_motor.SpecularStrength = 0.3;
+                    h_motor.SpecularExponent = 25;
+                    h_motor.BackFaceLighting = 'unlit';
+
+                    h_head.FaceLighting = 'gouraud';
+                    h_head.AmbientStrength = 0.5;
+                    h_head.DiffuseStrength = 0.8;
+                    h_head.SpecularStrength = 0.3;
+                    h_head.SpecularExponent = 25;
+                    h_head.BackFaceLighting = 'unlit';
                 end
-            
-            else
-                 error('Something wrong with attachment status');
             end
-
-
-
-            if m==1
-                set(h_motor,'FaceColor','b');
-            elseif m==2
-                set(h_motor,'FaceColor','r');
-            else
-                error('Error setting anchor face color');
-            end
-            
-            set(h_motor,'FaceAlpha',.5)
-            set(h_motor,'EdgeAlpha',.7)
 
             if Diagnostics>1
                 text(loc(n,1),...
@@ -464,10 +470,22 @@ for t=loop_ts
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
     
         %% MTs
-    for i=1:n_MTs
+
+    
+    if exist('makeFig','var')
         
-        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
+            MTpt{1},MTvec{1},R_MT(1),...
+            'Color',[0 0 .6],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
+        [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
+            MTpt{2},MTvec{2},R_MT(2),...
+            'Color',[.6 0 0],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
+    else
         
+            for i=1:n_MTs
+                [ h_cyl,h_cap1,h_cap2 ] = draw_MT( ...
+                    xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
+            end
     end
     
     if exist('draw_sep_dist_line','var')
@@ -476,6 +494,15 @@ for t=loop_ts
             [MTpt{1}(2) MTpt{2}(2)],...
             [MTpt{1}(3) MTpt{2}(3)],'k-.','LineWidth',2)
         
+    end
+    
+    %% lighting
+    if exist('makeFig','var')
+        if exist('lights','var')
+            lightangle(lights(1),lights(2))
+        else
+            lightangle(120,30)
+        end
     end
     
     %% draw and save, prepare for next frame
