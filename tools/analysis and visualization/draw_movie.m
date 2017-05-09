@@ -178,7 +178,7 @@ if SaveMPEG~=false
 
     vidObj = VideoWriter([localpath '/' SaveMPEG]);
     vidObj.FrameRate=12;
-    vidObj.Quality=100;
+    vidObj.Quality=75;
     
     open(vidObj);
     
