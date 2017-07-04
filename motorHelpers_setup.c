@@ -209,6 +209,51 @@ void initiallocations(){
 
             break;
 
+        case 8: //rotate so type0motor0 is on bottom
+
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    pickpointsphere();
+                    initlocs[m][n][0]=x*R+center[0];
+                    initlocs[m][n][1]=y*R+center[1];
+                    initlocs[m][n][2]=z*R+center[2];
+                }
+            }
+
+            if(verboseTF>3){
+                printf("Before rotation,initial locations are chosen as:\n");
+                for (m=0;m<2;m++){
+                    for(n=0;n<N[m];n++){
+                        printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
+                    }
+                }
+            }
+
+            m=0;
+            n=0;
+            makeRotationMatrix(0,0,-1);
+
+            if(verboseTF>3){
+                printf("The rotation matrix that was found is:\n");
+                printf("    %+E %+E %+E\n    %+E %+E %+E\n    %+E %+E %+E\n",
+                    rotmat[0],rotmat[1],rotmat[2],
+                    rotmat[3],rotmat[4],rotmat[5],
+                    rotmat[6],rotmat[7],rotmat[8]);
+            }
+
+            rotateCargo();
+
+            break;
+
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                pickpointsphere();
+                initlocs[m][n][0]=x*R+center[0];
+                initlocs[m][n][1]=y*R+center[1];
+                initlocs[m][n][2]=z*R+center[2];
+            }
+        }
+
         default:
             printf("Not a valid initial location type\n");
             exit(4);
@@ -261,15 +306,15 @@ void initiallocations(){
 } // finished initiallocations
 
 void makeRotationMatrix(double t0,double t1,double t2){
-    rotmat[0] = (pow(R,2) - pow(center[0] - initlocs[m][n][0],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
-    rotmat[1] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
-    rotmat[2] = (center[0] - initlocs[m][n][0])/R;
-    rotmat[3] = -(((center[0] - initlocs[m][n][0])*(center[1] - initlocs[m][n][1]))/(R*(R - center[2] + initlocs[m][n][2])));
-    rotmat[4] = (pow(R,2) - pow(center[1] - initlocs[m][n][1],2) + R*(-center[2] + initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2]));
-    rotmat[5] = (center[1] - initlocs[m][n][1])/R;
-    rotmat[6] = (-center[0] + initlocs[m][n][0])/R;
-    rotmat[7] = (-center[1] + initlocs[m][n][1])/R;
-    rotmat[8] = -((-pow(R,2) + pow(center[0],2) + pow(center[1],2) - 2*center[0]*initlocs[m][n][0] + pow(initlocs[m][n][0],2) - 2*center[1]*initlocs[m][n][1] + pow(initlocs[m][n][1],2) + R*(center[2] - initlocs[m][n][2]))/(R*(R - center[2] + initlocs[m][n][2])));
+    rotmat[0] = -((pow(t1*(center[0] - initlocs[m][n][0]) + t0*(-center[1] + initlocs[m][n][1]),2) - R*(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]) + pow(t2*(center[0] - initlocs[m][n][0]) + t0*(-center[2] + initlocs[m][n][2]),2))/(R*(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2])));
+    rotmat[1] = (t1*center[0] - t0*center[1] - t1*initlocs[m][n][0] + t0*initlocs[m][n][1] + ((t2*(-center[1] + initlocs[m][n][1]) + t1*(center[2] - initlocs[m][n][2]))*(t2*(center[0] - initlocs[m][n][0]) + t0*(-center[2] + initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[2] = (t2*center[0] - t0*center[2] - t2*initlocs[m][n][0] + t0*initlocs[m][n][2] - ((t1*(center[0] - initlocs[m][n][0]) + t0*(-center[1] + initlocs[m][n][1]))*(t2*(-center[1] + initlocs[m][n][1]) + t1*(center[2] - initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[3] = (-(t1*center[0]) + t0*center[1] + t1*initlocs[m][n][0] - t0*initlocs[m][n][1] + ((t2*(-center[1] + initlocs[m][n][1]) + t1*(center[2] - initlocs[m][n][2]))*(t2*(center[0] - initlocs[m][n][0]) + t0*(-center[2] + initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[4] = (pow(R,2) - (pow(t0,2) + pow(t2,2))*pow(center[1] - initlocs[m][n][1],2) + 2*t1*(center[1] - initlocs[m][n][1])*(t0*(center[0] - initlocs[m][n][0]) + t2*(center[2] - initlocs[m][n][2])) + R*(-(t1*center[1]) - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]) - pow(t1,2)*(pow(center[0],2) + pow(center[2],2) - 2*center[0]*initlocs[m][n][0] + pow(initlocs[m][n][0],2) - 2*center[2]*initlocs[m][n][2] + pow(initlocs[m][n][2],2)))/(R*(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]));
+    rotmat[5] = (t2*center[1] - t1*center[2] - t2*initlocs[m][n][1] + t1*initlocs[m][n][2] - ((t1*(center[0] - initlocs[m][n][0]) + t0*(-center[1] + initlocs[m][n][1]))*(t2*(center[0] - initlocs[m][n][0]) + t0*(-center[2] + initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[6] = (-(t2*center[0]) + t0*center[2] + t2*initlocs[m][n][0] - t0*initlocs[m][n][2] - ((t1*(center[0] - initlocs[m][n][0]) + t0*(-center[1] + initlocs[m][n][1]))*(t2*(-center[1] + initlocs[m][n][1]) + t1*(center[2] - initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[7] = (-(t2*center[1]) + t1*center[2] + t2*initlocs[m][n][1] - t1*initlocs[m][n][2] - ((t1*(center[0] - initlocs[m][n][0]) + t0*(-center[1] + initlocs[m][n][1]))*(t2*(center[0] - initlocs[m][n][0]) + t0*(-center[2] + initlocs[m][n][2])))/(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/R;
+    rotmat[8] = (pow(R,2) - pow(t2,2)*(pow(center[0],2) + pow(center[1],2) - 2*center[0]*initlocs[m][n][0] + pow(initlocs[m][n][0],2) - 2*center[1]*initlocs[m][n][1] + pow(initlocs[m][n][1],2)) + 2*t2*(t0*(center[0] - initlocs[m][n][0]) + t1*(center[1] - initlocs[m][n][1]))*(center[2] - initlocs[m][n][2]) - (pow(t0,2) + pow(t1,2))*pow(center[2] - initlocs[m][n][2],2) + R*(-(t1*center[1]) - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]))/(R*(R - t1*center[1] - t2*center[2] + t0*(-center[0] + initlocs[m][n][0]) + t1*initlocs[m][n][1] + t2*initlocs[m][n][2]));
 }
 
 void rotateCargo(){
