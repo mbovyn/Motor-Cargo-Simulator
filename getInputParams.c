@@ -65,7 +65,11 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&F_s[0], &F_s[1]);
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf %lf", blah,&F_d[0], &F_d[1]);
+    if(isnan(F_d[0])){
+        sscanf(tmpString,"%s %lf %lf", blah,&F_d[0], &F_d[1]);
+    }else{
+        sscanf(tmpString,"%s %lf %lf", blah,&trash, &F_d[1]);
+    }
     fgets(tmpString, 100, fParams);
     //Can input eps_0[0] from command line
     //only read if its still set to default nan value
@@ -98,7 +102,11 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&L[0], &L[1]);
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf %lf", blah,&k_m[0], &k_m[1]);
+    if(isnan(k_m[0])){
+        sscanf(tmpString,"%s %lf %lf", blah,&k_m[0], &k_m[1]);
+    }else{
+        sscanf(tmpString,"%s %lf %lf", blah,&trash, &k_m[1]);
+    }
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&step_size[0], &step_size[1]);
     fgets(tmpString, 100, fParams);
@@ -132,7 +140,11 @@ void getInputParams( void )
     }
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %lf", blah,&eta);
+    if(isnan(eta)){
+        sscanf(tmpString,"%s %lf", blah,&eta);
+    }else{
+        sscanf(tmpString,"%s %lf", blah,&trash);
+    }
 
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
@@ -334,11 +346,11 @@ void getInputParams( void )
     //External Force
 
     fgets(tmpString, 100, fParams);
-    if(isnan(Ftrap[0])){
+    if(isnan(Ftrap[2])){
         sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
     }
     else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&trash,&Ftrap[1],&Ftrap[2]);
+        sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&trash);
     }
 
     for(n_lines=1;n_lines<=6;n_lines++)

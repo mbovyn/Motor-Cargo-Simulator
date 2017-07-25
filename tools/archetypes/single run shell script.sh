@@ -11,7 +11,7 @@ working_dir=$("pwd")
 
 #set the parameters to pass in, leave others unset
 repeats=1
-verbose=3
+verbose=2
 #D=0
 #eps_0=0
 #pi_0=0
@@ -21,6 +21,9 @@ verbose=3
 #F_trap=0
 #theta_c=0
 #MT_angle=90
+F_d=6
+eta=.004
+k_m=300
 
 #source the script that calls the function. See here:
 #http://stackoverflow.com/questions/9772036/pass-all-variables-from-one-shellscript-to-another

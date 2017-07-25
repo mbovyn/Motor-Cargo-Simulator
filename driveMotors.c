@@ -164,9 +164,9 @@ int main( int argc, char *argv[] )
         N[0]=atoi(argv[10]);
     }
 
-    Ftrap[0]=NAN;
+    Ftrap[2]=NAN;
     if(argc>11){
-        Ftrap[0]=atof(argv[11]);
+        Ftrap[2]=atof(argv[11]);
     }
 
     theta_c=NAN;
@@ -179,6 +179,21 @@ int main( int argc, char *argv[] )
         MT_angle=atof(argv[13]);
     }
 
+    F_d[0]=NAN;
+    if(argc>14){
+        F_d[0]=atof(argv[14]);
+    }
+
+    eta=NAN;
+    if(argc>15){
+        eta=atof(argv[15]);
+    }
+
+    k_m[0]=NAN;
+    if(argc>16){
+        k_m[0]=atof(argv[16]);
+    }
+
     // load parameters
 
     if (verboseTF>2)
@@ -188,7 +203,8 @@ int main( int argc, char *argv[] )
     getInputParams();
 
     if (verboseTF>1)
-        printf("Initial location passed in is (%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
+        printf("Initial location passed in is (%g,%g,%g)\n",
+            center_initial[0],center_initial[1],center_initial[2]);
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
@@ -198,12 +214,15 @@ int main( int argc, char *argv[] )
         printf("     D = %g\n",D_m[0]);
         printf("     eps_0 = %g\n",eps_0[0]);
         printf("     pi_0 = %g\n",pi_0[0]);
+        printf("     F_d = %g\n",F_d[0]);
+        printf("     k_m = %g\n",k_m[0]);
         printf("Global parameters are:\n");
         printf("     MT_offset = %g\n",z_MT_offset);
         printf("     R = %g\n",R);
-        printf("     Trap force x component = %g\n",Ftrap[0]);
+        printf("     Trap force z component = %g\n",Ftrap[0]);
         printf("     Critical Angle theta_c = %g\n",theta_c);
         printf("     MT Angle = %g\n",MT_angle);
+        printf("     eta = %g\n",eta);
 
         printf("Running %d repeats\n\n",repeats );
     }
@@ -223,7 +242,8 @@ int main( int argc, char *argv[] )
 
     //print the final score
     if(verboseTF>0){
-        printf("There were %d successes in %d trials, where success is ",successes,repeats );
+        printf("There were %d successes in %d trials, where success is ",
+            successes,repeats );
         if(success_mode==1){
             switch(success){
                 case 0:

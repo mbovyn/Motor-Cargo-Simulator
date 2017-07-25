@@ -18,8 +18,8 @@ date +"    Script: started at %r on %F"
 #http://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash
 #answer by Jens
 #ex) ${eps_0:-NAN} returns NAN if variable eps_0 isn't set, whatever it's set to otherwise
-#motors.x   run_name   instance_name  repeats       verbose       D         eps_0         pi_0         z_MT_offset         R         N[0]       F_trap         theta_c         MT_angle
-./motors.x  $run_name  $run_name      ${repeats:-1} ${verbose:-0} ${D:-NAN} ${eps_0:-NAN} ${pi_0:-NAN} ${z_MT_offset:-NAN} ${R:-NAN} ${N0:--1}  ${F_trap:-NAN} ${theta_c:-NAN} ${MT_angle:-NAN}
+#motors.x   run_name   instance_name  repeats       verbose       D         eps_0         pi_0         z_MT_offset         R         N[0]       F_trap         theta_c         MT_angle         F_d         eta         k_m
+./motors.x  $run_name  $run_name      ${repeats:-1} ${verbose:-0} ${D:-NAN} ${eps_0:-NAN} ${pi_0:-NAN} ${z_MT_offset:-NAN} ${R:-NAN} ${N0:--1}  ${F_trap:-NAN} ${theta_c:-NAN} ${MT_angle:-NAN} ${F_d:-NAN} ${eta:-NAN} ${k_m:-NAN}
 
 #notify
 date +"    Script: done at %r on %F"
