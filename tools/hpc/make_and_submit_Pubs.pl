@@ -35,7 +35,7 @@ my $theta_c="NANpassthrough";
 my $MT_angle="NANpassthrough";
 my $F_d="NANpassthrough";
 my $eta="NANpassthrough";
-my k_m="NANpassthrough";
+my $k_m="NANpassthrough";
 #values to be passed through
 our $neg1passthrough=-1;
 our $NANpassthrough="NAN";
@@ -51,7 +51,7 @@ my $set_this="param2";
 #my $MT_angle="otherpassthrough";
 
 
-#need to change values in here --------------------------------------------
+#-----------------------------------------------------------------------
 
 # make pubs ###########################################################
 
