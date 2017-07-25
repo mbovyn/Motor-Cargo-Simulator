@@ -33,6 +33,9 @@ my $N0="neg1passthrough";
 my $F_trap="NANpassthrough";
 my $theta_c="NANpassthrough";
 my $MT_angle="NANpassthrough";
+my $F_d="NANpassthrough";
+my $eta="NANpassthrough";
+my k_m="NANpassthrough";
 #values to be passed through
 our $neg1passthrough=-1;
 our $NANpassthrough="NAN";
@@ -111,8 +114,8 @@ echo Time is `date`
 echo Directory is `pwd`
 
 # Run executable
-#motors.x   run_name   instance_name  repeat   verbose D   eps_0   pi_0   z_MT_offset   R   N[0] F_trap   theta_c   MT_angle
-./motors.x  $entry  $instance_name $repeats 2       $$D $$eps_0 $$pi_0 $$z_MT_offset $$R $$N0 $$F_trap $$theta_c $$MT_angle
+#motors.x   run_name   instance_name  repeat   verbose D   eps_0   pi_0   z_MT_offset   R   N[0] F_trap   theta_c   MT_angle   F_d   eta   k_m
+./motors.x  $entry     $instance_name $repeats 2       $$D $$eps_0 $$pi_0 $$z_MT_offset $$R $$N0 $$F_trap $$theta_c $$MT_angle $$F_d $$eta $$k_m
 
 echo Finished at `date`
 

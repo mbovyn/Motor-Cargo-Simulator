@@ -21,9 +21,9 @@ verbose=2
 #F_trap=0
 #theta_c=0
 #MT_angle=90
-F_d=6
-eta=.004
-k_m=300
+#F_d=4
+#eta=.0001
+#k_m=320
 
 #source the script that calls the function. See here:
 #http://stackoverflow.com/questions/9772036/pass-all-variables-from-one-shellscript-to-another
