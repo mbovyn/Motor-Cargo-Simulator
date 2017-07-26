@@ -25,6 +25,8 @@ SE_ToW=zeros(nruns(1),nruns(2));
 SE_switch=zeros(nruns(1),nruns(2));
 SE_switchToW=zeros(nruns(1),nruns(2));
 
+run([analysispath '/import_multiple_ToWs.m'])
+
 for i=1:nruns(1)
     for j=1:nruns(2)
         
@@ -37,7 +39,7 @@ for i=1:nruns(1)
 
         %ToW if
         %ToW status or switch
-        towed{i,j}=valid & (runs(i,j).success==1 | ...
+        towed{i,j}=valid & (runs(i,j).ToWs'>0 | ...
             runs(i,j).exit_cond==9 | ...
             runs(i,j).exit_cond==14);
         %passed{i,j}=runs(i,j).exit_cond==8 | runs(i,j).exit_cond==13;
