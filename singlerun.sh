@@ -5,6 +5,7 @@ cd "$working_dir"
 cp $code_dir/motors.x .
 
 #clean up existing files
+instance_name=$run_name
 . $code_dir/clean_files.sh
 
 date +"    Script: started at %r on %F"

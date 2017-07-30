@@ -50,12 +50,8 @@ do
         numInstances=$( pgrep motors | wc -l )
     done
 
-    #delete old summary file
-    fname="${instance_name}_Summary.txt"
-    if [ -f $fname -a ${keep_old:-0} -eq 0 ] ; then
-        rm $fname
-        echo "    deleted old summary file $fname"
-    fi
+    #delete old files
+    . $code_dir/clean_files.sh
 
     #run executable
     ./motors.x  "${instance_name}"  "${instance_name}"  ${repeats:-1} ${verbose:-2} &
