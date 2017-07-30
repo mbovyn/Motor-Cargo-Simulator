@@ -26,3 +26,5 @@ our $Rname="R";
 our $etaname="eta";
 
 our $kcMTname="kcMT";
+
+our $MT_anglename="MT_angle";

@@ -449,7 +449,7 @@ void getInputParams( void )
     }
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&MultiMTassay);
+    sscanf(tmpString,"%s %d %lf",blah,&MultiMTassay,&MT_angle);
 
     if(MultiMTassay && verboseTF>1){
         printf("     MT assay conditions\n");

@@ -282,7 +282,7 @@ StopOnStep $StopOnStep                //0 for don’t stop, otherwise enter step
 StopOnTime $StopOnTime                //0 for don’t stop, otherwise enter time
 StopOnDistance $StopOnDistance            //0 for don’t stop, otherwise enter distance in microns
 StopBelowThetaC $StopBelowThetaC $SB        //2nd value elevation in radians -pi/2 to pi/2
-multiMT_assay $multiMT_assay             //1 for switch, 2 for ToW
+multiMT_assay $multiMT_assay $$MT_anglename            //1 for switch, 2 for ToW
 StopOnBeadDissociation $StopOnBeadDissociation    //stop if bead is > 500nm from all MTs
 
 //Success Conditions
