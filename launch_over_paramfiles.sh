@@ -9,6 +9,9 @@ working_dir="$3"
 #echo "working_dir is $working_dir"
 repeats=$4
 verbose=$5
+#whether or not to keep old files
+keep_old=$6
+dont_wait=$7
 
 # generate and save a file that tells the hash of the git commit used to generate the data
 cd $code_dir
@@ -28,7 +31,9 @@ fi
 numCores=4
 
 #make an array of all the parameter files
-param_files=( $run_name*_MT_params.txt )
+param_files_unsorted=( $run_name*_MT_params.txt )
+IFS=$'\n' param_files=($(sort -t. -k2,2 -k3,3 -n <<<"${param_files_unsorted[*]}"))
+unset IFS
 #echo "${param_files[@]}"
 
 echo "Running ${#param_files[@]} instances"
@@ -41,17 +46,25 @@ do
     #echo "${instance%*_MT_params.txt}"
     instance_name="${instance%*_MT_params.txt}"
 
-    #find the number of simulations currently running
-    numInstances=$( pgrep motors | wc -l )
-    #wait to run the next instance until there are less than the max
-    while [ "$numInstances" -ge "$numCores" ]
-    do
-    	sleep 5s
+    if [ "$dont_wait" -ne "1" ]
+    then
+        #find the number of simulations currently running
         numInstances=$( pgrep motors | wc -l )
-    done
+        #wait to run the next instance until there are less than the max
+        while [ "$numInstances" -ge "$numCores" ]
+        do
+        	sleep 5s
+            numInstances=$( pgrep motors | wc -l )
+        done
+    fi
 
     #delete old files
-    . $code_dir/clean_files.sh
+    if [ "$keep_old" -ne "1" ]
+    then
+        . $code_dir/clean_files.sh
+    else
+        echo "Appending to old files"
+    fi
 
     #run executable
     #motors.x   run_name            instance_name       repeats       verbose       D   eps_0  pi_0 z_MT_offset R   N[0] F_trap theta_c MT_angle F_d eta k_m
@@ -63,34 +76,44 @@ do
     let ctr++
 
     #sleep so as not to go before the ISEED is updated
-	sleep .1s
+    if [ "$repeats" -ge "1" ]
+    then
+        sleep .1s
+    fi
 
 done
 
 echo finished launching
 
-let talk=1
-numInstances=$( jobs -r | wc -l )
-while [ "$numInstances" -gt "0" ]
-do
+if [ "$dont_wait" -ne "1" ]
+then
+    let talk=1
+    numInstances=$( jobs -r | wc -l )
+    while [ "$numInstances" -gt "0" ]
+    do
 
-    numInstancesnew=$( jobs -r | wc -l )
+        numInstancesnew=$( jobs -r | wc -l )
 
-    if [ "$numInstancesnew" -lt "$numInstances" ]
-    then
-        numInstances=$numInstancesnew
-        let talk=1
-    fi
+        if [ "$numInstancesnew" -lt "$numInstances" ]
+        then
+            numInstances=$numInstancesnew
+            let talk=1
+        fi
 
-    if [ "$talk" -eq "1" ]
-    then
-        echo waiting for last $numInstances to finish at
-        date +"    %r on %F"
-        let talk=0
-    fi
+        if [ "$talk" -eq "1" ]
+        then
+            echo waiting for last $numInstances to finish at
+            date +"    %r on %F"
+            let talk=0
+        fi
 
-    sleep 1s
-done
+        #sleep so as not to go before the ISEED is updated
+        if [ "$repeats" -ge "1" ]
+        then
+            sleep 1s
+        fi
+    done
+fi
 
 date +"done at: %r on %F"
 #create a notification

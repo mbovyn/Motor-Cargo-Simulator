@@ -313,6 +313,10 @@ do "$code_dir/makeparams2.pl";
 my $repeats=1;
 #verbosity (0-5)
 my $verbose=0;
+#set to 1 to append to old files
+my $keep_old=0;
+#set to 1 to override wait for open thread
+my $dont_wait=0;
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose")
