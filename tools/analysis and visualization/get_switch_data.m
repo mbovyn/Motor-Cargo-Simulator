@@ -9,6 +9,8 @@
 
 theta=zeros(nruns(1),nruns(2));
 
+valid=cell(nruns(1),nruns(2));
+
 towed=cell(nruns(1),nruns(2));
 switched=cell(nruns(1),nruns(2));
 stayed_on=cell(nruns(1),nruns(2));
@@ -35,38 +37,62 @@ for i=1:nruns(1)
         %passed out)
         theta(i,j)=180-acosd(dot(runs(i,j).MTvec(1,:),[1 0 0]));
         
-        valid=runs(i,j).exit_cond>0;
+        valid{i,j}=runs(i,j).exit_cond>0;
 
         %ToW if
         %ToW status or switch
-        towed{i,j}=valid & ( ...
-            (success==1)' ...
+        towed{i,j}=valid{i,j} & ( ...
+            runs(i,j).success==1 ...
             ...(runs(i,j).ToW_time>.25)' ...
             ...runs(i,j).ToWs'>0 ...
             | runs(i,j).exit_cond==9 ...
             | runs(i,j).exit_cond==14 ...
             );
+        towed_strict{i,j}=valid{i,j} & ( ...
+            runs(i,j).success==1 ...
+            ...(runs(i,j).ToW_time>.25)' ...
+            ...runs(i,j).ToWs'>0 ...
+            | runs(i,j).exit_cond==9 ...
+            );
         %passed{i,j}=runs(i,j).exit_cond==8 | runs(i,j).exit_cond==13;
         switched{i,j}=runs(i,j).exit_cond==9 | runs(i,j).exit_cond==14;
+        switched_strict{i,j}=runs(i,j).exit_cond==9;
 
         %was a valid run if have any of the listed exit conditions
         stayed_on{i,j}=runs(i,j).exit_cond==9 | runs(i,j).exit_cond==8 | ...
             runs(i,j).exit_cond==13 | runs(i,j).exit_cond==14;
+        stayed_on_strict{i,j}=runs(i,j).exit_cond==9 | runs(i,j).exit_cond==8;
+        
         fell_off{i,j}=runs(i,j).exit_cond==1;
         discarded{i,j}=~fell_off{i,j} & ~stayed_on{i,j};
+        fell_off_at_intersection{i,j}=runs(i,j).exit_cond==13 | runs(i,j).exit_cond==14;
 
         %find probability of ToW, switch, switch | ToW
         n_stayed_on(i,j)=sum(stayed_on{i,j});
+        n_stayed_on_strict(i,j)=sum(stayed_on_strict{i,j});
+        
         n_ToWed(i,j)=sum(towed{i,j} & stayed_on{i,j});
+        n_ToWed_strict(i,j)=sum(towed_strict{i,j} & stayed_on_strict{i,j});
+        
         p_ToW(i,j)=n_ToWed(i,j)/n_stayed_on(i,j);
+        p_ToW_strict(i,j)=n_ToWed_strict(i,j)/n_stayed_on_strict(i,j);
+        
         p_switch(i,j)=sum(switched{i,j} & stayed_on{i,j})/n_stayed_on(i,j);
+        p_switch_strict(i,j)=sum(switched_strict{i,j} & stayed_on_strict{i,j})/n_stayed_on_strict(i,j);
+        
         p_switchToW(i,j)=sum(towed{i,j} & switched{i,j} & stayed_on{i,j})/sum(towed{i,j});
+        p_switchToW_strict(i,j)=sum(towed_strict{i,j} & switched_strict{i,j} & stayed_on_strict{i,j})/sum(towed_strict{i,j});
 
         %SEM from 
         %http://stats.stackexchange.com/questions/29641/standard-error-for-the-mean-of-a-sample-of-binomial-random-variables
         SE_ToW(i,j)=sqrt(p_ToW(i,j)*(1-p_ToW(i,j))/n_stayed_on(i,j));
+        SE_ToW_strict(i,j)=sqrt(p_ToW_strict(i,j)*(1-p_ToW_strict(i,j))/n_stayed_on_strict(i,j));
+        
         SE_switch(i,j)=sqrt(p_switch(i,j)*(1-p_switch(i,j))/n_stayed_on(i,j));
+        SE_switch_strict(i,j)=sqrt(p_switch_strict(i,j)*(1-p_switch_strict(i,j))/n_stayed_on_strict(i,j));
+        
         SE_switchToW(i,j)=sqrt(p_switchToW(i,j)*(1-p_switchToW(i,j))/n_ToWed(i,j));
+        SE_switchToW_strict(i,j)=sqrt(p_switchToW_strict(i,j)*(1-p_switchToW_strict(i,j))/n_ToWed_strict(i,j));
         
         %bernoulli trial variance is np(1-p)
         %var_ToW(i,j)=n_stayed_on(i,j)*p_ToW(i,j)*(1-p_ToW(i,j));
