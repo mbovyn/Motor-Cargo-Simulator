@@ -80,8 +80,8 @@ for i=1:nruns(1)
         p_switch(i,j)=sum(switched{i,j} & stayed_on{i,j})/n_stayed_on(i,j);
         p_switch_strict(i,j)=sum(switched_strict{i,j} & stayed_on_strict{i,j})/n_stayed_on_strict(i,j);
         
-        p_switchToW(i,j)=sum(towed{i,j} & switched{i,j} & stayed_on{i,j})/sum(towed{i,j});
-        p_switchToW_strict(i,j)=sum(towed_strict{i,j} & switched_strict{i,j} & stayed_on_strict{i,j})/sum(towed_strict{i,j});
+        p_switchToW(i,j)=sum(towed{i,j} & switched{i,j} & stayed_on{i,j})/n_ToWed(i,j);
+        p_switchToW_strict(i,j)=sum(towed_strict{i,j} & switched_strict{i,j} & stayed_on_strict{i,j})/n_ToWed_strict(i,j);
 
         %SEM from 
         %http://stats.stackexchange.com/questions/29641/standard-error-for-the-mean-of-a-sample-of-binomial-random-variables
