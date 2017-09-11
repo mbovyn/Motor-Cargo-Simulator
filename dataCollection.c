@@ -271,6 +271,10 @@ void writeForces(){
             }
         }
     }
+
+    for(k=0;k<n_MTs;k++){
+        fprintf(fInUse, "%+1.16E ",MTdistk[k]);
+    }
 }//writeForces
 
 void writeOmega(){

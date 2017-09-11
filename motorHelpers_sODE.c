@@ -358,11 +358,14 @@ void evaluate_steric(){
                 MTviolationCounter[k]=0;
             }
 
+            MTdistk[k]=R-MTdist;
+
         }else{
             MTviolationCounter[k]=0;
             for(i=0;i<3;i++){
                 Fsterick[k][i]=0;
             }
+            MTdistk[k]=0;
         }
 
         if(verboseTF>4){

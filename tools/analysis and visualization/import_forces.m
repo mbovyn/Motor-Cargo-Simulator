@@ -18,7 +18,7 @@ startRow = 2;
 %need a %f for each column of numbers to read in
 %step, time, center x,y,z = 5
 %x,y,z for each motor = 3*(N_k+N_d)
-piece1=repmat('%f',1,9+6*(N(1)+N(2)));
+piece1=repmat('%f',1,9+6*(N(1)+N(2))+2);
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -70,6 +70,10 @@ for m=1:2
         Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
     end
 end
+
+%%
+
+MTdist=[dataArray{:,column+6:column+7}];
 
 
 %% Clear temporary variables
