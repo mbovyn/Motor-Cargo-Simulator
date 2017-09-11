@@ -34,6 +34,8 @@ void motorloading()
                     // }
                     //if this is greater than rest length, motor is stretched
                     if(neck_mag[m][n]>L[m]){
+                        neck_length+=(neck_mag[m][n]-L[m])*dt;
+                        stretch_time+=1*dt; //1 motor * time stretched
                         //find the force exerted by the spring motor
                         F_m_mag[m][n]=k_m[m]*(neck_mag[m][n]-L[m]);
                         if(F_m_mag[m][n]>50){

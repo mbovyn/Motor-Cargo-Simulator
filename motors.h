@@ -242,6 +242,8 @@ Unbinding
 */
 
 double neck_mag[2][NMOTORSMAX], neck_vec[2][NMOTORSMAX][3];
+double neck_length;
+double stretch_time;
 double unit_vec[3];
 
 /* -------------------------------------------------------------------

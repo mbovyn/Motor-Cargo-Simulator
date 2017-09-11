@@ -47,7 +47,7 @@ startRow = 2;
 %   column27: double (%f)
 %	column28: double (%f)
 % For more information, see the TEXTSCAN documentation.
-formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
+formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
 %% Open the text file.
 fileID = fopen(filename,'r');
@@ -99,6 +99,8 @@ n_ToW0 = dataArray{:, 28};
 n_ToW1 = dataArray{:, 29};
 off_count0 = dataArray{:, 30};
 off_count1 = dataArray{:, 31};
+stretch_amount = dataArray{:, 32};
+stretch_time = dataArray{:, 33};
 
 
 %% Clear temporary variables

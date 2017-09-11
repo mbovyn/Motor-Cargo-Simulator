@@ -296,7 +296,7 @@ void writeSummary(){
 }
 
 void writeToW(){
-    fprintf(fInUse, "%-+23.16E %d %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d",
+    fprintf(fInUse, "%-+23.16E %d %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d %+1.16E %+1.16E ",
         ToWtime, ToWs, F_ToW[0], F_ToW[1], F2_ToW[0], F2_ToW[1],
         FMT_ToW[0], FMT_ToW[1], F2MT_ToW[0], F2MT_ToW[1],
         FMTb_ToW[0], FMTb_ToW[1],
@@ -305,7 +305,7 @@ void writeToW(){
         FonMT_ToW[0][0], FonMT_ToW[0][1], FonMT_ToW[1][0], FonMT_ToW[1][1],
         FonOT_ToW[0], FonOT_ToW[1],
         n_ToW[0], n_ToW[1],
-        off_count[0], off_count[1]);
+        off_count[0], off_count[1], neck_length, stretch_time);
 }
 
 void inLoopDataCollection()

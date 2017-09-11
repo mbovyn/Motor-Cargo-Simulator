@@ -44,6 +44,9 @@ int simulate_cargo()
         off_count[k]=0;
     }
 
+    neck_length=0;
+    stretch_time=0;
+
     for (m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
