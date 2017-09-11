@@ -76,7 +76,7 @@ do
     let ctr++
 
     #sleep so as not to go before the ISEED is updated
-    if [ "$repeats" -ge "1" ]
+    if [ "$repeats" -gt "1" ]
     then
         sleep .1s
     fi
@@ -108,13 +108,13 @@ then
         fi
 
         #sleep so as not to go before the ISEED is updated
-        if [ "$repeats" -ge "1" ]
+        if [ "$repeats" -gt "1" ]
         then
             sleep 1s
         fi
     done
-fi
 
-date +"done at: %r on %F"
-#create a notification
-osascript -e 'display notification "Simulation Complete" with title "Done!"'
+    date +"done at: %r on %F"
+    #create a notification
+    osascript -e 'display notification "Simulation Complete" with title "Done!"'
+fi
