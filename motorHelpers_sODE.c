@@ -632,11 +632,17 @@ void compute_next_locations(){
 
             break;
 
-        case 9: //no anchor diffusion
+        case 9: //no cargo translational diffusion
 
-            generate_brownian_displacement_cargo();
-            for(i=0;i<3;i++){
-                Dbc[i]=brownian_displacement[i];
+            nn=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    generate_brownian_displacement_anchor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
+                    }
+                    nn++;
+                }
             }
 
             generate_brownian_displacement_rotation();
