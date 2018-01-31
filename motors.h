@@ -31,6 +31,7 @@ int StopBelowThetaC;
 double MT_angle;
 int StopOnBeadDissociation;
 double theta_c;
+int StopOnCargoBinding;
 int success, success_mode, trial_success;
 
 double timer=0;

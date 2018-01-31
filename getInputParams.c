@@ -462,6 +462,9 @@ void getInputParams( void )
         printf("     Bead > .5 microns from all MTs\n");
     }
 
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&StopOnCargoBinding);
+
     //success condition
 
     fgets(tmpString, 100, fParams);

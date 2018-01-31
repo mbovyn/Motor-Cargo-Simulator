@@ -657,6 +657,9 @@ int simulate_cargo()
                 case 14:
                     printf("Switch condition, but fell off before leaving ToW zone\n");
                     break;
+                case 15:
+                    printf("Cargo binding\n");
+                    break;
                 default:
                     printf("Missed case on reporting end of sim condition\n");
             }

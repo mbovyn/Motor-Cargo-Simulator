@@ -259,6 +259,13 @@ void evaluate_stop_conditions(){
         }
 
     }
+
+    if(StopOnCargoBinding && prematureReturn==0){//Stop when any motor binds
+
+        if(anybound(1)){
+            prematureReturn=15;
+        }
+    }
 }
 
 int any_motor_past_ToW_zone(){
