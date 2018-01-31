@@ -4,7 +4,7 @@ run_name='demo_mult';
 localpath=pwd;
 
 %analysis file path
-analysispath='/Users/Matt/project_code/Motor_Freedom/tools/analysis and visualization';
+analysispath='~/project_code/Motor_Freedom/tools/analysis and visualization';
 
 %%
 
@@ -20,7 +20,7 @@ for i=1:nruns
 
     run_length(i)=mean(runs(i).last_bound_center(:,1));
     bind_rate(i)=runs(i).pi_0(1);
-    
+
     SEM(i)=std(runs(i).last_bound_center(:,1))/sqrt(length(last_bound_center(:,1)));
 
 end
