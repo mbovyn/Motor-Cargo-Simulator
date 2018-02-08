@@ -278,8 +278,21 @@ void cargobehavior()
     if(MotorDiffusion<10){
         for(m=0;m<2;m++){
             for(n=0;n<N[m];n++){
+                for(i=0;i<3;i++){
+                    prior_locs[m][n][i]=locs[m][n][i];
+                }
                 convert_loc_to_spherical();
                 convert_loc_sph_to_cart();
+                move_to_membrane_dist[m][n]=sqrt(
+                    pow(prior_locs[m][n][0]-locs[m][n][0],2)+
+                    pow(prior_locs[m][n][1]-locs[m][n][1],2)+
+                    pow(prior_locs[m][n][1]-locs[m][n][1],2));
+                if(move_to_membrane_dist[m][n]>.01){
+                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
+                    //graceful_exit=1;
+                }
+                //printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
+
                 if(verboseTF>4 && MotorDiffusion==8){
                     printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
                 }
@@ -731,8 +744,8 @@ void compute_next_locations(){
             && sqrt( (a1[nn][0]-a[nn][0]-(c1[0]-c[0]))*(a1[nn][0]-a[nn][0]-(c1[0]-c[0]))
             + (a1[nn][1]-a[nn][1]-(c1[1]-c[1]))*(a1[nn][1]-a[nn][1]-(c1[1]-c[1]))
             + (a1[nn][2]-a[nn][2]-(c1[2]-c[2]))*(a1[nn][2]-a[nn][2]-(c1[2]-c[2])) )
-            > R*pi/10 ){
-            //printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
+            > R*pi/5 ){
+            printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
             //graceful_exit=1;
         }
     }

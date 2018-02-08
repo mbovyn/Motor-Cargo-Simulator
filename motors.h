@@ -153,6 +153,9 @@ double head[2][NMOTORSMAX][3]; //heads
 double last_bound_head[2][NMOTORSMAX][3];
 double F_m_vec [2][NMOTORSMAX][3];
 
+double prior_locs[2][NMOTORSMAX][3];
+double move_to_membrane_dist[2][NMOTORSMAX];
+
 // booleans
 int bound            [2][NMOTORSMAX];
 int bind_possible    [2][NMOTORSMAX][NMTSMAX];
