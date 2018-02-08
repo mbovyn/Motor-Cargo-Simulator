@@ -109,7 +109,7 @@ double muCargoRotation; //1/8*pi*eta*R^3
 double mu_m[2];
 
 double dt_max_Steric, dt_max_Motor, dt_max_Diffusion, dt_max_base, dt_max_MultiMotor;
-double dt_default=.0001;
+double dt_default=.00001;
 double dt_override;
 double nbound;
 
