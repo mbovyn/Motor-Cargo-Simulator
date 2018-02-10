@@ -263,6 +263,7 @@ our $StopOnDistance=0;              #//0 no stop, otherwise distance in microns
 our $StopBelowThetaC=0; our $SB=-1; #//2nd value elevation radians -pi/2 to pi/2
 our $multiMT_assay=0;               #//1 for switch, 2 for ToW
 our $StopOnBeadDissociation=0;      #//stop if bead is > 500nm from all MTs
+our $StopOnCargoBinding=1;        #//stop when any motor binds
 
 # //Success Conditions
 our $Success=0; our $SS2=3;
@@ -300,7 +301,13 @@ do "$code_dir/makeparams1.pl";
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #set params to be swept over to param1 and param2 by overwriting
+#append name to variablename to enable symbolic reference
 #if only sweeping one parameter, set first to $trash
+
+#example: sweep over number of kinesins and kinesin length
+#our $N1name="param1";
+#our $L1name="param2";
+
 our $trash="param1";
 our $L1name="param2";
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -319,4 +326,4 @@ my $keep_old=0;
 my $dont_wait=0;
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose")
+exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait")
