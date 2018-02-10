@@ -71,7 +71,7 @@ our $InitialLocations=5; our $IL2=0; our $IL3=0;
 # 5: Uniform random, rotate so type0motor0 is on top
 # 6: Uniform random, rotate so motor with most close neighbors is on top
 # 7: Start at a defined elevation (specify in 3rd input in degrees)
-# 8:
+# 8: Uniform random, rotate so type0motor0 is on bottom
 # 9:
 # 10:
 #
