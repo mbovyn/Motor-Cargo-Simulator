@@ -284,6 +284,7 @@ StopOnDistance $StopOnDistance            //0 for don’t stop, otherwise enter 
 StopBelowThetaC $StopBelowThetaC $SB        //2nd value elevation in radians -pi/2 to pi/2
 multiMT_assay $multiMT_assay $$MT_anglename            //1 for switch, 2 for ToW
 StopOnBeadDissociation $StopOnBeadDissociation    //stop if bead is > 500nm from all MTs
+StopOnCargoBinding $StopOnCargoBinding        //stop when any motor binds
 
 //Success Conditions
 Success $Success $SS2
