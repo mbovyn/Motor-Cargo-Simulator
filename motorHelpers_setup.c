@@ -245,14 +245,20 @@ void initiallocations(){
 
             break;
 
-        for (m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                pickpointsphere();
-                initlocs[m][n][0]=x*R+center[0];
-                initlocs[m][n][1]=y*R+center[1];
-                initlocs[m][n][2]=z*R+center[2];
+        case 9: //pick one random spot and put all motors there
+
+            //random initial location
+            pickpointsphere();
+            //place all motors there
+            for (m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    initlocs[m][n][0]=x*R+center[0];
+                    initlocs[m][n][1]=y*R+center[1];
+                    initlocs[m][n][2]=z*R+center[2];
+                }
             }
-        }
+
+            break;
 
         default:
             printf("Not a valid initial location type\n");
