@@ -289,7 +289,7 @@ void cargobehavior()
                     pow(prior_locs[m][n][1]-locs[m][n][1],2));
                 if(move_to_membrane_dist[m][n]>.01){
                     printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
-                    //graceful_exit=1;
+                    graceful_exit=1;
                 }
                 //printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
 
@@ -746,7 +746,7 @@ void compute_next_locations(){
             + (a1[nn][2]-a[nn][2]-(c1[2]-c[2]))*(a1[nn][2]-a[nn][2]-(c1[2]-c[2])) )
             > R*pi/5 ){
             printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
-            //graceful_exit=1;
+            graceful_exit=1;
         }
     }
 
