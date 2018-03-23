@@ -204,10 +204,10 @@ void getInputParams( void )
     //set to satisfy sqrt(D*dt)<<R
     dt_max_Diffusion=0;
     if(N[0]>0){
-        dt_max_Diffusion=.01*pow(R,2)/D_m[0];
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
     }
     if(N[1]>0 && D_m[1]>D_m[0]){
-        dt_max_Diffusion=.01*pow(R,2)/D_m[1];
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
     }
     if(dt_max_Diffusion==0){
         if(verboseTF>1){
