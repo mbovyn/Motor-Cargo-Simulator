@@ -41,9 +41,9 @@ while ( $val1 <= $val1Max )
                 $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param1;
                 print " after, cz=$cz\n";
             } elsif($Rname eq "param2") {
-                print "triggered, cz=$cz";
+                #print "triggered, cz=$cz";
                 $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param2;
-                print " after, cz=$cz\n";
+                #print " after, cz=$cz\n";
             }
         }
         open (FOOD, ">$file_name" );
