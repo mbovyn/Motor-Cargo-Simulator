@@ -174,12 +174,16 @@ void getInputParams( void )
     DCargoRotation=kBT*muCargoRotation;
     DCargoTranslation=kBT*muCargoTranslation;
 
-    //find maximum time step for attached motors
-    //set to satisfy
+    //find maximum time step
+    //There are various restrictions based on not letting the motors go too
+    //far off the cargo surface
     if(verboseTF>1){
         printf("Choosing Timesteps:\n");
     }
 
+    //Find stable timestep for motor spring
+    //timestep is restricted dynamically in simulate_cargo.c during gillespie
+    //timestep choosing based on number of motors attached
     dt_max_Motor=0;
     if(N[0]>0){
         dt_max_Motor=.9*1/(k_m[0]*muCargoTranslation);
@@ -200,7 +204,7 @@ void getInputParams( void )
         printf("    Max time step for steric spring is %g\n",dt_max_Steric);
     }
 
-    //find max time step for just diffusion of the motors
+    //find max time step for diffusion of the motors
     //set to satisfy calcuation in anchor diffusion time step.nb
     //knocked down by a factor of 10 because motors were still going too far
     dt_max_Diffusion=0;
@@ -217,14 +221,14 @@ void getInputParams( void )
         printf("    Max time step for diffusion is %g\n",dt_max_Diffusion);
     }
 
+    //find maximum time step for cargo rotation (6 sigma sqrt(2Ddt), again
+    //knocked down by a factor of 10
     dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
     if(verboseTF>2){
         printf("    Max time step for rotation is %g\n",dt_max_rotation);
     }
-    //printf("rotation time step is %g\n",dt_max_rotation );
-    //exit(0);
 
-    //the default max is the smaller of the two maximum dt's
+    //the default max is the smallest of the restrictions, or the base time step
     dt_max_base=dt_default;
     if(verboseTF>1){
         printf("    Time step set to dt=%f\n",dt_max_base);
@@ -236,6 +240,8 @@ void getInputParams( void )
             printf("     Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
+    //don't need to include motor time step, as it's implemented automatically
+    //before gillespie timestep choice
     // if(dt_max_Motor<dt_max_base){
     //     dt_max_base=dt_max_Motor;
     //     if(verboseTF>1){
@@ -248,31 +254,6 @@ void getInputParams( void )
             printf("     Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
         }
     }
-
-    exit(0);
-    // if(dt_max_Diffusion<dt_max_Motor){
-    //     dt_max_base=dt_max_Diffusion;
-    //     if(verboseTF>1){
-    //         printf("     Choosing max time step based on motor diffusion, dt=%g\n",dt_max_base);
-    //     }
-    // }
-    // else{
-    //     dt_max_base=dt_max_Motor;
-    //     if(verboseTF>1){
-    //         printf("     Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
-    //     }
-    // }
-    //
-    // //overrule time step manually if too large
-    // if(dt_max_base>dt_default){
-    //     dt_max_base=dt_default;
-    //     if(verboseTF>1){
-    //         printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
-    //     }
-    // }
-
-    //all of this may not have been necessay since dt_max_Motor is also a
-    //function of D_m. May always be lower at measured k_m of 320 pN/micron
 
     for(m=0;m<2;m++){
       unloaded_step_rate[m]=fabs(v_f[m]/step_size[m]);
