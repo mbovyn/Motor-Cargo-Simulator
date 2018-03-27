@@ -57,7 +57,7 @@ InitialLocations 4 0 0
 6: Uniform random, rotate so motor with most close neighbors is on top
 7: Start at a defined elevation (specify in 3rd input in degrees)
 8: Uniform random, rotate so type0motor0 is on bottom
-9:
+9: All motors set to same random spot
 10:
 
 second parameter: 1  - kin at bottom, 2 for dyn, 3 - kin on top, 4 for dyn
