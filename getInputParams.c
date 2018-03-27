@@ -188,16 +188,16 @@ void getInputParams( void )
         dt_max_Motor=.9*1/(k_m[1]*muCargoTranslation);
     }
     if(dt_max_Motor==0){
-        if(verboseTF>1){
-            printf("dt_max for motor springs is 0 (no motors?) - setting to default.\n");
-        }
         dt_max_Motor=dt_default;
+    }
+    if(verboseTF>2){
+        printf("    Max time step for single motor spring is %g\n",dt_max_Motor);
     }
 
     //find maximum time step for steric spring that keeps cargo out of MT
     dt_max_Steric=.9*1/(muCargoTranslation*kcMT);
-    if(verboseTF>1){
-        printf("     Max time step for steric spring is %g\n",dt_max_Steric);
+    if(verboseTF>2){
+        printf("    Max time step for steric spring is %g\n",dt_max_Steric);
     }
 
     //find max time step for just diffusion of the motors
@@ -211,33 +211,65 @@ void getInputParams( void )
         dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
     }
     if(dt_max_Diffusion==0){
-        if(verboseTF>1){
-            printf("dt_max for diffusion is 0 (no motors?) - setting to default.\n");
-        }
         dt_max_Diffusion=dt_default;
     }
+    if(verboseTF>2){
+        printf("    Max time step for diffusion is %g\n",dt_max_Diffusion);
+    }
+
+    dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
+    if(verboseTF>2){
+        printf("    Max time step for rotation is %g\n",dt_max_rotation);
+    }
+    //printf("rotation time step is %g\n",dt_max_rotation );
+    //exit(0);
 
     //the default max is the smaller of the two maximum dt's
-    if(dt_max_Diffusion<dt_max_Motor){
+    dt_max_base=dt_default;
+    if(verboseTF>1){
+        printf("    Time step set to dt=%f\n",dt_max_base);
+    }
+
+    if(dt_max_Diffusion<dt_max_base){
         dt_max_base=dt_max_Diffusion;
         if(verboseTF>1){
-            printf("     Choosing max time step based on motor diffusion, dt=%g\n",dt_max_base);
+            printf("     Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
-    else{
-        dt_max_base=dt_max_Motor;
+    // if(dt_max_Motor<dt_max_base){
+    //     dt_max_base=dt_max_Motor;
+    //     if(verboseTF>1){
+    //         printf("     Lowering base time step based on motor spring, dt=%g\n",dt_max_base);
+    //     }
+    // }
+    if(dt_max_rotation<dt_max_base){
+        dt_max_base=dt_max_rotation;
         if(verboseTF>1){
-            printf("     Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
+            printf("     Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
         }
     }
 
-    //overrule time step manually if too large
-    if(dt_max_base>dt_default){
-        dt_max_base=dt_default;
-        if(verboseTF>1){
-            printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
-        }
-    }
+    exit(0);
+    // if(dt_max_Diffusion<dt_max_Motor){
+    //     dt_max_base=dt_max_Diffusion;
+    //     if(verboseTF>1){
+    //         printf("     Choosing max time step based on motor diffusion, dt=%g\n",dt_max_base);
+    //     }
+    // }
+    // else{
+    //     dt_max_base=dt_max_Motor;
+    //     if(verboseTF>1){
+    //         printf("     Choosing max time step based on motor spring, dt=%g\n",dt_max_base);
+    //     }
+    // }
+    //
+    // //overrule time step manually if too large
+    // if(dt_max_base>dt_default){
+    //     dt_max_base=dt_default;
+    //     if(verboseTF>1){
+    //         printf("     Time step too large, overruling. dt=%f\n",dt_max_base);
+    //     }
+    // }
 
     //all of this may not have been necessay since dt_max_Motor is also a
     //function of D_m. May always be lower at measured k_m of 320 pN/micron
