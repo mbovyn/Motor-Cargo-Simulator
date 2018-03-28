@@ -281,7 +281,7 @@ our $Success=0; our $SS2=3;
 # */
 
 # //debugging
-our $dt_override=0; #//set this to 0 for no override, otherwise overrides set dt
+our $dt_override=0; #//set this to 0 for no override, otherwise overrides set dt.  Negative to ignore dt_default
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

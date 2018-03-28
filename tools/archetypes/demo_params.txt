@@ -266,7 +266,7 @@ Success 0 1
 */
 
 //debugging
-dt_override 0 //set this to 0 for no override, otherwise overrides set dt
+dt_override 0 //set this to 0 for no override, otherwise overrides set dt. Negative to ignore dt_default
 
 //check for correct read in
 checkbit 732
