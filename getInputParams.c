@@ -163,100 +163,6 @@ void getInputParams( void )
     //printf("Read in motor numbers as %ld %ld\n",N[0],N[1]);
     //printf("Read in kcMT as %lf\n",kcMT);
 
-
-    // Consequent parameters
-
-    muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
-    muCargoRotation=1/(8*pi*eta*pow(R,3));
-    for(m=0;m<2;m++){
-      mu_m[m]=D_m[m]/kBT;
-    }
-    DCargoRotation=kBT*muCargoRotation;
-    DCargoTranslation=kBT*muCargoTranslation;
-
-    //find maximum time step
-    //There are various restrictions based on not letting the motors go too
-    //far off the cargo surface
-    if(verboseTF>1){
-        printf("Choosing Timesteps:\n");
-    }
-
-    //Find stable timestep for motor spring
-    //timestep is restricted dynamically in simulate_cargo.c during gillespie
-    //timestep choosing based on number of motors attached
-    dt_max_Motor=0;
-    if(N[0]>0){
-        dt_max_Motor=.9*1/(k_m[0]*muCargoTranslation);
-    }
-    if( N[1]>0 && (k_m[1]*muCargoTranslation) > (k_m[0]*muCargoTranslation) ){
-        dt_max_Motor=.9*1/(k_m[1]*muCargoTranslation);
-    }
-    if(dt_max_Motor==0){
-        dt_max_Motor=dt_default;
-    }
-    if(verboseTF>2){
-        printf("    Max time step for single motor spring is %g\n",dt_max_Motor);
-    }
-
-    //find maximum time step for steric spring that keeps cargo out of MT
-    dt_max_Steric=.9*1/(muCargoTranslation*kcMT);
-    if(verboseTF>2){
-        printf("    Max time step for steric spring is %g\n",dt_max_Steric);
-    }
-
-    //find max time step for diffusion of the motors
-    //set to satisfy calcuation in anchor diffusion time step.nb
-    //knocked down by a factor of 10 because motors were still going too far
-    dt_max_Diffusion=0;
-    if(N[0]>0){
-        dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
-    }
-    if(N[1]>0 && D_m[1]>D_m[0]){
-        dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
-    }
-    if(dt_max_Diffusion==0){
-        dt_max_Diffusion=dt_default;
-    }
-    if(verboseTF>2){
-        printf("    Max time step for diffusion is %g\n",dt_max_Diffusion);
-    }
-
-    //find maximum time step for cargo rotation (6 sigma sqrt(2Ddt), again
-    //knocked down by a factor of 10
-    //dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
-    //.005 instead of .01 fixes errors for large cargos
-    dt_max_rotation=.1*(pow(R,2)*(8*pi*eta*pow(R,3)/kBT))*pow(tan(pow(3*.005/R,1/3.)),2)/72;
-    if(verboseTF>2){
-        printf("    Max time step for rotation is %g\n",dt_max_rotation);
-    }
-
-    //the default max is the smallest of the restrictions, or the base time step
-    dt_max_base=INF;
-    if(verboseTF>1){
-        printf("    Time step set to dt=%f\n",dt_max_base);
-    }
-
-    if(dt_max_Diffusion<dt_max_base){
-        dt_max_base=dt_max_Diffusion;
-        if(verboseTF>1){
-            printf("     Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
-        }
-    }
-    //don't need to include motor time step, as it's implemented automatically
-    //before gillespie timestep choice
-    // if(dt_max_Motor<dt_max_base){
-    //     dt_max_base=dt_max_Motor;
-    //     if(verboseTF>1){
-    //         printf("     Lowering base time step based on motor spring, dt=%g\n",dt_max_base);
-    //     }
-    // }
-    if(dt_max_rotation<dt_max_base){
-        dt_max_base=dt_max_rotation;
-        if(verboseTF>1){
-            printf("     Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
-        }
-    }
-
     for(m=0;m<2;m++){
       unloaded_step_rate[m]=fabs(v_f[m]/step_size[m]);
     }
@@ -495,13 +401,6 @@ void getInputParams( void )
 
     sscanf(tmpString,"%s %lf",blah,&dt_override);
 
-    if(dt_override){
-        dt_max_base=dt_override;
-        if(verboseTF>0){
-            printf("Overriding dt. Now %g\n",dt_override);
-        }
-    }
-
     //check bit
     //need 2 because fgets doesn't read past the last line
     fgets(tmpString, 100, fParams);
@@ -638,6 +537,106 @@ void getInputParams( void )
 
     fclose(fMTParams);
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Consequent parameters
 
+    muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
+    muCargoRotation=1/(8*pi*eta*pow(R,3));
+    for(m=0;m<2;m++){
+      mu_m[m]=D_m[m]/kBT;
+    }
+    DCargoRotation=kBT*muCargoRotation;
+    DCargoTranslation=kBT*muCargoTranslation;
+
+    //find maximum time step
+    //There are various restrictions based on not letting the motors go too
+    //far off the cargo surface
+    if(verboseTF>1){
+        printf("Choosing Timesteps:\n");
+    }
+
+    //Find stable timestep for motor spring
+    //timestep is restricted dynamically in simulate_cargo.c during gillespie
+    //timestep choosing based on number of motors attached
+    dt_max_Motor=0;
+    if(N[0]>0){
+        dt_max_Motor=.9*1/(k_m[0]*muCargoTranslation);
+    }
+    if( N[1]>0 && (k_m[1]*muCargoTranslation) > (k_m[0]*muCargoTranslation) ){
+        dt_max_Motor=.9*1/(k_m[1]*muCargoTranslation);
+    }
+    if(dt_max_Motor==0){
+        dt_max_Motor=dt_default;
+    }
+    if(verboseTF>2){
+        printf("    Max time step for single motor spring is %g\n",dt_max_Motor);
+    }
+
+    //find maximum time step for steric spring that keeps cargo out of MT
+    dt_max_Steric=.9*1/(muCargoTranslation*kcMT);
+    if(verboseTF>2){
+        printf("    Max time step for steric spring is %g\n",dt_max_Steric);
+    }
+
+    //find max time step for diffusion of the motors
+    //set to satisfy calcuation in anchor diffusion time step.nb
+    //knocked down by a factor of 10 because motors were still going too far
+    if(N[0]>0){
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
+    } else if(N[1]>0 && D_m[1]>D_m[0]){
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
+    } else {
+        dt_max_Diffusion=dt_default;
+    }
+    if(verboseTF>2){
+        printf("    Max time step for diffusion is %g\n",dt_max_Diffusion);
+    }
+
+    //find maximum time step for cargo rotation (6 sigma sqrt(2Ddt), again
+    //knocked down by a factor of 10
+    //dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
+    //.005 instead of .01 fixes errors for large cargos
+    dt_max_rotation=.1*(pow(R,2)*(8*pi*eta*pow(R,3)/kBT))*pow(tan(pow(3*.005/R,1/3.)),2)/72;
+    if(verboseTF>2){
+        printf("    Max time step for rotation is %g\n",dt_max_rotation);
+    }
+
+    //the default max is the smallest of the restrictions, or the base time step
+    if(dt_override<0){
+        dt_max_base=INF;
+    } else {
+        dt_max_base=dt_default;
+    }
+    if(verboseTF>1){
+        printf("    Time step set to dt=%f\n",dt_max_base);
+    }
+
+    if(dt_max_Diffusion<dt_max_base){
+        dt_max_base=dt_max_Diffusion;
+        if(verboseTF>1){
+            printf("     Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
+        }
+    }
+    //don't need to include motor time step, as it's implemented automatically
+    //before gillespie timestep choice
+    // if(dt_max_Motor<dt_max_base){
+    //     dt_max_base=dt_max_Motor;
+    //     if(verboseTF>1){
+    //         printf("     Lowering base time step based on motor spring, dt=%g\n",dt_max_base);
+    //     }
+    // }
+    if(dt_max_rotation<dt_max_base){
+        dt_max_base=dt_max_rotation;
+        if(verboseTF>1){
+            printf("     Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
+        }
+    }
+
+    if(dt_override>0){
+        dt_max_base=dt_override;
+        if(verboseTF>0){
+            printf("Overriding dt. Now %g\n",dt_override);
+        }
+    }
 
 }
