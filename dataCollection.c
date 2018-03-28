@@ -427,6 +427,7 @@ void simulationEndDataCollection(){
 void write_error(){
     //write an error for the run if we exited prematurely
     fInUse=fSummary;
+    t_inst=NAN;
     writeBase();
     //write summary
     prematureReturn=-1;
