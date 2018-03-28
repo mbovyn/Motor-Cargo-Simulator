@@ -4,7 +4,7 @@
 
 # make parameter files ######################################################
 
-print "Writing parameter files\n";
+#print "Writing parameter files\n";
 
 #check if counter values are set (otherwise loop is infinite)
 #$val1Max != 0 || die "Error: val1max string or 0\n";

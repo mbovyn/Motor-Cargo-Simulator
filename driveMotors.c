@@ -208,7 +208,7 @@ int main( int argc, char *argv[] )
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
-        printf("Running with %d kinesins and %d dyneins\n",N[0],N[1]);
+        printf("\nRunning with %d kinesins and %d dyneins\n",N[0],N[1]);
 
         printf("Parameters for type0 motors are:\n");
         printf("     D = %g\n",D_m[0]);
@@ -223,6 +223,7 @@ int main( int argc, char *argv[] )
         //printf("     Critical Angle theta_c = %g\n",theta_c);
         //printf("     MT Angle = %g\n",MT_angle);
         printf("     eta = %g\n",eta);
+        printf("     dt_max_base = %g\n",dt_max_base);
 
         printf("Running %d repeats\n\n",repeats );
     }
@@ -241,30 +242,30 @@ int main( int argc, char *argv[] )
     finalizeDataCollection();
 
     //print the final score
-    if(verboseTF>0){
-        printf("There were %d successes in %d trials, where success is ",
-            successes,repeats );
-        if(success_mode==1){
-            switch(success){
-                case 0:
-                    printf("not possible\n");
-                    break;
-                case 1:
-                    printf("type0motor0 being bound at the last step\n");
-                    break;
-                case 2:
-                    printf("went more than 10 microns\n");
-                    break;
-                case 3:
-                    printf("underwent tug of war\n");
-                    break;
-                default:
-                    printf("not defined\n");
-            }
-        }else{
-            printf("stopping by condition %d\n",success);
-        }
-    }
+    // if(verboseTF>0){
+    //     printf("There were %d successes in %d trials, where success is ",
+    //         successes,repeats );
+    //     if(success_mode==1){
+    //         switch(success){
+    //             case 0:
+    //                 printf("not possible\n");
+    //                 break;
+    //             case 1:
+    //                 printf("type0motor0 being bound at the last step\n");
+    //                 break;
+    //             case 2:
+    //                 printf("went more than 10 microns\n");
+    //                 break;
+    //             case 3:
+    //                 printf("underwent tug of war\n");
+    //                 break;
+    //             default:
+    //                 printf("not defined\n");
+    //         }
+    //     }else{
+    //         printf("stopping by condition %d\n",success);
+    //     }
+    // }
 
     return 0;
 

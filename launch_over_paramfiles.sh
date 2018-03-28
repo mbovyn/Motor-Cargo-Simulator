@@ -36,8 +36,8 @@ IFS=$'\n' param_files=($(sort -t. -k2,2 -k3,3 -n <<<"${param_files_unsorted[*]}"
 unset IFS
 #echo "${param_files[@]}"
 
-echo "Running ${#param_files[@]} instances"
-date +"    started at: %r on %F"
+echo "****Running ${#param_files[@]} instances"
+date +"****    started at: %r on %F"
 
 ctr=1
 
@@ -63,15 +63,15 @@ do
     then
         . $code_dir/clean_files.sh
     else
-        echo "Appending to old files"
+        echo "****Appending to old files"
     fi
 
     #run executable
     #motors.x   run_name            instance_name       repeats       verbose       D   eps_0  pi_0 z_MT_offset R   N[0] F_trap theta_c MT_angle F_d eta k_m
     ./motors.x  "${instance_name}"  "${instance_name}"  ${repeats:-1} ${verbose:-2} &
 
-    echo "ran $ctr of ${#param_files[@]}, $instance_name at"
-    date +"    %r on %F"
+    echo "****$ctr of ${#param_files[@]}, $instance_name started at"
+    date +"****%r on %F"
 
     let ctr++
 
@@ -83,7 +83,7 @@ do
 
 done
 
-echo finished launching
+echo ****finished launching
 
 if [ "$dont_wait" -ne "1" ]
 then
@@ -102,8 +102,8 @@ then
 
         if [ "$talk" -eq "1" ]
         then
-            echo waiting for last $numInstances to finish at
-            date +"    %r on %F"
+            echo ****waiting for last $numInstances to finish at
+            date +"****    %r on %F"
             let talk=0
         fi
 
@@ -114,7 +114,7 @@ then
         fi
     done
 
-    date +"done at: %r on %F"
+    date +"****done at: %r on %F"
     #create a notification
     osascript -e 'display notification "Simulation Complete" with title "Done!"'
 fi
