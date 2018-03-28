@@ -19,11 +19,11 @@ end
 
 %take in the summary the simulation writes if we haven't yet
 if ~exist('exit_cond','var')
-    
+
     disp('Importing Summary')
-    
+
     run([analysispath '/import_summary.m'])
-    
+
     if disp_theta_c==0
         theta_c=NaN;
     else
@@ -36,9 +36,9 @@ end
 %take in the location data written by the simulation
 %only if it hasn't already been read in
 if ~exist('loc_rec','var')
-    
+
     run([analysispath '/import_locs.m'])
-        
+
     %take in data on locations of heads if the file exists (sometimes we
     %need not write one)
     if exist([localpath '/' run_name '_Heads.txt'],'file')
@@ -60,14 +60,14 @@ end
 
 %take in the data on the orientation change of the cargo
 if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
-    
+
     disp('Importing Omega - Cargo Rotation')
     import_omega
-    
+
     %can't simply add euler vectors to get cumulative rotation
     %need to convert them to rotation matricies, multiply them, then
     %convert back
-    
+
     %first turn omega vector into normalized vector + magnitude (Euler
     %Vector)
     omega_mag=sqrt(sum(omega.*omega,2));
@@ -75,7 +75,7 @@ if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
     EV(isnan(EV))=0;
     %note first value written is 0 vector, so can't be normalized and ends
     %up NaNs
-    
+
     %use function from matlab file exchange to convert to rotation
     %matricies
     rotmats=SpinCalc('EVtoDCM',EV,eps,0);
@@ -90,11 +90,11 @@ if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
     end
     %find Cumulative Euler Vectors
     cumeuler=SpinCalc('DCMtoEV',cumrotmats,eps,0);
-    
+
     %also tried to do this with quaternians, didn't work for some reason
-    
+
 %     quaternians=SpinCalc('EVtoQ',EV,eps,1);
-% 
+%
 %     cumquatprod=zeros(size(quaternians));
 %     cumquatprod(1,:)=quaternians(1,:);
 %     cumquatprod(2,:)=quaternians(2,:);
@@ -102,7 +102,7 @@ if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
 %         cumquatprod(i,:)=quatmultiply(cumquatprod(i-1,:),quaternians(i,:));
 %     end
 %     cumeuler=SpinCalc('QtoEV',cumquatprod,eps,1);
-    
+
 end
 
 %% set plot bounds
@@ -110,43 +110,43 @@ end
 max_length=max(R_motor);
 
 switch plot_box
-    
+
     case 1 %cargo set at 0 and not moving
-        
+
         xends=[-(R(1)+max_length) R(1)+max_length];
         yends=[-(R(1)+max_length) R(1)+max_length];
         zends=[-(R(1)+max_length+.02) R(1)+max_length];
-        
+
     case 2 %outside of all points to be drawn
 
         xends=[min(center(:,1))-R(1)-max_length max(center(:,1))+R(1)+max_length];
         yends=[min(center(:,2))-R(1)-max_length max(center(:,2))+R(1)+max_length];
         zends=[min(center(:,3))-R(1)-max_length max(center(:,3))+R(1)+max_length];
-        
+
     case 3 %tighter bounds than 2, motor circles may be cut off
 
         xends=[min(center(:,1))-R(1) max(center(:,1))+R(1)];
         yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
         zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
-        
+
     case 4 % cargo centered
-        
+
 %         xends=[-(R+max_length) R+max_length];
 %         yends=[-(R+max_length) R+max_length];
 %         zends=[-(R+max_length+.02) R+max_length+.02];
 
     case 5 % only set y and z ends, leave x to be set in calling script
-        
+
         yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
         zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
-        
+
     otherwise
-        
+
         error('Unusable key for plot bounds specified in plot_box')
-        
+
 end
-        
-        
+
+
 
 % xends=[-(R+max_length) locs_final{1}{1}(1)+.2];
 % zends=[-(R+max_length) R+max_length];
@@ -171,19 +171,19 @@ create_attach_rec
 
 %if we want to save the MPEG
 if SaveMPEG~=false
-    
-    fig=figure('Position', [150, 150, 500, 500]);
-    
+
+    fig=figure('Position', [150, 150, 700, 700]);
+
     M(frames)=struct('cdata',[],'colormap',[]);
 
     vidObj = VideoWriter([localpath '/' SaveMPEG],'MPEG-4');
     vidObj.FrameRate=12;
     vidObj.Quality=75;
-    
+
     open(vidObj);
-    
+
 else
-    
+
     fig=figure('Position', [150, 150, 700, 700]);
 
 end
@@ -194,7 +194,7 @@ if ~exist('tan_scaling','var')
     %scale forces on cargo to cargo radius
     %and forces on anchor to motor length
     if draw_forces==true
-        
+
         disp('Creating force scaling')
 
         mags_ext=sqrt(sum(Fext.*Fext,2));
@@ -243,35 +243,35 @@ end
 %% loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
-    
+
     if exist('makeFig','var')
         h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf,'Color','w','Alpha',1);
-        
+
         h.FaceLighting = 'gouraud';
         h.AmbientStrength = 0.3;
         h.DiffuseStrength = 0.8;
         h.SpecularStrength = 0.3;
         h.SpecularExponent = 25;
         h.BackFaceLighting = 'unlit';
-        
+
     else
-        
-        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf);
-        
+
+        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf,'Alpha',1);
+
     end
-    
+
     if exist('omega','var')
         if(t>1)
             rotate(h,[cumeuler(t-1,1) cumeuler(t-1,2) cumeuler(t-1,3)],cumeuler(t-1,4),[center(t,1),center(t,2),center(t,3)])
         end
     end
-    
+
     %% initial axis properites
     hold on
-    
+
     %% motor anchors and heads
     for m=1:2
-        
+
         %access location information from this time step
         loc=loc_rec{m,t};
         loc_head=head_rec{m,t};
@@ -287,9 +287,9 @@ for t=loop_ts
             [ h_motor,h_head,h_stalk ] = draw_motor( ...
                 m,att(n),R_motor(m),loc(n,:),loc_head(n,:)...
                 );
-            
+
             if exist('makeFig','var')
-                
+
                 if ~att(n)
                     set(h_motor,'FaceColor',[0 .6 0]);
                     set(h_motor,'FaceAlpha',.8)
@@ -302,7 +302,7 @@ for t=loop_ts
                     h_motor.SpecularExponent = 25;
                     h_motor.BackFaceLighting = 'unlit';
                 else
-                
+
                     set(h_motor,'EdgeColor','none');
                     %set(h_motor,'EdgeAlpha',1);
                     if bound{m}(t,n)==1
@@ -312,7 +312,7 @@ for t=loop_ts
                     else
                         error('motor Not bound to 1 or 2')
                     end
-                    
+
                     set(h_head,'EdgeColor','none');
                     if bound{m}(t,n)==1
                         set(h_head,'FaceColor','c');
@@ -321,7 +321,7 @@ for t=loop_ts
                     else
                         error('Head Not bound to 1 or 2')
                     end
-                    
+
                     set(h_stalk,'LineWidth',2);
                     if bound{m}(t,n)==1
                         set(h_stalk,'Color','c');
@@ -356,15 +356,15 @@ for t=loop_ts
             end
 
             if draw_forces==true
-                
+
                 %for the radial force on the anchor
                 f=Ftangential{m}{n}(t,:)*tan_scaling;
                 plot3([loc(n,1),loc(n,1)+f(1)],...
                     [loc(n,2),loc(n,2)+f(2)],...
                     [loc(n,3),loc(n,3)+f(3)],'linewidth',3)
-                
+
                 ct=center(t,:);
-                
+
                 %for tangential force
                 f=Fradial{m}{n}(t,:)*cargo_scaling;
                 plot3([ct(1) ct(1)+f(1)],...
@@ -375,30 +375,30 @@ for t=loop_ts
             end
         end
     end
-    
+
     %% if have force vectors, plot out the forces acting on the cargo
     if draw_forces==true
-        
+
         ct=center(t,:);
-        
+
         %for external force
         f=Fext(t,:)*cargo_scaling;
         plot3([ct(1) ct(1)+f(1)],...
             [ct(2) ct(2)+f(2)],...
             [ct(3) ct(3)+f(3)],...
             'k','LineWidth',6)
-        
+
         %for the steric force from the MT
         f=Fsteric(t,:)*cargo_scaling;
         plot3([ct(1) ct(1)+f(1)],...
             [ct(2) ct(2)+f(2)],...
             [ct(3) ct(3)+f(3)],...
             'g','LineWidth',6)
-        
+
     end
-    
+
     %% extra display items
-    
+
     %plot a ring to indicate the location of the critical angle
     %for visualizing mean first passage time test
     if ~isnan(theta_c)
@@ -406,7 +406,7 @@ for t=loop_ts
         circle_center=[center(t,1) center(t,2) center(t,3)+R*sin(theta_c)];
         plotCircle3D(circle_center,[0 0 1],R*cos(theta_c))
     end
-    
+
     %     if p.Results.Diagnostics==true
     % %     if ~isempty(cargo_loc) && t>start_frame
     % %         if cargo_v(t)>0
@@ -416,13 +416,13 @@ for t=loop_ts
     % %         else
     % %             status='Not moving';
     % %         end
-    % %         
+    % %
     % %         text(0,0,.7,status,'HorizontalAlignment','center')
     % %     end
     %     end
-    
+
     %% plot labels
-    
+
     if Diagnostics>1
         title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',t_arr(t))]))
     elseif Diagnostics>0
@@ -430,7 +430,7 @@ for t=loop_ts
         %text(.4,-.4,.4,['Frame ' num2str(t)])
         %display current simulation time
         %text(-.4,.4,.4,['t=' num2str(t_arr(t))])
-        
+
         title(sprintf([titlestring '\n t=' sprintf('%0.3f',t_arr(t)) ' s']))
     else
         title(titlestring)
@@ -439,41 +439,41 @@ for t=loop_ts
     xlabel('x (\mum)')
     ylabel('y (\mum)')
     zlabel('z (\mum)')
-    
-    
+
+
     %% axis and view properties
-    
+
     if t==start_frame && exist('init_view','var')
         view(init_view(1),init_view(2));
     end
-    
+
 %     if ~isnan(theta_c)
 %         %set view angle
 %         view(0,0)
 %     end
-    
+
     if t>start_frame
         view(az,el)
     end
-    
+
     axis equal
     set(gca,'color',[.95 .95 .95])
-    
+
     if plot_box==4
-        
+
         xends=[center(t,1)-(R(1)+max_length) center(t,1)+R(1)+max_length];
         yends=[center(t,2)-(R(1)+max_length) center(t,2)+R(1)+max_length];
         zends=[center(t,3)-(R(1)+max_length+.02) center(t,3)+R(1)+max_length+.02];
-        
+
     end
-    
+
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
-    
+
         %% MTs
 
-    
+
     if exist('makeFig','var')
-        
+
         [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
             MTpt{1},MTvec{1},R_MT(1),...
             'Color',[0 0 .6],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
@@ -481,21 +481,21 @@ for t=loop_ts
             MTpt{2},MTvec{2},R_MT(2),...
             'Color',[.6 0 0],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
     else
-        
+
             for i=1:n_MTs
                 [ h_cyl,h_cap1,h_cap2 ] = draw_MT( ...
                     xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
             end
     end
-    
+
     if exist('draw_sep_dist_line','var')
-        
+
         plot3([MTpt{1}(1) MTpt{2}(1)],...
             [MTpt{1}(2) MTpt{2}(2)],...
             [MTpt{1}(3) MTpt{2}(3)],'k-.','LineWidth',2)
-        
+
     end
-    
+
     %% lighting
     if exist('makeFig','var')
         if exist('lights','var')
@@ -504,23 +504,23 @@ for t=loop_ts
             lightangle(120,30)
         end
     end
-    
+
     %% draw and save, prepare for next frame
-    
+
     drawnow
-    
+
     [az,el]=view;
-    
+
     if SaveMPEG~=false
-        
+
         M(t)=getframe(fig);
-        
+
         writeVideo(vidObj,M(t));
-        
+
     end
-    
+
     hold off
-    
+
 end
 
 
