@@ -223,13 +223,15 @@ void getInputParams( void )
 
     //find maximum time step for cargo rotation (6 sigma sqrt(2Ddt), again
     //knocked down by a factor of 10
-    dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
+    //dt_max_rotation=.1*pow((pi/30),2)*(8*pi*eta*pow(R,3)/kBT);
+    //.005 instead of .01 fixes errors for large cargos
+    dt_max_rotation=.1*(pow(R,2)*(8*pi*eta*pow(R,3)/kBT))*pow(tan(pow(3*.005/R,1/3.)),2)/72;
     if(verboseTF>2){
         printf("    Max time step for rotation is %g\n",dt_max_rotation);
     }
 
     //the default max is the smallest of the restrictions, or the base time step
-    dt_max_base=dt_default;
+    dt_max_base=INF;
     if(verboseTF>1){
         printf("    Time step set to dt=%f\n",dt_max_base);
     }
