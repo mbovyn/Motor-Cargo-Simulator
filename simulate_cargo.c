@@ -577,6 +577,8 @@ int simulate_cargo()
                 quat[i]=quat1[i];
             }
             //reset on writing in inLoopDataCollection
+            if (verboseTF>3)
+                printf("quaternion is %f %f %f %f\n",quat[0],quat[1],quat[2],quat[3] );
         }
 
         //record data
