@@ -235,6 +235,7 @@ int simulate_cargo()
 
         //gillespie_dt saves the smallest timestep we find by gillespie
         gillespie_dt=INF;
+        dt_max=dt_max_base;
         //loop through motors and generate time steps for each possible action
         for(m=0;m<2;m++){
             for (n=0;n<N[m];n++)
@@ -255,6 +256,11 @@ int simulate_cargo()
                 // loop through binding rates
                 for(k=0;k<n_MTs;k++){
                     if(bind_possible[m][n][k] && nuc_ready[m][n]){
+                        //make sure motor has a chance to diffuse away if
+                        //dt_max_base is large
+                        if(dt_max>dt_default){
+                            dt_max=dt_default;
+                        }
                         dtHere = -1/bind_rate[m][n][k]*log(RAND);
                         if (dtHere < gillespie_dt )
                         {
@@ -307,11 +313,10 @@ int simulate_cargo()
         dt_max_MultiMotor=.9*1/(nbound*k_m[0]*muCargoTranslation);
 
         //choose dt max for the current situation
-        if(dt_max_MultiMotor<dt_max_base){
+        if(dt_max_MultiMotor<dt_max){
             dt_max = dt_max_MultiMotor;
-        }else{
-            dt_max = dt_max_base;
         }
+        
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
