@@ -217,11 +217,11 @@ int main( int argc, char *argv[] )
         printf("     F_d = %g\n",F_d[0]);
         printf("     k_m = %g\n",k_m[0]);
         printf("Global parameters are:\n");
-        printf("     MT_offset = %g\n",z_MT_offset);
+        //printf("     MT_offset = %g\n",z_MT_offset);
         printf("     R = %g\n",R);
-        printf("     External force z component = %g\n",Ftrap[2]);
-        printf("     Critical Angle theta_c = %g\n",theta_c);
-        printf("     MT Angle = %g\n",MT_angle);
+        //printf("     External force z component = %g\n",Ftrap[2]);
+        //printf("     Critical Angle theta_c = %g\n",theta_c);
+        //printf("     MT Angle = %g\n",MT_angle);
         printf("     eta = %g\n",eta);
 
         printf("Running %d repeats\n\n",repeats );

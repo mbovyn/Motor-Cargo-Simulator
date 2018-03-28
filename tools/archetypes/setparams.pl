@@ -72,7 +72,7 @@ our $InitialLocations=5; our $IL2=0; our $IL3=0;
 # 6: Uniform random, rotate so motor with most close neighbors is on top
 # 7: Start at a defined elevation (specify in 3rd input in degrees)
 # 8: Uniform random, rotate so type0motor0 is on bottom
-# 9:
+# 9: All motors set to same random spot
 # 10:
 #
 # second parameter: 1  - kin at bottom, 2 for dyn, 3 - kin on top, 4 for dyn
@@ -89,7 +89,7 @@ our $MotorDiffusion=10;
 # 6: free motors - cargo rot and anchor diffusion set to 0
 # 7: free motors - cargo trans and anchor diffusion set to 0
 # 8: free motors - debugging case
-# 9: free motors - anchor diffusion set to 0
+# 9: free motors - cargo translational diffusion to 0
 # 10: bead motors
 # 11: bead motors - deterministic (cargo trans and rot, motor diffusion set to 0)
 # 12:
@@ -281,7 +281,7 @@ our $Success=0; our $SS2=3;
 # */
 
 # //debugging
-our $dt_override=0; #//set this to 0 for no override, otherwise overrides set dt
+our $dt_override=0; #//set this to 0 for no override, otherwise overrides set dt.  Negative to ignore dt_default
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

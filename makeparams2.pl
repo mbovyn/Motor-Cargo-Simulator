@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+#use strict;
+#use warnings;
 
 # make parameter files ######################################################
 
@@ -32,6 +34,18 @@ while ( $val1 <= $val1Max )
         my $file_name=$instance_name . "_params.txt";
         #open file for writing and print the following
         #print "$localpath\n";
+
+        if($setCargoMT_dist>=0) {
+            if($Rname eq "param1") {
+                print "triggered, cz=$cz";
+                $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param1;
+                print " after, cz=$cz\n";
+            } elsif($Rname eq "param2") {
+                #print "triggered, cz=$cz";
+                $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param2;
+                #print " after, cz=$cz\n";
+            }
+        }
         open (FOOD, ">$file_name" );
         print FOOD << "EOF";
 //
