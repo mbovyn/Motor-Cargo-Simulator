@@ -70,8 +70,8 @@ do
     #motors.x   run_name            instance_name       repeats       verbose       D   eps_0  pi_0 z_MT_offset R   N[0] F_trap theta_c MT_angle F_d eta k_m
     ./motors.x  "${instance_name}"  "${instance_name}"  ${repeats:-1} ${verbose:-2} &
 
-    echo "****$ctr of ${#param_files[@]}, $instance_name started at"
-    date +"****%r on %F"
+    echo "****Starting $ctr of ${#param_files[@]}, $instance_name at"
+    date +"****    %r on %F"
 
     let ctr++
 

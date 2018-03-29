@@ -13,8 +13,11 @@ $val1increment != 0 || die "Error: val1increment string or 0\n";
 $val2increment != 0 || die "Error: val2increment string or 0\n";
 
 #define begining values
-my $ctr1=1;
-my $ctr2=1;
+#https://www.effectiveperlprogramming.com/2010/10/set-default-values-with-the-defined-or-operator/
+#print "$ctr1start";
+my $ctr1=$ctr1start // 1;
+#print "$ctr1";
+my $ctr2=$ctr2start // 1;
 my $val1=$val1Base;
 my $val2=$val2Base;
 #loop until values have reached their max
@@ -30,6 +33,7 @@ while ( $val1 <= $val1Max )
 
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
+        #print "$instance_name";
         #pub file name
         my $file_name=$instance_name . "_params.txt";
         #open file for writing and print the following
