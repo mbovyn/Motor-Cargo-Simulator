@@ -92,7 +92,7 @@ our $MotorDiffusion=10;
 # 9: free motors - cargo translational diffusion to 0
 # 10: bead motors
 # 11: bead motors - deterministic (cargo trans and rot, motor diffusion set to 0)
-# 12:
+# 12: bead motors - only rotation
 # 13:
 # 14:
 # 15:
