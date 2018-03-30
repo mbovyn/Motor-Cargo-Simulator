@@ -1,10 +1,17 @@
 #!/usr/bin/perl
-
-# creates parameter files for sweeps, then launches simulations for all
-# param files in the folder
-
 #use strict;
 use warnings;
+
+# creates parameter files for sweeps, then launches either locally or on the hpc
+
+###############################################################################
+#Run mode
+#set to 'local' or 'hpc'.
+#If local, this will launch simulations for all param files in the folder
+#If hpc, will make and submit pubs
+my $launch_mode='local';
+#if hpc, also set a short hpc run name
+our $hpc_name='motors';
 
 ###############################################################################
 #define run name to label files
@@ -295,7 +302,7 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 #metaparameters
 
 #number of times to repeat
-my $repeats=1;
+our $repeats=1;
 #verbosity (0-5)
 my $verbose=0;
 #set to 1 to append to old files
@@ -307,4 +314,10 @@ my $dont_wait=0;
 #make parameter files
 do "$code_dir/makeparams.pl";
 #launch simulations for each parameter file
-exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait")
+if ($launch_mode eq 'local') {
+    exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait");
+} elsif ($launch_mode eq 'hpc') {
+    do "./make_and_submit_Pubs.pl";
+} else {
+    die "Invalid launch mode: should be 'local' or 'hpc'\n";
+}

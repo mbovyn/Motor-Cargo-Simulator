@@ -4,8 +4,6 @@
 #This script copies all files from the code directory to the working
 #directory which are necessary for compiling and running on the HPC.
 #(except for the parameter files and the ISEED)
-#
-#it chops the launch off makeandlaunch.pl
 ##################################################################
 
 #local location to copy the code from
@@ -20,7 +18,6 @@ cp $code_dir/Makefile ./code
 #copy the scripts if they don't already exist
 #first the file which genearates the parameter files
 cp -n $code_dir/tools/archetypes/makeandlaunch.pl .
-sed -i '' -e '$ d' makeandlaunch.pl
 #then the script which makes the pub files
 cp -n $code_dir/tools/hpc/make_and_submit_Pubs.pl .
 

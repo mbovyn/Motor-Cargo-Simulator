@@ -6,6 +6,8 @@
 
 #print "Writing parameter files\n";
 
+our @namelist = ();
+
 #for values in array for first parameter
 for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
     our $param1=$sweepvals[0][$ctr1];
@@ -19,6 +21,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
         #print "$instance_name";
+        push @namelist, $instance_name;
 
         #pub file name
         my $file_name=$instance_name . "_params.txt";
@@ -335,3 +338,4 @@ EOF
 
     }
 }
+#print "@namelist\n";
