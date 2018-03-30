@@ -1,38 +1,36 @@
 #!/usr/bin/perl
 
-# creates a bunch of parameter text files with different values
-#then starts the launcher shell script
-
-##############################################################################
-#Notice: you must fill out all variables between these markings:
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#fill in stuff in here!
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#other stuff can generally be ignored
-##############################################################################
+# creates parameter files for sweeps, then launches simulations for all
+# param files in the folder
 
 #use strict;
 use warnings;
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#define run name
+###############################################################################
+#define run name to label files
 our $run_name = "test";
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+###############################################################################
+#set code and working directories
 our $code_dir = glob("~/project_code/Motor_Freedom");
 our $working_dir=$ENV{'PWD'};
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#define base, max and increment values for loops
-our $val1Base = 1;
-our $val2Base = 1;
-our $val1Max = 2;
-our $val2Max = 2;
-our $val1increment = 1;
-our $val2increment = 1;
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+###############################################################################
+#define variables to loop over and the values to use in Perl arrays
+#Ex:
+#our @sweepvars = ("D_m1","N1");
+#our @sweepvals = (
+#    [.05, .5],
+#    [1, 2, 3],
+#    );
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+our @sweepvars = ("D_m1","N1");
+our @sweepvals = (
+   [.05, .5],
+   [1, 2, 3],
+   );
+
+###############################################################################
 #set parameter values
 
 our $N1=3;     our $N2=0;      #number of motors
@@ -281,10 +279,9 @@ our $Success=0; our $SS2=3;
 # */
 
 # //debugging
-our $dt_override=0; #//set this to 0 for no override, otherwise overrides set dt.  Negative to ignore dt_default
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+our $dt_override=0; #//set to positive value to override default dt.  Negative to ignore dt_default
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+###############################################################################
 #MT parameters
 #Note: for no second MT, set n_MTs to 1 above! Can just leave MT2 values here
 #//point (x y z) unit vector (x y z) R_MT
@@ -294,28 +291,9 @@ our $vx1=1; our $vy1=0; our $vz1=0; our $R_MT1=.012;
 our $px2=0; our $py2=0; our $pz2=-.012;
 our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+###############################################################################
+#metaparameters
 
-#call first part of script
-do "$code_dir/makeparams1.pl";
-
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#set params to be swept over to param1 and param2 by overwriting
-#append name to variablename to enable symbolic reference
-#if only sweeping one parameter, set first to $trash
-
-#example: sweep over number of kinesins and kinesin length
-#our $N1name="param1";
-#our $L1name="param2";
-
-our $trash="param1";
-our $L1name="param2";
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-#call second half of script
-do "$code_dir/makeparams2.pl";
-
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #number of times to repeat
 my $repeats=1;
 #verbosity (0-5)
@@ -324,6 +302,9 @@ my $verbose=0;
 my $keep_old=0;
 #set to 1 to override wait for open thread
 my $dont_wait=0;
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+###############################################################################
+#make parameter files
+do "$code_dir/makeparams.pl";
+#launch simulations for each parameter file
 exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait")

@@ -1,23 +1,27 @@
 #!/bin/bash
 
 ##################################################################
-#change this stuff!
-
-#set run name here
-run_name=angle
-
-
+#This script copies all files from the code directory to the working
+#directory which are necessary for compiling and running on the HPC.
+#(except for the parameter files and the ISEED)
+#
+#it chops the launch off makeandlaunch.pl
 ##################################################################
-#self sufficient below here
 
+#local location to copy the code from
 code_dir=~/project_code/Motor_Freedom
 working_dir=$("pwd")
 
 #copy code to current folder
-cp $code_dir/*.c .
-cp $code_dir/*.h .
-cp $code_dir/Makefile .
-#copy the script if it doesn't already exist
+mkdir code
+cp $code_dir/*.c ./code
+cp $code_dir/*.h ./code
+cp $code_dir/Makefile ./code
+#copy the scripts if they don't already exist
+#first the file which genearates the parameter files
+cp -n $code_dir/tools/archetypes/makeandlaunch.pl .
+sed -i '' -e '$ d' makeandlaunch.pl
+#then the script which makes the pub files
 cp -n $code_dir/tools/hpc/make_and_submit_Pubs.pl .
 
 #warn if missing necessary files

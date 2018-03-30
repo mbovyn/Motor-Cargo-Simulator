@@ -2,43 +2,29 @@
 #use strict;
 #use warnings;
 
-# make parameter files ######################################################
+# makes parameter files ######################################################
 
 #print "Writing parameter files\n";
 
-#check if counter values are set (otherwise loop is infinite)
-#$val1Max != 0 || die "Error: val1max string or 0\n";
-#$val2Max != 0 || die "Error: val2max string or 0\n";
-$val1increment != 0 || die "Error: val1increment string or 0\n";
-$val2increment != 0 || die "Error: val2increment string or 0\n";
+#for values in array for first parameter
+for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
+    our $param1=$sweepvals[0][$ctr1];
+    #print "param1 is $param1\n";
 
-#define begining values
-#https://www.effectiveperlprogramming.com/2010/10/set-default-values-with-the-defined-or-operator/
-#print "$ctr1start";
-my $ctr1=$ctr1start // 1;
-#print "$ctr1";
-my $ctr2=$ctr2start // 1;
-my $val1=$val1Base;
-my $val2=$val2Base;
-#loop until values have reached their max
-while ( $val1 <= $val1Max )
-{
-
-    our $param1 = $val1;
-
-    while ( $val2 <= $val2Max )
-    {
-
-        our $param2 = $val2;
+    #for values in array for second parameter
+    for my $ctr2 ( 0 .. $#{ $sweepvals[1] } ) {
+        our $param2=$sweepvals[1][$ctr2];
+        #print "param2 is $param2\n";
 
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
         #print "$instance_name";
+
         #pub file name
         my $file_name=$instance_name . "_params.txt";
-        #open file for writing and print the following
-        #print "$localpath\n";
 
+        #if change the cargo center location if the cargo-MT distance is
+        #supposed to stay set for changing R
         if($setCargoMT_dist>=0) {
             if($Rname eq "param1") {
                 print "triggered, cz=$cz";
@@ -50,6 +36,8 @@ while ( $val1 <= $val1Max )
                 #print " after, cz=$cz\n";
             }
         }
+
+        #open file for writing and print the following
         open (FOOD, ">$file_name" );
         print FOOD << "EOF";
 //
@@ -328,9 +316,9 @@ checkbit2 576
 
 EOF
         close FOOD;
+
         #MT params file
         my $file_name=$instance_name . "_MT_params.txt";
-        #open file for writing and print the following
         open (FOOD, ">$file_name" );
         print FOOD << "EOF";
 //
@@ -345,17 +333,5 @@ EOF
         close FOOD;
         #done writing
 
-        #increment inner loop values
-        $val2 += $val2increment;
-        $ctr2++;
-        $ctr2 < 100 || die "Woah, made more than 100 files\n";
-
     }
-    #reset loop 2 values
-    $val2=$val2Base;
-    $ctr2=1;
-    #increment loop 1 values
-    $val1 += $val1increment;
-    $ctr1++;
-    $ctr1 < 100 || die "Woah, made more than 100 files\n";
 }
