@@ -7,17 +7,23 @@ use warnings;
 
 #check if all necessary files exist
 #for some reason, these don't write out their messages
-if (! -f "ISEED"){die "Error: ISEED missing, stopped";}
-if (! -f "motors.x"){die "Error: Execuable missing, stopped";}
+if (! -f "ISEED"){
+    print "No ISEED\n";
+    die "Error: ISEED missing, stopped";
+}
+if (! -f "motors.x"){
+    print "No executable\n";
+    die "Error: Executable missing, stopped";
+}
 
-#loop until values have reached their max
+#loop over instance names, generated in makeparams2.pl
 foreach $instance_name (@namelist) {
 
     #pub file name
     my $file_name=$instance_name . ".pub";
 
     #hpc run name
-    #get suffix numbers from regex
+    #get suffix numbers from regex on instance name
     $s = $instance_name;
     $s =~ /$run_name([0-9.]+)/;
     my $hpc_instance_name = $hpc_name . $1;
