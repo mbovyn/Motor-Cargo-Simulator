@@ -2,7 +2,7 @@
 
 #copy the current version of the executable into the local folder
 cd "$working_dir"
-cp $code_dir/motors.x .
+cp -p $code_dir/motors.x .
 
 #clean up existing files
 instance_name=$run_name
