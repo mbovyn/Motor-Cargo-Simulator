@@ -582,9 +582,9 @@ void getInputParams( void )
     //set to satisfy calcuation in anchor diffusion time step.nb
     //knocked down by a factor of 10 because motors were still going too far
     if(N[0]>0){
-        dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.005/R,1/3.)),2)/72;
     } else if(N[1]>0 && D_m[1]>D_m[0]){
-        dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.01/R,1/3.)),2)/72;
+        dt_max_Diffusion=.1*(pow(R,2)/D_m[1])*pow(tan(pow(3*.005/R,1/3.)),2)/72;
     } else {
         dt_max_Diffusion=dt_default;
     }
