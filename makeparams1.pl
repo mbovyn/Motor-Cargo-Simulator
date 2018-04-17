@@ -1,6 +1,7 @@
 #!/usr/bin/perl
+use warnings;
 
-#print "Setting default names\n";
+print "--->Setting default names\n";
 
 #variable business using symbolic reference
 #http://www.perlmonks.org/?node_id=724856

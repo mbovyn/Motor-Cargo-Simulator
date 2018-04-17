@@ -4,7 +4,7 @@
 
 # makes parameter files ######################################################
 
-#print "Writing parameter files\n";
+print "--->Writing parameter files\n";
 
 our @namelist = ();
 
@@ -20,7 +20,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
 
         #specific name for each instance that will run
         my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
-        #print "$instance_name";
+        #print "$instance_name\n";
         push @namelist, $instance_name;
 
         #pub file name
@@ -321,8 +321,8 @@ EOF
         close FOOD;
 
         #MT params file
-        my $file_name=$instance_name . "_MT_params.txt";
-        open (FOOD, ">$file_name" );
+        my $MT_file_name=$instance_name . "_MT_params.txt";
+        open (FOOD, ">$MT_file_name" );
         print FOOD << "EOF";
 //
 // params for MTs

@@ -12,6 +12,7 @@ use warnings;
 my $launch_mode='local';
 #if hpc, also set a short hpc run name
 our $hpc_name='motors';
+our $folder_name='motors_sweep';
 
 ###############################################################################
 #define run name to label files
@@ -310,6 +311,8 @@ my $keep_old=0;
 #set to 1 to override wait for open thread
 my $dont_wait=0;
 
+our $setCargoMT_dist=0;
+
 ###############################################################################
 #make parameter files
 do "$code_dir/makeparams.pl";
@@ -317,7 +320,7 @@ do "$code_dir/makeparams.pl";
 if ($launch_mode eq 'local') {
     exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait");
 } elsif ($launch_mode eq 'hpc') {
-    do "./make_and_submit_Pubs.pl";
+    do "$code_dir/tools/hpc/make_and_submit_Pubs.pl";
 } else {
     die "Invalid launch mode: should be 'local' or 'hpc'\n";
 }

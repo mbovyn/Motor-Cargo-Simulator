@@ -18,16 +18,8 @@ cp $code_dir/Makefile ./code
 #copy the scripts if they don't already exist
 #first the file which genearates the parameter files
 cp -n $code_dir/tools/archetypes/makeandlaunch.pl .
-#then the script which makes the pub files
-cp -n $code_dir/tools/hpc/make_and_submit_Pubs.pl .
 
-#warn if missing necessary files
-if [ ! -f "$run_name"_params.txt ] ; then
-    echo "Missing parameter file!"
-fi
-if [ ! -f "$run_name"_MT_params.txt ] ; then
-    echo "Missing MT parameter file!"
-fi
+#warn if missing necessary ISEED file
 if [ ! -f ISEED ] ; then
     echo "Missing ISEED!"
 fi

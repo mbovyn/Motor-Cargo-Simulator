@@ -9,11 +9,6 @@ use warnings;
 #for some reason, these don't write out their messages
 if (! -f "ISEED"){
     print "No ISEED\n";
-    die "Error: ISEED missing, stopped";
-}
-if (! -f "motors.x"){
-    print "No executable\n";
-    die "Error: Executable missing, stopped";
 }
 
 #loop over instance names, generated in makeparams2.pl
@@ -50,7 +45,7 @@ foreach $instance_name (@namelist) {
 #\$ -e logs/$instance_name.err
 #\$ -o logs/$instance_name.log
 
-cd /pub/mbovyn/$run_name
+cd /pub/mbovyn/$folder_name
 
 echo Running on host `hostname`
 echo Time is `date`
@@ -67,5 +62,5 @@ EOF
     #done writing
 
     #submit job
-    system "qsub pubs/$file_name";
+    #system "qsub pubs/$file_name";
 }
