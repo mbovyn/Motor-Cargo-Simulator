@@ -12,11 +12,10 @@ From scratch. Locally:
 To the HPC
 
 * SSH in: ```ssh mbovyn@hpc.oit.uci.edu```
-* navigate to correct folder: ```cd /pub/mbovyn```
-* cd into code folder and compile correct version
-* copy executable up one level ```cp motors.x ..```
+* navigate to correct folder: ```cd /pub/mbovyn/folder_you_transferred```
+* ```cd code``` and ```make free5``` or whatever the correct version version to compile is
 * return to folder ```cd ..```
-* launch ```qsub pubs/*```
+* launch ```./submit_pubs.sh```
 
 Monitoring
 
