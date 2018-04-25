@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use warnings;
 
-print "--->Setting default names\n";
+print "--->Setting default names (makeparams1.pl)\n";
 
 #variable business using symbolic reference
 #http://www.perlmonks.org/?node_id=724856
@@ -29,3 +29,5 @@ our $etaname="eta";
 our $kcMTname="kcMT";
 
 our $MT_anglename="MT_angle";
+
+print "--->Done setting default names (makeparams1.pl)\n";

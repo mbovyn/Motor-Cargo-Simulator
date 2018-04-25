@@ -4,7 +4,7 @@
 
 # makes parameter files ######################################################
 
-print "--->Writing parameter files\n";
+print "--->Writing parameter files (makeparams2.pl)\n";
 
 our @namelist = ();
 
@@ -339,3 +339,4 @@ EOF
     }
 }
 #print "@namelist\n";
+print "--->Done writing parameter files (makeparams2.pl)\n";
