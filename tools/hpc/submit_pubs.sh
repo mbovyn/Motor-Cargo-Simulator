@@ -8,5 +8,5 @@ fi
 cp code/motors.x .
 
 for filename in pubs/*.pub; do
-    qsub filename
+    qsub $filename
 done

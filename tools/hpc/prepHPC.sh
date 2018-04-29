@@ -15,8 +15,9 @@ mkdir code
 cp $code_dir/*.c ./code
 cp $code_dir/*.h ./code
 cp $code_dir/Makefile ./code
-#copy the scripts if they don't already exist
-#first the file which genearates the parameter files
+#copy the pub submitter
+cp $code_dir/tools/hpc/submit_pubs.sh .
+#copy the param file generator if it don't already exist
 cp -n $code_dir/tools/archetypes/makeandlaunch.pl .
 
 #warn if missing necessary ISEED file
@@ -24,7 +25,7 @@ if [ ! -f ISEED ] ; then
     echo "Missing ISEED!"
 fi
 
-#make the folders
+#make the folders to hold the pubs and logs
 mkdir pubs
 mkdir logs
 

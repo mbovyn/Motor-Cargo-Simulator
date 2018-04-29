@@ -8,6 +8,8 @@ From scratch. Locally:
 * run makeandlaunch.pl - this will create parameter files and pub files
 * Add an ISEED
 * copy that folder onto the hpc via filezilla or whatever
+    * sftp://mbovyn@hpc.oit.uci.edu
+    * want /pub/mbovyn instead of default home of /data/users/mbovyn
 
 To the HPC
 
