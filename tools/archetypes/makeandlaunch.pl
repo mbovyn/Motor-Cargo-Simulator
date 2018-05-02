@@ -57,9 +57,9 @@ our $s1=.008;   our $s2= -.008; #step size
 
 our $D_m1=0;    our $D_m2=3;    #motor diffusion constant
 
-our $cx=-1; our $cy=0; our $cz=-.5; #cargo center (microns)
+our $cx=0; our $cy=0; our $cz=.5; #cargo center (microns)
 our $R=.5;                          #cargo radius
-our $eta=.00089;                    #surrounding fluid viscosity
+our $eta=.0089;                    #surrounding fluid viscosity
 
 our $n_MTs=1;
 our $kcMT=40000;
@@ -68,7 +68,7 @@ our $kcMT=40000;
 
 #//Motor Location
 
-our $InitialLocations=5; our $IL2=0; our $IL3=0;
+our $InitialLocations=8; our $IL2=0; our $IL3=0;
 # /*
 # 1:
 # 2: Uniform Random on the surface of the sphere
@@ -85,7 +85,7 @@ our $InitialLocations=5; our $IL2=0; our $IL3=0;
 # third parameter used to pass in angle (degrees)
 #  */
 
-our $MotorDiffusion=10;
+our $MotorDiffusion=4;
 # /*
 # 1: no drag - Diffuse all motors by legacy function
 # 2: no drag - Only diffuse non-attached motors by legacy function
@@ -120,7 +120,7 @@ our $InitialBinding=2; our $IB2=0;
 # 10:
 #  */
 
-our $Binding=5; our $B2=.5;
+our $Binding=1; our $B2=.5;
 # /*
 # 1: set given binding rate if in range
 # 2: motors don’t bind
@@ -148,7 +148,7 @@ our $Unbinding=1;
 # 10:
 #  */
 
-our $Stepping=5; our $S2=999999999;
+our $Stepping=2; our $S2=999999999;
 # /*
 # 1: Step at rate determined by unloaded velocity
 # 2: Stepping rate depends on force (Ambarish)
@@ -216,7 +216,7 @@ our $CargoBehavior=1;
 # 10:
 #  */
 
-our $ExternalForce=2; our $EF2=0; our $EF3=0; our $EF4=-.005;
+our $ExternalForce=1; our $EF2=0; our $EF3=0; our $EF4=-.005;
 # /*
 # 1: no external forces
 # 2: external force given by next three values (x y z)
@@ -269,7 +269,7 @@ our $StopOnDistance=0;              #//0 no stop, otherwise distance in microns
 our $StopBelowThetaC=0; our $SB=-1; #//2nd value elevation radians -pi/2 to pi/2
 our $multiMT_assay=0;               #//1 for switch, 2 for ToW
 our $StopOnBeadDissociation=0;      #//stop if bead is > 500nm from all MTs
-our $StopOnCargoBinding=1;        #//stop when any motor binds
+our $StopOnCargoBinding=0;        #//stop when any motor binds
 
 # //Success Conditions
 our $Success=0; our $SS2=3;
@@ -293,7 +293,7 @@ our $dt_override=0; #//set to positive value to override default dt.  Negative t
 #MT parameters
 #Note: for no second MT, set n_MTs to 1 above! Can just leave MT2 values here
 #//point (x y z) unit vector (x y z) R_MT
-our $px1=0; our $py1=0; our $pz1=.012;
+our $px1=0; our $py1=0; our $pz1=-.012;
 our $vx1=1; our $vy1=0; our $vz1=0; our $R_MT1=.012;
 
 our $px2=0; our $py2=0; our $pz2=-.012;
