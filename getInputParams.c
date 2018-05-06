@@ -600,6 +600,14 @@ void getInputParams( void )
     if(verboseTF>2){
         printf("    Max time step for rotation is %g\n",dt_max_rotation);
     }
+    //Manually found that even 20nm diameter cargos are ok at 5e-8
+    if(dt_max_rotation<5e-8){
+        dt_max_rotation=5e-8;
+        if(verboseTF>1){
+            printf("     Rotation dt bottomed out, setting to %g\n",dt_max_rotation);
+        }
+    }
+
 
     //the default max is the smallest of the restrictions, or the base time step
     if(dt_override<0){
