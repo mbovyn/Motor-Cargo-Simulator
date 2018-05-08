@@ -26,7 +26,7 @@ if(scalar(@sweepvars)<1){
     our $name1="none1name";
 } else {
     our $name1=$sweepvars[0] . "name";
-    print "$name1\n";
+    #print "$name1\n";
 }
 
 if(scalar(@sweepvars)<2){

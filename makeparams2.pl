@@ -18,8 +18,10 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
         our $param2=$sweepvals[1][$ctr2];
         #print "param2 is $param2\n";
 
-        #specific name for each instance that will run
-        my $instance_name=$run_name . "." . $ctr1 . "." . $ctr2;
+        #specific name for each instance that will run]
+        my $id1=$ctr1+$ctr1start;
+        my $id2=$ctr2+$ctr2start;
+        my $instance_name=$run_name . "." . $id1 . "." . $id2;
         #print "$instance_name\n";
         push @namelist, $instance_name;
 
@@ -29,15 +31,19 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
         #if change the cargo center location if the cargo-MT distance is
         #supposed to stay set for changing R
         if($setCargoMT_dist>=0) {
-            if($Rname eq "param1") {
-                print "triggered, cz=$cz";
-                $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param1;
-                print " after, cz=$cz\n";
-            } elsif($Rname eq "param2") {
-                #print "triggered, cz=$cz";
-                $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param2;
-                #print " after, cz=$cz\n";
-            }
+            # if($Rname eq "param1") {
+            #     print "triggered, cz=$cz";
+            #     $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param1;
+            #     print " after, cz=$cz\n";
+            # } elsif($Rname eq "param2") {
+            #     #print "triggered, cz=$cz";
+            #     $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $param2;
+            #     #print " after, cz=$cz\n";
+            # } else {
+                print "!!!!moving center from cz=$cz";
+                $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $$Rname;
+                print " to cz=$cz\n";
+            # }
         }
 
         #open file for writing and print the following

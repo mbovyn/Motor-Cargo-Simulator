@@ -310,8 +310,11 @@ my $verbose=0;
 my $keep_old=0;
 #set to 1 to override wait for open thread
 my $dont_wait=0;
-
-our $setCargoMT_dist=0;
+#set to anything>=0 to override z postion of cargo
+our $setCargoMT_dist=-1;
+#set these to start numbering at something other than 0
+#our $ctr1start=0;
+#our $ctr2start=0;
 
 ###############################################################################
 #make parameter files
