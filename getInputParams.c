@@ -270,6 +270,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     if(isnan(Ftrap[2])){
         sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
+        //printf("\n\n\nFtrap[0] is %lf\n\n\n",Ftrap[0]);
     }
     else{//if not NAN, the value was set in command line so trash it
         sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&trash);
