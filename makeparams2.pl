@@ -246,7 +246,7 @@ CargoBehavior $CargoBehavior
 10:
  */
 
-ExternalForce $ExternalForce $EF2 $EF3 $EF4
+ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname
 /*
 1: no external forces
 2: external force given by next three values (x y z)

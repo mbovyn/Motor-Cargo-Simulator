@@ -216,7 +216,7 @@ our $CargoBehavior=1;
 # 10:
 #  */
 
-our $ExternalForce=1; our $EF2=0; our $EF3=0; our $EF4=-.005;
+our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=-.005;
 # /*
 # 1: no external forces
 # 2: external force given by next three values (x y z)
