@@ -9,7 +9,14 @@ use warnings;
 #set to 'local' or 'hpc'.
 #If local, this will launch simulations for all param files in the folder
 #If hpc, will make and submit pubs
-my $launch_mode='local';
+our $launch_mode='local';
+
+#if local, set compilation options
+#set compile to yes to compile and copy executable to local folder
+our $compile='yes';
+#set compile keyword to correct one for number of motors
+our $compile_keyword='free5';
+
 #if hpc, also set a short hpc run name
 our $hpc_name='motors';
 our $folder_name='motors_sweep';
@@ -305,11 +312,11 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 #number of times to repeat
 our $repeats=1;
 #verbosity (0-5)
-my $verbose=0;
+our $verbose=0;
 #set to 1 to append to old files
-my $keep_old=0;
+our $keep_old=0;
 #set to 1 to override wait for open thread
-my $dont_wait=0;
+our $dont_wait=0;
 #set to anything>=0 to override z postion of cargo
 our $setCargoMT_dist=-1;
 #set these to start numbering at something other than 0
@@ -317,13 +324,5 @@ our $setCargoMT_dist=-1;
 #our $ctr2start=0;
 
 ###############################################################################
-#make parameter files
-do "$code_dir/makeparams.pl";
-#launch simulations for each parameter file
-if ($launch_mode eq 'local') {
-    exec("$code_dir/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait");
-} elsif ($launch_mode eq 'hpc') {
-    do "$code_dir/tools/hpc/make_and_submit_Pubs.pl";
-} else {
-    die "Invalid launch mode: should be 'local' or 'hpc'\n";
-}
+#launch
+do "$code_dir/launching_scripts/launch.pl";

@@ -5,8 +5,7 @@ use warnings;
 
 # make pubs ###########################################################
 
-#check if all necessary files exist
-#for some reason, these don't write out their messages
+#check ISEED exists
 if (! -f "ISEED"){
     print "No ISEED\n";
 }
@@ -60,7 +59,4 @@ echo Finished at `date`
 EOF
     close FOOD;
     #done writing
-
-    #submit job
-    #system "qsub pubs/$file_name";
 }

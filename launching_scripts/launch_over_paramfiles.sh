@@ -13,20 +13,6 @@ verbose=$5
 keep_old=$6
 dont_wait=$7
 
-# generate and save a file that tells the hash of the git commit used to generate the data
-cd $code_dir
-git log -1 --pretty=format:%H > "${run_name}_CommitUsedHash.txt"
-mv "${run_name}_CommitUsedHash.txt" "$working_dir"
-
-cd "$working_dir"
-
-#copy the current version of the executable into the local folder
-cp $code_dir/motors.x .
-#also copy the archetypes ISEED in if one doesn't exist here
-if [ ! -f ISEED ] ; then
-    cp "$code_dir/tools/archetypes/ISEED" .
-fi
-
 #number of processes we want to run at once
 numCores=4
 
@@ -61,7 +47,7 @@ do
     #delete old files
     if [ "$keep_old" -ne "1" ]
     then
-        . $code_dir/clean_files.sh
+        . $code_dir/launching_scripts/clean_files.sh
     else
         echo "****Appending to old files"
     fi
