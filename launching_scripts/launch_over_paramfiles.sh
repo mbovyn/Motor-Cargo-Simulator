@@ -16,11 +16,7 @@ dont_wait=$7
 #number of processes we want to run at once
 numCores=4
 
-#make an array of all the parameter files
-param_files_unsorted=( $run_name*_MT_params.txt )
-IFS=$'\n' param_files=($(sort -t. -k2,2 -k3,3 -n <<<"${param_files_unsorted[*]}"))
-unset IFS
-#echo "${param_files[@]}"
+. $code_dir/launching_scripts/get_param_file_list.sh
 
 echo "****Running ${#param_files[@]} instances"
 date +"****    started at: %r on %F"
@@ -42,14 +38,6 @@ do
         	sleep 5s
             numInstances=$( pgrep motors | wc -l )
         done
-    fi
-
-    #delete old files
-    if [ "$keep_old" -ne "1" ]
-    then
-        . $code_dir/launching_scripts/clean_files.sh
-    else
-        echo "****Appending to old files"
     fi
 
     #run executable

@@ -1,8 +1,13 @@
 #!/usr/bin/perl
 
+#use strict;
+use warnings;
+
+#clean out old files
+system("$code_dir/launching_scripts/clean_files.sh $code_dir $working_dir $keep_old");
+
 #make parameter files
 do "$code_dir/launching_scripts/makeparams.pl";
-
 
 if ($launch_mode eq 'local') { #launch simulations
     if ($compile eq 'yes') {
