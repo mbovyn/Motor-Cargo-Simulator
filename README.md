@@ -4,7 +4,7 @@ This code performs simulation of a mathematical model of the motion of
 intracellular cargos driven by molecular motors.
 
 Contained herein:
-* simulation code: Code which performs the simulation, written in C.
+* simulation_code: Code which performs the simulation, written in C.
 * tools: Mathematica code and Bash scripts which generate C code used in the
 simulation
 * launching_scripts: Bash and Perl scripts which are useful for feeding the
