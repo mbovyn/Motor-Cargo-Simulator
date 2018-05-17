@@ -55,6 +55,8 @@ disp_theta_c=0;
 2: outside of all points to be drawn
 3: tighter bounds than 2, motor circles may be cut off
 4: follow cargo center
+5: don't set xends, left to be set here
+6: in x, follow cargo. In y and z, same as 3
 %}
 plot_box=2;
 

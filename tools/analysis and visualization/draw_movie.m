@@ -140,6 +140,11 @@ switch plot_box
         yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
         zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
 
+    case 6 %only follow in x
+
+        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
+        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
+
     otherwise
 
         error('Unusable key for plot bounds specified in plot_box')
@@ -464,6 +469,14 @@ for t=loop_ts
         xends=[center(t,1)-(R(1)+max_length) center(t,1)+R(1)+max_length];
         yends=[center(t,2)-(R(1)+max_length) center(t,2)+R(1)+max_length];
         zends=[center(t,3)-(R(1)+max_length+.02) center(t,3)+R(1)+max_length+.02];
+
+    elseif plot_box==6
+
+        %thing1=[ max([t-50 1]) min([t+50 length(ts)]) ]
+        xends=[mean(center(max([t-50 1]):min([t+50 length(t_arr)]),1))-(R(1)+max_length) ...
+            mean(center(max([t-50 1]):min([t+50 length(t_arr)]),1))+R(1)+max_length];
+
+        %xends
 
     end
 
