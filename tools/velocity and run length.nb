@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     29768,        675]
+NotebookDataLength[     29767,        675]
 NotebookOptionsPosition[     27655,        632]
-NotebookOutlinePosition[     28010,        648]
-CellTagsIndexPosition[     27967,        645]
+NotebookOutlinePosition[     28009,        648]
+CellTagsIndexPosition[     27966,        645]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -630,8 +630,8 @@ Cell["So, it\[CloseCurlyQuote]s about exponential", "Text",
 6fe127616aa7"]
 }, Open  ]]
 },
-WindowSize->{808, 911},
-WindowMargins->{{148, Automatic}, {Automatic, 66}},
+WindowSize->{825, 755},
+WindowMargins->{{174, Automatic}, {Automatic, 0}},
 FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
 2018)",
 StyleDefinitions->"Default.nb"
@@ -680,6 +680,4 @@ Cell[27455, 626, 184, 3, 35, "Text",ExpressionUUID->"bc6c6763-be4b-4df6-b2df-6fe
 }
 ]
 *)
-
-(* End of internal cache information *)
 
