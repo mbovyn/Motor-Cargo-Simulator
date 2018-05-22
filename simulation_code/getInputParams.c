@@ -52,40 +52,22 @@ void getInputParams( void )
     //motor parameters
 
     fgets(tmpString, 100, fParams);
-    //can pass in N[0] from call
-    //value is first set to -1. If this isn't changed, read in from file
-    if(N[0]<0){
-        sscanf(tmpString,"%s %d %d", blah,&N[0], &N[1]);
-    }else{//the value was set in command line - trash the value from the file
-        sscanf(tmpString,"%s %lf %d", blah,&trash, &N[1]);
-    }
+
+    //Number of motors
+    sscanf(tmpString,"%s %d %d", blah,&N[0], &N[1]);
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     //Muller
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&F_s[0], &F_s[1]);
     fgets(tmpString, 100, fParams);
-    if(isnan(F_d[0])){
-        sscanf(tmpString,"%s %lf %lf", blah,&F_d[0], &F_d[1]);
-    }else{
-        sscanf(tmpString,"%s %lf %lf", blah,&trash, &F_d[1]);
-    }
+
+    sscanf(tmpString,"%s %lf %lf", blah,&F_d[0], &F_d[1]);
     fgets(tmpString, 100, fParams);
-    //Can input eps_0[0] from command line
-    //only read if its still set to default nan value
-    if(isnan(eps_0[0])){
-        sscanf(tmpString,"%s %lf %lf", blah,&eps_0[0], &eps_0[1]);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf %lf", blah,&trash, &eps_0[1]);
-    }
+    //Base unbinding rate
+    sscanf(tmpString,"%s %lf %lf", blah,&eps_0[0], &eps_0[1]);
     fgets(tmpString, 100, fParams);
-    if(isnan(pi_0[0])){
-        sscanf(tmpString,"%s %lf %lf", blah,&pi_0[0], &pi_0[1]);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf %lf", blah,&trash, &pi_0[1]);
-    }
+    sscanf(tmpString,"%s %lf %lf", blah,&pi_0[0], &pi_0[1]);
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&v_f[0], &v_f[1]);
     fgets(tmpString, 100, fParams);
@@ -102,11 +84,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&L[0], &L[1]);
     fgets(tmpString, 100, fParams);
-    if(isnan(k_m[0])){
-        sscanf(tmpString,"%s %lf %lf", blah,&k_m[0], &k_m[1]);
-    }else{
-        sscanf(tmpString,"%s %lf %lf", blah,&trash, &k_m[1]);
-    }
+    sscanf(tmpString,"%s %lf %lf", blah,&k_m[0], &k_m[1]);
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf %lf", blah,&step_size[0], &step_size[1]);
     fgets(tmpString, 100, fParams);
@@ -115,12 +93,7 @@ void getInputParams( void )
     fgets(tmpString, 100, fParams);
     //Can input D_m[0] from command line
     //only read if its still set to default nan value
-    if(isnan(D_m[0])){
-        sscanf(tmpString,"%s %lf %lf", blah,&D_m[0], &D_m[1]);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf %lf", blah,&trash, &D_m[1]);
-    }
+    sscanf(tmpString,"%s %lf %lf", blah,&D_m[0], &D_m[1]);
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
@@ -132,19 +105,10 @@ void getInputParams( void )
         &center_initial[0], &center_initial[1],&center_initial[2]);
 
     fgets(tmpString, 100, fParams);
-    if(isnan(R)){
-        sscanf(tmpString,"%s %lf", blah,&R);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %lf", blah,&trash);
-    }
+    sscanf(tmpString,"%s %lf", blah,&R);
 
     fgets(tmpString, 100, fParams);
-    if(isnan(eta)){
-        sscanf(tmpString,"%s %lf", blah,&eta);
-    }else{
-        sscanf(tmpString,"%s %lf", blah,&trash);
-    }
+    sscanf(tmpString,"%s %lf", blah,&eta);
 
     fgets(tmpString, 100, fParams);
     fgets(tmpString, 100, fParams);
@@ -268,16 +232,11 @@ void getInputParams( void )
     //External Force
 
     fgets(tmpString, 100, fParams);
-    if(isnan(Ftrap[2])){
-        sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
-        //printf("\n\n\nFtrap[0] is %lf\n\n\n",Ftrap[0]);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&trash);
-    }
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
+    //printf("\n\n\nFtrap[0] is %lf\n\n\n",Ftrap[0]);
 
     for(n_lines=1;n_lines<=6;n_lines++)
-      fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     //ExternalTorque
 
@@ -285,7 +244,7 @@ void getInputParams( void )
     sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_torque,&TorqeExt[0],&TorqeExt[1],&TorqeExt[2]);
 
     for(n_lines=1;n_lines<=6;n_lines++)
-      fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     //Use Steric
 
@@ -293,7 +252,7 @@ void getInputParams( void )
     sscanf(tmpString,"%s %d",blah,&UseSteric);
 
     for(n_lines=1;n_lines<=9;n_lines++)
-    fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     //ReturnDetails
 
@@ -301,7 +260,7 @@ void getInputParams( void )
     sscanf(tmpString,"%s %d %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega);
 
     for(n_lines=1;n_lines<=12;n_lines++)
-      fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     //ReturnFinalState
 
@@ -309,7 +268,7 @@ void getInputParams( void )
     sscanf(tmpString,"%s %d",blah,&ReturnFinalState);
 
     for(n_lines=1;n_lines<=6;n_lines++)
-      fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     //End conditions
     if(verboseTF>1){
@@ -359,13 +318,7 @@ void getInputParams( void )
     }
 
     fgets(tmpString, 100, fParams);
-    if(isnan(theta_c)){
-        sscanf(tmpString,"%s %d %lf",blah,&StopBelowThetaC,&theta_c);
-    }
-    else{//if not NAN, the value was set in command line so trash it
-        sscanf(tmpString,"%s %d %lf", blah,&StopBelowThetaC,&trash);
-        //StopBelowThetaC=1;
-    }
+    sscanf(tmpString,"%s %d %lf",blah,&StopBelowThetaC,&theta_c);
 
     if(StopBelowThetaC && verboseTF>1){
         printf("     Motor below critical angle of %g\n",theta_c);
@@ -398,7 +351,7 @@ void getInputParams( void )
     //debugging
 
     for(n_lines=1;n_lines<=15;n_lines++)
-      fgets(tmpString, 100, fParams);
+        fgets(tmpString, 100, fParams);
 
     sscanf(tmpString,"%s %lf",blah,&dt_override);
 

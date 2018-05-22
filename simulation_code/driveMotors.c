@@ -132,68 +132,6 @@ int main( int argc, char *argv[] )
         RAND;
     }
 
-    //can bring params in from the command line here
-    //if they are not input they are read from the parameter file
-    D_m[0]=NAN;
-    if(argc>5){
-        D_m[0]=atof(argv[5]);
-    }
-
-    eps_0[0]=NAN;
-    if(argc>6){
-        eps_0[0]=atof(argv[6]);
-    }
-
-    pi_0[0]=NAN;
-    if(argc>7){
-        pi_0[0]=atof(argv[7]);
-    }
-
-    z_MT_offset=NAN;
-    if(argc>8){
-        z_MT_offset=atof(argv[8]);
-    }
-
-    R=NAN;
-    if(argc>9){
-        R=atof(argv[9]);
-    }
-
-    N[0]=-1;
-    if(argc>10){
-        N[0]=atoi(argv[10]);
-    }
-
-    Ftrap[2]=NAN;
-    if(argc>11){
-        Ftrap[2]=atof(argv[11]);
-    }
-
-    theta_c=NAN;
-    if(argc>12){
-        theta_c=atof(argv[12]);
-    }
-
-    MT_angle=NAN;
-    if(argc>13){
-        MT_angle=atof(argv[13]);
-    }
-
-    F_d[0]=NAN;
-    if(argc>14){
-        F_d[0]=atof(argv[14]);
-    }
-
-    eta=NAN;
-    if(argc>15){
-        eta=atof(argv[15]);
-    }
-
-    k_m[0]=NAN;
-    if(argc>16){
-        k_m[0]=atof(argv[16]);
-    }
-
     // load parameters
 
     if (verboseTF>2)
