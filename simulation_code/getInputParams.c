@@ -10,7 +10,7 @@ void getInputParams( void )
     //fParams initialized in motors.h
 
     //open the MT file
-    strcpy(MTparamFileName,paramFileName);
+    strcpy(MTparamFileName,runName);
     strcat(MTparamFileName,"_MT_params");
     strcat(MTparamFileName,".txt");
     if( access( MTparamFileName, F_OK ) != -1 ) {
@@ -24,6 +24,7 @@ void getInputParams( void )
 
 
     //open the param file
+    strcpy(paramFileName,runName);
     strcat(paramFileName,"_params");
     strcat(paramFileName,".txt");
     if( access( paramFileName, F_OK ) != -1 ) {

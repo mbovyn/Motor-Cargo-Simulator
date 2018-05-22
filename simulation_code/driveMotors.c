@@ -76,18 +76,14 @@
 // arguments: parameter_file_name run_name repeats verboseness_number D eps_0 pi_0
 int main( int argc, char *argv[] )
 {
-    // parameter file name
+    // runName string, label of parameter and output files
     if(argv[1])
-        strcpy(paramFileName, argv[1]);
-
-    // runName string, to label output files
-    if(argv[2])
-        strcpy(runName, argv[2]);
+        strcpy(runName, argv[1]);
 
     //number of times to repeat simulation - default to 1
     repeats=1;
-    if(argv[3]){
-        repeats=atoi(argv[3]);
+    if(argv[2]){
+        repeats=atoi(argv[2]);
         //printf("read in repeats as %s\n",argv[3]);
     }
 
@@ -98,12 +94,12 @@ int main( int argc, char *argv[] )
     //        will also output lines to follow what's going on
     // if =4, will output every time step
     // if =5, will output every time certain functions are called
-    verboseTF = 0;
-    if(argv[4]) // Verbose Output
-        verboseTF = atoi(argv[4]);
+    verboseTF = 1;
+    if(argv[3]) // Verbose Output
+        verboseTF = atoi(argv[3]);
 
-    if(verboseTF>1){
-        printf("Run name:      %s\nInstance name: %s\n",paramFileName,runName);
+    if(verboseTF>0){
+        printf("Run name:      %s\n",runName);
     }
 
     if (verboseTF>2){
