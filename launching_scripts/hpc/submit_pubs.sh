@@ -5,7 +5,12 @@ if [ ! -f ISEED ] ; then
     exit 1
 fi
 
-cp code/motors.x .
+if [ ! -f simulation_code/motors.x ] ; then
+    echo "Missing executable!"
+    exit 1
+fi
+
+cp simulation_code/motors.x .
 
 for filename in pubs/*.pub; do
     qsub $filename
