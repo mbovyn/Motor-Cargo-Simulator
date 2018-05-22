@@ -13,7 +13,7 @@ our $launch_mode='local';
 
 #if local, set compilation options
 #set compile to yes to compile and copy executable to local folder
-our $compile='yes';
+our $compile=0;
 #set compile keyword to correct one for number of motors
 our $compile_keyword='free5';
 

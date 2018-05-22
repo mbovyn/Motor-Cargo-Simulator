@@ -10,9 +10,7 @@ system("$code_dir/launching_scripts/clean_files.sh $code_dir $working_dir $keep_
 do "$code_dir/launching_scripts/makeparams.pl";
 
 if ($launch_mode eq 'local') { #launch simulations
-    if ($compile eq 'yes') {
-        system("$code_dir/launching_scripts/make_and_get_executable.sh $code_dir $working_dir $compile_keyword");
-    }
+    system("$code_dir/launching_scripts/make_and_get_executable.sh $code_dir $working_dir $compile_keyword $compile");
     exec("$code_dir/launching_scripts/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_old $dont_wait");
 } elsif ($launch_mode eq 'hpc') { #make parameter files only
     do "$code_dir/launching_scripts/hpc/make_pubs.pl";
