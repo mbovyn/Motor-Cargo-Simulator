@@ -21,8 +21,7 @@ numCores=4
 
 . $code_dir/launching_scripts/get_param_file_list.sh
 
-echo "****Running ${#param_files[@]} instances"
-date +"****    started at: %r on %F"
+echo "****Running ${#param_files[@]} instances, $(date +"started at %r on %F")"
 
 ctr=1
 
@@ -47,8 +46,7 @@ do
     #motors.x   run_name            repeats       verbose
     ./motors.x  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
 
-    echo "****Starting $ctr of ${#param_files[@]}, $instance_name at"
-    date +"****    %r on %F"
+    echo "****Starting $ctr of ${#param_files[@]}, $instance_name at $(date +"%r on %F")"
 
     let ctr++
 
@@ -60,7 +58,7 @@ do
 
 done
 
-echo ****finished launching
+echo "****finished launching"
 
 if [ "$dont_wait" -ne "1" ]
 then
@@ -79,8 +77,7 @@ then
 
         if [ "$talk" -eq "1" ]
         then
-            echo ****waiting for last $numInstances to finish at
-            date +"****    %r on %F"
+            echo ****waiting for last $numInstances to finish at $(date +"%r on %F")
             let talk=0
         fi
 
