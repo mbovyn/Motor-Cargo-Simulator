@@ -345,4 +345,4 @@ EOF
     }
 }
 #print "@namelist\n";
-print "--->Done writing parameter files (makeparams2.pl)\n";
+#print "--->Done writing parameter files (makeparams2.pl)\n";

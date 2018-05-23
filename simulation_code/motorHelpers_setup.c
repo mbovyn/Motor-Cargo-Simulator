@@ -67,7 +67,7 @@ void initiallocations(){
     //sets locs
 
     if(verboseTF>2){
-        printf("setting initial locations with case %d\n",InitialLocations);
+        printf("Setting initial locations with case %d\n",InitialLocations);
     }
     switch(InitialLocations){
 
@@ -137,7 +137,7 @@ void initiallocations(){
 
             if(verboseTF>3){
                 printf("The rotation matrix that was found is:\n");
-                printf("    %+E %+E %+E\n    %+E %+E %+E\n    %+E %+E %+E\n",
+                printf("    %+E %+E %+E\n        %+E %+E %+E\n        %+E %+E %+E\n",
                     rotmat[0],rotmat[1],rotmat[2],
                     rotmat[3],rotmat[4],rotmat[5],
                     rotmat[6],rotmat[7],rotmat[8]);
@@ -221,10 +221,10 @@ void initiallocations(){
             }
 
             if(verboseTF>3){
-                printf("Before rotation,initial locations are chosen as:\n");
+                printf("    Before rotation,initial locations are chosen as:\n");
                 for (m=0;m<2;m++){
                     for(n=0;n<N[m];n++){
-                        printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
+                        printf("        type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
                     }
                 }
             }
@@ -234,8 +234,8 @@ void initiallocations(){
             makeRotationMatrix(0,0,-1);
 
             if(verboseTF>3){
-                printf("The rotation matrix that was found is:\n");
-                printf("    %+E %+E %+E\n    %+E %+E %+E\n    %+E %+E %+E\n",
+                printf("    The rotation matrix that was found is:\n");
+                printf("        %+E %+E %+E\n        %+E %+E %+E\n        %+E %+E %+E\n",
                     rotmat[0],rotmat[1],rotmat[2],
                     rotmat[3],rotmat[4],rotmat[5],
                     rotmat[6],rotmat[7],rotmat[8]);
@@ -261,18 +261,18 @@ void initiallocations(){
             break;
 
         default:
-            printf("Not a valid initial location type\n");
+            printf("\n\nError: Not a valid initial location type\n\n");
             exit(4);
     }//switch
 
-    if(verboseTF>3){
-        printf("Initial locations are chosen as:\n");
-        for (m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
-            }
-        }
-    }
+    // if(verboseTF>2){
+    //     printf("Initial locations finally:\n");
+    //     for (m=0;m<2;m++){
+    //         for(n=0;n<N[m];n++){
+    //             printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,initlocs[m][n][0],initlocs[m][n][1],initlocs[m][n][2] );
+    //         }
+    //     }
+    // }
 
     //if passed the setting to have one of the motors on the bottom
     if(SetAtBottom){
@@ -383,28 +383,32 @@ void findMTdist(){
 void initialbinding(){
 
     if(verboseTF>2){
-        printf("setting initial binding with case %d\n",InitialBinding);
+        printf("Setting initial binding with case %d\n",InitialBinding);
     }
 
     //Set no motors to be bound before we start (need this for findMTdist)
-    for(n=0;n<N[m];n++){
-        bound[m][n]=0;
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            bound[m][n]=0;
+        }
     }
 
     switch (InitialBinding) {
         case 1: //Bind all in range
 
-            //call the function that find the distance from each motor to the MT
-            findMTdist();
+            for(m=0;m<2;m++){
+                //call the function that find the distance from each motor to the MT
+                findMTdist();
 
-            //set bound status to mirror capture possibility
-            for(n=0;n<N[m];n++){
-                for(k=0;k<n_MTs;k++){
-                    //set bound to MT number
-                    if(!bound[m][n]){
-                        bound[m][n]=(k+1)*bind_possible[m][n][k];
+                //set bound status to mirror capture possibility
+                for(n=0;n<N[m];n++){
+                    for(k=0;k<n_MTs;k++){
+                        //set bound to MT number
+                        if(!bound[m][n]){
+                            bound[m][n]=(k+1)*bind_possible[m][n][k];
+                        }
+                        //Note: this will always bind the motor to the first MT if there are multiple MTs in range
                     }
-                    //Note: this will always bind the motor to the first MT if there are multiple MTs in range
                 }
             }
 
@@ -412,24 +416,88 @@ void initialbinding(){
 
         case 2: //Bind only one kinesin to 1st MT
 
-            //find the distance from each anchor to the MT
-            findMTdist();
+            for(m=0;m<2;m++){
+                //find the distance from each anchor to the MT
+                findMTdist();
 
-            //attach the one kinesin
-            if(m==0){
-                done=0;
+                //attach the one kinesin
+                if(m==0){
+                    done=0;
 
-                if(InitialLocations==6){
-                    if(bind_possible[m][most_neighbors][0]){
-                        bound[m][most_neighbors]=1;
-                        done=1;
+                    if(InitialLocations==6){
+                        if(bind_possible[m][most_neighbors][0]){
+                            bound[m][most_neighbors]=1;
+                            done=1;
+                        }
+                        if(!done){
+                            printf("\n\n\n Error: Wasn't able to bind motor with most neighbors\n\n\n");
+                            exit(4);
+                        }
+                    }else{
+
+                        //loop through motors to assign binding status
+                        for(n=0;n<N[m];n++){
+                            //of the motors for which capture is possible, attach only one
+                            if(bind_possible[m][n][0]){
+                                if(done==0){
+                                    bound[m][n]=1;
+                                    done=1;
+                                }
+                                //all others don't attach
+                                else{
+                                    bound[m][n]=0;
+                                }
+                            }
+                            else{
+                                bound[m][n]=0;
+                            }
+                        }
                     }
-                    if(!done){
-                        printf("\n\n\n Error: Wasn't able to bind motor with most neighbors\n\n\n");
-                        exit(4);
-                    }
-                }else{
 
+                    //stop if one wasn't able to bind
+                    if(done==0){
+                        printf("\n\n\n Error: Wasn't able to bind motor as requested\n");
+                        printf("Center was (%g,%g,%g)\n",center[0],center[1],center[2]);
+                        printf("InitialLocations was %d\n",InitialLocations);
+                        printf("Anchor locations were:\n");
+                        for(m=0;m<2;m++){
+                            for(n=0;n<N[m];n++){
+                                printf("type%dmotor%d: (%g,%g,%g)\n",m,n,locs[m][n][0],locs[m][n][1],locs[m][n][2] );
+                            }
+                        }
+                        printf("\n\n");
+                        if(j==0){
+                            exit(4);
+                        } else {
+                            graceful_exit=1;
+                        }
+
+                    }
+                }
+            }
+
+            break;
+
+        case 3: //don't bind any motors
+
+            for(m=0;m<2;m++){
+                //set none bound if we don't want any motors initially bound
+                for(n=0;n<N[m];n++){
+                    bound[m][n]=0;
+                }
+            }
+
+            break;
+
+        case 4: //Bind only one dyn
+
+            for(m=0;m<2;m++){
+                //find the distance from each anchor to the MT
+                findMTdist();
+
+                //attach the one dyn
+                if(m==1){
+                    done=0;
                     //loop through motors to assign binding status
                     for(n=0;n<N[m];n++){
                         //of the motors for which capture is possible, attach only one
@@ -447,70 +515,12 @@ void initialbinding(){
                             bound[m][n]=0;
                         }
                     }
-                }
 
-                //stop if one wasn't able to bind
-                if(done==0){
-                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n");
-                    printf("Center was (%g,%g,%g)\n",center[0],center[1],center[2]);
-                    printf("InitialLocations was %d\n",InitialLocations);
-                    printf("Anchor locations were:\n");
-                    for(m=0;m<2;m++){
-                        for(n=0;n<N[m];n++){
-                            printf("type%dmotor%d: (%g,%g,%g)\n",m,n,locs[m][n][0],locs[m][n][1],locs[m][n][2] );
-                        }
-                    }
-                    printf("\n\n");
-                    if(j==0){
+                    //stop if one wasn't able to bind
+                    if(done==0){
+                        printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
                         exit(4);
-                    } else {
-                        graceful_exit=1;
                     }
-
-                }
-            }
-
-            break;
-
-        case 3: //don't bind any motors
-
-            //set none bound if we don't want any motors initially bound
-            for(n=0;n<N[m];n++){
-                bound[m][n]=0;
-            }
-
-            break;
-
-        case 4: //Bind only one dyn
-
-            //find the distance from each anchor to the MT
-            findMTdist();
-
-            //attach the one dyn
-            if(m==1){
-                done=0;
-                //loop through motors to assign binding status
-                for(n=0;n<N[m];n++){
-                    //of the motors for which capture is possible, attach only one
-                    if(bind_possible[m][n][0]){
-                        if(done==0){
-                            bound[m][n]=1;
-                            done=1;
-                        }
-                        //all others don't attach
-                        else{
-                            bound[m][n]=0;
-                        }
-                    }
-                    else{
-                        bound[m][n]=0;
-                    }
-                }
-
-                //stop if one wasn't able to bind
-                if(done==0){
-                    printf("\n\n\n Error: Wasn't able to bind motor as requested\n\n\n");
-                    exit(4);
                 }
             }
 
@@ -518,17 +528,19 @@ void initialbinding(){
 
         case 5: //force bind all motors
 
-            findMTdist();
+            for(m=0;m<2;m++){
+                findMTdist();
 
-            //loop through motors to assign binding status
-            for(n=0;n<N[m];n++){
-                bound[m][n]=1;
+                //loop through motors to assign binding status
+                for(n=0;n<N[m];n++){
+                    bound[m][n]=1;
+                }
             }
 
             break;
 
         default:
-            printf("Not a valid initial binding type\n");
+            printf("\n\nError: Not a valid initial binding type\n\n");
             exit(4);
     }
 
@@ -537,19 +549,29 @@ void initialbinding(){
     //when motors attach they then have a defined head location
     //this sets the heads directly below the anchor (same x position)
     //should later change to projection from center of cargo?
-    for(n=0;n<N[m];n++){
-        if(bound[m][n]){
-            // printf("Calling closestPoint from head setting\n");
-            closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],bound[m][n]-1);
-            //printf("cVector is \n", );
-            for(i=0;i<3;i++){
-                head[m][n][i]=cPoint[i];
+    // if(verboseTF>2)
+    //     printf("Bound status:\n");
+
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+
+            // if(verboseTF>2){
+            //     printf("    type%dmotor%d: %d\n",m,n,bound[m][n]);
+            // }
+
+            if(bound[m][n]){
+                // printf("Calling closestPoint from head setting\n");
+                closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],bound[m][n]-1);
+                //printf("cVector is \n", );
+                for(i=0;i<3;i++){
+                    head[m][n][i]=cPoint[i];
+                }
             }
-        }
-        else{
-            head[m][n][0]=NAN;
-            head[m][n][1]=NAN;
-            head[m][n][2]=NAN;
+            else{
+                head[m][n][0]=NAN;
+                head[m][n][1]=NAN;
+                head[m][n][2]=NAN;
+            }
         }
     }
 
@@ -564,6 +586,14 @@ void initialbinding(){
         head[1][0][1]=cPoint[1];
         head[1][0][2]=cPoint[2];
     }
+
+    // if(verboseTF>2)
+    //     printf("Head location:\n");
+    // for(m=0;m<2;m++){
+    //     for(n=0;n<N[m];n++){
+    //         printf("    type%dmotor%d: (%g,%g,%g)\n",m,n,head[m][n][0],head[m][n][1],head[m][n][2] );
+    //     }
+    // }
 }//end initial binding
 
 void closestPointOnMT(double x,double y,double z,int MTnum){
@@ -585,20 +615,25 @@ void initialnucleotide(){
 
     switch (InitialNucleotideBehavior) {
         case 1: //all start ready
-            for(n=0;n<N[m];n++){
-                nuc_ready[n][m]=1;
+
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    nuc_ready[n][m]=1;
+                }
             }
             break;
 
         case 2: //all start not ready
 
-            for(n=0;n<N[m];n++){
-                nuc_ready[n][m]=0;
+            for(m=0;m<2;m++){
+                for(n=0;n<N[m];n++){
+                    nuc_ready[n][m]=0;
+                }
             }
             break;
 
         default:
-            printf("Invalid Initial Nucleotide Behavior setting\n");
+            printf("\n\nError: Invalid Initial Nucleotide Behavior setting\n\n");
             exit(4);
     }
 }//finished initialnucleotide

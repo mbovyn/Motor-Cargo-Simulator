@@ -272,72 +272,32 @@ void getInputParams( void )
         fgets(tmpString, 100, fParams);
 
     //End conditions
-    if(verboseTF>1){
-        printf("Stopping on:\n");
-    }
-
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&Requirebound);
-
-    if(Requirebound && verboseTF>1){
-        printf("     All motors unbound\n");
-    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnMotor2Attach);
 
-    if(StopOnMotor2Attach && verboseTF>1){
-        printf("     type0motor1 attach\n");
-    }
-
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnAllbound);
-
-    if(StopOnAllbound && verboseTF>1){
-        printf("     All motors bound\n");
-    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %ld",blah,&StopOnStep);
 
-    if(StopOnStep && verboseTF>1){
-        printf("     Step %ld\n",StopOnStep);
-    }
-
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnTime);
-
-    if(StopOnTime && verboseTF>1){
-        printf("     After %g seconds\n",StopOnTime);
-    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %lf",blah,&StopOnDistance);
 
-    if(StopOnDistance && verboseTF>1){
-        printf("     Cargo x location > %g microns\n",StopOnDistance);
-    }
-
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&StopBelowThetaC,&theta_c);
-
-    if(StopBelowThetaC && verboseTF>1){
-        printf("     Motor below critical angle of %g\n",theta_c);
-    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&MultiMTassay,&MT_angle);
 
-    if(MultiMTassay && verboseTF>1){
-        printf("     MT assay conditions\n");
-    }
-
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnBeadDissociation);
-
-    if(StopOnBeadDissociation && verboseTF>1){
-        printf("     Bead > .5 microns from all MTs\n");
-    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d",blah,&StopOnCargoBinding);
@@ -374,7 +334,7 @@ void getInputParams( void )
     fclose(fParams);
 
     if(verboseTF>2){
-        printf("read in all params from params file\n");
+        printf("    read in all params from params file\n");
     }
 
     //Read in MT params from MTparams file
@@ -394,14 +354,18 @@ void getInputParams( void )
             &R_MT[i]);
     }
 
+    if(verboseTF>2){
+        printf("    read in all params from MT params file\n");
+    }
+
     //set offset if one is input
     if(!isnan(z_MT_offset)){
         if(MultiMTassay){
-            if(verboseTF>1){
+            if(verboseTF>0){
                 printf("z_MT_offset input. Moving MT2 z from %g",MTpoint[1][2]);
             }
             MTpoint[1][2]=-z_MT_offset;
-            if(verboseTF>1){
+            if(verboseTF>0){
                 printf(" to %g\n",MTpoint[1][2]);
             }
         } else {
@@ -412,7 +376,7 @@ void getInputParams( void )
     //if we're doing an MT assay, find the ToW zone distance
     if(MultiMTassay){
 
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("Multi MT assay detected\n");
         }
 
@@ -421,7 +385,7 @@ void getInputParams( void )
         MTvec[0][1]=0;
         MTvec[0][2]=0;
 
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("    Forcing first MTvec to (%g,%g,%g)\n",MTvec[0][0],MTvec[0][1],MTvec[0][2]);
         }
 
@@ -434,7 +398,7 @@ void getInputParams( void )
             MTvec[1][1]=sin(MT_angle);
             MTvec[1][2]=0;
 
-            if(verboseTF>1){
+            if(verboseTF>0){
                 printf("    MT_angle given,forcing second MTvec to ");
             }
 
@@ -443,12 +407,12 @@ void getInputParams( void )
             // assuming MTvec[1] = (1,0,0)
             MT_angle=acos(MTvec[1][0]);
 
-            if(verboseTF>1){
+            if(verboseTF>0){
                 printf("    MTvec given as ");
             }
         }
 
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("(%g,%g,%g). MT angle is %g degrees\n",MTvec[1][0],MTvec[1][1],MTvec[1][2],MT_angle*180/pi);
         }
 
@@ -462,25 +426,25 @@ void getInputParams( void )
         //ToW_zone=.05+sqrt((2*L[0] + 2*R - s)*(2*L[0] + 2*R + s))/sin(MT_angle);
         ToW_zone=sqrt(pow(2*(L[0]+.02) + 2*R + sqrt(2)*R_MT[0]+R_MT[1],2) - pow(s,2))/sin(MT_angle);
         // printf("L[0]= %g, R= %g, s= %g\n",L[0],R,s);
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("    ToW zone is %g microns\n",ToW_zone);
         }
 
 
         //set correct inital center for ToW assay
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("    Moving initial cargo center from (%g,%g,%g) ",center_initial[0],center_initial[1],center_initial[2]);
         }
 
         center_initial[0]=MTpoint[0][0]-ToW_zone;
 
-        if(verboseTF>1){
+        if(verboseTF>0){
             printf("to (%g,%g,%g)\n",center_initial[0],center_initial[1],center_initial[2]);
         }
     }
 
     //print out what we have
-    if(verboseTF>1){
+    if(verboseTF>0){
         printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
         for(i=0;i<n_MTs;i++){
             printf("     (%g,%g,%g) (%g,%g,%g) %g\n",
@@ -491,6 +455,41 @@ void getInputParams( void )
     }
 
     fclose(fMTParams);
+
+    //Print end conditions
+    if(verboseTF>0){
+        printf("Stopping on:\n");
+    }
+    if(Requirebound && verboseTF>0){
+        printf("    All motors unbound\n");
+    }
+    if(StopOnMotor2Attach && verboseTF>0){
+        printf("    type0motor1 attach\n");
+    }
+    if(StopOnAllbound && verboseTF>0){
+        printf("    All motors bound\n");
+    }
+    if(StopOnStep && verboseTF>0){
+        printf("    Step %ld\n",StopOnStep);
+    }
+    if(StopOnTime && verboseTF>0){
+        printf("    After %g seconds\n",StopOnTime);
+    }
+    if(StopOnDistance && verboseTF>0){
+        printf("    Cargo x location > %g microns\n",StopOnDistance);
+    }
+    if(StopBelowThetaC && verboseTF>0){
+        printf("    Motor below critical angle of %g\n",theta_c);
+    }
+    if(MultiMTassay && verboseTF>0){
+        printf("    MT assay conditions\n");
+    }
+    if(StopOnBeadDissociation && verboseTF>0){
+        printf("    Bead > .5 microns from all MTs\n");
+    }
+    if(StopOnCargoBinding && verboseTF>0){
+        printf("    Cargo binding\n");
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Consequent parameters
@@ -506,8 +505,12 @@ void getInputParams( void )
     //find maximum time step
     //There are various restrictions based on not letting the motors go too
     //far off the cargo surface
-    if(verboseTF>1){
+    if(verboseTF>2){
         printf("Choosing Timesteps:\n");
+    }
+
+    if(verboseTF>2){
+        printf("    Default time step is dt=%f\n",dt_default);
     }
 
     //Find stable timestep for motor spring
@@ -558,7 +561,7 @@ void getInputParams( void )
     //Manually found that even 20nm diameter cargos are ok at 5e-8
     if(dt_max_rotation<5e-8){
         dt_max_rotation=5e-8;
-        if(verboseTF>1){
+        if(verboseTF>2){
             printf("     Rotation dt bottomed out, setting to %g\n",dt_max_rotation);
         }
     }
@@ -567,17 +570,17 @@ void getInputParams( void )
     //the default max is the smallest of the restrictions, or the base time step
     if(dt_override<0){
         dt_max_base=INF;
+        if(verboseTF>0){
+            printf("dt_override<0, default timestep ignored");
+        }
     } else {
         dt_max_base=dt_default;
-    }
-    if(verboseTF>1){
-        printf("    Time step set to dt=%f\n",dt_max_base);
     }
 
     if(dt_max_Diffusion<dt_max_base){
         dt_max_base=dt_max_Diffusion;
-        if(verboseTF>1){
-            printf("     Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
+        if(verboseTF>0){
+            printf("Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
     //don't need to include motor time step, as it's implemented automatically
@@ -590,15 +593,15 @@ void getInputParams( void )
     // }
     if(dt_max_rotation<dt_max_base){
         dt_max_base=dt_max_rotation;
-        if(verboseTF>1){
-            printf("     Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
+        if(verboseTF>0){
+            printf("Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
         }
     }
 
     if(dt_override>0){
         dt_max_base=dt_override;
         if(verboseTF>0){
-            printf("Overriding dt. Now %g\n",dt_override);
+            printf("Overriding dt. Now %g\n",dt_max_base);
         }
     }
 

@@ -1,12 +1,12 @@
 /*** Matt Bovyn mbovyn@uci.edu  ***/
 
-//Error codes:
+//Returns:
+//0: Completed successfully
 //1: Unable to open one of the input files
 //2: Unsupported compile parameters
 //3: Mismatch between parameter file and read in functions
-//4: Bad input from parameter file
+//4: Bad input from parameter file on mode choice
 //5: Bad Gillespie result
-//6: Graceful exit for one reason or another
 
 /******************************************************************************/
 //  INCLUDES
@@ -104,12 +104,6 @@ int main( int argc, char *argv[] )
     if(argv[3]) // Verbose Output
         verboseTF = atoi(argv[3]);
 
-    if (verboseTF>2){
-        printf("\n-------------------------------------------------\n");
-        printf("\nBeginning new run\n\n");
-        printf("-------------------------------------------------\n\n");
-    }
-
     // Intialize random number generator (twister.c)
     //can set RanInit(1) to use same seed every time
     //otherwise the seed is updated and the next run will use the new seed
@@ -120,14 +114,25 @@ int main( int argc, char *argv[] )
     }
     RanInit(keep_seed); //twister.c
 
+    if (verboseTF>2){
+        printf("\n-------------------------------------------------\n");
+        printf("\nBeginning new run\n\n");
+        printf("-------------------------------------------------\n");
+    }
+    if(verboseTF>0)
+        printf("\nStarting %s\n",runName);
+
     // load parameters
     if (verboseTF>2)
-        printf("\nReading in Parameters\n\n");
+        printf("\nReading in Parameters\n");
     getInputParams(); //getInputParams.c
+
+    if (verboseTF>2)
+        printf("Done with reading in Parameters\n\n");
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
-        printf("\n%s:\n",runName);
+        //printf("%s:\n",runName);
         if(keep_seed){
             printf("Random Seed won't be updated\n");
         } else {
@@ -154,13 +159,18 @@ int main( int argc, char *argv[] )
         printf("     eta = %g\n",eta);
         printf("     dt_max_base = %g\n",dt_max_base);
 
-        printf("Running %d repeats\n\n",repeats );
+        printf("Running %d repeats\n",repeats );
     }else{
         RAND; //need this to keep number of RAND calls the same
     }
 
     //set up for data collection
+    if (verboseTF>2)
+        printf("\nInitializing data collection\n");
     initializeDataCollection(); //dataCollection.c
+
+    if(verboseTF>0)
+        printf("\n");
 
     //call simulation function for each repeat
     for(j=0;j<repeats;j++){
@@ -168,6 +178,8 @@ int main( int argc, char *argv[] )
     }
 
     //close files
+    if (verboseTF>2)
+        printf("\nFinalizing data collection\n");
     finalizeDataCollection(); //dataCollection.c
 
     //print the final score

@@ -6,15 +6,16 @@ int simulate_cargo()
     // Hybrid fixed time step / gillespie with stochastic steppers
 
     // Setup
-    if (verboseTF>2)
-        printf("\nPerforming setup step\n\n");
-
-    if(verboseTF>1){
-        printf("Starting repeat %d\n",j);
+    if(verboseTF>2){
+        printf("%s: Starting repeat %d\n",runName,j+1);
     }
 
+    if (verboseTF>2)
+        printf("\nPerforming setup step\n");
     //set current center to center that was passed in
     //wipe variables which don't reset otherwise
+    if (verboseTF>2)
+        printf("    Resetting counters and sums\n");
     for(i=0;i<3;i++){
         center[i]=center_initial[i];
         LastBoundLocation[i]=NAN;
@@ -56,38 +57,37 @@ int simulate_cargo()
     }
 
     if (verboseTF>2)
-        printf("Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
+        printf("    Initial location of the cargo is (%g,%g,%g)\n",center[0],center[1],center[2]);
 
     // set initial locations of motors -------------------------------------
-    initiallocations();
+    initiallocations(); //motorHelpers_setup.c
     //sets locs
+
+    // set initial binding status ---------------------------------------
+    initialbinding(); //motorHelpers_setup.c
+    //sets bound and head
+
+    // set initial nucleotide status
+    if(NucleotideBehavior){
+        initialnucleotide(); //motorHelpers_setup.c
+    }
+    else{ //if NucleotideBehavior is 0, always be ready (removes effect)
+        for(n=0;n<N[m];n++){
+            nuc_ready[m][n]=1;
+        }
+    }
+    //sets nuc_ready
 
     for (m=0;m<2;m++) //()()()()()()()()()()()()()()()()()()()()()()()()()()()()
     {
-        // set initial binding status ---------------------------------------
-        initialbinding();
-        //sets bound and head
-
-        // set initial nucleotide status
-        if(NucleotideBehavior){
-            initialnucleotide();
-        }
-        else{ //if NucleotideBehavior is 0, always be ready (removes effect)
-            for(n=0;n<N[m];n++){
-                nuc_ready[m][n]=1;
-            }
-        }
-        //sets nuc_ready
-
         //calculate initial forces
-        motorloading();
-
+        motorloading(); //motorHelpers_rates.c
     } //end of looping over motor types for inital settings ()()()()()()()()()()
 
     calculate_forces();
     set_brownian_forces_to_0();
 
-    if(verboseTF>3){
+    if(verboseTF>2){
         printf("The initial locations of the anchors are set to:\n");
         for (m=0;m<2;m++){
             for(n=0;n<N[m];n++){
@@ -316,7 +316,7 @@ int simulate_cargo()
         if(dt_max_MultiMotor<dt_max){
             dt_max = dt_max_MultiMotor;
         }
-        
+
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
@@ -507,7 +507,7 @@ int simulate_cargo()
                 }
                 else
                 {
-                    printf("Should not have gotten here on choosing action in Gillespie\n");
+                    printf("\n\nError: Should not have gotten here on choosing action in Gillespie\n\n");
                     exit(5);
                 }
             }
@@ -612,15 +612,15 @@ int simulate_cargo()
 
         write_error();
         printf("\n");
-        return 6;
+        return 0;
 
     } else {
 
         if (verboseTF>2)
-            printf("Simulation Ended\n");
+            printf("\nSimulation Ended\n");
 
         if(verboseTF>1){
-            printf("repeat %d stopped at t=%g / step %ld by ",j+1,t_inst,step);
+            printf("\n%s: repeat %d stopped at t=%g / step %ld by ",runName,j+1,t_inst,step);
             switch (prematureReturn) {
                 case 1:
                     printf("detachment\n");
@@ -670,7 +670,7 @@ int simulate_cargo()
                 default:
                     printf("Missed case on reporting end of sim condition\n");
             }
-            printf("Cargo location was (%g,%g,%g)\n\n",center[0],center[1],center[2] );
+            printf("Cargo location was (%g,%g,%g)\n",center[0],center[1],center[2] );
         }
 
         //count up number of results we've labeled as success for this trial

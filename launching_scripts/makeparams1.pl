@@ -35,4 +35,4 @@ our $MT_anglename="MT_angle";
 our $none1name = "none1none";
 our $none2name = "none2none";
 
-print "--->Done setting default names (makeparams1.pl)\n";
+#print "--->Done setting default names (makeparams1.pl)\n";

@@ -42,11 +42,11 @@ do
         done
     fi
 
+    echo "****Starting $ctr of ${#param_files[@]}, $instance_name at $(date +"%r on %F")"
+
     #run executable
     #motors.x   run_name            repeats       verbose
     ./motors.x  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
-
-    echo "****Starting $ctr of ${#param_files[@]}, $instance_name at $(date +"%r on %F")"
 
     let ctr++
 

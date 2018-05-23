@@ -270,7 +270,7 @@ void cargobehavior()
             break;
 
         default:
-            printf("bad value for CargoBehavior\n" );
+            printf("\n\nError: Bad value for CargoBehavior\n\n" );
             exit(4);
     }//finished switch
 
@@ -418,7 +418,7 @@ void calculate_forces()
             //implement something here for an optical trap
             break;
         default:
-            printf("bad value for external_force\n");
+            printf("\n\nError: Bad value for external_force\n\n");
             exit(4);
     }
 
@@ -439,7 +439,7 @@ void calculate_forces()
             //values for Ftrap set when input, don't change them
             break;
         default:
-            printf("bad value for external_force\n");
+            printf("\n\nError: Bad value for external_force\n\n");
             exit(4);
     }
 
@@ -697,7 +697,7 @@ void compute_next_locations(){
             break;
 
         default:
-            printf("Bad Motor Diffusion type\n");
+            printf("\n\nError: Bad Motor Diffusion type\n\n");
             exit(4);
 
     }

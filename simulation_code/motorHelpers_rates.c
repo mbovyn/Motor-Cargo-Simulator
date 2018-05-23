@@ -82,7 +82,7 @@ void motorloading()
             break;
 
         default:
-            printf("Invalid MotorLoading Type\n");
+            printf("\n\nError: Invalid MotorLoading Type\n\n");
             exit(4);
     }
 
@@ -155,7 +155,7 @@ void stepping_rates()
             break;
 
         default:
-            printf("Invalid stepping rate type\n");
+            printf("\n\nError: Invalid stepping rate type\n\n");
             exit(4);
     }
 } // finished stepping
@@ -290,7 +290,7 @@ void unbinding_rates()
         break;
 
     default:
-        printf("Invalid Unbinding type\n");
+        printf("\n\nError: Invalid Unbinding type\n\n");
         exit(4);
     }
 } //finished unbinding
@@ -354,7 +354,7 @@ void binding_rates() //sets bind_possible and bind_rate
             //
             // break;
 
-            printf("Code needs to be reconfigured to exclude binding when too close\n");
+            printf("\n\nError: Code needs to be reconfigured to exclude binding when too close\n\n");
             exit(4);
 
         case 5: //can't bind in forbidden zone
@@ -386,7 +386,7 @@ void binding_rates() //sets bind_possible and bind_rate
             break;
 
         default:
-            printf("Not a valid binding type\n");
+            printf("\n\nError: Not a valid binding type\n\n");
             exit(4);
         }
 }
@@ -418,7 +418,7 @@ void nucleotide(){
             break;
 
         default:
-            printf("Not a valid nucleotide behavior\n");
+            printf("\n\nError: Not a valid nucleotide behavior\n\n");
             exit(4);
     }
 }

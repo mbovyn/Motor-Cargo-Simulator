@@ -79,6 +79,20 @@ void writeToWHeader(){
 
 void initializeDataCollection()
 {
+    if(verboseTF>0){
+        printf("Writing details ");
+        if(ReturnDetails==1){
+            printf("every step\n");
+        }else if(ReturnDetails==2){
+            printf("every time a chemical event happens\n");
+        }else if(ReturnDetails==3){
+            printf("every 1000 steps\n");
+        }else if(ReturnDetails==4){
+            printf("every .001s\n");
+        }else{
+            printf("never");
+        }
+    }
 
     //open summary file
     strcpy(summaryName,runName);
