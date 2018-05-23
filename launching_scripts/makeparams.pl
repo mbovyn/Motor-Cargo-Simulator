@@ -2,7 +2,7 @@
 #use strict;
 use warnings;
 
-print "Making parameter files\n";
+print "Making parameter files (makeparams.pl)\n";
 
 #call first part of script
 #sets names

@@ -3,6 +3,8 @@
 #use strict;
 use warnings;
 
+print "Launching (launch.pl)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+
 #clean out old files
 system("$code_dir/launching_scripts/clean_files.sh $code_dir $working_dir $keep_old");
 

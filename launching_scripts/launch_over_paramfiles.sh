@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "****Launching locally (launch_over_paramfiles.sh)****"
+
 #take in variables passed from perl script where parameter values are set
 run_name="$1"
 #echo "run_name is $run_name"

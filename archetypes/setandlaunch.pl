@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-#use strict;
+use strict;
 use warnings;
 
 # creates parameter files for sweeps, then launches either locally or on the hpc

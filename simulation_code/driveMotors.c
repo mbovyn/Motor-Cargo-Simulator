@@ -104,10 +104,6 @@ int main( int argc, char *argv[] )
     if(argv[3]) // Verbose Output
         verboseTF = atoi(argv[3]);
 
-    if(verboseTF>0){
-        printf("Run name:      %s\n",runName);
-    }
-
     if (verboseTF>2){
         printf("\n-------------------------------------------------\n");
         printf("\nBeginning new run\n\n");
@@ -124,18 +120,6 @@ int main( int argc, char *argv[] )
     }
     RanInit(keep_seed); //twister.c
 
-    if(verboseTF>0){
-        //if ever see two that are the same, know iSEED wasn't updated
-        if(keep_seed){
-            printf("Random Seed won't be updated\n");
-        } else {
-            printf("Random Seed will be updated\n");
-        }
-        printf("    The test rand is %f\n",RAND);
-    }else{
-        RAND;
-    }
-
     // load parameters
     if (verboseTF>2)
         printf("\nReading in Parameters\n\n");
@@ -143,7 +127,14 @@ int main( int argc, char *argv[] )
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
-        printf("\nRunning with %d kinesins and %d dyneins\n",N[0],N[1]);
+        printf("\n%s:\n",runName);
+        if(keep_seed){
+            printf("Random Seed won't be updated\n");
+        } else {
+            printf("Random Seed will be updated\n");
+        }
+        printf("    The test rand is %f\n",RAND);
+        printf("Running with %d kinesins and %d dyneins\n",N[0],N[1]);
 
         printf("Initial cargo location is (%g,%g,%g)\n",
             center_initial[0],center_initial[1],center_initial[2]);
@@ -164,6 +155,8 @@ int main( int argc, char *argv[] )
         printf("     dt_max_base = %g\n",dt_max_base);
 
         printf("Running %d repeats\n\n",repeats );
+    }else{
+        RAND; //need this to keep number of RAND calls the same
     }
 
     //set up for data collection
@@ -202,6 +195,10 @@ int main( int argc, char *argv[] )
     //         printf("stopping by condition %d\n",success);
     //     }
     // }
+
+    if(verboseTF>0){
+        printf("\n%s: Finished all %d repeats\n\n",runName,repeats);
+    }
 
     return 0;
 

@@ -3,6 +3,8 @@
 #This script generates a file with the commit hash of the current code and makes
 #an executable, then copies both to the working folder
 
+echo "Checking executable (make_and_get_executable.sh)"
+
 set -e
 
 #take in inputs
@@ -28,7 +30,10 @@ if [ ! -f motors.x ] || [ $force_recompile -gt 0 ] ; then
 
     #compile and copy code to working directory
     cd simulation_code
+    echo -n "--->"
     make $compile_keyword
     mv "$code_dir/simulation_code/motors.x" "$working_dir"
 
+else
+    echo "--->Using current executable"
 fi
