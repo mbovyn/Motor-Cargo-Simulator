@@ -9,9 +9,10 @@ working_dir="$3"
 #echo "working_dir is $working_dir"
 repeats=$4
 verbose=$5
+keep_seed=$6
 #whether or not to keep old files
-keep_old=$6
-dont_wait=$7
+keep_old=$7
+dont_wait=$8
 
 #number of processes we want to run at once
 numCores=4
@@ -41,8 +42,8 @@ do
     fi
 
     #run executable
-    #motors.x   run_name            repeats       verbose       
-    ./motors.x  "${instance_name}"  ${repeats:-1} ${verbose:-2} &
+    #motors.x   run_name            repeats       verbose
+    ./motors.x  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
 
     echo "****Starting $ctr of ${#param_files[@]}, $instance_name at"
     date +"****    %r on %F"

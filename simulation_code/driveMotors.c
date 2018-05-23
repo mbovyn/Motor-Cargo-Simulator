@@ -8,6 +8,10 @@
 //5: Bad Gillespie result
 //6: Graceful exit for one reason or another
 
+/******************************************************************************/
+//  INCLUDES
+/******************************************************************************/
+
 //Basic librarys and functions to include
 #include <math.h>
 #include <stdlib.h>
@@ -15,49 +19,51 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "twister.c"
 
-/*******************************************************************************/
-//  INCLUDES
-/*******************************************************************************/
-
+//local files
+#include "twister.c" //does random number generation
 #include "motors.h" //header which intializes all variables
 
 //in the preprocessor, select which equation files to include
 //want to do this because the equation files with large numbers of motors
 //take a long time to compile
-#if defined(bead5)
+
+//must compile with correct keyword. Ex:
+// gcc -O3 driveMotors.c -o motors.x -lm -Dbead5
+
+//bead motors
+#if defined(bead5) //Any number of motors between 0 and 5
     #include "beadequations5.c"
     int available_motors_bead=5;
-#elif defined(bead10)
+#elif defined(bead10) //Any number of motors between 0 and 10
     #include "beadequations10.c"
     int available_motors_bead=10;
-#elif defined(bead20)
+#elif defined(bead20) //Any number of motors between 0 and 20
     #include "beadequations20.c"
     int available_motors_bead=20;
-#elif defined(bead50)
+#elif defined(bead50) //Any number of motors between 0 and 50
     #include "beadequations50.c"
     int available_motors_bead=50;
-#elif defined(bead101)
+#elif defined(bead101) //1, 11, 21, 31, ... 91, or 101 motors
     #include "beadequations101.c"
     int available_motors_bead=101;
-#else
-    #include "beadequations5.c"
-    int available_motors_bead=5;
+#else //otherwise define an empty function and set no motors availiable
+    void bead_equations(){};
+    int available_motors_bead=0;
 #endif
-
-#if defined(free5)
+//free motors
+#if defined(free5) //Any number of motors between 0 and 5
     #include "stochasticequations5.c"
     int available_motors_free=5;
-#elif defined(free10)
+#elif defined(free10) //Any number of motors between 0 and 10
     #include "stochasticequations10.c"
     int available_motors_free=10;
-#elif defined(free20)
+#elif defined(free20) //Any number of motors between 0 and 20
     #include "stochasticequations20.c"
     int available_motors_free=20;
 #else
-    #include "stochasticequations5.c"
-    int available_motors_free=5;
+    void stochastic_equations(){};
+    int available_motors_free=0;
 #endif
 
 #include "getInputParams.c" //reads parameter file
@@ -65,7 +71,6 @@
 #include "motorHelpers_setup.c" //file with functions for setup
 #include "motorHelpers_rates.c" //functions for finding stepping rates
 #include "stop_conditions.c"
-
 #include "motorHelpers_sODE.c" //functions for setting up the solve
 #include "simulate_cargo.c" //main simulation
 
@@ -73,7 +78,7 @@
 //  MAIN
 /*******************************************************************************/
 
-// arguments: parameter_file_name run_name repeats verboseness_number D eps_0 pi_0
+// arguments: run_name repeats verboseness_number keep_seed
 int main( int argc, char *argv[] )
 {
     // runName string, label of parameter and output files
@@ -87,8 +92,9 @@ int main( int argc, char *argv[] )
         //printf("read in repeats as %s\n",argv[3]);
     }
 
+    //Verbosity
     // IF verboseTF = 0, will not output anything
-    // IF verboseTF = 1, will output running params
+    // IF verboseTF = 1, will output general things, nothing inside repeat loop
     // if =2, will say more and additionally output a few lines per repeat
     // if =3, will additionally output important events but not every time step
     //        will also output lines to follow what's going on
@@ -109,16 +115,18 @@ int main( int argc, char *argv[] )
     }
 
     // Intialize random number generator (twister.c)
-    #if defined(keepseed)
-        int seed_option=1;
-    #else
-        int seed_option=0;
-    #endif
-    RanInit(seed_option); //can set RanInit(1) to use same seed every time
+    //can set RanInit(1) to use same seed every time
+    //otherwise the seed is updated and the next run will use the new seed
+    //default to new seed every time
+    keep_seed=0;
+    if(argv[4]){
+        keep_seed=atoi(argv[4]);
+    }
+    RanInit(keep_seed); //twister.c
 
-    if(verboseTF>1){
+    if(verboseTF>0){
         //if ever see two that are the same, know iSEED wasn't updated
-        if(seed_option){
+        if(keep_seed){
             printf("Random Seed won't be updated\n");
         } else {
             printf("Random Seed will be updated\n");
@@ -129,20 +137,16 @@ int main( int argc, char *argv[] )
     }
 
     // load parameters
-
     if (verboseTF>2)
         printf("\nReading in Parameters\n\n");
-
-
-    getInputParams();
-
-    if (verboseTF>1)
-        printf("Initial location passed in is (%g,%g,%g)\n",
-            center_initial[0],center_initial[1],center_initial[2]);
+    getInputParams(); //getInputParams.c
 
     //print number of motors and parameters we're running
     if(verboseTF>0){
         printf("\nRunning with %d kinesins and %d dyneins\n",N[0],N[1]);
+
+        printf("Initial cargo location is (%g,%g,%g)\n",
+            center_initial[0],center_initial[1],center_initial[2]);
 
         printf("Parameters for type0 motors are:\n");
         printf("     D = %g\n",D_m[0]);
@@ -163,17 +167,15 @@ int main( int argc, char *argv[] )
     }
 
     //set up for data collection
-    initializeDataCollection();
+    initializeDataCollection(); //dataCollection.c
 
-    //call simulation function in loop
+    //call simulation function for each repeat
     for(j=0;j<repeats;j++){
-
-        result=simulate_cargo();
-
+        result=simulate_cargo(); //simulate_cargo.c
     }
 
     //close files
-    finalizeDataCollection();
+    finalizeDataCollection(); //dataCollection.c
 
     //print the final score
     // if(verboseTF>0){

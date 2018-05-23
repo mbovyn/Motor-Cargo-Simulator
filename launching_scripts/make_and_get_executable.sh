@@ -3,6 +3,8 @@
 #This script generates a file with the commit hash of the current code and makes
 #an executable, then copies both to the working folder
 
+set -e
+
 #take in inputs
 code_dir="$1"
 working_dir="$2"

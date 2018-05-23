@@ -10,6 +10,8 @@ use warnings;
 #If local, this will launch simulations for all param files in the folder
 #If hpc, will make and submit pubs
 our $launch_mode='local';
+#option to not update the random seed
+our $keep_seed=0;
 
 #if local, set compilation options
 #set compile to yes to compile and copy executable to local folder

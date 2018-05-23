@@ -11,6 +11,8 @@
 Driving function variables
 */
 
+int keep_seed;
+
 int n_lines;
 
 int repeats;
