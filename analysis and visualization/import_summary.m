@@ -1,3 +1,4 @@
+function summary=import_summary(params,localpath,run_name)
 %% Import data from text file.
 % Script for importing data from the following text file:
 %
@@ -10,15 +11,18 @@
 
 %% Initialize variables.
 
-summimport=struct;
+filename = [localpath '/' run_name '_Summary.txt'];
 
-summimport.filename = [localpath '/' run_name '_Summary.txt'];
-
-if ~exist(summimport.filename,'file')
-    error([summimport.filename ' doesnt exist!'])
+if ~exist(filename,'file')
+    error([filename ' doesnt exist!'])
 end
-summimport.delimiter = ' ';
-summimport.startRow = 2;
+if ~exist('params','var')
+    error('Import params first')
+end
+delimiter = ' ';
+startRow = 2;
+
+N=params.N;
 
 %% Format for each line of text:
 %   column1: double (%f)
@@ -36,44 +40,21 @@ summimport.startRow = 2;
 % For more information, see the TEXTSCAN documentation.
 %formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 
-summimport.num=24;
+fileID = fopen(filename,'r');
 
-%piece1=repmat('%f',1,num+3+2*3*(N(1)+N(2)));
-summimport.piece1=repmat('%f',1,summimport.num);
-summimport.piece2='%[^\n\r]';
+piece1=repmat('%f',1,5+3+3*sum(N));
+piece2='%[^\n\r]';
 
-summimport.formatSpec=strcat(summimport.piece1,summimport.piece2);
-
-%% Open the text file.
-summimport.fileID = fopen(summimport.filename,'r');
-
-%% Read columns of data according to the format.
-% This call is based on the structure of the file used to generate this
-% code. If an error occurs for a different file, try regenerating the code
-% from the Import Tool.
-summimport.dataArray2 = textscan(summimport.fileID, summimport.formatSpec, ...
-    'Delimiter', summimport.delimiter, 'MultipleDelimsAsOne', true, ...
-    'HeaderLines' ,summimport.startRow-1, 'ReturnOnError', false, 'EndOfLine', '\r\n');
-
-N1 = summimport.dataArray2{:,11};
-
-fclose(summimport.fileID);
-
-summimport.fileID = fopen(summimport.filename,'r');
-
-summimport.piece1=repmat('%f',1,summimport.num+3+2*3*(N1(1)+N(2))+(N1(1)+N(2)));
-summimport.piece2='%[^\n\r]';
-
-summimport.formatSpec=strcat(summimport.piece1,summimport.piece2);
+formatSpec=strcat(piece1,piece2);
 
 %% second time
 
-summimport.dataArray = textscan(summimport.fileID, summimport.formatSpec, ...
-    'Delimiter', summimport.delimiter, 'MultipleDelimsAsOne', true, ...
-    'HeaderLines' , summimport.startRow-1, 'ReturnOnError', false, 'EndOfLine', '\r\n');
+dataArray = textscan(fileID, formatSpec, ...
+    'Delimiter', delimiter, 'MultipleDelimsAsOne', true, ...
+    'HeaderLines' , startRow-1, 'ReturnOnError', false, 'EndOfLine', '\r\n');
 
 %% Close the text file.
-fclose(summimport.fileID);
+fclose(fileID);
 
 %% Allocate imported array to column variable names
 
@@ -81,96 +62,38 @@ fclose(summimport.fileID);
 %     dataArray{:,importi}=dataArray{:,importi}(~isnan(dataArray{:,importi}));
 % end
 
-repeat = summimport.dataArray{:,1};
-step = summimport.dataArray{:, 2};
-t_final = summimport.dataArray{:, 3};
-exit_cond = summimport.dataArray{:, 4};
-success = summimport.dataArray{:,5};
-success=logical(success);
-D_anchor = summimport.dataArray{:, 6};
-eps_0 = summimport.dataArray{:, 7};
-pi_0 = summimport.dataArray{:, 8};
-offset = summimport.dataArray{:, 9};
-R = summimport.dataArray{:,10};
-N1 = summimport.dataArray{:,11};
-F1 = summimport.dataArray{:,12};
-theta_c = summimport.dataArray{:,13};
-MT_angle = summimport.dataArray{:,14};
-F_d1 = summimport.dataArray{:,15};
-eta = summimport.dataArray{:,16};
-k_m1 = summimport.dataArray{:,17};
+summary=struct;
 
-MTvec{2}=[summimport.dataArray{:,summimport.num-6} ...
-    summimport.dataArray{:,summimport.num-5} ...
-    summimport.dataArray{:,summimport.num-4}];
+summary.repeat = dataArray{:,1};
+summary.step = dataArray{:, 2};
+summary.t_final = dataArray{:, 3};
+summary.exit_cond = dataArray{:, 4};
+summary.success = dataArray{:,5};
+summary.success=logical(summary.success);
 
-ToW_time = summimport.dataArray{:,summimport.num-3};
+num=5+3;
 
-last_bound_center = [summimport.dataArray{:, summimport.num-2} ...
-    summimport.dataArray{:, summimport.num-1} ...
-    summimport.dataArray{:, summimport.num}];
+summary.last_bound_center = [dataArray{:, num-2} ...
+    dataArray{:, num-1} ...
+    dataArray{:, num}]';
 
-center_final = [summimport.dataArray{:, summimport.num+1} ...
-    summimport.dataArray{:, summimport.num+2} ...
-    summimport.dataArray{:, summimport.num+3}];
-% type0motor0_x = dataArray{:, 10};
-% type0motor0_y = dataArray{:, 11};
-% type0motor0_z = dataArray{:, 12};
+summary.last_bound_head=cell(2,1);
+summary.last_bound_head{1}=zeros(N(1),3);
+summary.last_bound_head{2}=zeros(N(2),3);
 
-N(1)=N1(1);
-
-locs_final=cell(2,1);
-locs_final{1}=cell(N(1),1);
-locs_final{2}=cell(N(2),2);
-
-for summimportm=1:2
-    for summimportn=1:N(summimportm)
-        if summimportm==1
-            summimport.column=summimport.num+4+(summimportn-1)*3;
+for m=1:2
+    for n=1:N(m)
+        if m==1
+            column=num+1+(n-1)*3;
         else
-            summimport.column=summimport.num+4+N(1)*3+(summimportn-1)*3;
+            column=num+1+N(1)*3+(n-1)*3;
         end
-        locs_final{summimportm}{summimportn}=...
-            [summimport.dataArray{:,summimport.column:summimport.column+2}];
-    end
-end
-
-summimport.last_locs_col=summimport.num+4+3*(N(1)+N(2))-1;
-
-head_final=cell(2,1);
-head_final{1}=cell(N(1),1);
-head_final{2}=cell(N(2),2);
-
-for summimportm=1:2
-    for summimportn=1:N(summimportm)
-        if summimportm==1
-            summimport.column=summimport.last_locs_col+1+(summimportn-1)*3;
-        else
-            summimport.column=summimport.last_locs_col+1+N(1)*3+(summimportn-1)*3;
-        end
-        head_final{summimportm}{summimportn}=...
-            [summimport.dataArray{:,summimport.column:summimport.column+2}];
-    end
-end
-
-summimport.last_head_col=summimport.num+4+3*(N(1)+N(2))-1+ 3*(N(1)+N(2));
-
-bound_final=cell(2,1);
-bound_final{1}=cell(N(1),1);
-bound_final{2}=cell(N(2),2);
-
-for summimportm=1:2
-    for summimportn=1:N(summimportm)
-        if summimportm==1
-            summimport.column=summimport.last_head_col+1+(summimportn-1);
-        else
-            summimport.column=summimport.last_head_col+1+N(1)+(summimportn-1);
-        end
-        bound_final{summimportm}{summimportn}=...
-            [summimport.dataArray{:,summimport.column}];
+        summary.last_bound_head{m}(n,:)=...
+            [dataArray{:,column:column+2}];
     end
 end
 
 
 %% Clear temporary variables
-clearvars summimport summimportm summimportn;
+%clearvars  m n;
+end

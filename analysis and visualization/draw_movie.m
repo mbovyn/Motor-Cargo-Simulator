@@ -1,35 +1,21 @@
 %% draws movie from data created by simulation
 
+error('This needs to be updated for the new import structure')
+
 %want a white background behind the figure so it blends in with slide
 set(0,'defaultfigurecolor','w')
 
 %% import parameters and data
 
-%take in parameters from the files read by the simulation
-%only take it in if we haven't done it already
-if ~exist('N','var')
-    disp('Importing Parameters')
-    %2 entry parameters
-    run([analysispath '/import_params2.m'])
-    %1 entry parameters
-    run([analysispath '/import_params.m'])
-    %MT params
-    run([analysispath '/import_MT_params.m'])
+import_params_and_results.m
+
+
+if disp_theta_c==0
+    theta_c=NaN;
+else
+    theta_c=theta_c(1);
 end
 
-%take in the summary the simulation writes if we haven't yet
-if ~exist('exit_cond','var')
-
-    disp('Importing Summary')
-
-    run([analysispath '/import_summary.m'])
-
-    if disp_theta_c==0
-        theta_c=NaN;
-    else
-        theta_c=theta_c(1);
-    end
-end
 
 
 

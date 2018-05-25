@@ -19,6 +19,9 @@ void simulationEndDataCollection();
 
 void set_quat_to_identity();
 
+int open_exist(char fName[100]);
+void write_all();
+
 
 void writeBaseHeader(){
     fprintf(fInUse, "repeat       step time                   ");
@@ -70,11 +73,18 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success D_anchor eps_0 pi_0   z_MT   R    N[0] Fexternal[0] theta_c MT_angle F_d[0]      eta k_m[0] MT2vecx   MT2vecy   MT2vecz   ToW_time               last_attached_center_x  last_attached_center_y  last_attached_center_z  ");
+    fprintf(fInUse, "exit_cond success last_bound_center_x     last_bound_center_y     last_bound_center_z     ");
+    for(m = 0; m<2; m++){
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"lb_head_type%02dmotor%02d_x ",m,n);
+            fprintf(fInUse,"lb_head_type%02dmotor%02d_y ",m,n);
+            fprintf(fInUse,"lb_head_type%02dmotor%02d_z ",m,n);
+        }
+    }
 }
 
 void writeToWHeader(){
-    fprintf(fInUse, "ToW_time ToWs F_ToW[0] F_ToW[1] F2_ToW[0] F2_ToW[1] FMT_ToW[0] FMT_ToW[1] F2MT_ToW[0] F2MT_ToW[1] FMTb_ToW[0] FMTb_ToW[1] FH_ToW[0] FH_ToW[1] F2H_ToW[0] F2H_ToW[1] Fteam_ToW[0] Fteam_ToW[1] FonMT_ToW[0][0] FonMT_ToW[0][1] FonMT_ToW[1][0] FonMT_ToW[1][1] FonOT_ToW[0] FonOT_ToW[1] n_ToW[0] n_ToW[1] off_count[0] off_count[1]");
+    fprintf(fInUse, "ToW_time MT_angle ToWs F_ToW[0] F_ToW[1] F2_ToW[0] F2_ToW[1] FMT_ToW[0] FMT_ToW[1] F2MT_ToW[0] F2MT_ToW[1] FMTb_ToW[0] FMTb_ToW[1] FH_ToW[0] FH_ToW[1] F2H_ToW[0] F2H_ToW[1] Fteam_ToW[0] Fteam_ToW[1] FonMT_ToW[0][0] FonMT_ToW[0][1] FonMT_ToW[1][0] FonMT_ToW[1][1] FonOT_ToW[0] FonOT_ToW[1] n_ToW[0] n_ToW[1] off_count[0] off_count[1]");
 }
 
 void initializeDataCollection()
@@ -94,121 +104,115 @@ void initializeDataCollection()
         }
     }
 
-    //open summary file
+    //create file name, open file and write header if file is new
+
+    //summary file
     strcpy(summaryName,runName);
     strcat(summaryName,"_Summary");
     strcat(summaryName,".txt");
 
-    //if summary file exists from another call, open it
-    //otherwise, create it and write the header
-    if( access( summaryName, F_OK ) != -1 ) {
-        //file exists
-        fSummary = fopen(summaryName, "a");
-    } else {
-        // file doesn't exist
-        fSummary = fopen(summaryName, "w");
-        fInUse=fSummary;
+    newfile=open_exist(summaryName);
+    fSummary=fInUse;
+    if( newfile ) {
         writeBaseHeader();
         writeSummaryHeader();
-        writeCenterLocsHeader();
-        writeHeadHeader();
-        fprintf(fSummary, "\n");
+        fprintf(fInUse, "\n");
     }
 
     if(MultiMTassay){
-
-        //open summary file
         strcpy(ToWName,runName);
         strcat(ToWName,"_ToW");
         strcat(ToWName,".txt");
 
-        //if file exists from another call, open it
-        //otherwise, create it and write the header
-        if( access( ToWName, F_OK ) != -1 ) {
-            //file exists
-            fToW = fopen(ToWName, "a");
-        } else {
-            // file doesn't exist
-            fToW = fopen(ToWName, "w");
-            fInUse=fToW;
+        newfile=open_exist(ToWName);
+        fToW=fInUse;
+        if( newfile ) {
             writeBaseHeader();
             writeToWHeader();
-            fprintf(fToW, "\n");
+            fprintf(fInUse, "\n");
         }
     }
 
-    if (ReturnDetails){
+    //if (ReturnDetails){
 
-        //create the different file names
-        //name of file for center location and locations of motors
+        //center location and locations of anchors
+        if(ReturnCenterLocs){
+            strcpy(centerlocsName,runName);
+            strcat(centerlocsName,"_Center_and_Anchors");
+            strcat(centerlocsName,".txt");
 
-        //sprintf(repeat_number,".%d",j);
-
-        strcpy(centerlocsName,runName);
-        //strcat(centerlocsName,repeat_number);
-        strcat(centerlocsName,"_Center_and_Anchors");
-        strcat(centerlocsName,".txt");
-
-        //Write center and anchor location to file
-        fCenterLocs = fopen(centerlocsName, "w");
-        //return header line
-        fInUse=fCenterLocs;
-        writeBaseHeader();
-        writeCenterLocsHeader();
-        fprintf(fCenterLocs, "\n");
+            newfile=open_exist(centerlocsName);
+            fCenterLocs=fInUse;
+            if( newfile ) {
+                writeBaseHeader();
+                writeCenterLocsHeader();
+                fprintf(fInUse, "\n");
+            }
+        }//ReturnCenterLocs
 
         if(ReturnHeads){
             //file with motor head locations
             strcpy(headName,runName);
-            //strcat(headName,repeat_number);
             strcat(headName,"_Heads");
             strcat(headName,".txt");
 
-            //write head locations to file
-            fHead=fopen(headName,"w");
-            fInUse=fHead;
-            //write header line
-            writeBaseHeader();
-            writeHeadHeader();
-            fprintf(fHead, "\n");
-        }
-
+            newfile=open_exist(headName);
+            fHead=fInUse;
+            if( newfile ) {
+                writeBaseHeader();
+                writeHeadHeader();
+                fprintf(fInUse, "\n");
+            }
+        }//ReturnHeads
 
         if(ReturnForces){
             //file with force values
             strcpy(forcesName,runName);
-            //strcat(forcesName,repeat_number);
             strcat(forcesName,"_Forces");
             strcat(forcesName,".txt");
 
-            //Write center and anchor location to file
-            fForces = fopen(forcesName, "w");
-            //return header line
-            fInUse=fForces;
-            writeBaseHeader();
-            writeForcesHeader();
-            fprintf(fForces, "\n");
+            newfile=open_exist(forcesName);
+            fForces=fInUse;
+            if( newfile ) {
+                writeBaseHeader();
+                writeForcesHeader();
+                fprintf(fForces, "\n");
+            }
         }//ReturnForces
 
         if(ReturnOmega){
-            //file with force values
+            //file with rotation quaternions
             strcpy(omegaName,runName);
-            //strcat(forcesName,repeat_number);
             strcat(omegaName,"_Omega");
             strcat(omegaName,".txt");
 
-            //Write center and anchor location to file
-            fOmega = fopen(omegaName, "w");
-            //return header line
-            fInUse=fOmega;
-            writeBaseHeader();
-            writeOmegaHeader();
-            fprintf(fOmega, "\n");
-        }//ReturnForces
+            newfile=open_exist(omegaName);
+            fOmega=fInUse;
+            if( newfile ) {
+                writeBaseHeader();
+                writeOmegaHeader();
+                fprintf(fOmega, "\n");
+            }
+        }//ReturnOmega
 
-    }//ReturnDetails
+    //}//ReturnDetails
 
 } //initializeDataCollection
+
+//If file already exists, open in append mode
+//if it doesn't, open and return 1 so we know to write the header
+int open_exist(char fName[100]){
+    //printf("%s\n",fName);
+    if( access( fName, F_OK ) != -1 ) {
+        //file exists
+        fInUse = fopen(fName, "a");
+        return 0;
+    } else {
+        // file doesn't exist
+        fInUse = fopen(fName, "w");
+        return 1;
+    }
+}
 
 void writeBase(){
     fprintf(fInUse, "%4d   %10ld %.16E ",j+1,step,t_inst);
@@ -300,18 +304,23 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%9d %7d %8g %5g %4g %+4.3g %.4g %4d %12g %8g %8g %6g %8g %6g %-+6.6f %-+6.6f %-+6.6f %22.16E %-+23.16E %-+23.16E %-+23.16E ",
+    fprintf(fInUse, "%9d %7d %-+23.16E %-+23.16E %-+23.16E ",
         prematureReturn,trial_success,
-        D_m[0],eps_0[0],pi_0[0],MTpoint[0][2],R,N[0],Ftrap[0],theta_c,
-        MT_angle,F_d[0],eta,k_m[0],
-        MTvec[1][0],MTvec[1][1],MTvec[1][2],
-        ToWtime,
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
+    for (m = 0; m<2; m++) {
+        for(n=0;n<N[m];n++){
+            fprintf(fInUse,"%-+23.16E %-+23.16E %-+23.16E ",
+                last_bound_head[m][n][0],
+                last_bound_head[m][n][1],
+                last_bound_head[m][n][2]
+                );
+        }
+    }
 }
 
 void writeToW(){
-    fprintf(fInUse, "%-+23.16E %d %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d %+1.16E %+1.16E ",
-        ToWtime, ToWs, F_ToW[0], F_ToW[1], F2_ToW[0], F2_ToW[1],
+    fprintf(fInUse, "%-+23.16E %8g %d %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %-+23.16E %d %d %+1.16E %+1.16E ",
+        ToWtime, MT_angle, ToWs, F_ToW[0], F_ToW[1], F2_ToW[0], F2_ToW[1],
         FMT_ToW[0], FMT_ToW[1], F2MT_ToW[0], F2MT_ToW[1],
         FMTb_ToW[0], FMTb_ToW[1],
         FH_ToW[0], FH_ToW[1], F2H_ToW[0], F2H_ToW[1],
@@ -326,50 +335,7 @@ void inLoopDataCollection()
 {
     if (ReturnDetails)
     {
-        fInUse=fCenterLocs;
-        writeBase();
-        writeCenterLocs();
-        fprintf(fCenterLocs, "\n");
-
-        if(ReturnHeads){
-            fInUse=fHead;
-            writeBase();
-            writeHead();
-            fprintf(fHead, "\n");
-        }
-
-        if(ReturnForces){
-            fInUse=fForces;
-            writeBase();
-            writeForces();
-            fprintf(fForces, "\n");
-        }//ReturnForces
-
-        if(ReturnOmega){
-
-            if(ReturnDetails>1){
-                //convert accumlated quaternion to euler vector and reset
-
-                //convert to euler vector (from quaternions.nb)
-                if(quat[0]>1 - 1E-10){
-                    omega[0] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[1])/315.;
-                    omega[1] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[2])/315.;
-                    omega[2] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[3])/315.;
-                }else{
-                    omega[0] = (2*acos(quat[0])*quat[1])/sqrt(1 - pow(quat[0],2));
-                    omega[1] = (2*acos(quat[0])*quat[2])/sqrt(1 - pow(quat[0],2));
-                    omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));
-                }
-
-                //reset quat by setting it to the identity quaternion
-                set_quat_to_identity();
-            }
-
-            fInUse=fOmega;
-            writeBase();
-            writeOmega();
-            fprintf(fOmega, "\n");
-        }//ReturnOmega
+        write_all();
 
         if(MultiMTassay){
             fInUse=fToW;
@@ -379,6 +345,55 @@ void inLoopDataCollection()
         }
     } //ReturnDetails
 }//inLoopDataCollection
+
+void write_all(){
+    if(ReturnCenterLocs){
+        fInUse=fCenterLocs;
+        writeBase();
+        writeCenterLocs();
+        fprintf(fCenterLocs, "\n");
+    }
+
+    if(ReturnHeads){
+        fInUse=fHead;
+        writeBase();
+        writeHead();
+        fprintf(fHead, "\n");
+    }
+
+    if(ReturnForces){
+        fInUse=fForces;
+        writeBase();
+        writeForces();
+        fprintf(fForces, "\n");
+    }//ReturnForces
+
+    if(ReturnOmega){
+
+        if(ReturnDetails>1){
+            //convert accumlated quaternion to euler vector and reset
+
+            //convert to euler vector (from quaternions.nb)
+            if(quat[0]>1 - 1E-10){
+                omega[0] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[1])/315.;
+                omega[1] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[2])/315.;
+                omega[2] = (2*(488 - 275*quat[0] + 144*pow(quat[0],2) - 50*pow(quat[0],3) + 8*pow(quat[0],4))*quat[3])/315.;
+            }else{
+                omega[0] = (2*acos(quat[0])*quat[1])/sqrt(1 - pow(quat[0],2));
+                omega[1] = (2*acos(quat[0])*quat[2])/sqrt(1 - pow(quat[0],2));
+                omega[2] = (2*acos(quat[0])*quat[3])/sqrt(1 - pow(quat[0],2));
+            }
+
+            //reset quat by setting it to the identity quaternion
+            set_quat_to_identity();
+        }
+
+        fInUse=fOmega;
+        writeBase();
+        writeOmega();
+        fprintf(fOmega, "\n");
+    }//ReturnOmega
+}
 
 void set_quat_to_identity(){
     quat[0]=1;
@@ -419,15 +434,6 @@ void simulationEndDataCollection(){
     fInUse=fSummary;
     writeBase();
     writeSummary();
-    writeCenterLocs();
-    for (m = 0; m<2; m++) {
-        for(n=0;n<N[m];n++){
-            for(i=0;i<3;i++){
-                head[m][n][i]=last_bound_head[m][n][i];
-            }
-        }
-    }
-    writeHead();
     fprintf(fSummary, "\n");
 
     if(MultiMTassay && ReturnDetails==0){
@@ -436,6 +442,8 @@ void simulationEndDataCollection(){
         writeToW();
         fprintf(fToW, "\n");
     }
+
+    write_all();
 }
 
 void write_error(){

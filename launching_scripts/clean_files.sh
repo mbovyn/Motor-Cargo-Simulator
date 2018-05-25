@@ -11,7 +11,8 @@ keep_old="$3"
 echo "Cleaning old files (clean_files.sh)"
 
 #all files code creates
-file_endings=(_params.txt _MT_params.txt _Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
+param_endings=( _params.txt _MT_params.txt )
+file_endings=( _Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
 
 cd $working_dir
 . $code_dir/launching_scripts/get_param_file_list.sh
@@ -24,16 +25,29 @@ do
     #echo "${instance%*_MT_params.txt}"
     instance_name="${instance%*_MT_params.txt}"
 
+    for ending in ${param_endings[*]}
+    do
+        fname="${instance_name}$ending"
+        if [ -f $fname ] ; then
+
+            rm $fname
+            echo "--->deleted $fname"
+
+        fi
+    done
+
     for ending in ${file_endings[*]}
     do
         fname="${instance_name}$ending"
-        if [ -f $fname -a ${keep_old:-0} -eq 0 ] ; then
-            rm $fname
-            echo "--->deleted $fname"
-        else
+        if [ -f $fname ] ; then
+
             if [ ${keep_old:-0} -eq 1 ] ; then
                 echo "--->didn't delete $fname, keeping old"
+            else
+                rm $fname
+                echo "--->deleted $fname"
             fi
+
         fi
     done
 done

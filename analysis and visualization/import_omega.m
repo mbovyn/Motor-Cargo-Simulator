@@ -1,3 +1,4 @@
+function omega=import_omega(localpath,run_name)
 %% Import data from text file.
 % Script for importing data from the following text file:
 %
@@ -10,6 +11,7 @@
 
 %% Initialize variables.
 filename = [localpath '/' run_name '_Omega.txt'];
+disp(['Importing rotation from ' filename]);
 delimiter = ' ';
 startRow = 2;
 
@@ -42,11 +44,12 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
-repeat1 = dataArray{:, 1};
-step1 = dataArray{:, 2};
-time = dataArray{:, 3};
-omega = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
+%repeat1 = dataArray{:, 1};
+%step1 = dataArray{:, 2};
+%time = dataArray{:, 3};
+omega.vector = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
 
 
 %% Clear temporary variables
-clearvars filename delimiter startRow formatSpec fileID dataArray ans;
+%clearvars filename delimiter startRow formatSpec fileID dataArray ans;
+end

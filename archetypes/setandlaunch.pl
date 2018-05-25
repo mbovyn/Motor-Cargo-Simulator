@@ -249,7 +249,7 @@ our $UseSteric=1;
 
 # //Output
 
-our $ReturnDetails=0; our $RD2=1; our $RD3=0; our $RD4=1;
+our $ReturnDetails=0; our $RD2=0; our $RD3=0; our $RD4=0; our $RD5=0;
 # /* create text files with records of anchor and head locations
 # 0: Don’t return any details during simulation
 # 1: Return details every step

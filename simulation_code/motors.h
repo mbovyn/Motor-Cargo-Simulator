@@ -129,6 +129,7 @@ int InitialNucleotideBehavior;
 int NucleotideBehavior;
 int MotorLoading;
 int ReturnDetails;
+int ReturnCenterLocs=1;
 int ReturnHeads;
 int ReturnFinalState;
 int ReturnForces;
@@ -372,6 +373,8 @@ double alpha;
 int runningInLoop;
 char repeat_number[100];
 double trash;
+
+int newfile;
 
 //strings to use for filnames and lines read in
 char paramFileName[100], MTparamFileName[100], tmpString[100], runName[100], blah[100];

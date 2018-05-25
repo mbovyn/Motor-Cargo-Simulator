@@ -1,3 +1,4 @@
+function forces=import_forces(params,localpath,run_name)
 %% Import data from text file.
 % Script for importing data from the following text file:
 %
@@ -10,8 +11,11 @@
 
 %% Initialize variables.
 filename = [localpath '/' run_name '_Forces.txt'];
+disp(['Importing forces from ' filename]);
 delimiter = ' ';
 startRow = 2;
+
+N=params.N;
 
 %% Format string for each line of text:
 
@@ -42,18 +46,18 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
-repeat = dataArray{:, 1};
-step = dataArray{:, 2};
-t_arr = dataArray{:, 3};
+%repeat = dataArray{:, 1};
+%step = dataArray{:, 2};
+%t_arr = dataArray{:, 3};
 
-Fext = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
-Fsteric = [dataArray{:, 7} dataArray{:, 8} dataArray{:, 9}];
+forces.Fext = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
+forces.Fsteric = [dataArray{:, 7} dataArray{:, 8} dataArray{:, 9}];
 
-Fradial=cell(2,1);
-Ftangential=cell(2,1);
+forces.Fradial=cell(2,1);
+forces.Ftangential=cell(2,1);
 for m=1:2
-    Fradial{m}=cell(N(m),1);
-    Ftangential{m}=cell(N(m),1);
+    forces.Fradial{m}=cell(N(m),1);
+    forces.Ftangential{m}=cell(N(m),1);
 end
 
 
@@ -66,16 +70,17 @@ for m=1:2
         else
             column=10+N(1)*6+(n-1)*6;
         end
-        Fradial{m}{n}=[dataArray{:,column:column+2}];
-        Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
+        forces.Fradial{m}{n}=[dataArray{:,column:column+2}];
+        forces.Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
     end
 end
 
 %%
 
-MTdist=[dataArray{:,column+6:column+7}];
+forces.MTdist=[dataArray{:,column+6:column+7}];
 
 
 %% Clear temporary variables
-clearvars column m n piece1 piece2...
-    filename delimiter startRow formatSpec fileID dataArray ans;
+%clearvars column m n piece1 piece2...
+%    filename delimiter startRow formatSpec fileID dataArray ans;
+end
