@@ -47,15 +47,14 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
-%repeat = dataArray{:, 1};
-step = dataArray{:, 2};
-%t_arr = dataArray{:, 3};
 
 locs=struct;
 
+%repeat = dataArray{:, 1};
+step = dataArray{:, 2};
+locs.t_arr = dataArray{:, 3};
+
 locs.center = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
-
-
 
 %% 
 

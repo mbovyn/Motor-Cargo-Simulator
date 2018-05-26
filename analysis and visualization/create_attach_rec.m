@@ -3,7 +3,7 @@ if ~exist('attach_rec','var')
     disp('Creating attach_rec')
 
     if ~exist('head_rec','var')
-        head_rec=cell(size(loc_rec));
+        head_rec=cell(size(locs.loc_rec));
     end
 
     %attached status (head loc = NAN if not attached)

@@ -7,48 +7,21 @@ set(0,'defaultfigurecolor','w')
 
 %% import parameters and data
 
-import_params_and_results.m
+nruns=[1,1];
+import_params_and_results
 
 
 if disp_theta_c==0
     theta_c=NaN;
 else
-    theta_c=theta_c(1);
-end
-
-
-
-
-%take in the location data written by the simulation
-%only if it hasn't already been read in
-if ~exist('loc_rec','var')
-
-    run([analysispath '/import_locs.m'])
-
-    %take in data on locations of heads if the file exists (sometimes we
-    %need not write one)
-    if exist([localpath '/' run_name '_Heads.txt'],'file')
-        run([analysispath '/import_head.m'])
-    else
-        disp('No file to read heads from')
-    end
-
-end
-
-
-
-%take in the force data written by the simulation
-%only if we're going to use it and it hasn't already been read in
-if draw_forces==true && ~exist('Fext','var')
-    disp('Importing Forces')
-    run([analysispath '/import_forces.m'])
+    theta_c=params.theta_c;
 end
 
 %take in the data on the orientation change of the cargo
-if ~exist('omega','var') && exist([localpath '/' run_name '_Omega.txt'],'file')
+if exist('omega','var') && ~exist('cumeuler','var')
 
-    disp('Importing Omega - Cargo Rotation')
-    import_omega
+    omegastruct=omega;
+    omega=omegastruct.vector;
 
     %can't simply add euler vectors to get cumulative rotation
     %need to convert them to rotation matricies, multiply them, then
@@ -93,7 +66,10 @@ end
 
 %% set plot bounds
 
+R_motor=params.L;
 max_length=max(R_motor);
+R=params.R;
+center=locs.center;
 
 switch plot_box
 
@@ -151,7 +127,7 @@ end
 %calculate what we need from what was read in
 %--------------------------------------------------------------------------
 
-create_attach_rec
+attach_rec=heads.bound;
 
 %% ------------------------------------------------------------------------
 %plot
@@ -179,6 +155,8 @@ else
 
 end
 
+N=params.N;
+
 if ~exist('tan_scaling','var')
 
     %prepare to draw forces
@@ -187,6 +165,11 @@ if ~exist('tan_scaling','var')
     if draw_forces==true
 
         disp('Creating force scaling')
+        
+        Fext=forces.Fext;
+        Fsteric=forces.Fsteric;
+        Ftangential=forces.Ftangential;
+        Fradial=forces.Fradial;
 
         mags_ext=sqrt(sum(Fext.*Fext,2));
         ext_scaling=R(1)/max(mags_ext);
@@ -217,6 +200,13 @@ if ~exist('tan_scaling','var')
     end
 
 end
+
+loc_rec=locs.loc_rec;
+head_rec=heads.head_rec;
+t_arr=locs.t_arr;
+n_MTs=params.n_MTs;
+MTpt=params.MTpt;
+MTvec=params.MTvec;
 
 if isnan(skip_frames)
     skip_frames=ceil((size(loc_rec,2))/frames);
@@ -269,7 +259,7 @@ for t=loop_ts
         att=attach_rec{m,t};
 
         if draw_detail==true
-            stretch=stretch_rec{m,t};
+            %stretch=stretch_rec{m,t}; %obsolete
         end
 
         %plot a sphere for each motor

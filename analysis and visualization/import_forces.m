@@ -46,9 +46,12 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
+
+forces=struct;
+
 %repeat = dataArray{:, 1};
 %step = dataArray{:, 2};
-%t_arr = dataArray{:, 3};
+forces.t_arr = dataArray{:, 3};
 
 forces.Fext = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
 forces.Fsteric = [dataArray{:, 7} dataArray{:, 8} dataArray{:, 9}];

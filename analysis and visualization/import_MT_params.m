@@ -1,3 +1,4 @@
+function params=import_MT_params(params,localpath,run_name)
 %% Import data from text file.
 % Script for importing data from the following text file:
 %
@@ -76,6 +77,10 @@ end
 
 
 %% Allocate imported array to column variable names
+
+%MTparams=struct;
+%MTparams.n_MTs=params.n_MTs;
+
 ptx = cell2mat(raw(:, 1));
 pty = cell2mat(raw(:, 2));
 ptz = cell2mat(raw(:, 3));
@@ -93,5 +98,6 @@ for importi=1:params.n_MTs
 end
 
 %% Clear temporary variables
-clearvars filename delimiter startRow formatSpec fileID dataArray ans raw col numericData rawData row regexstr result numbers invalidThousandsSeparator thousandsRegExp me;
-clearvars ptx pty ptz vecx vecy vecz importi;
+%clearvars filename delimiter startRow formatSpec fileID dataArray ans raw col numericData rawData row regexstr result numbers invalidThousandsSeparator thousandsRegExp me;
+%clearvars ptx pty ptz vecx vecy vecz importi;
+end

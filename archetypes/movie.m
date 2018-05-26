@@ -10,7 +10,7 @@ localpath=pwd;
 results_prefix=[localpath '/' run_name];
 
 %analysis file path
-analysispath='~/project_code/Motor_Freedom/tools/analysis and visualization';
+analysispath='~/project_code/Motor_Freedom/analysis and visualization';
 
 %% Movie setup
 

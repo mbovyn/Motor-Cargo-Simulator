@@ -124,6 +124,10 @@ params.F_ext=test(20,2:4)';
 params.T_ext=test(21,2:4)';
 params.theta_c=test(22,2);
 
+params.R_MT=[];
+params.MTpt=[];
+params.MTvec=[];
+
 %clearvars test;
 
 end

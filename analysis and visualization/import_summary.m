@@ -16,9 +16,6 @@ filename = [localpath '/' run_name '_Summary.txt'];
 if ~exist(filename,'file')
     error([filename ' doesnt exist!'])
 end
-if ~exist('params','var')
-    error('Import params first')
-end
 delimiter = ' ';
 startRow = 2;
 

@@ -48,9 +48,12 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
+
+heads=struct;
+
 %repeat = dataArray{:, 1};
 step = dataArray{:, 2};
-%t_arr = dataArray{:, 3};
+heads.t_arr = dataArray{:, 3};
 
 heads.head_rec=cell(2,size(step,1));
 

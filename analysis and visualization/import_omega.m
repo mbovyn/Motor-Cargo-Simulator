@@ -44,11 +44,13 @@ fclose(fileID);
 % script.
 
 %% Allocate imported array to column variable names
+
+omega=struct;
+
 %repeat1 = dataArray{:, 1};
 %step1 = dataArray{:, 2};
-%time = dataArray{:, 3};
+omega.t_arr = dataArray{:, 3};
 omega.vector = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
-
 
 %% Clear temporary variables
 %clearvars filename delimiter startRow formatSpec fileID dataArray ans;

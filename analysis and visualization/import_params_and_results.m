@@ -1,24 +1,25 @@
 %bring in parameters and outputs for multiple runs
 
 %take in the summary the simulation writes if we haven't yet
-if ~exist('runs','var')
-    
-    [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,localpath);
-    
-    
-    if isempty(fieldnames(locs))
-        clearvars locs
-    end
-    if isempty(fieldnames(heads))
-        clearvars heads
-    end
-    if isempty(fieldnames(forces))
-        clearvars forces
-    end
-    if isempty(fieldnames(omega))
-        clearvars omega
-    end
-    
+
+if exist('params','var')
+    return
+end
+
+[params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,localpath);
+
+
+if isempty(fieldnames(locs))
+    clearvars locs
+end
+if isempty(fieldnames(heads))
+    clearvars heads
+end
+if isempty(fieldnames(forces))
+    clearvars forces
+end
+if isempty(fieldnames(omega))
+    clearvars omega
 end
 
 function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,localpath)
@@ -62,6 +63,7 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
 
             %import parameters
             params(runno1,runno2)=import_params(localpath,run_name);
+            params(runno1,runno2)=import_MT_params(params(runno1,runno2),localpath,run_name);
 
             %import summary
             summary(runno1,runno2)=import_summary(params(runno1,runno2),localpath,run_name);
