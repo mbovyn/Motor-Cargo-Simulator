@@ -39,7 +39,7 @@ N=params.N;
 
 fileID = fopen(filename,'r');
 
-piece1=repmat('%f',1,5+3+3*sum(N));
+piece1=repmat('%f',1,5+3+3+3*sum(N));
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -68,15 +68,17 @@ summary.exit_cond = dataArray{:, 4};
 summary.success = dataArray{:,5};
 summary.success=logical(summary.success);
 
-num=5+3;
+summary.max_dist=[dataArray{:,6:8}];
+
+num=5+3+3;
 
 summary.last_bound_center = [dataArray{:, num-2} ...
     dataArray{:, num-1} ...
     dataArray{:, num}]';
 
 summary.last_bound_head=cell(2,1);
-summary.last_bound_head{1}=zeros(N(1),3);
-summary.last_bound_head{2}=zeros(N(2),3);
+summary.last_bound_head{1}=zeros(N(1),size(summary.repeat,1),3);
+summary.last_bound_head{2}=zeros(N(2),size(summary.repeat,1),3);
 
 for m=1:2
     for n=1:N(m)
@@ -85,7 +87,7 @@ for m=1:2
         else
             column=num+1+N(1)*3+(n-1)*3;
         end
-        summary.last_bound_head{m}(n,:)=...
+        summary.last_bound_head{m}(n,:,:)=...
             [dataArray{:,column:column+2}];
     end
 end

@@ -147,6 +147,7 @@ long step; //2
 
 //Cargo dynamic properties
 double center[3];
+double max_dist[3];
 double center_MT_dist;
 
 // motor dynamic properties

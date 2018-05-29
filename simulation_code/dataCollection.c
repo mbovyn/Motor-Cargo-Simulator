@@ -77,7 +77,7 @@ void writeOmegaHeader(){
 }
 
 void writeSummaryHeader(){
-    fprintf(fInUse, "exit_cond success last_bound_center_x     last_bound_center_y     last_bound_center_z     ");
+    fprintf(fInUse, "exit_cond success max_dist_x    max_dist_y    max_dist_z    last_bound_center_x     last_bound_center_y     last_bound_center_z     ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
             fprintf(fInUse,"lb_head_type%02dmotor%02d_x ",m,n);
@@ -317,8 +317,9 @@ void writeOmega(){
 }
 
 void writeSummary(){
-    fprintf(fInUse, "%9d %7d %-+23.16E %-+23.16E %-+23.16E ",
+    fprintf(fInUse, "%9d %7d %+13.6E %+13.6E %+13.6E %-+23.16E %-+23.16E %-+23.16E ",
         prematureReturn,trial_success,
+        max_dist[0],max_dist[1],max_dist[2],
         LastBoundLocation[0],LastBoundLocation[1],LastBoundLocation[2]);
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){

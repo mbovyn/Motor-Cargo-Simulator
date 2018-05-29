@@ -7,6 +7,7 @@ void clear_aggregates(){
     for(i=0;i<3;i++){
         center[i]=center_initial[i];
         LastBoundLocation[i]=NAN;
+        max_dist[i]=center[i];
     }
     for(k=0;k<n_MTs;k++){
         MTviolationCounter[k]=0;
@@ -85,6 +86,11 @@ void update_lasts_and_maxes(){
                 }
             }
         }
+    }
+
+    for(i=0;i<3;i++){
+        if(center[i]>max_dist[i])
+            max_dist[i]=center[i];
     }
 
     //keep track of which MT the cargo is walking on
