@@ -50,253 +50,253 @@ our @sweepvals = (
 ###############################################################################
 #set parameter values
 
-our $N1=3;     our $N2=0;      #number of motors
-our $F_s1=5;    our $F_s2=5;    #stall force
-our $F_d1=4;    our $F_d2=4;    #detachment force
-our $eps_01=.7; our $eps_02=.7; #base unbinding rate
-our $pi_01=10;  our $pi_02=10;  #base binding rate
-our $v_f1=1;    our $v_f2=3;    #max velocity
+our $N1=3;     our $N2=0;         our $cc1="//number of motors";
+our $F_s1=5;    our $F_s2=5;      our $cc2="//stall force (pN)";
+our $F_d1=4;    our $F_d2=4;      our $cc3="//detachment force (pN)";
+our $eps_01=.7; our $eps_02=.7;   our $cc4="//base unbinding rate (1/s)";
+our $pi_01=10;  our $pi_02=10;    our $cc5="//base binding rate (1/s)";
+our $v_f1=1;    our $v_f2=3;      our $cc6="//max velocity (microns/s)";
 
-our $a1=1.07;   our $a2=1.07;   #superstall parameter 1
-our $b1=.186;   our $b2=.186;   #superstall parameter 2
-our $w1=2;      our $w2=2;      #force velocity curve exponent
-our $L1=.08;    our $L2=.08;    #motor length
-our $k_m1=320;  our $k_m2=320;  #motor spring stiffness
-our $s1=.008;   our $s2= -.008; #step size
+our $a1=1.07;   our $a2=1.07;     our $cc7="//superstall parameter 1";
+our $b1=.186;   our $b2=.186;     our $cc8="//superstall parameter 2";
+our $w1=2;      our $w2=2;        our $cc9="//force velocity curve exponent";
+our $L1=.08;    our $L2=.08;      our $cc10="//motor length (microns)";
+our $k_m1=320;  our $k_m2=320;    our $cc11="//motor spring stiffness (pN/micron)";
+our $s1=.008;   our $s2= -.008;   our $cc12="//step size (microns)";
 
-our $D_m1=0;    our $D_m2=3;    #motor diffusion constant
+our $D_m1=0;    our $D_m2=3;      our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
-our $cx=0; our $cy=0; our $cz=.5; #cargo center (microns)
-our $R=.5;                          #cargo radius
-our $eta=.0089;                    #surrounding fluid viscosity
+our $cx=0; our $cy=0; our $cz=.5; our $cc14="//cargo center (microns)";
+our $R=.5;                        our $cc15="//cargo radius (microns)";
+our $eta=.0089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
 
-our $n_MTs=1;
-our $kcMT=40000;
+our $n_MTs=1;    our $cc17="//number of MTs";
+our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
 
-#//Keyword Arguments-------------
+#Keyword Arguments-------------
 
-#//Motor Location
+#Motor Location
 
 our $InitialLocations=8; our $IL2=0; our $IL3=0;
-# /*
-# 1:
-# 2: Uniform Random on the surface of the sphere
-# 3: Top
-# 4: Bottom
-# 5: Uniform random, rotate so type0motor0 is on top
-# 6: Uniform random, rotate so motor with most close neighbors is on top
-# 7: Start at a defined elevation (specify in 3rd input in degrees)
-# 8: Uniform random, rotate so type0motor0 is on bottom
-# 9: All motors set to same random spot
-# 10:
-#
-# second parameter: 1  - kin at bottom, 2 for dyn, 3 - kin on top, 4 for dyn
-# third parameter used to pass in angle (degrees)
-#  */
+our $cc19="/*
+1:
+2:  Uniform Random on the surface of the sphere
+3:  All at Top
+4:  All at Bottom
+5:  Uniform random, rotate so type0motor0 is on top
+6:  Uniform random, rotate so motor with most close neighbors is on top
+7:  Start at a defined elevation (specify in 3rd input in degrees)
+8:  Uniform random, rotate so type0motor0 is on bottom
+9:  All motors at same random spot
+10:
+
+second parameter: 1 - kin at bottom, 2 - dyn at bottom, 3 - kin on top, 4 - dyn on top
+third parameter used to pass in angle (degrees)
+*/";
 
 our $MotorDiffusion=4;
-# /*
-# 1: no drag - Diffuse all motors by legacy function
-# 2: no drag - Only diffuse non-attached motors by legacy function
-# 3: free motors - deterministic (cargo trans and rot, motor diffusion set to 0)
-# 4: free motors
-# 5: free motors - cargo diffusion (rot and trans) set to 0
-# 6: free motors - cargo rot and anchor diffusion set to 0
-# 7: free motors - cargo trans and anchor diffusion set to 0
-# 8: free motors - debugging case
-# 9: free motors - cargo translational diffusion to 0
-# 10: bead motors
-# 11: bead motors - deterministic (cargo trans and rot, motor diffusion set to 0)
-# 12: bead motors - only rotation
-# 13:
-# 14:
-# 15:
-#  */
+our $cc20="/*
+1:  no drag - Diffuse all motors by legacy function
+2:  no drag - Only diffuse non-attached motors by legacy function
+3:  free motors - deterministic (cargo trans and rot, motor diffusion set to 0)
+4:  free motors
+5:  free motors - cargo diffusion (rot and trans) set to 0
+6:  free motors - cargo rot and anchor diffusion set to 0
+7:  free motors - cargo trans and anchor diffusion set to 0
+8:  free motors - debugging case
+9:  free motors - cargo translational diffusion to 0
+10: bead motors
+11: bead motors - deterministic (cargo trans and rot, motor diffusion set to 0)
+12: bead motors - only rotation
+13:
+14:
+15:
+*/";
 
-# //Interaction of motors with MT
+#Interaction of motors with MT
 
 our $InitialBinding=2; our $IB2=0;
-# /*
+our $cc21="/*
 # 1: Bind all in range
-# 2: Bind only 1 Kin
-# 3: Don’t bind
-# 4: Bind 1 dyn
-# 5: Force all motors to bind (debugging)
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+2: Bind only 1 Kin
+3: Don’t bind
+4: Bind 1 dyn
+5: Force all motors to bind (debugging)
+6:
+7:
+8:
+9:
+10:
+ */";
 
 our $Binding=1; our $B2=.5;
-# /*
-# 1: set given binding rate if in range
-# 2: motors don’t bind
-# 3: always bind if in range
-# 4: (not implemented) set binding rate if between L and inner limit (fraction*L)
-# 5: Normal binding, but excluded in region for 0nm MT crossings
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+our $cc22="/*
+1: set given binding rate if in range
+2: motors don’t bind
+3: always bind if in range
+4: (not implemented) set binding rate if between L and inner limit (fraction*L)
+5: Normal binding, but excluded in region for 0nm MT crossings
+6:
+7:
+8:
+9:
+10:
+*/";
 
 our $Unbinding=1;
-# /*
-# 1: Ambarish Unbinding
-# 2: unbind at constant rate eps_0
-# 3: NoUnbinding
-# 4: different between assisting and hindering
-# 5:
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+our $cc23="/*
+1: Ambarish Unbinding
+2: unbind at constant rate eps_0
+3: NoUnbinding
+4: different between assisting and hindering
+5:
+6:
+7:
+8:
+9:
+10:
+*/";
 
 our $Stepping=2; our $S2=999999999;
-# /*
-# 1: Step at rate determined by unloaded velocity
-# 2: Stepping rate depends on force (Ambarish)
-# 3: no stepping
-# 4: override stepping rate with second input (999999999 for always step)
-# 5: Don’t step into excluded in region for 0nm MT crossings
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+our $cc24="/*
+1: Step at rate determined by unloaded velocity
+2: Stepping rate depends on force (Ambarish)
+3: no stepping
+4: override stepping rate with second input (999999999 for always step)
+5: Don’t step into excluded in region for 0nm MT crossings
+6:
+7:
+8:
+9:
+10:
+*/";
 
 our $InitialNucleotideBehavior=1;
-# /*
-# 1: All start ready
-# 2: All start not ready
-# 3:
-# 4:
-# 5:
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+our $cc25="/*
+1: All start ready
+2: All start not ready
+3:
+4:
+5:
+6:
+7:
+8:
+9:
+10:
+*/";
 
 our $NucleotideBehavior=0; our $NB2=300; our $NB3=300;
-# /*
-# 1: No nucleotide exchange (explicit)
-# 2: set constant nucleotide exchange rate (give in arguments 2 and 3)
-# 3:
-# 4:
-# 5:
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-# second and third arguments are nucleotide exchange rates
-# if first argument is set to 0, nucleotide exchange is ignored
-#  */
+our $cc26="/*
+1: No nucleotide exchange (explicit)
+2: set constant nucleotide exchange rate (give in arguments 2 and 3)
+3:
+4:
+5:
+6:
+7:
+8:
+9:
+10:
+second and third arguments are nucleotide exchange rates
+if first argument is set to 0, nucleotide exchange is ignored
+*/";
 
-# //Bound motor behavior
+#Bound motor behavior
 
 our $MotorLoading=1;
-# /*
-# 1: Load by stretch of necks
-# 2: Force always 0
-# */
+our $cc27="/*
+1: Load by stretch of necks
+2: Force always 0
+*/";
 
-# //Cargo Behavior
+#Cargo Behavior
 
 our $CargoBehavior=1;
-# /*
-# 1: Cargo moves normally
-# 2: On rail - cargo moves only in x
-# 3: stuck - cargo can’t move at all
-# 4:
-# 5:
-# 6:
-# 7:
-# 8:
-# 9:
-# 10:
-#  */
+our $cc28="/*
+1: Cargo moves normally
+2: On rail - cargo moves only in x
+3: stuck - cargo can’t move at all
+4:
+5:
+6:
+7:
+8:
+9:
+10:
+*/";
 
 our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=-.005;
-# /*
-# 1: no external forces
-# 2: external force given by next three values (x y z)
-# 3: force given by optical trap (not implemented yet)
-# */
+our $cc29="/*
+1: no external forces
+2: external force given by next three values (x y z)
+3: force given by optical trap (not implemented yet)
+*/";
 
 our $ExternalTorque=1; our $ET2=0; our $ET3=0; our $ET4=100;
-# /*
-# 1: no external torque
-# 2: external torque given by next three values (x y z)
+our $cc30="/*
+1: no external torque
+2: external torque given by next three values (x y z)
 #
-# */
+*/";
 
 our $UseSteric=1;
-# /*
-# 1: Use steric force
-# 0: Don’t use steric force
+our $cc31="/*
+1: Use steric force
+0: Don’t use steric force
 #
-# Note: steric force spring constant specified in kcMT
-# /*
+Note: steric force spring constant specified in kcMT
+/*";
 
-# //Output
+#Output
 
 our $ReturnDetails=0; our $RD2=0; our $RD3=0; our $RD4=0; our $RD5=0;
-# /* create text files with records of anchor and head locations
-# 0: Don’t return any details during simulation
-# 1: Return details every step
-# 2: Return details only when something important happens (step, attachment, etc.)
-# 3: Return details every 100 steps
-# 4: Return details every .001 seconds
-# 5:
-# set second value to 1 to return file with head locations, 0 for no
-# set third value to 1 to return file with forces, 0 for no
-# set fourth value to 1 to return file with rotation of cargo
-# */
+our $cc32="/* create text files with records
+0: Only return end state
+1: Return details every step
+2: Return details only when something important happens (step, attachment, etc.)
+3: Return details every 100 steps
+4: Return details every .001 seconds
+set second value to 1 to return file with head locations, 0 for no
+set third value to 1 to return file with forces, 0 for no
+set fourth value to 1 to return file with rotation of cargo
+set fifth value to 1 to return file with locations of cargo and anchors
+*/";
 
 our $ReturnFinalState=1;
-# /*
-# Not implemented
+our $cc33="/*
+Not implemented
 #
-# */
+*/";
 
-# //Simulation end conditions (1=yes,0=no)
-our $RequireAttached=0;
-our $StopOnMotor2Attach=0;
-our $StopOnAllAttached=0;
-our $StopOnStep=0;                  #//0 for don’t stop, otherwise enter step
-our $StopOnTime=.1;                  #//0 for don’t stop, otherwise enter time
-our $StopOnDistance=0;              #//0 no stop, otherwise distance in microns
-our $StopBelowThetaC=0; our $SB=-1; #//2nd value elevation radians -pi/2 to pi/2
-our $multiMT_assay=0;               #//1 for switch, 2 for ToW
-our $StopOnBeadDissociation=0;      #//stop if bead is > 500nm from all MTs
-our $StopOnCargoBinding=0;        #//stop when any motor binds
+#Simulation end conditions (1=yes,0=no)
+our $RequireAttached=0;             our $cc34="//Stop when all motors in unbound state";
+our $StopOnMotor2Attach=0;          our $cc35="//Stop when second motor binds";
+our $StopOnAllAttached=0;           our $cc36="//Stop when all motors bound";
+our $StopOnStep=0;                  our $cc37="//0 for don’t stop, otherwise enter step";
+our $StopOnTime=.1;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
+our $StopOnDistance=0;              our $cc39="//0 no stop, otherwise distance (microns)";
+our $StopBelowThetaC=0; our $SB=-1; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
+our $multiMT_assay=0;               our $cc41="//1 for switch, 2 for ToW";
+our $StopOnBeadDissociation=0;      our $cc42="//stop if bead is > 500nm from all MTs";
+our $StopOnCargoBinding=0;          our $cc43="//stop when any motor binds";
 
-# //Success Conditions
+#Success Conditions
 our $Success=0; our $SS2=3;
-# /*success success_mode - if mode=0, success if result==success
-# 0: Nothing counts as success
-# 1: type0motor0 is bound
-# 2: went > 10 microns
-# 3: underwent a tug of war
-# 4:
-# 5:
-# 6:
-# 7:
-# 8:
-# 9:
-# */
+our $cc44="/*success success_mode - if mode=0, success if result==success
+0: Nothing counts as success
+1: type0motor0 is bound
+2: went > 10 microns
+3: underwent a tug of war
+4:
+5:
+6:
+7:
+8:
+9:
+*/";
 
 # //debugging
-our $dt_override=0; #//set to positive value to override default dt.  Negative to ignore dt_default
+our $dt_override=0; our $cc45="//0=no override. Value in (s) to override. -1 to ignore dt_default";
 
 ###############################################################################
 #MT parameters
