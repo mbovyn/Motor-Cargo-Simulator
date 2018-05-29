@@ -311,7 +311,7 @@ void binding_rates() //sets bind_possible and bind_rate
         case 1:
             //motors can bind if the anchors are closer to the MT
             //than they are long
-            findMTdist();
+            findMTdist(); //motorHelpers_setup.c
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
                     if(bind_possible[m][n][k]){
@@ -332,7 +332,7 @@ void binding_rates() //sets bind_possible and bind_rate
             break;
 
         case 3: //motors always bind if possible
-            findMTdist();
+            findMTdist(); //motorHelpers_setup.c
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
                     if(bind_possible[m][n][k]){

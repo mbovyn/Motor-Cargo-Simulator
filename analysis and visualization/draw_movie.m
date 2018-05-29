@@ -176,6 +176,8 @@ if ~exist('tan_scaling','var')
 
         clear mags_ext mags_steric mags_tan mags_rad ...
             ext_scaling steric_scaling rad_scaling
+        
+        disp('Drawing')
     end
 
 end
@@ -195,7 +197,7 @@ else
     loop_ts=start_frame:skip_frames:final_frame;
 end
 
-disp('Drawing')
+
 
 %% loop over each frame we want to draw
 for t=loop_ts

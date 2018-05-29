@@ -31,12 +31,15 @@ int simulate_cargo()
     //sets bound and head
 
     // set initial nucleotide status
+    //printf("Nucleotide is %d\n",NucleotideBehavior);
     if(NucleotideBehavior){
         initialnucleotide(); //motorHelpers_setup.c
     }
     else{ //if NucleotideBehavior is 0, always be ready (removes effect)
-        for(n=0;n<N[m];n++){
-            nuc_ready[m][n]=1;
+        for (m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                nuc_ready[m][n]=1;
+            }
         }
     }
     //sets nuc_ready
@@ -218,7 +221,9 @@ int simulate_cargo()
 
                 // loop through binding rates
                 for(k=0;k<n_MTs;k++){
+                    //printf("nuc_ready of type%dmotor%d is %d\n",m,n,nuc_ready[m][n]);
                     if(bind_possible[m][n][k] && nuc_ready[m][n]){
+                        //printf("binding possible for type%dmotor%d with rate %f\n",m,n,bind_rate[m][n][k]);
                         //make sure motor has a chance to diffuse away if
                         //dt_max_base is large
                         if(dt_max>dt_default){

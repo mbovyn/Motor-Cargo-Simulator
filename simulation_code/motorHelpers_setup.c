@@ -370,6 +370,7 @@ void findMTdist(){
                 }else{
                     bind_possible[m][n][k]=0;
                 }
+                //printf("for type%dmotor%d dist is %f, bind_possible is %d\n",m,n,MTdist,bind_possible[m][n][k]);
             }
 
         }else{

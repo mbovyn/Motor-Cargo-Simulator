@@ -64,10 +64,10 @@ our $L1=.08;    our $L2=.08;      our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;    our $cc11="//motor spring stiffness (pN/micron)";
 our $s1=.008;   our $s2= -.008;   our $cc12="//step size (microns)";
 
-our $D_m1=0;    our $D_m2=3;      our $cc13="//motor diffusion coefficiant (micron^2/s)";
+our $D_m1=1;    our $D_m2=3;      our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
-our $cx=0; our $cy=0; our $cz=.5; our $cc14="//cargo center (microns)";
-our $R=.5;                        our $cc15="//cargo radius (microns)";
+our $cx=0; our $cy=0; our $cz=.25; our $cc14="//cargo center (microns)";
+our $R=.25;                        our $cc15="//cargo radius (microns)";
 our $eta=.0089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
 
 our $n_MTs=1;    our $cc17="//number of MTs";
@@ -225,7 +225,7 @@ our $cc28="/*
 10:
 */";
 
-our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=-.005;
+our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=0;
 our $cc29="/*
 1: no external forces
 2: external force given by next three values (x y z), pN
