@@ -58,6 +58,10 @@ void writeForcesHeader(){
     fprintf(fInUse, "steric_x      steric_y      steric_z      ");
     for(m = 0; m<2; m++){
         for(n=0;n<N[m];n++){
+            fprintf(fInUse,"Mag_%02d_%02d     ",m,n);
+            fprintf(fInUse,"Vec_%02d_%02d_x   ",m,n);
+            fprintf(fInUse,"Vec_%02d_%02d_y   ",m,n);
+            fprintf(fInUse,"Vec_%02d_%02d_z   ",m,n);
             fprintf(fInUse,"Radial_%02d_%02d_x  ",m,n);
             fprintf(fInUse,"Radial_%02d_%02d_y  ",m,n);
             fprintf(fInUse,"Radial_%02d_%02d_z  ",m,n);
@@ -176,7 +180,7 @@ void initializeDataCollection()
             if( newfile ) {
                 writeBaseHeader();
                 writeForcesHeader();
-                fprintf(fForces, "\n");
+                fprintf(fInUse, "\n");
             }
         }//ReturnForces
 
@@ -191,7 +195,7 @@ void initializeDataCollection()
             if( newfile ) {
                 writeBaseHeader();
                 writeOmegaHeader();
-                fprintf(fOmega, "\n");
+                fprintf(fInUse, "\n");
             }
         }//ReturnOmega
 
@@ -268,7 +272,11 @@ void writeForces(){
     for (m = 0; m<2; m++) {
         for(n=0;n<N[m];n++){
             if(bound[m][n]){
-                fprintf(fInUse, "%+E %+E %+E %+E %+E %+E ",
+                fprintf(fInUse, "%+13.6E %+13.6E %+13.6E %+13.6E %+15.8E %+15.8E %+15.8E %+15.8E %+15.8E %+15.8E ",
+                    F_m_mag[m][n],
+                    F_m_vec[m][n][0],
+                    F_m_vec[m][n][1],
+                    F_m_vec[m][n][2],
                     FmRadial[nn][0],
                     FmRadial[nn][1],
                     FmRadial[nn][2],
@@ -279,20 +287,25 @@ void writeForces(){
                 nn++;
             }
             else{
-                fprintf(fInUse, "%d %d %d %d %d %d ",
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0);
+                fprintf(fInUse, "%+-13.6E %+-13.6E %+-13.6E %+-13.6E %+-15.8E %+-15.8E %+-15.8E %+-15.8E %+-15.8E %+-15.8E ",
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN,
+                    NAN
+                    );
             }
         }
     }
 
-    for(k=0;k<n_MTs;k++){
-        fprintf(fInUse, "%+1.16E ",MTdistk[k]);
-    }
+    // for(k=0;k<n_MTs;k++){
+    //     fprintf(fInUse, "%+1.16E ",MTdistk[k]);
+    // }
 }//writeForces
 
 void writeOmega(){

@@ -72,6 +72,7 @@
 #include "motorHelpers_rates.c" //functions for finding stepping rates
 #include "stop_conditions.c"
 #include "motorHelpers_sODE.c" //functions for setting up the solve
+#include "aggregate_numbers.c" 
 #include "simulate_cargo.c" //main simulation
 
 /*******************************************************************************/
