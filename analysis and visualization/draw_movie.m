@@ -150,21 +150,27 @@ if ~exist('tan_scaling','var')
         mags_steric=sqrt(sum(forces.Fsteric.*forces.Fsteric,2));
         steric_scaling=params.R(1)/max(mags_steric);
 
-        mags_tan=zeros(size(forces.Ftangential{1}{1},1),params.N(1)+params.N(2));
-        mags_rad=zeros(size(forces.Fradial{1}{1},1),params.N(1)+params.N(2));
-
-        for m=1:2
-            for n=1:params.N(m)
-                mags_tan(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Ftangential{m}{n}.*forces.Ftangential{m}{n},2));
-                mags_rad(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Fradial{m}{n}.*forces.Fradial{m}{n},2));
+        if max(params.N)>0
+            
+            mags_tan=zeros(size(forces.Ftangential{1}{1},1),params.N(1)+params.N(2));
+            mags_rad=zeros(size(forces.Fradial{1}{1},1),params.N(1)+params.N(2));
+        
+            for m=1:2
+                for n=1:params.N(m)
+                    mags_tan(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Ftangential{m}{n}.*forces.Ftangential{m}{n},2));
+                    mags_rad(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Fradial{m}{n}.*forces.Fradial{m}{n},2));
+                end
             end
+
+            mags_tan=mags_tan(:);
+            mags_rad=mags_rad(:);
+
+            tan_scaling=params.R(1)/max(mags_tan);
+            rad_scaling=params.R(1)/max(mags_rad);
+        else
+            tan_scaling=Inf;
+            rad_scaling=Inf;
         end
-
-        mags_tan=mags_tan(:);
-        mags_rad=mags_rad(:);
-
-        tan_scaling=params.R(1)/max(mags_tan);
-        rad_scaling=params.R(1)/max(mags_rad);
 
         cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
 
@@ -177,7 +183,7 @@ end
 %figure out which frames to draw
 
 if isnan(skip_frames)
-    skip_frames=ceil((size(locs.loc_rec,2))/frames);
+    skip_frames=ceil((size(locs.center,1))/frames);
 end
 
 %find the final frame to draw from the given inputs
@@ -220,110 +226,116 @@ for t=loop_ts
     hold on
 
     %% motor anchors and heads
-    for m=1:2
+    if max(params.N)>0
+        for m=1:2
 
-        %access location information from this time step
-        loc=locs.loc_rec{m,t};
-        loc_head=heads.head_rec{m,t};
-        att=heads.bound{m}(t,:);
+            %access location information from this time step
+            loc=locs.loc_rec{m,t};
+            loc_head=heads.head_rec{m,t};
+            if params.N(m)>0
+                att=heads.bound{m}(t,:);
+            end
 
-        if draw_detail==true
-            %stretch=stretch_rec{m,t}; %obsolete
-        end
+            if draw_detail==true
+                %stretch=stretch_rec{m,t}; %obsolete
+            end
 
-        %plot a sphere for each motor
-        for n=1:params.N(m)
+            %plot a sphere for each motor
+            for n=1:params.N(m)
 
-            [ h_motor,h_head,h_stalk ] = draw_motor( ...
-                m,att(n),params.L(m),loc(n,:),loc_head(n,:)...
-                );
+                [ h_motor,h_head,h_stalk ] = draw_motor( ...
+                    m,att(n),params.L(m),loc(n,:),loc_head(n,:)...
+                    );
 
-            if exist('makeFig','var')
+                if exist('makeFig','var')
 
-                if ~att(n)
-                    set(h_motor,'FaceColor',[0 .6 0]);
-                    set(h_motor,'FaceAlpha',.8)
-                    set(h_motor,'EdgeAlpha',0)
+                    if ~att(n)
+                        set(h_motor,'FaceColor',[0 .6 0]);
+                        set(h_motor,'FaceAlpha',.8)
+                        set(h_motor,'EdgeAlpha',0)
 
-                    h_motor.FaceLighting = 'gouraud';
-                    h_motor.AmbientStrength = 0.5;
-                    h_motor.DiffuseStrength = 0.8;
-                    h_motor.SpecularStrength = 0.3;
-                    h_motor.SpecularExponent = 25;
-                    h_motor.BackFaceLighting = 'unlit';
-                else
-
-                    set(h_motor,'EdgeColor','none');
-                    %set(h_motor,'EdgeAlpha',1);
-                    if bound{m}(t,n)==1
-                        set(h_motor,'FaceColor','c');
-                    elseif bound{m}(t,n)==2
-                        set(h_motor,'FaceColor','m');
+                        h_motor.FaceLighting = 'gouraud';
+                        h_motor.AmbientStrength = 0.5;
+                        h_motor.DiffuseStrength = 0.8;
+                        h_motor.SpecularStrength = 0.3;
+                        h_motor.SpecularExponent = 25;
+                        h_motor.BackFaceLighting = 'unlit';
                     else
-                        error('motor Not bound to 1 or 2')
+
+                        set(h_motor,'EdgeColor','none');
+                        %set(h_motor,'EdgeAlpha',1);
+                        if bound{m}(t,n)==1
+                            set(h_motor,'FaceColor','c');
+                        elseif bound{m}(t,n)==2
+                            set(h_motor,'FaceColor','m');
+                        else
+                            error('motor Not bound to 1 or 2')
+                        end
+
+                        set(h_head,'EdgeColor','none');
+                        if bound{m}(t,n)==1
+                            set(h_head,'FaceColor','c');
+                        elseif bound{m}(t,n)==2
+                            set(h_head,'FaceColor','m');
+                        else
+                            error('Head Not bound to 1 or 2')
+                        end
+
+                        set(h_stalk,'LineWidth',2);
+                        if bound{m}(t,n)==1
+                            set(h_stalk,'Color','c');
+                        elseif bound{m}(t,n)==2
+                            set(h_stalk,'Color','m');
+                        else
+                            error('Neck Not bound to 1 or 2')
+                        end
+
+                        h_motor.FaceLighting = 'gouraud';
+                        h_motor.AmbientStrength = 0.5;
+                        h_motor.DiffuseStrength = 0.8;
+                        h_motor.SpecularStrength = 0.3;
+                        h_motor.SpecularExponent = 25;
+                        h_motor.BackFaceLighting = 'unlit';
+
+                        h_head.FaceLighting = 'gouraud';
+                        h_head.AmbientStrength = 0.5;
+                        h_head.DiffuseStrength = 0.8;
+                        h_head.SpecularStrength = 0.3;
+                        h_head.SpecularExponent = 25;
+                        h_head.BackFaceLighting = 'unlit';
                     end
+                end
 
-                    set(h_head,'EdgeColor','none');
-                    if bound{m}(t,n)==1
-                        set(h_head,'FaceColor','c');
-                    elseif bound{m}(t,n)==2
-                        set(h_head,'FaceColor','m');
-                    else
-                        error('Head Not bound to 1 or 2')
-                    end
+                if Diagnostics>1
+                    text(loc(n,1),...
+                        loc(n,2),...
+                        loc(n,3)+1.1*params.L(m),sprintf('%d\n',n)...
+                        ,'FontWeight','bold'...
+                        ,'HorizontalAlignment','center');
+                end
 
-                    set(h_stalk,'LineWidth',2);
-                    if bound{m}(t,n)==1
-                        set(h_stalk,'Color','c');
-                    elseif bound{m}(t,n)==2
-                        set(h_stalk,'Color','m');
-                    else
-                        error('Neck Not bound to 1 or 2')
-                    end
+                if draw_forces==true
 
-                    h_motor.FaceLighting = 'gouraud';
-                    h_motor.AmbientStrength = 0.5;
-                    h_motor.DiffuseStrength = 0.8;
-                    h_motor.SpecularStrength = 0.3;
-                    h_motor.SpecularExponent = 25;
-                    h_motor.BackFaceLighting = 'unlit';
+                    %for the radial force on the anchor
+                    f=forces.Ftangential{m}{n}(t,:)*tan_scaling;
+                    plot3([loc(n,1),loc(n,1)+f(1)],...
+                        [loc(n,2),loc(n,2)+f(2)],...
+                        [loc(n,3),loc(n,3)+f(3)],'linewidth',3)
 
-                    h_head.FaceLighting = 'gouraud';
-                    h_head.AmbientStrength = 0.5;
-                    h_head.DiffuseStrength = 0.8;
-                    h_head.SpecularStrength = 0.3;
-                    h_head.SpecularExponent = 25;
-                    h_head.BackFaceLighting = 'unlit';
+                    ct=locs.center(t,:);
+
+                    %for tangential force
+                    f=forces.Fradial{m}{n}(t,:)*cargo_scaling;
+                    plot3([ct(1) ct(1)+f(1)],...
+                        [ct(2) ct(2)+f(2)],...
+                        [ct(3) ct(3)+f(3)],...
+                        'm','LineWidth',6)
+
                 end
             end
-
-            if Diagnostics>1
-                text(loc(n,1),...
-                    loc(n,2),...
-                    loc(n,3)+1.1*params.L(m),sprintf('%d\n',n)...
-                    ,'FontWeight','bold'...
-                    ,'HorizontalAlignment','center');
-            end
-
-            if draw_forces==true
-
-                %for the radial force on the anchor
-                f=forces.Ftangential{m}{n}(t,:)*tan_scaling;
-                plot3([loc(n,1),loc(n,1)+f(1)],...
-                    [loc(n,2),loc(n,2)+f(2)],...
-                    [loc(n,3),loc(n,3)+f(3)],'linewidth',3)
-
-                ct=locs.center(t,:);
-
-                %for tangential force
-                f=forces.Fradial{m}{n}(t,:)*cargo_scaling;
-                plot3([ct(1) ct(1)+f(1)],...
-                    [ct(2) ct(2)+f(2)],...
-                    [ct(3) ct(3)+f(3)],...
-                    'm','LineWidth',6)
-
-            end
         end
+    else
+        %no motors to draw
     end
 
     %% if have force vectors, plot out the forces acting on the cargo

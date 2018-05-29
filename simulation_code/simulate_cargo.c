@@ -16,7 +16,7 @@ int simulate_cargo()
     //wipe variables which don't reset otherwise
     if (verboseTF>2)
         printf("    Resetting counters and sums\n");
-        
+
     clear_aggregates(); //aggregate_numbers.c
 
     if (verboseTF>2)
@@ -305,7 +305,7 @@ int simulate_cargo()
         // time step now determined, can do forward euler
         // to move anchors and cargo--------------------------------------------
         setup_solve(); //sets total_pulling_motors, forward equation variables
-        calculate_forces(); //finds force values for trap, steric, and splits motor forces to radial and tangential
+        calculate_forces(); //motorHelpers_sODE.c
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
         //keep track of ToW forces

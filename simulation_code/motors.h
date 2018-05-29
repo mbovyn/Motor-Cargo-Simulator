@@ -292,6 +292,7 @@ double a_sph[NMOTORSMAX][3];
 double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
+double Fin[3];
 double Fsteric[3];
 double Fsterick[NMTSMAX][3];
 double TorqeExt[3];

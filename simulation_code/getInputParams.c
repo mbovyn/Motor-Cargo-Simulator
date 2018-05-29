@@ -233,7 +233,7 @@ void getInputParams( void )
     //External Force
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Ftrap[0],&Ftrap[1],&Ftrap[2]);
+    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Fin[0],&Fin[1],&Fin[2]);
     //printf("\n\n\nFtrap[0] is %lf\n\n\n",Ftrap[0]);
 
     for(n_lines=1;n_lines<=6;n_lines++)

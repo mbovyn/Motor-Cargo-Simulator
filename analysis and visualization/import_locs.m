@@ -88,7 +88,7 @@ if max(N)>0
     end
     
 else
-    error('No motors')
+    locs.loc_rec=[];
 end
 
 

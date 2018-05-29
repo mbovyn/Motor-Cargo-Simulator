@@ -66,21 +66,25 @@ end
 
 %% 
 
-for m=1:2
-    for n=1:N(m)
-        if m==1
-            column=10+(n-1)*6;
-        else
-            column=10+N(1)*6+(n-1)*6;
+if max(N)>0
+    for m=1:2
+        for n=1:N(m)
+            if m==1
+                column=10+(n-1)*6;
+            else
+                column=10+N(1)*6+(n-1)*6;
+            end
+            forces.Fradial{m}{n}=[dataArray{:,column:column+2}];
+            forces.Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
         end
-        forces.Fradial{m}{n}=[dataArray{:,column:column+2}];
-        forces.Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
     end
+else
+    %no motors
 end
 
 %%
 
-forces.MTdist=[dataArray{:,column+6:column+7}];
+%forces.MTdist=[dataArray{:,column+6:column+7}];
 
 
 %% Clear temporary variables

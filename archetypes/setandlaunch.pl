@@ -117,7 +117,7 @@ our $cc20="/*
 
 our $InitialBinding=2; our $IB2=0;
 our $cc21="/*
-# 1: Bind all in range
+1: Bind all in range
 2: Bind only 1 Kin
 3: Don’t bind
 4: Bind 1 dyn
@@ -228,8 +228,8 @@ our $cc28="/*
 our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=-.005;
 our $cc29="/*
 1: no external forces
-2: external force given by next three values (x y z)
-3: force given by optical trap (not implemented yet)
+2: external force given by next three values (x y z), pN
+3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */";
 
 our $ExternalTorque=1; our $ET2=0; our $ET3=0; our $ET4=100;

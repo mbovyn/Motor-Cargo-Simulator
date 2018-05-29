@@ -401,7 +401,7 @@ void evaluate_steric(){
 
 } //evaluate_steric
 
-void calculate_forces()
+void calculate_forces() //finds force values for trap, steric, and splits motor forces to radial and tangential
 {
     //set value of external force
     switch(external_force){
@@ -413,9 +413,15 @@ void calculate_forces()
         case 2:
             //external force given as input
             //values for Ftrap set when input, don't change them
+            for(i=0;i<3;i++){
+                Ftrap[i]=Fin[i];
+            }
             break;
         case 3:
             //implement something here for an optical trap
+            for(i=0;i<3;i++){
+                Ftrap[i]=-Fin[i]*center[i];
+            }
             break;
         default:
             printf("\n\nError: Bad value for external_force\n\n");
