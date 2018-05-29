@@ -89,12 +89,12 @@ vecy = cell2mat(raw(:, 5));
 vecz = cell2mat(raw(:, 6));
 params.R_MT = cell2mat(raw(:, 7));
 
-params.MTpt=zeros(params.n_MTs,3);
-params.MTvec=zeros(params.n_MTs,3);
+params.MTpt=zeros(params.n_MTs,3)';
+params.MTvec=zeros(params.n_MTs,3)';
 
-for importi=1:params.n_MTs
-    params.MTpt(importi,:)=[ptx(importi) pty(importi) ptz(importi)];
-    params.MTvec(importi,:)=[vecx(importi) vecy(importi) vecz(importi)];
+for i=1:params.n_MTs
+    params.MTpt(:,i)=[ptx(i) pty(i) ptz(i)]';
+    params.MTvec(:,i)=[vecx(i) vecy(i) vecz(i)]';
 end
 
 %% Clear temporary variables

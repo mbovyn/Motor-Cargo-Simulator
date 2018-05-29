@@ -1,7 +1,5 @@
 %% draws movie from data created by simulation
 
-error('This needs to be updated for the new import structure')
-
 %want a white background behind the figure so it blends in with slide
 set(0,'defaultfigurecolor','w')
 
@@ -10,18 +8,8 @@ set(0,'defaultfigurecolor','w')
 nruns=[1,1];
 import_params_and_results
 
-
-if disp_theta_c==0
-    theta_c=NaN;
-else
-    theta_c=params.theta_c;
-end
-
 %take in the data on the orientation change of the cargo
 if exist('omega','var') && ~exist('cumeuler','var')
-
-    omegastruct=omega;
-    omega=omegastruct.vector;
 
     %can't simply add euler vectors to get cumulative rotation
     %need to convert them to rotation matricies, multiply them, then
@@ -29,8 +17,8 @@ if exist('omega','var') && ~exist('cumeuler','var')
 
     %first turn omega vector into normalized vector + magnitude (Euler
     %Vector)
-    omega_mag=sqrt(sum(omega.*omega,2));
-    EV=[omega(:,1)./omega_mag,omega(:,2)./omega_mag,omega(:,3)./omega_mag,omega_mag*180/pi];
+    omega_mag=sqrt(sum(omega.vector.*omega.vector,2));
+    EV=[omega.vector(:,1)./omega_mag,omega.vector(:,2)./omega_mag,omega.vector(:,3)./omega_mag,omega_mag*180/pi];
     EV(isnan(EV))=0;
     %note first value written is 0 vector, so can't be normalized and ends
     %up NaNs
@@ -66,46 +54,43 @@ end
 
 %% set plot bounds
 
-R_motor=params.L;
-max_length=max(R_motor);
-R=params.R;
-center=locs.center;
+max_length=max(params.L);
 
 switch plot_box
 
     case 1 %cargo set at 0 and not moving
 
-        xends=[-(R(1)+max_length) R(1)+max_length];
-        yends=[-(R(1)+max_length) R(1)+max_length];
-        zends=[-(R(1)+max_length+.02) R(1)+max_length];
+        xends=[-(params.R(1)+max_length) params.R(1)+max_length];
+        yends=[-(params.R(1)+max_length) params.R(1)+max_length];
+        zends=[-(params.R(1)+max_length+.02) params.R(1)+max_length];
 
     case 2 %outside of all points to be drawn
 
-        xends=[min(center(:,1))-R(1)-max_length max(center(:,1))+R(1)+max_length];
-        yends=[min(center(:,2))-R(1)-max_length max(center(:,2))+R(1)+max_length];
-        zends=[min(center(:,3))-R(1)-max_length max(center(:,3))+R(1)+max_length];
+        xends=[min(locs.center(:,1))-params.R(1)-max_length max(locs.center(:,1))+params.R(1)+max_length];
+        yends=[min(locs.center(:,2))-params.R(1)-max_length max(locs.center(:,2))+params.R(1)+max_length];
+        zends=[min(locs.center(:,3))-params.R(1)-max_length max(locs.center(:,3))+params.R(1)+max_length];
 
     case 3 %tighter bounds than 2, motor circles may be cut off
 
-        xends=[min(center(:,1))-R(1) max(center(:,1))+R(1)];
-        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
-        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
+        xends=[min(locs.center(:,1))-params.R(1) max(locs.center(:,1))+params.R(1)];
+        yends=[min(locs.center(:,2))-params.R(1) max(locs.center(:,2))+params.R(1)];
+        zends=[min(locs.center(:,3))-params.R(1) max(locs.center(:,3))+params.R(1)];
 
     case 4 % cargo centered
 
-%         xends=[-(R+max_length) R+max_length];
-%         yends=[-(R+max_length) R+max_length];
-%         zends=[-(R+max_length+.02) R+max_length+.02];
+%         xends=[-(params.R+max_length) params.R+max_length];
+%         yends=[-(params.R+max_length) params.R+max_length];
+%         zends=[-(params.R+max_length+.02) params.R+max_length+.02];
 
     case 5 % only set y and z ends, leave x to be set in calling script
 
-        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
-        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
+        yends=[min(locs.center(:,2))-params.R(1) max(locs.center(:,2))+params.R(1)];
+        zends=[min(locs.center(:,3))-params.R(1) max(locs.center(:,3))+params.R(1)];
 
     case 6 %only follow in x
 
-        yends=[min(center(:,2))-R(1) max(center(:,2))+R(1)];
-        zends=[min(center(:,3))-R(1) max(center(:,3))+R(1)];
+        yends=[min(locs.center(:,2))-params.R(1) max(locs.center(:,2))+params.R(1)];
+        zends=[min(locs.center(:,3))-params.R(1) max(locs.center(:,3))+params.R(1)];
 
     otherwise
 
@@ -115,26 +100,16 @@ end
 
 
 
-% xends=[-(R+max_length) locs_final{1}{1}(1)+.2];
-% zends=[-(R+max_length) R+max_length];
+% xends=[-(params.R+max_length) locs_final{1}{1}(1)+.2];
+% zends=[-(params.R+max_length) params.R+max_length];
 
 %xends=[-.15 .5];
 % yends=[-.15 .15];
-% zends=[-(R+max_length+z_MT_offset+.005) -(R+max_length+z_MT_offset+.005)+.3];
-
-
-%% --------------------------------------------------------------------------
-%calculate what we need from what was read in
-%--------------------------------------------------------------------------
-
-attach_rec=heads.bound;
+% zends=[-(params.R+max_length+z_MT_offset+.005) -(params.R+max_length+z_MT_offset+.005)+.3];
 
 %% ------------------------------------------------------------------------
 %plot
 %--------------------------------------------------------------------------
-
-%create a figure which we'll update
-
 
 %if we want to save the MPEG
 if SaveMPEG~=false
@@ -155,8 +130,6 @@ else
 
 end
 
-N=params.N;
-
 if ~exist('tan_scaling','var')
 
     %prepare to draw forces
@@ -166,32 +139,32 @@ if ~exist('tan_scaling','var')
 
         disp('Creating force scaling')
         
-        Fext=forces.Fext;
-        Fsteric=forces.Fsteric;
-        Ftangential=forces.Ftangential;
-        Fradial=forces.Fradial;
+        %Fext=forces.Fext;
+        %Fsteric=forces.Fsteric;
+        %Ftangential=forces.Ftangential;
+        %Fradial=forces.Fradial;
 
-        mags_ext=sqrt(sum(Fext.*Fext,2));
-        ext_scaling=R(1)/max(mags_ext);
+        mags_ext=sqrt(sum(forces.Fext.*forces.Fext,2));
+        ext_scaling=params.R(1)/max(mags_ext);
 
-        mags_steric=sqrt(sum(Fsteric.*Fsteric,2));
-        steric_scaling=R(1)/max(mags_steric);
+        mags_steric=sqrt(sum(forces.Fsteric.*forces.Fsteric,2));
+        steric_scaling=params.R(1)/max(mags_steric);
 
-        mags_tan=zeros(size(Ftangential{1}{1},1),N(1)+N(2));
-        mags_rad=zeros(size(Fradial{1}{1},1),N(1)+N(2));
+        mags_tan=zeros(size(forces.Ftangential{1}{1},1),params.N(1)+params.N(2));
+        mags_rad=zeros(size(forces.Fradial{1}{1},1),params.N(1)+params.N(2));
 
         for m=1:2
-            for n=1:N(m)
-                mags_tan(:,(m-1)*N(1)+n)=sqrt(sum(Ftangential{m}{n}.*Ftangential{m}{n},2));
-                mags_rad(:,(m-1)*N(1)+n)=sqrt(sum(Fradial{m}{n}.*Fradial{m}{n},2));
+            for n=1:params.N(m)
+                mags_tan(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Ftangential{m}{n}.*forces.Ftangential{m}{n},2));
+                mags_rad(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Fradial{m}{n}.*forces.Fradial{m}{n},2));
             end
         end
 
         mags_tan=mags_tan(:);
         mags_rad=mags_rad(:);
 
-        tan_scaling=R(1)/max(mags_tan);
-        rad_scaling=R(1)/max(mags_rad);
+        tan_scaling=params.R(1)/max(mags_tan);
+        rad_scaling=params.R(1)/max(mags_rad);
 
         cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
 
@@ -201,32 +174,29 @@ if ~exist('tan_scaling','var')
 
 end
 
-loc_rec=locs.loc_rec;
-head_rec=heads.head_rec;
-t_arr=locs.t_arr;
-n_MTs=params.n_MTs;
-MTpt=params.MTpt;
-MTvec=params.MTvec;
+%figure out which frames to draw
 
 if isnan(skip_frames)
-    skip_frames=ceil((size(loc_rec,2))/frames);
+    skip_frames=ceil((size(locs.loc_rec,2))/frames);
 end
 
 %find the final frame to draw from the given inputs
-final_frame=min([start_frame+frames*skip_frames size(center,1)]);
+final_frame=min([start_frame+frames*skip_frames size(locs.center,1)]);
 
-if start_frame+frames*skip_frames > size(center,1)
-    loop_ts=[start_frame:skip_frames:final_frame length(t_arr)];
+if start_frame+frames*skip_frames > size(locs.center,1)
+    loop_ts=[start_frame:skip_frames:final_frame length(locs.t_arr)];
 else
     loop_ts=start_frame:skip_frames:final_frame;
 end
+
+disp('Drawing')
 
 %% loop over each frame we want to draw
 for t=loop_ts
     %% plot vesicle
 
     if exist('makeFig','var')
-        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf,'Color','w','Alpha',1);
+        h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Color','w','Alpha',1);
 
         h.FaceLighting = 'gouraud';
         h.AmbientStrength = 0.3;
@@ -237,36 +207,35 @@ for t=loop_ts
 
     else
 
-        h = draw_cargo(center(t,1),center(t,2),center(t,3),R(1),n_cargo_surf,'Alpha',1);
+        h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',1);
 
     end
 
     if exist('omega','var')
         if(t>1)
-            rotate(h,[cumeuler(t-1,1) cumeuler(t-1,2) cumeuler(t-1,3)],cumeuler(t-1,4),[center(t,1),center(t,2),center(t,3)])
+            rotate(h,[cumeuler(t-1,1) cumeuler(t-1,2) cumeuler(t-1,3)],cumeuler(t-1,4),[locs.center(t,1),locs.center(t,2),locs.center(t,3)])
         end
     end
 
-    %% initial axis properites
     hold on
 
     %% motor anchors and heads
     for m=1:2
 
         %access location information from this time step
-        loc=loc_rec{m,t};
-        loc_head=head_rec{m,t};
-        att=attach_rec{m,t};
+        loc=locs.loc_rec{m,t};
+        loc_head=heads.head_rec{m,t};
+        att=heads.bound{m}(t,:);
 
         if draw_detail==true
             %stretch=stretch_rec{m,t}; %obsolete
         end
 
         %plot a sphere for each motor
-        for n=1:N(m)
+        for n=1:params.N(m)
 
             [ h_motor,h_head,h_stalk ] = draw_motor( ...
-                m,att(n),R_motor(m),loc(n,:),loc_head(n,:)...
+                m,att(n),params.L(m),loc(n,:),loc_head(n,:)...
                 );
 
             if exist('makeFig','var')
@@ -331,7 +300,7 @@ for t=loop_ts
             if Diagnostics>1
                 text(loc(n,1),...
                     loc(n,2),...
-                    loc(n,3)+1.1*R_motor(m),sprintf('%d\n',n)...
+                    loc(n,3)+1.1*params.L(m),sprintf('%d\n',n)...
                     ,'FontWeight','bold'...
                     ,'HorizontalAlignment','center');
             end
@@ -339,15 +308,15 @@ for t=loop_ts
             if draw_forces==true
 
                 %for the radial force on the anchor
-                f=Ftangential{m}{n}(t,:)*tan_scaling;
+                f=forces.Ftangential{m}{n}(t,:)*tan_scaling;
                 plot3([loc(n,1),loc(n,1)+f(1)],...
                     [loc(n,2),loc(n,2)+f(2)],...
                     [loc(n,3),loc(n,3)+f(3)],'linewidth',3)
 
-                ct=center(t,:);
+                ct=locs.center(t,:);
 
                 %for tangential force
-                f=Fradial{m}{n}(t,:)*cargo_scaling;
+                f=forces.Fradial{m}{n}(t,:)*cargo_scaling;
                 plot3([ct(1) ct(1)+f(1)],...
                     [ct(2) ct(2)+f(2)],...
                     [ct(3) ct(3)+f(3)],...
@@ -360,17 +329,17 @@ for t=loop_ts
     %% if have force vectors, plot out the forces acting on the cargo
     if draw_forces==true
 
-        ct=center(t,:);
+        ct=locs.center(t,:);
 
         %for external force
-        f=Fext(t,:)*cargo_scaling;
+        f=forces.Fext(t,:)*cargo_scaling;
         plot3([ct(1) ct(1)+f(1)],...
             [ct(2) ct(2)+f(2)],...
             [ct(3) ct(3)+f(3)],...
             'k','LineWidth',6)
 
         %for the steric force from the MT
-        f=Fsteric(t,:)*cargo_scaling;
+        f=forces.Fsteric(t,:)*cargo_scaling;
         plot3([ct(1) ct(1)+f(1)],...
             [ct(2) ct(2)+f(2)],...
             [ct(3) ct(3)+f(3)],...
@@ -382,37 +351,24 @@ for t=loop_ts
 
     %plot a ring to indicate the location of the critical angle
     %for visualizing mean first passage time test
-    if ~isnan(theta_c)
+    if disp_theta_c~=0
         %plot a circle on the sphere where theta_c is
-        circle_center=[center(t,1) center(t,2) center(t,3)+R*sin(theta_c)];
-        plotCircle3D(circle_center,[0 0 1],R*cos(theta_c))
+        circle_center=[locs.center(t,1) locs.center(t,2) locs.center(t,3)+params.R*sin(params.theta_c)];
+        plotCircle3D(circle_center,[0 0 1],params.R*cos(params.theta_c))
     end
 
-    %     if p.Results.Diagnostics==true
-    % %     if ~isempty(cargo_loc) && t>start_frame
-    % %         if cargo_v(t)>0
-    % %             status='Kinesin (blue) winning, moving (+)';
-    % %         elseif cargo_v(t)<0
-    % %             status='Dynein (red) winning, moving (-)';
-    % %         else
-    % %             status='Not moving';
-    % %         end
-    % %
-    % %         text(0,0,.7,status,'HorizontalAlignment','center')
-    % %     end
-    %     end
 
     %% plot labels
 
     if Diagnostics>1
-        title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',t_arr(t))]))
+        title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',locs.t_arr(t))]))
     elseif Diagnostics>0
         %display current frame
         %text(.4,-.4,.4,['Frame ' num2str(t)])
         %display current simulation time
-        %text(-.4,.4,.4,['t=' num2str(t_arr(t))])
+        %text(-.4,.4,.4,['t=' num2str(locs.t_arr(t))])
 
-        title(sprintf([titlestring '\n t=' sprintf('%0.3f',t_arr(t)) ' s']))
+        title(sprintf([titlestring '\n t=' sprintf('%0.3f',locs.t_arr(t)) ' s']))
     else
         title(titlestring)
     end
@@ -428,10 +384,10 @@ for t=loop_ts
         view(init_view(1),init_view(2));
     end
 
-%     if ~isnan(theta_c)
-%         %set view angle
-%         view(0,0)
-%     end
+    if disp_theta_c~=0
+        %set view angle
+        view(0,0)
+    end
 
     if t>start_frame
         view(az,el)
@@ -442,46 +398,43 @@ for t=loop_ts
 
     if plot_box==4
 
-        xends=[center(t,1)-(R(1)+max_length) center(t,1)+R(1)+max_length];
-        yends=[center(t,2)-(R(1)+max_length) center(t,2)+R(1)+max_length];
-        zends=[center(t,3)-(R(1)+max_length+.02) center(t,3)+R(1)+max_length+.02];
+        xends=[locs.center(t,1)-(params.R(1)+max_length) locs.center(t,1)+params.R(1)+max_length];
+        yends=[locs.center(t,2)-(params.R(1)+max_length) locs.center(t,2)+params.R(1)+max_length];
+        zends=[locs.center(t,3)-(params.R(1)+max_length+.02) locs.center(t,3)+params.R(1)+max_length+.02];
 
     elseif plot_box==6
 
-        %thing1=[ max([t-50 1]) min([t+50 length(ts)]) ]
-        xends=[mean(center(max([t-50 1]):min([t+50 length(t_arr)]),1))-(R(1)+max_length) ...
-            mean(center(max([t-50 1]):min([t+50 length(t_arr)]),1))+R(1)+max_length];
-
-        %xends
-
+        xends=[mean(locs.center(max([t-50 1]):min([t+50 length(locs.t_arr)]),1))-(params.R(1)+max_length) ...
+            mean(locs.center(max([t-50 1]):min([t+50 length(locs.t_arr)]),1))+params.R(1)+max_length];
     end
 
     axis([xends(1) xends(2) yends(1) yends(2) zends(1) zends(2)]);
 
-        %% MTs
+    %% MTs
 
 
     if exist('makeFig','var')
 
         [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
-            MTpt{1},MTvec{1},R_MT(1),...
+            params.MTpt{1},params.MTvec{1},params.R_MT(1),...
             'Color',[0 0 .6],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
         [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
-            MTpt{2},MTvec{2},R_MT(2),...
+            params.MTpt{2},params.MTvec{2},params.R_MT(2),...
             'Color',[.6 0 0],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
     else
 
-            for i=1:n_MTs
-                [ h_cyl,h_cap1,h_cap2 ] = draw_MT( ...
-                    xends,yends,zends,MTpt{i},MTvec{i},R_MT(i) );
-            end
+        for i=1:params.n_MTs
+            [ h_cyl,h_cap1,h_cap2 ] = draw_MT( ...
+                xends,yends,zends,params.MTpt(:,i)',params.MTvec(:,i)',params.R_MT(i) );
+        end
+        
     end
 
     if exist('draw_sep_dist_line','var')
 
-        plot3([MTpt{1}(1) MTpt{2}(1)],...
-            [MTpt{1}(2) MTpt{2}(2)],...
-            [MTpt{1}(3) MTpt{2}(3)],'k-.','LineWidth',2)
+        plot3([params.MTpt{1}(1) params.MTpt{2}(1)],...
+            [params.MTpt{1}(2) params.MTpt{2}(2)],...
+            [params.MTpt{1}(3) params.MTpt{2}(3)],'k-.','LineWidth',2)
 
     end
 
@@ -511,7 +464,6 @@ for t=loop_ts
     hold off
 
 end
-
 
 % close the video file
 if SaveMPEG~=false
