@@ -7,7 +7,7 @@ fi
 
 if [ ! -f simulation_code/motors.x ] ; then
     echo "Missing executable!"
-    exit 1
+    exit 2
 fi
 
 cp simulation_code/motors.x .

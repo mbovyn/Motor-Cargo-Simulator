@@ -327,4 +327,4 @@ our $setCargoMT_dist=-1;
 
 ###############################################################################
 #launch
-do "$code_dir/launching_scripts/launch.pl";
+do "$code_dir/launching_scripts/launch.pl" or die "$@ from call";

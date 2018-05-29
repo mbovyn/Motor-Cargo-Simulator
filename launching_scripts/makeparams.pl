@@ -6,7 +6,7 @@ print "Making parameter files (makeparams.pl)\n";
 
 #call first part of script
 #sets names
-do "$code_dir/launching_scripts/makeparams1.pl";
+do "$code_dir/launching_scripts/makeparams1.pl" or die "$@ from call";
 
 #set params to be swept over to param1 and param2 by overwriting
 #append name to variablename to enable symbolic reference
@@ -47,4 +47,5 @@ $$name2="param2";
 #print "$$name1, $$name2\n";
 
 #call second half of script
-do "$code_dir/launching_scripts/makeparams2.pl";
+do "$code_dir/launching_scripts/makeparams2.pl" or die "$@ from call";
+return 1;

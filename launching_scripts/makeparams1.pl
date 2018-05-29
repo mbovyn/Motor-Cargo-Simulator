@@ -36,3 +36,4 @@ our $none1name = "none1none";
 our $none2name = "none2none";
 
 #print "--->Done setting default names (makeparams1.pl)\n";
+return 1;

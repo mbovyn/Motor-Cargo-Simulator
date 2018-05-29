@@ -6,28 +6,26 @@
 #(except for the parameter files and the ISEED)
 ##################################################################
 
-#local location to copy the code from
-code_dir=~/project_code/Motor_Freedom
-working_dir=$("pwd")
+code_dir="$1"
+working_dir="$2"
 
 #copy code to current folder
-cp -r $code_dir/simulation_code $working_dir
+cp -r $code_dir/simulation_code "$working_dir"
 #copy the pub submitter
-cp $code_dir/launching_scripts/hpc/submit_pubs.sh .
+cp $code_dir/launching_scripts/hpc/submit_pubs.sh "$working_dir"
 #copy the param file generator if it don't already exist
-cp -n $code_dir/archetypes/setandlaunch.pl .
+#cp -n $code_dir/archetypes/setandlaunch.pl .
 
 #warn if missing necessary ISEED file
-if [ ! -f ISEED ] ; then
-    echo "Missing ISEED!"
-fi
+cp -n $code_dir/archetypes/ISEED "$working_dir"
 
 #make the folders to hold the pubs and logs
+cd "$working_dir"
 mkdir pubs
 mkdir logs
 
 #get commit hash
-cd $code_dir
+cd "$code_dir"
 git log -1 --pretty=format:%H > "CommitHash.txt"
 mv "CommitHash.txt" "$working_dir"
 cd "$working_dir"

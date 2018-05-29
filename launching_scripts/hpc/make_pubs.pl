@@ -25,17 +25,17 @@ foreach $instance_name (@namelist) {
 
     #check the parameter files exist
     if (! -f $instance_name . "_params.txt"){
-        die "Error: Params file $instance_name _params.txt missing\n"
+        die "Error: Params file $instance_name _params.txt missing"
     };
     if (! -f $instance_name . "_MT_params.txt"){
-        die "Error: MT params file $instance_name _MT_params.txt missing\n"
+        die "Error: MT params file $instance_name _MT_params.txt missing"
     };
 
     #
     my $entry="$instance_name";
 
     #open file for writing and print the following
-    open (FOOD, ">pubs/$file_name" );
+    open(FOOD, ">pubs/$file_name" ) or die "Can't open pubs/$file_name";
     print FOOD << "EOF";
 #!/bin/bash
 #\$ -N $hpc_instance_name
@@ -60,3 +60,4 @@ EOF
     close FOOD;
     #done writing
 }
+return 1;

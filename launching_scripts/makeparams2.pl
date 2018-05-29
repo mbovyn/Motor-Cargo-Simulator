@@ -47,7 +47,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
         }
 
         #open file for writing and print the following
-        open (FOOD, ">$file_name" );
+        open (FOOD, ">$file_name" ) or die "can't open $file_name";
         print FOOD << "EOF";
 //
 // Parameters for
@@ -179,7 +179,7 @@ EOF
 
         #MT params file
         my $MT_file_name=$instance_name . "_MT_params.txt";
-        open (FOOD, ">$MT_file_name" );
+        open (FOOD, ">$MT_file_name" ) or die "can't open $MT_file_name";
         print FOOD << "EOF";
 //
 // params for MTs
@@ -197,3 +197,4 @@ EOF
 }
 #print "@namelist\n";
 #print "--->Done writing parameter files (makeparams2.pl)\n";
+return 1;
