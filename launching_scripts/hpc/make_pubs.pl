@@ -51,8 +51,8 @@ echo Time is `date`
 echo Directory is `pwd`
 
 # Run executable
-#motors.x   run_name   instance_name  repeat   verbose
-./motors.x  $entry     $instance_name $repeats 2
+#motors.x instance_name repeat verbose keep_seed
+./motors.x $instance_name $repeats 2 0
 
 echo Finished at `date`
 
