@@ -6,8 +6,7 @@ if exist('params','var')
     return
 end
 
-[params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,localpath);
-
+[params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,localpath);
 
 if isempty(fieldnames(locs))
     clearvars locs
@@ -20,6 +19,20 @@ if isempty(fieldnames(forces))
 end
 if isempty(fieldnames(omega))
     clearvars omega
+end
+
+
+
+
+function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,localpath)
+
+    for i=length(localpath):-1:1
+
+        [params(:,i),summary(:,i),locs(:,i),heads(:,i),forces(:,i),omega(:,i)]= ...
+            import_all(run_name{i},nruns{i},localpath{i});
+
+    end
+
 end
 
 function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,localpath)
@@ -45,7 +58,7 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
     else
         error(['Unable to find file matching any format of ' filename00])
     end
-    
+
     %structs are dumb, so make the last one first to avoid growing it
     %https://blogs.mathworks.com/loren/2008/02/01/structure-initialization/
     for runno1=nruns(1):-1:1
@@ -67,28 +80,28 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
 
             %import summary
             summary(runno1,runno2)=import_summary(params(runno1,runno2),localpath,run_name);
-            
+
             %import locs
             if exist([localpath '/' run_name '_Center_and_Anchors.txt'],'file')
                 locs(runno1,runno2)=import_locs(params(runno1,runno2),localpath,run_name);
             else
                 locs(runno1,runno2)=struct;
             end
-            
+
             %import heads
             if exist([localpath '/' run_name '_Heads.txt'],'file')
                 heads(runno1,runno2)=import_head(params(runno1,runno2),localpath,run_name);
             else
                 heads(runno1,runno2)=struct;
             end
-            
+
             %import forces
             if exist([localpath '/' run_name '_Forces.txt'],'file')
                 forces(runno1,runno2)=import_forces(params(runno1,runno2),localpath,run_name);
             else
                 forces(runno1,runno2)=struct;
             end
-            
+
             %import omega
             if exist([localpath '/' run_name '_Omega.txt'],'file')
                 omega(runno1,runno2)=import_omega(localpath,run_name);
