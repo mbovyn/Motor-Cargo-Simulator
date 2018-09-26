@@ -50,13 +50,13 @@ fclose(fileID);
 
 locs=struct;
 
-%repeat = dataArray{:, 1};
+locs.repeat = dataArray{:, 1};
 step = dataArray{:, 2};
 locs.t_arr = dataArray{:, 3};
 
 locs.center = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
 
-%% 
+%%
 
 if max(N)>0
 
@@ -86,7 +86,7 @@ if max(N)>0
             locs.loc_rec{m,s}=temp2;
         end
     end
-    
+
 else
     locs.loc_rec=[];
 end

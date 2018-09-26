@@ -49,7 +49,7 @@ fclose(fileID);
 
 forces=struct;
 
-%repeat = dataArray{:, 1};
+forces.repeat = dataArray{:, 1};
 %step = dataArray{:, 2};
 forces.t_arr = dataArray{:, 3};
 
@@ -64,7 +64,7 @@ for m=1:2
 end
 
 
-%% 
+%%
 
 if max(N)>0
     for m=1:2

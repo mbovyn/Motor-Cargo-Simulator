@@ -47,7 +47,7 @@ fclose(fileID);
 
 omega=struct;
 
-%repeat1 = dataArray{:, 1};
+omega.repeat = dataArray{:, 1};
 %step1 = dataArray{:, 2};
 omega.t_arr = dataArray{:, 3};
 omega.vector = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];

@@ -51,7 +51,7 @@ fclose(fileID);
 
 heads=struct;
 
-%repeat = dataArray{:, 1};
+heads.repeat = dataArray{:, 1};
 step = dataArray{:, 2};
 heads.t_arr = dataArray{:, 3};
 
