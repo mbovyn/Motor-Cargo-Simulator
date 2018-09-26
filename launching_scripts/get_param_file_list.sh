@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #make an array of all the parameter files
 param_files_unsorted=( $run_name*_MT_params.txt )

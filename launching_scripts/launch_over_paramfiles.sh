@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "****Launching locally (launch_over_paramfiles.sh)****"
 
@@ -19,7 +20,7 @@ dont_wait=$8
 #number of processes we want to run at once
 numCores=4
 
-. $code_dir/launching_scripts/get_param_file_list.sh
+. "$code_dir/launching_scripts/get_param_file_list.sh"
 
 echo "****Running ${#param_files[@]} instances, $(date +"started at %r on %F")"
 

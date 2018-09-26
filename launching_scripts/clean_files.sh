@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #program chooses to append or open to write based on existance of files
 #if there's an old one hanging around, we probably want to delete it
@@ -14,8 +15,8 @@ echo "Cleaning old files (clean_files.sh)"
 param_endings=( _params.txt _MT_params.txt )
 file_endings=( _Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
 
-cd $working_dir
-. $code_dir/launching_scripts/get_param_file_list.sh
+cd "$working_dir"
+. "$code_dir/launching_scripts/get_param_file_list.sh"
 
 #for each ending, check if the file exists and delete it
 #unless keeping old files

@@ -1,11 +1,10 @@
 #!/bin/bash
+set -e
 
 #This script generates a file with the commit hash of the current code and makes
 #an executable, then copies both to the working folder
 
 echo "Checking executable (make_and_get_executable.sh)"
-
-set -e
 
 #take in inputs
 code_dir="$1"
