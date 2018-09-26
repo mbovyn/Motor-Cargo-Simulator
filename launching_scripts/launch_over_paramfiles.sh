@@ -17,6 +17,15 @@ keep_seed=$6
 keep_old=$7
 dont_wait=$8
 
+#echo $run_name
+#echo $code_dir
+#echo $working_dir
+#echo $repeats
+#echo $verbose
+#echo $keep_seed
+#echo $keep_old
+#echo $dont_wait
+
 #number of processes we want to run at once
 numCores=4
 
@@ -63,29 +72,41 @@ echo "****finished launching"
 
 if [ "$dont_wait" -ne "1" ]
 then
-    let talk=1
+    talk=1
     numInstances=$( jobs -r | wc -l )
+    #echo $numInstances
     while [ "$numInstances" -gt "0" ]
     do
 
         numInstancesnew=$( jobs -r | wc -l )
+        #echo $numInstancesnew
 
         if [ "$numInstancesnew" -lt "$numInstances" ]
         then
+            #echo "numInstances updating from $numInstances to $numInstancesnew"
             numInstances=$numInstancesnew
-            let talk=1
+            talk=1
+        #else
+        #    echo "not updating numInstances"
         fi
 
         if [ "$talk" -eq "1" ]
         then
             echo ****waiting for last $numInstances to finish at $(date +"%r on %F")
-            let talk=0
+            #apparently "let talk=0" returns a 0, which sets off the error
+            #checking from set -e. regular assignment doens't though.
+            talk=0
+        #else
+        #    echo "Not talking"
         fi
 
         #sleep so as not to go before the ISEED is updated
         if [ "$repeats" -gt "1" ]
         then
+            echo "sleeping"
             sleep 1s
+        #else
+        #    echo "not sleeping"
         fi
     done
 
