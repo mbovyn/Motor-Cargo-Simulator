@@ -103,7 +103,7 @@ then
         #sleep so as not to go before the ISEED is updated
         if [ "$repeats" -gt "1" ]
         then
-            echo "sleeping"
+            #echo "sleeping"
             sleep 1s
         #else
         #    echo "not sleeping"
