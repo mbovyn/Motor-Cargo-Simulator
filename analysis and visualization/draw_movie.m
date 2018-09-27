@@ -5,7 +5,7 @@ set(0,'defaultfigurecolor','w')
 
 %% import parameters and data
 
-nruns=[1,1];
+%nruns=[1,1];
 import_params_and_results
 
 %take in the data on the orientation change of the cargo

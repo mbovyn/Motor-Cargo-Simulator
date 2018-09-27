@@ -4,10 +4,9 @@
 %% file juggling
 
 %set the name of the run here
-run_name='demo';
-localpath=pwd;
-%create prefix name with directory
-results_prefix=[localpath '/' run_name];
+run_name={'demo'};
+localpath={pwd};
+nruns={[1,1]};
 
 %analysis file path
 analysispath='~/project_code/Motor_Freedom/analysis and visualization';
