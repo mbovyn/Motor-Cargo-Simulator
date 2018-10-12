@@ -23,14 +23,56 @@ end
 
 
 
-
+%get parameters over several conditions, each with multiple runs
 function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,localpath)
 
-    for i=length(localpath):-1:1
+    %determine if numbers of runs are the same between conditions
+    differentsizes=0;
+    for j=1:length(nruns)-1
+        if ~isequal(nruns{j},nruns{j+1})
+            differentsizes=1;         
+        end
+    end
 
-        [params(:,i),summary(:,i),locs(:,i),heads(:,i),forces(:,i),omega(:,i)]= ...
-            import_all(run_name{i},nruns{i},localpath{i});
+    %if only have one parameter sweeps (nruns is nx1 or 1xn) and number
+    %of runs is the same between conditions, use simplified form
+    %ex. params(runs,condition)
+    if (sum([nruns{:}]==1)==length([nruns{:}])/2) && ~differentsizes
+        
+        for i=length(localpath):-1:1
+            [params(:,i),summary(:,i),locs(:,i),heads(:,i),forces(:,i),omega(:,i)]= ...
+                import_all(run_name{i},nruns{i},localpath{i});
+        end
+        
+    %otherwise stack conditions in third dimension
+    %(nruns is nxm or have different numbers of runs between conditions)
+    %ex. params(runs(1),runs(2),condition)
+    else
+        
+        %check that structure will be created with a large enough size in
+        %each dimension to hold all conditions
+        %right now this will happen if the larger one is input first
+        %(checked by if statement)
+        %Don't know how to handle mismatched sizes (ex. 6x4 and 7x3),
+        %these currently break this
+        [~,inds]=max(cell2mat(nruns'));
+        if ~isequal(inds,[1,1])
+            error(['Please order conditions with highest number of runs first', newline,...
+                'This code needs to be rewritten for mismatched numbers of runs (ex. 6x4 and 7x5)'] );
+        end
+        
+        for i=length(localpath):-1:1
 
+            [params(1:nruns{i}(1),1:nruns{i}(2),i),...
+            summary(1:nruns{i}(1),1:nruns{i}(2),i),...
+            locs(1:nruns{i}(1),1:nruns{i}(2),i),...
+            heads(1:nruns{i}(1),1:nruns{i}(2),i),...
+            forces(1:nruns{i}(1),1:nruns{i}(2),i),...
+            omega(1:nruns{i}(1),1:nruns{i}(2),i)]= ...
+                import_all(run_name{i},nruns{i},localpath{i});
+
+        end
+        
     end
 
 end
