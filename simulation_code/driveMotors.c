@@ -72,7 +72,7 @@
 #include "motorHelpers_rates.c" //functions for finding stepping rates
 #include "stop_conditions.c"
 #include "motorHelpers_sODE.c" //functions for setting up the solve
-#include "aggregate_numbers.c" 
+#include "aggregate_numbers.c"
 #include "simulate_cargo.c" //main simulation
 
 /*******************************************************************************/
@@ -159,6 +159,12 @@ int main( int argc, char *argv[] )
         //printf("     MT Angle = %g\n",MT_angle);
         printf("     eta = %g\n",eta);
         printf("     dt_max_base = %g\n",dt_max_base);
+        if(external_force>1){
+            printf("     External force parameters are: %g %g %g\n",Fin[0],Fin[1],Fin[2] );
+        }
+        if(external_torque>1){
+            printf("     External force parameters are: %g %g %g\n",TorqeExt[0],TorqeExt[1],TorqeExt[2] );
+        }
 
         printf("Running %d repeats\n",repeats );
     }else{
