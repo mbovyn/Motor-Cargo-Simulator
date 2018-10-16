@@ -289,6 +289,52 @@ void unbinding_rates()
 
         break;
 
+        case 5: //Bovyn2018, piecewise exponential asymmetrical
+
+            for(n=0;n<N[m];n++){
+                if(bound[m][n]){
+                    unbind_possible[m][n]=1;
+
+                    // printf("dot product is %g\n",F_m_vec[m][n][0]*MTvec[bound[m][n]-1][0]+
+                    //     F_m_vec[m][n][1]*MTvec[bound[m][n]-1][1]+
+                    //     F_m_vec[m][n][1]*MTvec[bound[m][n]-1][1]);
+
+                    //under hindering load
+                    if(F_m_mag[m][n]==0){
+                        unbind_rate[m][n]=eps_0[m];
+                    }else if(!force_in_MT_direction()){
+
+                        //motors below stall unbind exponentially
+                        if(F_m_mag[m][n]<F_s[m]){
+                            unbind_rate[m][n]=eps_0[m]*exp(F_m_mag[m][n]/F_d[m]);
+                        }
+                        else{
+                            //kinesins above stall unbind exponentially with different parameters
+                            if(m==0){
+                                unbind_rate[m][n]=a_param[m]*exp(F_m_mag[m][n]/b[m]);
+                            }
+                            //dyneins above stall unbind with catch bond
+                            else{
+                                unbind_rate[m][n]=1/(a_param[m]*(1-exp(-F_m_mag[m][n]/b[m])));
+                            }
+                        }
+
+                    }else if(force_in_MT_direction()){
+
+                        unbind_rate[m][n] = 7.4 * exp(F_m_mag[m][n]*.00032/kBT);
+
+                    }else{
+                        printf("Error finding out if load was forward or backward\n");
+                        graceful_exit=1;
+                    }
+
+                }else{
+                    unbind_possible[m][n]=0;
+                }
+            }
+
+            break;
+
     default:
         printf("\n\nError: Invalid Unbinding type\n\n");
         exit(4);

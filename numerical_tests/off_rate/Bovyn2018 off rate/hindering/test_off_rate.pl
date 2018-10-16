@@ -15,7 +15,7 @@ our $keep_seed=0;
 
 #if local, set compilation options
 #set compile to yes to compile and copy executable to local folder
-our $compile=0;
+our $compile=1;
 #set compile keyword to correct one for number of motors
 our $compile_keyword='free5';
 
@@ -25,7 +25,7 @@ our $folder_name='motors_sweep';
 
 ###############################################################################
 #define run name to label files
-our $run_name = "test";
+our $run_name = "test_off_rate";
 
 ###############################################################################
 #set code and working directories
@@ -41,26 +41,23 @@ our $working_dir=$ENV{'PWD'};
 #    [1, 2, 3],
 #    );
 
-our @sweepvars = ("D_m1","N1");
-our @sweepvals = (
-   [.05, .5],
-   [1, 2, 3],
-   );
-#print "\n@{$sweepvals[0]}\n";
-#print "\n@{$sweepvals[1]}\n";
+our @sweepvars = ("IB2");
+my @fs=( [0,1,2,3,4,4.99,5.01,7,9,11,13,15,17,19,21,23,25] );
+our @sweepvals = ( [map { $_ / 320 + .08 } @{$fs[0]}] );
+#print "\n@{$sweepvals[0]}\n\n";
 
 ###############################################################################
 #set parameter values
 
-our $N1=3;     our $N2=0;         our $cc1="//number of motors";
+our $N1=1;     our $N2=0;         our $cc1="//number of motors";
 our $F_s1=5;    our $F_s2=5;      our $cc2="//stall force (pN)";
-our $F_d1=4;    our $F_d2=4;      our $cc3="//detachment force (pN)";
-our $eps_01=.7; our $eps_02=.7;   our $cc4="//base unbinding rate (1/s)";
+our $F_d1=3.64671;    our $F_d2=4;      our $cc3="//detachment force (pN)";
+our $eps_01=.7988911; our $eps_02=.7;   our $cc4="//base unbinding rate (1/s)";
 our $pi_01=10;  our $pi_02=10;    our $cc5="//base binding rate (1/s)";
 our $v_f1=1;    our $v_f2=3;      our $cc6="//max velocity (microns/s)";
 
-our $a1=1.07;   our $a2=1.07;     our $cc7="//superstall parameter 1";
-our $b1=.186;   our $b2=.186;     our $cc8="//superstall parameter 2";
+our $a1=1.56307;   our $a2=1.07;     our $cc7="//superstall parameter 1";
+our $b1=7.57772;   our $b2=.186;     our $cc8="//superstall parameter 2";
 our $w1=2;      our $w2=2;        our $cc9="//force velocity curve exponent";
 our $L1=.08;    our $L2=.08;      our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;    our $cc11="//motor spring stiffness (pN/micron)";
@@ -68,7 +65,7 @@ our $s1=.008;   our $s2= -.008;   our $cc12="//step size (microns)";
 
 our $D_m1=1;    our $D_m2=3;      our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
-our $cx=0; our $cy=0; our $cz=.25; our $cc14="//cargo center (microns)";
+our $cx=0; our $cy=0; our $cz=0; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";
 our $eta=.0089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
 
@@ -79,7 +76,7 @@ our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
 
 #Motor Location
 
-our $InitialLocations=8; our $IL2=0; our $IL3=0;
+our $InitialLocations=7; our $IL2=0; our $IL3=0;
 our $cc19="/*
 1:
 2:  Uniform Random on the surface of the sphere
@@ -91,12 +88,12 @@ our $cc19="/*
 8:  Uniform random, rotate so type0motor0 is on bottom
 9:  All motors at same random spot
 10:
+
 second parameter: 1 - kin at bottom, 2 - dyn at bottom, 3 - kin on top, 4 - dyn on top
-third parameter used to pass in angle (degrees, from -180 to 180)
-north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
+third parameter used to pass in angle (degrees)
 */";
 
-our $MotorDiffusion=4;
+our $MotorDiffusion=3;
 our $cc20="/*
 1:  no drag - Diffuse all motors by legacy function
 2:  no drag - Only diffuse non-attached motors by legacy function
@@ -117,7 +114,7 @@ our $cc20="/*
 
 #Interaction of motors with MT
 
-our $InitialBinding=2; our $IB2=0;
+our $InitialBinding=5; our $IB2=0;
 our $cc21="/*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -128,7 +125,7 @@ our $cc21="/*
 7:
 8:
 9:
-Set second input to move x position of head of type0motor0 or type1motor0
+10:
  */";
 
 our $Binding=1; our $B2=.5;
@@ -145,13 +142,13 @@ our $cc22="/*
 10:
 */";
 
-our $Unbinding=1;
+our $Unbinding=5;
 our $cc23="/*
-1: Bergman 2018 (symmetrical, like Kunwar 2011)
+1: Ambarish Unbinding
 2: unbind at constant rate eps_0
 3: NoUnbinding
-4: Bergman2018-like asymmetrical
-5: Bovyn2018 piecewise exponential, asymmetrical
+4: different between assisting and hindering
+5:
 6:
 7:
 8:
@@ -159,7 +156,7 @@ our $cc23="/*
 10:
 */";
 
-our $Stepping=2; our $S2=999999999;
+our $Stepping=3; our $S2=999999999;
 our $cc24="/*
 1: Step at rate determined by unloaded velocity
 2: Stepping rate depends on force (Ambarish)
@@ -213,7 +210,7 @@ our $cc27="/*
 
 #Cargo Behavior
 
-our $CargoBehavior=1;
+our $CargoBehavior=3;
 our $cc28="/*
 1: Cargo moves normally
 2: On rail - cargo moves only in x
@@ -241,7 +238,7 @@ our $cc30="/*
 #
 */";
 
-our $UseSteric=1;
+our $UseSteric=0;
 our $cc31="/*
 1: Use steric force
 0: Don’t use steric force
@@ -271,11 +268,11 @@ Not implemented
 */";
 
 #Simulation end conditions (1=yes,0=no)
-our $RequireAttached=0;             our $cc34="//Stop when all motors in unbound state";
+our $RequireAttached=1;             our $cc34="//Stop when all motors in unbound state";
 our $StopOnMotor2Attach=0;          our $cc35="//Stop when second motor binds";
 our $StopOnAllAttached=0;           our $cc36="//Stop when all motors bound";
 our $StopOnStep=0;                  our $cc37="//0 for don’t stop, otherwise enter step";
-our $StopOnTime=.1;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
+our $StopOnTime=0;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
 our $StopOnDistance=0;              our $cc39="//0 no stop, otherwise distance (microns)";
 our $StopBelowThetaC=0; our $SB=-1; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
 our $multiMT_assay=0;               our $cc41="//1 for switch, 2 for ToW";
@@ -314,9 +311,9 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 #metaparameters
 
 #number of times to repeat
-our $repeats=1;
+our $repeats=300;
 #verbosity (0-5)
-our $verbose=0;
+our $verbose=2;
 #set to 1 to append to old files
 our $keep_old=0;
 #set to 1 to override wait for open thread
