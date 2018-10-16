@@ -114,7 +114,7 @@ our $cc20="/*
 
 #Interaction of motors with MT
 
-our $InitialBinding=2; our $IB2=0;
+our $InitialBinding=2; our $IB2=.08;
 our $cc21="/*
 1: Bind all in range
 2: Bind only 1 Kin

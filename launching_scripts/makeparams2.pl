@@ -106,7 +106,7 @@ $cc20
 
 //Interaction of motors with MT
 
-InitialBinding $InitialBinding $IB2
+InitialBinding $InitialBinding $$IB2name
 $cc21
 
 Binding $Binding $B2

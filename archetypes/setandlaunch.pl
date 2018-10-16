@@ -46,6 +46,8 @@ our @sweepvals = (
    [.05, .5],
    [1, 2, 3],
    );
+#print "\n@{$sweepvals[0]}\n";
+#print "\n@{$sweepvals[1]}\n";
 
 ###############################################################################
 #set parameter values
@@ -89,9 +91,9 @@ our $cc19="/*
 8:  Uniform random, rotate so type0motor0 is on bottom
 9:  All motors at same random spot
 10:
-
 second parameter: 1 - kin at bottom, 2 - dyn at bottom, 3 - kin on top, 4 - dyn on top
-third parameter used to pass in angle (degrees)
+third parameter used to pass in angle (degrees, from -180 to 180)
+north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */";
 
 our $MotorDiffusion=4;
@@ -126,7 +128,7 @@ our $cc21="/*
 7:
 8:
 9:
-10:
+Set second input to move x position of head of type0motor0 or type1motor0
  */";
 
 our $Binding=1; our $B2=.5;

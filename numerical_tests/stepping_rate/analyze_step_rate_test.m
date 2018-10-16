@@ -14,12 +14,13 @@ run([analysispath '/import_params_and_results.m'])
 
 for i=1:nruns{1}(1)
     force(i)=params(i).F_ext(1);
-    velocity(i)=mean((summary(i).last_bound_center(1,:)+params(i).L(1))./summary(i).t_final');
+    velocity(i)=mean((summary(i).last_bound_center(1,:))./summary(i).t_final');
     velocity_sem(i)=std(velocity(i))/sqrt(length(summary(i).last_bound_center(1,:)));
 end
 
 %% plot mean velocity
 %velocity is step size * stepping rate
+%note negative value for velocity at 0 - this is due to stretch in motor
 
 errorbar(force,velocity,velocity_sem,'.')
 hold on
@@ -40,7 +41,7 @@ figure
 cs=lines(nruns{1}(1));
 
 for i=1:nruns{1}(1)
-    [f,x]=ecdf((summary(i).last_bound_center(1,:)+params(i).L(1))./params(i).step_size(1));
+    [f,x]=ecdf((summary(i).last_bound_center(1,:))./params(i).step_size(1));
     hh(i)=stairs(x,f,'Linewidth',1.5,'Color',cs(i,:));
     legendentry{i}=['f=' num2str(abs(params(i).F_ext(1)))];
     hold on

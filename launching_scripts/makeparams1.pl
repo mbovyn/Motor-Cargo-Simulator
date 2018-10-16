@@ -28,6 +28,8 @@ our $etaname="eta";
 
 our $kcMTname="kcMT";
 
+our $IB2name="IB2";
+
 our $EFxname="EFx"; our $EFyname="EFy"; our $EFzname="EFz";
 
 our $MT_anglename="MT_angle";

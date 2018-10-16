@@ -201,9 +201,19 @@ void initiallocations(){
         case 7: //start at a defined angle along the x axis
             for (m=0;m<2;m++){
                 for(n=0;n<N[m];n++){
-                    initlocs[m][n][0]=center[0]+R*cos(pi/180*InitAngle)*cos(0);
-                    initlocs[m][n][1]=center[1]+R*cos(pi/180*InitAngle)*sin(0);
-                    initlocs[m][n][2]=center[2]+R*sin(pi/180*InitAngle);
+                    if(InitAngle<=90 && InitAngle>=-90){
+                        initlocs[m][n][0]=center[0]+R*cos(pi/180*InitAngle)*cos(0);
+                        initlocs[m][n][1]=center[1]+R*cos(pi/180*InitAngle)*sin(0);
+                        initlocs[m][n][2]=center[2]+R*sin(pi/180*InitAngle);
+                    } else if((InitAngle>90 && InitAngle<=180) ||
+                              (InitAngle<-90 && InitAngle>=-180)){
+                        initlocs[m][n][0]=center[0]+R*cos(pi/180*InitAngle)*cos(0);
+                        initlocs[m][n][1]=center[1]+R*cos(pi/180*InitAngle)*sin(0);
+                        initlocs[m][n][2]=center[2]+R*sin(pi/180*InitAngle);
+                    } else {
+                        printf("\n\nError: %g is not a valid initial angle\n(-180 to 180 accepted)\n\n", InitAngle);
+                        exit(4);
+                    }
                 }
             }
 
@@ -576,8 +586,13 @@ void initialbinding(){
         }
     }
 
+
+
     if (bound[0][0] && initial_head){
         closestPointOnMT(locs[0][0][0],locs[0][0][1],locs[0][0][2],bound[0][0]-1);
+        if(verboseTF>2){
+            printf("InitialHead specified, adding %g to x part of (%g,%g,%g)\n",initial_head,cPoint[0],cPoint[1],cPoint[2]);
+        }
         head[0][0][0]=cPoint[0]+initial_head;
         head[0][0][1]=cPoint[1];
         head[0][0][2]=cPoint[2];

@@ -112,6 +112,7 @@ int simulate_cargo()
     t_inst = 0;
 
     //setup data collection
+    update_lasts_and_maxes(); //aggregate_numbers.c
     inLoopDataCollection();
     t_rec=dt_rec;
 
