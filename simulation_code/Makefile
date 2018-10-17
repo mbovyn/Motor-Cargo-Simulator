@@ -1,3 +1,6 @@
+bead0:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead0
+
 bead5:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dbead5
 
@@ -12,6 +15,9 @@ bead50:
 
 bead101:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dbead101
+
+free0:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dfree0
 
 free5:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dfree5

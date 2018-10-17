@@ -32,7 +32,10 @@
 // gcc -O3 driveMotors.c -o motors.x -lm -Dbead5
 
 //bead motors
-#if defined(bead5) //Any number of motors between 0 and 5
+#if defined(bead0) //Any number of motors between 0 and 5
+    #include "beadequations0.c"
+    int available_motors_bead=0;
+#elif defined(bead5) //Any number of motors between 0 and 5
     #include "beadequations5.c"
     int available_motors_bead=5;
 #elif defined(bead10) //Any number of motors between 0 and 10
@@ -52,7 +55,10 @@
     int available_motors_bead=0;
 #endif
 //free motors
-#if defined(free5) //Any number of motors between 0 and 5
+#if defined(free0) //Any number of motors between 0 and 5
+    #include "stochasticequations0.c"
+    int available_motors_free=0;
+#elif defined(free5) //Any number of motors between 0 and 5
     #include "stochasticequations5.c"
     int available_motors_free=5;
 #elif defined(free10) //Any number of motors between 0 and 10

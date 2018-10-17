@@ -572,10 +572,10 @@ void getInputParams( void )
 
 
     //the default max is the smallest of the restrictions, or the base time step
-    if(dt_override<0){
+    if(isinf(dt_override)){
         dt_max_base=INF;
         if(verboseTF>0){
-            printf("dt_override<0, default timestep ignored");
+            printf("dt_override is INF, default timestep ignored\n");
         }
     } else {
         dt_max_base=dt_default;
@@ -602,10 +602,13 @@ void getInputParams( void )
         }
     }
 
-    if(dt_override>0){
-        dt_max_base=dt_override;
+    if((dt_override>0 || dt_override<0) && !isinf(dt_override)){
+        dt_max_base=fabs(dt_override);
         if(verboseTF>0){
             printf("Overriding dt. Now %g\n",dt_max_base);
+            if(dt_override<0){
+              printf("!!!dt_override negative, ignoring stability tests!!!\n");
+            }
         }
     }
 

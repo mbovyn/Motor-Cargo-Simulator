@@ -696,7 +696,7 @@ void compute_next_locations(){
             bead_equations();
             break;
 
-        case 12: //attempt to fix motor wandering
+        case 12: //bead equations, rotational diffusion only
 
             generate_brownian_displacement_rotation();
             for(i=0;i<3;i++){
@@ -724,28 +724,30 @@ void compute_next_locations(){
         graceful_exit=1;
     }
 
-    //cargo moving too far is a sign of instability
-    if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
-        printf("\n\n\nError! Cargo moved >R in one time step!\nExiting gracefully at step %ld\n\n\n",step);
-        graceful_exit=1;
-    }
-
-    //if rotates greater than pi/5, tan(theta)-theta gets off by >.1
-    //this means the difference in the local cartesian distance and distance on the circle is more than 10% off
-    if(!graceful_exit && sqrt( (theta1[0]-theta[0])*(theta1[0]-theta[0]) + (theta1[1]-theta[1])*(theta1[1]-theta[1]) + (theta1[2]-theta[2])*(theta1[2]-theta[2]) )> pi/10 ){
-            printf("\n\n\nError! Cargo rotated too much in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+    if(dt_override>=0){
+        //cargo moving too far is a sign of instability
+        if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
+            printf("\n\n\nError! Cargo moved >R in one time step!\nExiting gracefully at step %ld\n\n\n",step);
             graceful_exit=1;
         }
 
-    //if motors move on the cargo more than R*pi/5 radians, local cartesian approximation off by >10%
-    for(nn=0;nn<N[0]+N[1];nn++){
-        if(!graceful_exit
-            && sqrt( (a1[nn][0]-a[nn][0]-(c1[0]-c[0]))*(a1[nn][0]-a[nn][0]-(c1[0]-c[0]))
-            + (a1[nn][1]-a[nn][1]-(c1[1]-c[1]))*(a1[nn][1]-a[nn][1]-(c1[1]-c[1]))
-            + (a1[nn][2]-a[nn][2]-(c1[2]-c[2]))*(a1[nn][2]-a[nn][2]-(c1[2]-c[2])) )
-            > R*pi/5 ){
-            printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
-            graceful_exit=1;
+        //if rotates greater than pi/5, tan(theta)-theta gets off by >.1
+        //this means the difference in the local cartesian distance and distance on the circle is more than 10% off
+        if(!graceful_exit && sqrt( (theta1[0]-theta[0])*(theta1[0]-theta[0]) + (theta1[1]-theta[1])*(theta1[1]-theta[1]) + (theta1[2]-theta[2])*(theta1[2]-theta[2]) )> pi/10 ){
+                printf("\n\n\nError! Cargo rotated too much in one time step!\nExiting gracefully at step %ld\n\n\n",step);
+                graceful_exit=1;
+            }
+
+        //if motors move on the cargo more than R*pi/5 radians, local cartesian approximation off by >10%
+        for(nn=0;nn<N[0]+N[1];nn++){
+            if(!graceful_exit
+                && sqrt( (a1[nn][0]-a[nn][0]-(c1[0]-c[0]))*(a1[nn][0]-a[nn][0]-(c1[0]-c[0]))
+                + (a1[nn][1]-a[nn][1]-(c1[1]-c[1]))*(a1[nn][1]-a[nn][1]-(c1[1]-c[1]))
+                + (a1[nn][2]-a[nn][2]-(c1[2]-c[2]))*(a1[nn][2]-a[nn][2]-(c1[2]-c[2])) )
+                > R*pi/5 ){
+                printf("\n\n\nError! Motor number %ld moved too much one time step!\nExiting gracefully at step %ld\n\n\n",nn,step);
+                graceful_exit=1;
+            }
         }
     }
 
