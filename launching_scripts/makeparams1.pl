@@ -32,6 +32,8 @@ our $IB2name="IB2";
 
 our $EFxname="EFx"; our $EFyname="EFy"; our $EFzname="EFz";
 
+our $SBname="SB";
+
 our $MT_anglename="MT_angle";
 
 our $none1name = "none1none";

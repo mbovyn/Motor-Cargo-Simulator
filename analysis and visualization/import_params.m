@@ -18,8 +18,8 @@ if ~exist(filename,'file')
 end
 
 delimiter = ' ';
-startRow = [11,13,20,27,29,33,171,177,212];
-endRow = [11,18,25,27,31,34,171,177,212];
+startRow = [11,13,20,27,29,33,171,177,216];
+endRow = [11,18,25,27,31,34,171,177,216];
 
 %% Read columns of data as text:
 % For more information, see the TEXTSCAN documentation.

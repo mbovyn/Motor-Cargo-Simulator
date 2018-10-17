@@ -158,7 +158,7 @@ StopOnAllAttached $StopOnAllAttached      $cc36
 StopOnStep $StopOnStep             $cc37
 StopOnTime $StopOnTime           $cc38
 StopOnDistance $StopOnDistance         $cc39
-StopBelowThetaC $StopBelowThetaC $SB     $cc40
+StopBelowThetaC $StopBelowThetaC $$SBname     $cc40
 multiMT_assay $multiMT_assay $$MT_anglename         $cc41
 StopOnBeadDissociation $StopOnBeadDissociation $cc42
 StopOnCargoBinding $StopOnCargoBinding     $cc43

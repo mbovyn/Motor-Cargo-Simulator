@@ -56,7 +56,7 @@ function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,
         %Don't know how to handle mismatched sizes (ex. 6x4 and 7x3),
         %these currently break this
         [~,inds]=max(cell2mat(nruns'));
-        if ~isequal(inds,[1,1])
+        if length(nruns)>1 && ~isequal(inds,[1,1])
             error(['Please order conditions with highest number of runs first', newline,...
                 'This code needs to be rewritten for mismatched numbers of runs (ex. 6x4 and 7x5)'] );
         end
