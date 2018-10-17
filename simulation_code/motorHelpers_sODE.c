@@ -350,6 +350,10 @@ void evaluate_steric(){
     for(k=0;k<n_MTs;k++){
         pointToMTdist(center[0],center[1],center[2],k);
         if(MTdist<R){
+            if(MTdist==0){
+                printf("\nError! Center-MT distance is 0. Steric force undefined.\n");
+                exit(0);
+            }
             //implement the steric force
             Fsterick[k][0]=-kcMT*(R*cVector[0]/MTdist - cVector[0]);
             Fsterick[k][1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
@@ -715,6 +719,10 @@ void compute_next_locations(){
     }
 
     //check for error states
+    if(isnan(c1[0]) || isnan(c1[1]) || isnan(c1[2]) || isinf(c1[0])| isinf(c1[1]) || isinf(c1[2])){
+        printf("\nError! new value of center is (%g,%g,%g) - shouldn't be nan or inf\n",c1[0],c1[1],c1[2]);
+        graceful_exit=1;
+    }
 
     //cargo moving too far is a sign of instability
     if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
