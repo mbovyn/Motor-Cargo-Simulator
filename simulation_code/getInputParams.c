@@ -499,7 +499,7 @@ void getInputParams( void )
     // Consequent parameters
 
     muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
-    muCargoRotation=1/(8*pi*eta*pow(R,3));
+    muCargoRotation=1/(8*pi*eta*pow(R,3)); //eta in Pa*s is the same as pN/micron^2*seconds
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
