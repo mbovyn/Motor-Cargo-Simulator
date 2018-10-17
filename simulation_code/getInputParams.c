@@ -292,6 +292,10 @@ void getInputParams( void )
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&StopBelowThetaC,&theta_c);
+    if(theta_c<-pi/2 || theta_c>pi/2){
+      printf("\n\nError: input theta_c of %g is not between -pi/2 and pi/2\n\n",theta_c);
+      exit(3);
+    }
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %lf",blah,&MultiMTassay,&MT_angle);
