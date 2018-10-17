@@ -6,7 +6,7 @@ void unbinding_rates();
 void binding_rates();
 void nucleotide();
 //helper helpers
-void convert_loc_to_spherical();
+void convert_loc_to_spherical(int m,int n);
 void calculate_stepping_rate();
 
 void motorloading()
@@ -341,7 +341,7 @@ void unbinding_rates()
     }
 } //finished unbinding
 
-void convert_loc_to_spherical(){
+void convert_loc_to_spherical(int m,int n){
     //locs_sph[0]=azimuthal angle
     //locs_sph[1]=elevation
 

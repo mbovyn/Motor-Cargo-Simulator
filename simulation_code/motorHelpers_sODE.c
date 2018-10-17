@@ -54,7 +54,7 @@ void convert_vec_to_sph(double az,double el,double v_x,double v_y,double v_z){
 
 void generate_brownian_displacement_anchor(){
     //convert motor locations to spherical
-    convert_loc_to_spherical();
+    convert_loc_to_spherical(m,n);
 
     //find local cartesian vectors in plane tangent to sphere at anchor loc
     //use cartesian version of az and el vectors as vectors in plane
@@ -136,7 +136,7 @@ void diffuse_sph_one_motor(){
     }
 
     //bring back to sphere surface by converting to spherical and back (fix R)
-    convert_loc_to_spherical();
+    convert_loc_to_spherical(m,n);
     convert_loc_sph_to_cart();
 
     if(verboseTF>4 && MotorDiffusion==8){
@@ -281,7 +281,7 @@ void cargobehavior()
                 for(i=0;i<3;i++){
                     prior_locs[m][n][i]=locs[m][n][i];
                 }
-                convert_loc_to_spherical();
+                convert_loc_to_spherical(m,n);
                 convert_loc_sph_to_cart();
                 move_to_membrane_dist[m][n]=sqrt(
                     pow(prior_locs[m][n][0]-locs[m][n][0],2)+
@@ -464,7 +464,7 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
         for(n=0;n<N[m];n++){
             if(bound[m][n]){
 
-                convert_loc_to_spherical();
+                convert_loc_to_spherical(m,n);
                 convert_vec_to_sph(locs_sph[m][n][0],locs_sph[m][n][1],F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
 
                 convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],0,0,v_sph[2]);

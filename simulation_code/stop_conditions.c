@@ -81,7 +81,8 @@ void evaluate_stop_conditions(){
     }
 
     if(StopBelowThetaC && prematureReturn==0){
-        convert_loc_to_spherical();
+        convert_loc_to_spherical(0,0);
+		//printf("spherical locs are (%g,%g)\n",locs_sph[0][0][0],locs_sph[0][0][1]);
         if(locs_sph[0][0][1]<theta_c){
             prematureReturn=7;
         }
