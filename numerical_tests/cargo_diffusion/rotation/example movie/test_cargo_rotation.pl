@@ -17,7 +17,7 @@ our $keep_seed=0;
 #set compile to yes to compile and copy executable to local folder
 our $compile=1;
 #set compile keyword to correct one for number of motors
-our $compile_keyword='bead5';
+our $compile_keyword='free5';
 
 #if hpc, also set a short hpc run name
 our $hpc_name='motors';
@@ -64,7 +64,7 @@ our $L1=.08;    our $L2=.08;       our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;     our $cc11="//motor spring stiffness (pN/micron)";
 our $s1=.008;   our $s2= -.008;    our $cc12="//step size (microns)";
 
-our $D_m1=0;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
+our $D_m1=1;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
 our $cx=0; our $cy=0; our $cz=0; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";
@@ -94,7 +94,7 @@ third parameter used to pass in angle (degrees, from -180 to 180)
 north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */";
 
-our $MotorDiffusion=12;
+our $MotorDiffusion=9;
 our $cc20="/*
 1:  no drag - Diffuse all motors by legacy function
 2:  no drag - Only diffuse non-attached motors by legacy function
@@ -239,7 +239,7 @@ our $cc30="/*
 #
 */";
 
-our $UseSteric=1;
+our $UseSteric=0;
 our $cc31="/*
 1: Use steric force
 0: Don’t use steric force
@@ -273,9 +273,9 @@ our $RequireAttached=0;             our $cc34="//Stop when all motors in unbound
 our $StopOnMotor2Attach=0;          our $cc35="//Stop when second motor binds";
 our $StopOnAllAttached=0;           our $cc36="//Stop when all motors bound";
 our $StopOnStep=0;                  our $cc37="//0 for don’t stop, otherwise enter step";
-our $StopOnTime=.1;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
+our $StopOnTime=0;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
 our $StopOnDistance=0;              our $cc39="//0 no stop, otherwise distance (microns)";
-our $StopBelowThetaC=0; our $SB=-1; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
+our $StopBelowThetaC=1; our $SB=-.75; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
 our $multiMT_assay=0;               our $cc41="//1 for switch, 2 for ToW";
 our $StopOnBeadDissociation=0;      our $cc42="//stop if bead is > 500nm from all MTs";
 our $StopOnCargoBinding=0;          our $cc43="//stop when any motor binds";
@@ -302,7 +302,7 @@ our $dt_override=0; our $cc45="//0=no override. Value in (s) to override. -1 to 
 #MT parameters
 #Note: for no second MT, set n_MTs to 1 above! Can just leave MT2 values here
 #//point (x y z) unit vector (x y z) R_MT
-our $px1=0; our $py1=0; our $pz1=-.012;
+our $px1=0; our $py1=0; our $pz1=-.262;
 our $vx1=1; our $vy1=0; our $vz1=0; our $R_MT1=.012;
 
 our $px2=0; our $py2=0; our $pz2=-.012;
@@ -320,7 +320,7 @@ our $keep_old=0;
 #set to 1 to override wait for open thread
 our $dont_wait=0;
 #set to anything>=0 to override z postion of cargo
-our $setCargoMT_dist=0;
+our $setCargoMT_dist=-1;
 #set these to start numbering at something other than 0
 #our $ctr1start=0;
 #our $ctr2start=0;

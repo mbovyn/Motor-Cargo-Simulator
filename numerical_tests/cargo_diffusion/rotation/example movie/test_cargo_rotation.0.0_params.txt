@@ -30,11 +30,11 @@ k_m       320 320      //motor spring stiffness (pN/micron)
 step_size 0.008 -0.008 //step size (microns)
 
 //Bovyn Sim
-D_m       0 3  //motor diffusion coefficiant (micron^2/s)
+D_m       1 3  //motor diffusion coefficiant (micron^2/s)
 
 //Cargo Parameters
 
-center  0 0 0.25 //cargo center (microns)
+center  0 0 0 //cargo center (microns)
 R       0.25     //cargo radius (microns)
 eta     0.00089  //surrounding fluid viscosity (Pa s), water=8.9E-4
 
@@ -64,7 +64,7 @@ third parameter used to pass in angle (degrees, from -180 to 180)
 north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */
 
-MotorDiffusion 12
+MotorDiffusion 9
 /*
 1:  no drag - Diffuse all motors by legacy function
 2:  no drag - Only diffuse non-attached motors by legacy function
@@ -209,7 +209,7 @@ ExternalTorque 1 0 0 100
 #
 */
 
-UseSteric 1
+UseSteric 0
 /*
 1: Use steric force
 0: Don’t use steric force
@@ -243,9 +243,9 @@ RequireAttached 0        //Stop when all motors in unbound state
 StopOnMotor2Attach 0     //Stop when second motor binds
 StopOnAllAttached 0      //Stop when all motors bound
 StopOnStep 0             //0 for don’t stop, otherwise enter step
-StopOnTime 0.1           //0 for don’t stop, otherwise enter time (s)
+StopOnTime 0           //0 for don’t stop, otherwise enter time (s)
 StopOnDistance 0         //0 no stop, otherwise distance (microns)
-StopBelowThetaC 0 -1     //2nd value elevation radians -pi/2 to pi/2
+StopBelowThetaC 1 -0.75     //2nd value elevation radians -pi/2 to pi/2
 multiMT_assay 0          //1 for switch, 2 for ToW
 StopOnBeadDissociation 0 //stop if bead is > 500nm from all MTs
 StopOnCargoBinding 0     //stop when any motor binds

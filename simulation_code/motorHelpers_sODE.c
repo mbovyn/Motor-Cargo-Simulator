@@ -215,18 +215,34 @@ void diffuse_sph_one_motor(){
 // }
 
 void update_motor_locations(){
-    //set next locations from solver to current locations
-    nn=0;
-    for(m=0;m<2;m++){
-        for(n=0;n<N[m];n++){
-            //set anchor location of solver syntax (a) from syntax in rest
-            //of program (locs)
 
-            if(MotorDiffusion>2){
+    if(MotorDiffusion>2 && MotorDiffusion<10){
+        //set next locations from solver to current locations
+        //and put anchor location back on cargo surface
+
+        double center_to_a_mag;
+
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+
+                //magnitude of vector to calculated next anchor position (a1)
+                center_to_a_mag=sqrt(pow(a1[nn][0]-center[0],2)+
+                    pow(a1[nn][1]-center[1],2)+pow(a1[nn][2]-center[2],2));
+                //check for too large movement
+                if(fabs(center_to_a_mag-R)>.01){
+                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld of repeat %d\n\n\n",m,n,move_to_membrane_dist[m][n],step,j);
+                    graceful_exit=1;
+                }
+                //position on surface=R*(unit vector from c to a1)
                 for(i=0;i<3;i++){
-                    locs[m][n][i]=a1[nn][i];
+                    locs[m][n][i]=center[i]+R*((a1[nn][i]-center[i])/center_to_a_mag);
                 }
                 nn++;
+
+                if(verboseTF>4 && MotorDiffusion==8){
+                    printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
             }
         }
     }
@@ -238,8 +254,6 @@ void cargobehavior()
 
         case 1: //transfer all values
 
-            update_motor_locations();
-
             //transfer cargo center
             for(i=0;i<3;i++){
                 center[i]=c1[i];
@@ -249,8 +263,6 @@ void cargobehavior()
 
         case 2: //on rails - only move in x direction
 
-            update_motor_locations();
-
             //transfer cargo center
             center[0]=c1[0];
             //center[1]=c1[1];
@@ -259,8 +271,6 @@ void cargobehavior()
             break;
 
         case 3: //stuck - cargo can't move at all
-
-            update_motor_locations();
 
             //transfer cargo center
             //center[0]=c1[0];
@@ -272,10 +282,15 @@ void cargobehavior()
         default:
             printf("\n\nError: Bad value for CargoBehavior\n\n" );
             exit(4);
-    }//finished switch
+    }//finished CargoBehavior switch
+
+    //transfer motor locations to syntax for rest of program
+    //and force motors onto surface for free case
+    update_motor_locations();
 
     //force anchor back onto cargo surface
-    if(MotorDiffusion<10){
+    //legacy version which used spherical conversions
+    if(MotorDiffusion<3){
         for(m=0;m<2;m++){
             for(n=0;n<N[m];n++){
                 for(i=0;i<3;i++){
