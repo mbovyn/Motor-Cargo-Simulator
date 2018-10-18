@@ -49,12 +49,18 @@ fclose(fileID);
 
 forces=struct;
 
-forces.repeat = dataArray{:, 1};
-%step = dataArray{:, 2};
+repeat = dataArray{:, 1};
+forces.step = dataArray{:, 2};
 forces.t_arr = dataArray{:, 3};
 
 forces.Fext = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
 forces.Fsteric = [dataArray{:, 7} dataArray{:, 8} dataArray{:, 9}];
+
+%%
+
+forces = transform_vars(forces,repeat);
+
+%%
 
 forces.Fradial=cell(2,1);
 forces.Ftangential=cell(2,1);
@@ -62,9 +68,6 @@ for m=1:2
     forces.Fradial{m}=cell(N(m),1);
     forces.Ftangential{m}=cell(N(m),1);
 end
-
-
-%%
 
 if max(N)>0
     for m=1:2

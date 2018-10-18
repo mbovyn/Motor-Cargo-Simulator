@@ -50,17 +50,21 @@ fclose(fileID);
 
 locs=struct;
 
-locs.repeat = dataArray{:, 1};
-step = dataArray{:, 2};
+repeat = dataArray{:, 1};
+locs.step = dataArray{:, 2};
 locs.t_arr = dataArray{:, 3};
 
 locs.center = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
+
+%% if there are times for each repeat, shape outputs
+
+locs = transform_vars(locs,repeat);
 
 %%
 
 if max(N)>0
 
-    locs.loc_rec=cell(2,size(step,1));
+    locs.loc_rec=cell(2,size(repeat,1));
 
     temp=cell(2,max(N));
 
@@ -79,7 +83,7 @@ if max(N)>0
     %reformat to the shape motor_movie expects
     for m=1:2
         temp2=zeros(N(m),3);
-        for s=1:size(locs.center,1)
+        for s=1:size(repeat,1)
             for n=1:N(m)
                 temp2(n,:)=temp{m,n}(s,:);
             end

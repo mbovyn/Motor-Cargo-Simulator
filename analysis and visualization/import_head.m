@@ -51,11 +51,9 @@ fclose(fileID);
 
 heads=struct;
 
-heads.repeat = dataArray{:, 1};
-step = dataArray{:, 2};
+repeat = dataArray{:, 1};
+heads.step = dataArray{:, 2};
 heads.t_arr = dataArray{:, 3};
-
-heads.head_rec=cell(2,size(step,1));
 
 last=3+3*(N(1)+N(2))+(N(1)+N(2));
 
@@ -63,8 +61,12 @@ heads.bound=cell(2,1);
 heads.bound{1}=[dataArray{:,last-(N(1)+N(2))+1:last-N(2)}];
 heads.bound{2}=[dataArray{:,last-N(2)+1:last}];
 
-%%
+%% if there are times for each repeat, shape outputs
 
+heads = transform_vars(heads,repeat);
+
+%%
+heads.head_rec=cell(2,size(repeat,1));
 temp=cell(2,max(N));
 
 for m=1:2
@@ -83,7 +85,7 @@ end
 %reformat to the shape motor_movie expects
 for m=1:2
     temp2=zeros(N(m),3);
-    for s=1:size(step,1)
+    for s=1:size(repeat,1)
         for n=1:N(m)
             temp2(n,:)=temp{m,n}(s,:);
         end

@@ -47,10 +47,14 @@ fclose(fileID);
 
 omega=struct;
 
-omega.repeat = dataArray{:, 1};
-%step1 = dataArray{:, 2};
+repeat = dataArray{:, 1};
+omega.step = dataArray{:, 2};
 omega.t_arr = dataArray{:, 3};
 omega.vector = [dataArray{:, 4} dataArray{:, 5} dataArray{:, 6}];
+
+%%
+
+omega = transform_vars(omega,repeat);
 
 %% Clear temporary variables
 %clearvars filename delimiter startRow formatSpec fileID dataArray ans;
