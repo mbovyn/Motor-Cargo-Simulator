@@ -62,37 +62,27 @@ locs = transform_vars(locs,repeat);
 
 %%
 
+%locs.loc_rec{motor_type,repeat}(timestep,dimension,motor number)
+locs.loc_rec=cell(2,max(repeat));
+
 if max(N)>0
 
-    locs.loc_rec=cell(2,size(repeat,1));
+    for i=1:max(repeat)
 
-    temp=cell(2,max(N));
-
-    for m=1:2
-
-        for n=1:N(m)
-
-            ind=7+(m-1)*N(1)*3+(n-1)*3;
-            temp{m,n}=[dataArray{ind} dataArray{ind+1} ...
-                dataArray{ind+2}];
-
-        end
-
-    end
-
-    %reformat to the shape motor_movie expects
-    for m=1:2
-        temp2=zeros(N(m),3);
-        for s=1:size(repeat,1)
+        for m=1:2
             for n=1:N(m)
-                temp2(n,:)=temp{m,n}(s,:);
+
+                ind=7+(m-1)*N(1)*3+(n-1)*3;
+                locs.loc_rec{m,i}(:,:,n)=[dataArray{ind} dataArray{ind+1} ...
+                    dataArray{ind+2}];
+
             end
-            locs.loc_rec{m,s}=temp2;
         end
-    end
+        
+    end %repeat
 
 else
-    locs.loc_rec=[];
+    % no motors
 end
 
 

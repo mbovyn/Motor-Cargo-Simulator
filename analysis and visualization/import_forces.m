@@ -20,9 +20,9 @@ N=params.N;
 %% Format string for each line of text:
 
 %need a %f for each column of numbers to read in
-%step, time, center x,y,z = 5
+
 %x,y,z for each motor = 3*(N_k+N_d)
-piece1=repmat('%f',1,9+6*(N(1)+N(2))+2);
+piece1=repmat('%f',1,9+10*(N(1)+N(2)));
 piece2='%[^\n\r]';
 
 formatSpec=strcat(piece1,piece2);
@@ -62,27 +62,30 @@ forces = transform_vars(forces,repeat);
 
 %%
 
-forces.Fradial=cell(2,1);
-forces.Ftangential=cell(2,1);
-for m=1:2
-    forces.Fradial{m}=cell(N(m),1);
-    forces.Ftangential{m}=cell(N(m),1);
-end
+%forces.F_______{motor_type,repeat}(timestep,dimension,motor number)
+forces.Fradial=cell(2,max(repeat));
+forces.Ftangential=cell(2,max(repeat));
 
 if max(N)>0
-    for m=1:2
-        for n=1:N(m)
-            if m==1
-                column=10+(n-1)*6;
-            else
-                column=10+N(1)*6+(n-1)*6;
+    
+    for i=1:max(repeat)
+        for m=1:2
+            for n=1:N(m)
+                if m==1
+                    column=14+(n-1)*10;
+                else
+                    column=14+N(1)*10+(n-1)*10;
+                end
+                forces.Fradial{m,i}(:,:,n)=[dataArray{:,column:column+2}];
+                forces.Ftangential{m,i}(:,:,n)=[dataArray{:,column+3:column+5}];
             end
-            forces.Fradial{m}{n}=[dataArray{:,column:column+2}];
-            forces.Ftangential{m}{n}=[dataArray{:,column+3:column+5}];
         end
     end
+    
 else
     %no motors
+    forces.Fradial=[];
+    forces.Ftangential=[];
 end
 
 %%

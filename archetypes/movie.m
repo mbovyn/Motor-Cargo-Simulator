@@ -7,6 +7,8 @@
 run_name={'demo'};
 localpath={pwd};
 nruns={[1,1]};
+%Note: won't work with multiple conditions, runs, or repeats
+%(so nruns should always be {[1,1]})
 
 %analysis file path
 analysispath='~/project_code/Motor_Freedom/analysis and visualization';

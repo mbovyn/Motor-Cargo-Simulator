@@ -66,31 +66,27 @@ heads.bound{2}=[dataArray{:,last-N(2)+1:last}];
 heads = transform_vars(heads,repeat);
 
 %%
-heads.head_rec=cell(2,size(repeat,1));
-temp=cell(2,max(N));
 
-for m=1:2
+%heads.head_rec{motor_type,repeat}(timestep,dimension,motor number)
+heads.head_rec=cell(2,max(repeat));
 
-    for n=1:N(m)
+if max(N)>0
 
-        ind=4+(m-1)*N(1)*3+(n-1)*3;
-        temp{m,n}=[dataArray{ind} ...
-            dataArray{ind+1} ...
-            dataArray{ind+2}];
+    for i=1:max(repeat)
+        for m=1:2
+            for n=1:N(m)
 
-    end
+                ind=4+(m-1)*N(1)*3+(n-1)*3;
+                heads.head_rec{m,i}(:,:,n)=[dataArray{ind} ...
+                    dataArray{ind+1} ...
+                    dataArray{ind+2}];
 
-end
-
-%reformat to the shape motor_movie expects
-for m=1:2
-    temp2=zeros(N(m),3);
-    for s=1:size(repeat,1)
-        for n=1:N(m)
-            temp2(n,:)=temp{m,n}(s,:);
+            end
         end
-        heads.head_rec{m,s}=temp2;
     end
+    
+else
+    %no motors
 end
 
 

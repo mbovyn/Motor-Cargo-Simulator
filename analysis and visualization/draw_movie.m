@@ -5,8 +5,19 @@ set(0,'defaultfigurecolor','w')
 
 %% import parameters and data
 
-%nruns=[1,1];
+if length(nruns)>1
+    error('draw_movie won''t work with more than one condition')
+end
+
+if max(nruns{1})>1
+    error('draw_movie won''t work with more than one run')
+end
+
 import_params_and_results
+
+if size(locs.loc_rec,2)>1
+    error('draw_movie won''t work for a run with more than one repeat')
+end
 
 %take in the data on the orientation change of the cargo
 if exist('omega','var') && ~exist('cumeuler','var')
@@ -152,21 +163,16 @@ if ~exist('tan_scaling','var')
 
         if max(params.N)>0
             
-            mags_tan=zeros(size(forces.Ftangential{1}{1},1),params.N(1)+params.N(2));
-            mags_rad=zeros(size(forces.Fradial{1}{1},1),params.N(1)+params.N(2));
-        
+            mags_tan=cell(2,1);
+            mags_rad=cell(2,1);
+            
             for m=1:2
-                for n=1:params.N(m)
-                    mags_tan(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Ftangential{m}{n}.*forces.Ftangential{m}{n},2));
-                    mags_rad(:,(m-1)*params.N(1)+n)=sqrt(sum(forces.Fradial{m}{n}.*forces.Fradial{m}{n},2));
-                end
+                mags_tan{m}=sqrt(sum(forces.Ftangential{m,1}.*forces.Ftangential{m,1},2));
+                mags_rad{m}=sqrt(sum(forces.Fradial{m,1}.*forces.Fradial{m,1},2));
             end
 
-            mags_tan=mags_tan(:);
-            mags_rad=mags_rad(:);
-
-            tan_scaling=params.R(1)/max(mags_tan);
-            rad_scaling=params.R(1)/max(mags_rad);
+            tan_scaling=params.R(1)/max(max(mags_tan{1},[],'all'),max(mags_tan{2},[],'all'));
+            rad_scaling=params.R(1)/max(max(mags_rad{1},[],'all'),max(mags_rad{2},[],'all'));
         else
             tan_scaling=Inf;
             rad_scaling=Inf;
@@ -215,7 +221,7 @@ for t=loop_ts
 
     else
 
-        h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',1);
+        h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',.3);
 
     end
 
@@ -228,12 +234,17 @@ for t=loop_ts
     hold on
 
     %% motor anchors and heads
-    if max(params.N)>0
-        for m=1:2
+    
+    for m=1:2
+        if params.N(m)>0
 
             %access location information from this time step
-            loc=locs.loc_rec{m,t};
-            loc_head=heads.head_rec{m,t};
+            loc=squeeze(locs.loc_rec{m,1}(t,:,:));
+            loc_head=squeeze(heads.head_rec{m,1}(t,:,:));
+            if params.N(m)>1
+                loc=loc';
+                loc_head=loc_head';
+            end
             if params.N(m)>0
                 att=heads.bound{m}(t,:);
             end
@@ -319,7 +330,7 @@ for t=loop_ts
                 if draw_forces==true
 
                     %for the radial force on the anchor
-                    f=forces.Ftangential{m}{n}(t,:)*tan_scaling;
+                    f=forces.Ftangential{m,1}(t,:,n)*tan_scaling;
                     plot3([loc(n,1),loc(n,1)+f(1)],...
                         [loc(n,2),loc(n,2)+f(2)],...
                         [loc(n,3),loc(n,3)+f(3)],'linewidth',3)
@@ -327,7 +338,7 @@ for t=loop_ts
                     ct=locs.center(t,:);
 
                     %for tangential force
-                    f=forces.Fradial{m}{n}(t,:)*cargo_scaling;
+                    f=forces.Fradial{m,1}(t,:,n)*cargo_scaling;
                     plot3([ct(1) ct(1)+f(1)],...
                         [ct(2) ct(2)+f(2)],...
                         [ct(3) ct(3)+f(3)],...
@@ -336,8 +347,6 @@ for t=loop_ts
                 end
             end
         end
-    else
-        %no motors to draw
     end
 
     %% if have force vectors, plot out the forces acting on the cargo
@@ -382,7 +391,7 @@ for t=loop_ts
         %display current simulation time
         %text(-.4,.4,.4,['t=' num2str(locs.t_arr(t))])
 
-        title(sprintf([titlestring '\n t=' sprintf('%0.3f',locs.t_arr(t)) ' s']))
+        title(sprintf([titlestring '\n t=' sprintf('%0.3g',locs.t_arr(t)) ' s']))
     else
         title(titlestring)
     end
