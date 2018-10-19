@@ -90,9 +90,9 @@ int simulate_cargo()
 
         printf("The initial forces on the cargo are:\n");
         printf("    External Force: (%g,%g,%g)\n",
-            Ftrap[0],Ftrap[0],Ftrap[0]);
+            Ftrap[0],Ftrap[1],Ftrap[2]);
         printf("    External Torque: (%g,%g,%g)\n",
-            TorqeExt[0],TorqeExt[0],TorqeExt[0]);
+            TorqeExt[0],TorqeExt[1],TorqeExt[2]);
 
     }//end of super verbose display
 
