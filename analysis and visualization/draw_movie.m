@@ -167,8 +167,13 @@ if ~exist('tan_scaling','var')
             mags_rad=cell(2,1);
             
             for m=1:2
-                mags_tan{m}=sqrt(sum(forces.Ftangential{m,1}.*forces.Ftangential{m,1},2));
-                mags_rad{m}=sqrt(sum(forces.Fradial{m,1}.*forces.Fradial{m,1},2));
+                if params.N(m)>0
+                    mags_tan{m}=sqrt(sum(forces.Ftangential{m,1}.*forces.Ftangential{m,1},2));
+                    mags_rad{m}=sqrt(sum(forces.Fradial{m,1}.*forces.Fradial{m,1},2));
+                else
+                    mags_tan{m}=-Inf;
+                    mags_rad{m}=-Inf;
+                end
             end
 
             tan_scaling=params.R(1)/max(max(mags_tan{1},[],'all'),max(mags_tan{2},[],'all'));
@@ -178,7 +183,10 @@ if ~exist('tan_scaling','var')
             rad_scaling=Inf;
         end
 
-        cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
+        %cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling]);
+        %cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling params.R/1]);
+        cargo_scaling=min([ext_scaling,steric_scaling,rad_scaling,tan_scaling]);
+        tan_scaling=cargo_scaling;
 
         clear mags_ext mags_steric mags_tan mags_rad ...
             ext_scaling steric_scaling rad_scaling
@@ -384,17 +392,23 @@ for t=loop_ts
     %% plot labels
 
     if Diagnostics>1
-        title(sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',locs.t_arr(t))]))
+        titlestringhere=sprintf([titlestring '\n Frame ' sprintf('%d',t) ', t=' sprintf('%0.5f',locs.t_arr(t))]);
     elseif Diagnostics>0
         %display current frame
         %text(.4,-.4,.4,['Frame ' num2str(t)])
         %display current simulation time
         %text(-.4,.4,.4,['t=' num2str(locs.t_arr(t))])
 
-        title(sprintf([titlestring '\n t=' sprintf('%0.3g',locs.t_arr(t)) ' s']))
+        titlestringhere=sprintf([titlestring '\n t=' sprintf('%0.3g',locs.t_arr(t)) ' s']);
     else
-        title(titlestring)
+        titlestringhere=titlestring;
     end
+    
+    if draw_forces==true
+        titlestringhere=sprintf([titlestringhere '\n F=' num2str(params.R*cargo_scaling) 'pN at cargo radius']);
+    end
+    
+    title(titlestringhere)
 
     xlabel('x (\mum)')
     ylabel('y (\mum)')
