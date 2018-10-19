@@ -235,7 +235,7 @@ our $cc29="/*
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */";
 
-our $ExternalTorque=1; our $ET2=0; our $ET3=0; our $ET4=100;
+our $ExternalTorque=1; our $ETx=0; our $ETy=0; our $ETz=0;
 our $cc30="/*
 1: no external torque
 2: external torque given by next three values (x y z)

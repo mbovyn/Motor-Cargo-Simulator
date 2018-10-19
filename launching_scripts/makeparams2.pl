@@ -137,7 +137,7 @@ $cc28
 ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname
 $cc29
 
-ExternalTorque $ExternalTorque $ET2 $ET3 $ET4
+ExternalTorque $ExternalTorque $$ETxname $$ETyname $$ETzname
 $cc30
 
 UseSteric $UseSteric

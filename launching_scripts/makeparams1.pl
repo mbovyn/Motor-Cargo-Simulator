@@ -31,6 +31,7 @@ our $kcMTname="kcMT";
 our $IB2name="IB2";
 
 our $EFxname="EFx"; our $EFyname="EFy"; our $EFzname="EFz";
+our $ETxname="ETx"; our $ETyname="ETy"; our $ETzname="ETz";
 
 our $SBname="SB";
 
