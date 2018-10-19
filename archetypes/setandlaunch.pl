@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 # creates parameter files for sweeps, then launches either locally or on the hpc
+# Note! If comments are too long C will get confused
 
 ###############################################################################
 #Run mode

@@ -125,8 +125,10 @@ void getInputParams( void )
     sscanf(tmpString,"%s %lf", blah,&kcMT);
 
     //make sure we have the right values
-    //printf("Read in motor numbers as %ld %ld\n",N[0],N[1]);
-    //printf("Read in kcMT as %lf\n",kcMT);
+    //printf("Read in motor numbers as %d %d\n",N[0],N[1]);
+    if(verboseTF>4){
+      printf("Read in kcMT as %g\n",kcMT);
+    }
 
     for(m=0;m<2;m++){
       unloaded_step_rate[m]=fabs(v_f[m]/step_size[m]);
@@ -247,6 +249,10 @@ void getInputParams( void )
     for(n_lines=1;n_lines<=6;n_lines++)
         fgets(tmpString, 100, fParams);
 
+    if(verboseTF>4){
+      printf("Read in external torque as %d %g %g %g\n",external_torque,TorqeExt[0],TorqeExt[1],TorqeExt[2]);
+    }
+
     //Use Steric
 
     fgets(tmpString, 100, fParams);
@@ -320,6 +326,10 @@ void getInputParams( void )
 
     sscanf(tmpString,"%s %lf",blah,&dt_override);
 
+    if(verboseTF>4){
+      printf("Read in dt_override as %g\n",dt_override);
+    }
+
     //check bit
     //need 2 because fgets doesn't read past the last line
     fgets(tmpString, 100, fParams);
@@ -330,7 +340,7 @@ void getInputParams( void )
     sscanf(tmpString,"%s %d",blah,&check_bit2);
 
     if(check_bit!=732 || check_bit2!=576){
-        printf("\n\n\nError! Exiting!\n\n\nCheck bit incorrect, mismatch between paramers file and read in code\n");
+        printf("\n\n\nError! Exiting!\n\n\nCheck bits incorrect - read %i and %i.\nShould be 732 and 576.\nMismatch between parameter file and read in code.\n\n\n",check_bit,check_bit2);
         exit(3);
     }
 
@@ -341,6 +351,8 @@ void getInputParams( void )
         printf("    read in all params from params file\n");
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////
     //Read in MT params from MTparams file
 
     //skip the header lines
