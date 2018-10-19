@@ -18,6 +18,7 @@ void evaluate_steric();
 void calculate_forces();
 void set_brownian_forces_to_0();
 void compute_next_locations();
+void split_forces();
 
 
 void generate_rand_normal(){
@@ -245,6 +246,19 @@ void update_motor_locations(){
                 }
             }
         }
+    } else if(MotorDiffusion>=10){
+
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+
+                for(i=0;i<3;i++){
+                    locs[m][n][i]=a1[nn][i];
+                }
+                nn++;
+
+            }
+        }
     }
 }
 
@@ -311,6 +325,18 @@ void cargobehavior()
                 if(verboseTF>4 && MotorDiffusion==8){
                     printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
                 }
+            }
+        }
+    }//legacy anchor movement
+
+    //check for anchor off surface
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(!graceful_exit
+                && (sqrt( pow(locs[m][n][0]-center[0],2)+pow(locs[m][n][1]-center[1],2)+pow(locs[m][n][2]-center[2],2) ) > R+.005 ||
+                 sqrt( pow(locs[m][n][0]-center[0],2)+pow(locs[m][n][1]-center[1],2)+pow(locs[m][n][2]-center[2],2) ) < R-.005)){
+                printf("\n\n\nError! Anchor type%dmotor%d more than 5nm off surface!\nExiting gracefully at step %ld\n\n\n",m,n,step);
+                graceful_exit=1;
             }
         }
     }
@@ -473,6 +499,10 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
             TorqeExt[0],TorqeExt[1],TorqeExt[2]);
     }
 
+    //split forces into radial and tangential components
+    //split_forces();
+
+    //(legacy version of)
     //transform force vectors to spherical and split into radial and tangential
     nn=0;
     for(m=0;m<2;m++){
@@ -513,6 +543,53 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
         }
     }
 }//end calculate forces
+
+void split_forces(){
+
+    double dotprod, loc_mag;
+
+    nn=0;
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(bound[m][n]){
+
+                //find dot product of motor force with radial vector
+                //(same as unit vector from center to anchor)
+                //gives fraction of motor force in radial direction
+                loc_mag=sqrt(pow(locs[m][n][0]-center[0],2)+
+                    pow(locs[m][n][1]-center[1],2)+pow(locs[m][n][2]-center[2],2));
+                dotprod=F_m_vec[m][n][0]*((locs[m][n][0]-center[0])/loc_mag)+
+                    F_m_vec[m][n][1]*((locs[m][n][1]-center[1])/loc_mag)+
+                    F_m_vec[m][n][2]*((locs[m][n][2]-center[2])/loc_mag);
+
+                //then radial force has magnitude proportion*original magnitude
+                //and is in radial direction
+                //tangential force is difference between the two
+                for(i=0;i<3;i++){
+                    FmRadial[nn][i]=dotprod*F_m_mag[m][n]*((locs[m][n][i]-center[i])/loc_mag);
+                    FmTangential[nn][i]=F_m_vec[m][n][i]-FmRadial[nn][i];
+                }
+
+                if(verboseTF>4){
+                    printf("On type%dmotor%d\n",m,n);
+                    printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
+                    printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                    printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
+                    printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+                    printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
+                }
+
+            }else{
+                for(i=0;i<3;i++){
+                    FmRadial[nn][i]=0;
+                    FmTangential[nn][i]=0;
+                }
+            }
+            nn++;
+        }
+    }
+}
 
 void set_brownian_forces_to_0(){
 
@@ -776,4 +853,4 @@ void compute_next_locations(){
         printf("    Change in cargo angle is (%g,%g,%g)\n",theta1[0]-theta[0],theta1[1]-theta[1],theta1[2]-theta[2]);
     }
 
-}
+} //compute_next_locations
