@@ -59,7 +59,7 @@ disp_theta_c=0;
 5: don't set xends, left to be set here
 6: in x, follow cargo. In y and z, same as 3
 %}
-plot_box=2;
+plot_box=4;
 
 %% create the movie
 

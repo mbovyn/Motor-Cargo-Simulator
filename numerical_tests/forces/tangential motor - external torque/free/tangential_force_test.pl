@@ -41,9 +41,10 @@ our $working_dir=$ENV{'PWD'};
 #    [1, 2, 3],
 #    );
 
+#our @sweepvars = ();
 our @sweepvars = ("ETy");
 our @sweepvals = (
-   [.25*1,.25*5,.25*15]
+   [.25*1]
    );
 #print "\n@{$sweepvals[0]}\n";
 #print "\n@{$sweepvals[1]}\n";
@@ -130,7 +131,7 @@ our $cc21="/*
 Set second input to move x position of head of type0motor0 or type1motor0
  */";
 
-our $Binding=1; our $B2=.5;
+our $Binding=2; our $B2=.5;
 our $cc22="/*
 1: set given binding rate if in range
 2: motors don’t bind
@@ -212,7 +213,7 @@ our $cc27="/*
 
 #Cargo Behavior
 
-our $CargoBehavior=3;
+our $CargoBehavior=1;
 our $cc28="/*
 1: Cargo moves normally
 2: On rail - cargo moves only in x
@@ -226,7 +227,7 @@ our $cc28="/*
 10:
 */";
 
-our $ExternalForce=1; our $EFx=-3; our $EFy=0; our $EFz=0;
+our $ExternalForce=2; our $EFx=-.417248; our $EFy=0; our $EFz=0;
 our $cc29="/*
 1: no external forces
 2: external force given by next three values (x y z), pN
@@ -250,7 +251,7 @@ Note: steric force spring constant specified in kcMT
 
 #Output
 
-our $ReturnDetails=4; our $RD2=1; our $RD3=1; our $RD4=1; our $RD5=1;
+our $ReturnDetails=1; our $RD2=1; our $RD3=1; our $RD4=1; our $RD5=1;
 our $cc32="/* create text files with records
 0: Only return end state
 1: Return details every step
@@ -274,7 +275,7 @@ our $RequireAttached=0;             our $cc34="//Stop when all motors in unbound
 our $StopOnMotor2Attach=0;          our $cc35="//Stop when second motor binds";
 our $StopOnAllAttached=0;           our $cc36="//Stop when all motors bound";
 our $StopOnStep=0;                  our $cc37="//0 for don’t stop, otherwise enter step";
-our $StopOnTime=.5;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
+our $StopOnTime=.00025;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
 our $StopOnDistance=0;              our $cc39="//0 no stop, otherwise distance (microns)";
 our $StopBelowThetaC=0; our $SB=-1; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
 our $multiMT_assay=0;               our $cc41="//1 for switch, 2 for ToW";
@@ -297,7 +298,7 @@ our $cc44="/*success success_mode - if mode=0, success if result==success
 */";
 
 # //debugging
-our $dt_override=0; our $cc45="//(s). \"inf\"=ignore dt_default. 0=don't. (-) time to ignore stability checks";
+our $dt_override=.000001; our $cc45="//(s). \"inf\"=ignore dt_default. 0=don't. (-) time to ignore stability checks";
 
 ###############################################################################
 #MT parameters

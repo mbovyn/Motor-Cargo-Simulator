@@ -44,6 +44,10 @@ void clear_aggregates(){
             }
         }
     }
+
+    omega[0]=NAN;
+    omega[1]=NAN;
+    omega[2]=NAN;
 }
 
 void update_quaternion(){
