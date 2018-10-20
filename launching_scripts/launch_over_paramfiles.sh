@@ -28,6 +28,7 @@ dont_wait=$8
 
 #number of processes we want to run at once
 numCores=4
+oldname=motors.x
 
 . "$code_dir/launching_scripts/get_param_file_list.sh"
 
@@ -55,8 +56,11 @@ do
     echo "****Starting $ctr of ${#param_files[@]}, $instance_name at $(date +"%r on %F")"
 
     #run executable
+    newname="$instance_name.x"
+    mv $working_dir/$oldname $working_dir/$newname
     #motors.x   run_name            repeats       verbose
-    ./motors.x  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
+    ./$newname  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
+    oldname=$newname
 
     let ctr++
 
@@ -67,6 +71,8 @@ do
     fi
 
 done
+
+mv $working_dir/$newname $working_dir/motors.x
 
 echo "****finished launching"
 
