@@ -500,48 +500,48 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
     }
 
     //split forces into radial and tangential components
-    //split_forces();
+    split_forces();
 
     //(legacy version of)
     //transform force vectors to spherical and split into radial and tangential
-    nn=0;
-    for(m=0;m<2;m++){
-        for(n=0;n<N[m];n++){
-            if(bound[m][n]){
-
-                convert_loc_to_spherical(m,n);
-                convert_vec_to_sph(locs_sph[m][n][0],locs_sph[m][n][1],F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
-
-                convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],0,0,v_sph[2]);
-                for(i=0;i<3;i++){
-                    FmRadial[nn][i]=v_cart[i];
-                }
-                convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],v_sph[0],v_sph[1],0);
-                for(i=0;i<3;i++){
-                    FmTangential[nn][i]=v_cart[i];
-                }
-
-                if(verboseTF>4){
-                    printf("On type%dmotor%d\n",m,n);
-                    printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
-                    printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                    printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
-                    printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
-                    printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
-                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
-                }
-
-
-            }
-            else{
-                for(i=0;i<3;i++){
-                    FmRadial[nn][i]=0;
-                    FmTangential[nn][i]=0;
-                }
-            }
-            nn++;
-        }
-    }
+    // nn=0;
+    // for(m=0;m<2;m++){
+    //     for(n=0;n<N[m];n++){
+    //         if(bound[m][n]){
+    //
+    //             convert_loc_to_spherical(m,n);
+    //             convert_vec_to_sph(locs_sph[m][n][0],locs_sph[m][n][1],F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+    //
+    //             convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],0,0,v_sph[2]);
+    //             for(i=0;i<3;i++){
+    //                 FmRadial[nn][i]=v_cart[i];
+    //             }
+    //             convert_vec_to_cart(locs_sph[m][n][0],locs_sph[m][n][1],v_sph[0],v_sph[1],0);
+    //             for(i=0;i<3;i++){
+    //                 FmTangential[nn][i]=v_cart[i];
+    //             }
+    //
+    //             if(verboseTF>4){
+    //                 printf("On type%dmotor%d\n",m,n);
+    //                 printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
+    //                 printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+    //                 printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
+    //                 printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
+    //                 printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+    //                 printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
+    //             }
+    //
+    //
+    //         }
+    //         else{
+    //             for(i=0;i<3;i++){
+    //                 FmRadial[nn][i]=0;
+    //                 FmTangential[nn][i]=0;
+    //             }
+    //         }
+    //         nn++;
+    //     }
+    // }
 }//end calculate forces
 
 void split_forces(){
