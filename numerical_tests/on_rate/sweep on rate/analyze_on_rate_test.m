@@ -1,5 +1,5 @@
 %Compare the simulated binding times to on rates we input into the simulation
-
+clear
 %% setup for analyzing data
 
 %set the name of the run here
@@ -17,7 +17,7 @@ run([analysispath '/import_params_and_results.m'])
 for i=1:nruns{1}(1)
     on_rate(i)=params(i).pi_0(1);
     bind_time(i)=mean(summary(i).t_final);
-    bind_time_sem(i)=std(bind_time(i))/sqrt(length(summary(i).t_final));
+    bind_time_sem(i)=std(summary(i).t_final)/sqrt(length(summary(i).t_final));
 end
 
 %% plot mean binding time
