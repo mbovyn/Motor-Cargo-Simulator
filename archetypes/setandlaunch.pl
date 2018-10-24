@@ -132,14 +132,14 @@ our $cc21="/*
 Set second input to move x position of head of type0motor0 or type1motor0
  */";
 
-our $Binding=1; our $B2=.5;
+our $Binding=6; our $B2=.5;
 our $cc22="/*
 1: set given binding rate if in range
 2: motors don’t bind
 3: always bind if in range
 4: (not implemented) set binding rate if between L and inner limit (fraction*L)
 5: Normal binding, but excluded in region for 0nm MT crossings
-6:
+6: Uniform rate for MTdist<=L with gaussian tail for MTdist>L
 7:
 8:
 9:

@@ -427,7 +427,36 @@ void binding_rates() //sets bind_possible and bind_rate
                 }
             }
 
+            break;
 
+        case 6: //uniform for MTdist<=L, gaussian tail for MTdist>L
+
+            for(n=0;n<N[m];n++){
+                if(bound[m][n]==0){
+
+                    //for each MT
+                    for(k=0;k<n_MTs;k++){
+                        //find the distance from the anchor
+                        pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
+                        //set binding rate if within 3 standard deviations
+                        if (MTdist<=L[m]+3*sqrt(kBT/k_m[m])) {
+                            bind_possible[m][n][k]=1;
+                            if(MTdist<=L[m]){
+                                bind_rate[m][n][k]=pi_0[m];
+                            }else{
+                                bind_rate[m][n][k]=pi_0[m]*exp(-.5*k_m[m]*pow(MTdist-L[m],2)/kBT);
+                            }
+                        }else{
+                            bind_possible[m][n][k]=0;
+                        }
+                    }
+
+                }else{
+                    for(k=0;k<n_MTs;k++){
+                        bind_possible[m][n][k]=0;
+                    }
+                }
+            }
 
             break;
 
