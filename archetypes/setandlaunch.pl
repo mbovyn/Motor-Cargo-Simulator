@@ -5,6 +5,11 @@ use warnings;
 # creates parameter files for sweeps, then launches either locally or on the hpc
 # Note! If comments are too long C will get confused
 
+# if something goes wrong:
+# ps
+# kill PID
+# https://stackoverflow.com/questions/36369136/how-to-kill-a-background-process-created-in-a-script
+
 ###############################################################################
 #Run mode
 #set to 'local' or 'hpc'.
