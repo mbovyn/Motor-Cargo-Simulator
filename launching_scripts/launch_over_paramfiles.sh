@@ -44,12 +44,12 @@ do
     if [ "$dont_wait" -ne "1" ]
     then
         #find the number of simulations currently running
-        numInstances=$( pgrep motors | wc -l )
+        numInstances=$( jobs -r | wc -l )
         #wait to run the next instance until there are less than the max
         while [ "$numInstances" -ge "$numCores" ]
         do
         	sleep 5s
-            numInstances=$( pgrep motors | wc -l )
+            numInstances=$( jobs -r | wc -l )
         done
     fi
 
@@ -57,7 +57,7 @@ do
 
     #run executable
     newname="$instance_name.x"
-    mv $working_dir/$oldname $working_dir/$newname
+    mv "$working_dir"/"$oldname" "$working_dir"/"$newname"
     #motors.x   run_name            repeats       verbose
     ./$newname  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
     oldname=$newname
@@ -72,7 +72,7 @@ do
 
 done
 
-mv $working_dir/$newname $working_dir/motors.x
+mv "$working_dir"/"$newname" "$working_dir"/motors.x
 
 echo "****finished launching"
 
@@ -84,6 +84,7 @@ then
     while [ "$numInstances" -gt "0" ]
     do
 
+        #jobs
         numInstancesnew=$( jobs -r | wc -l )
         #echo $numInstancesnew
 

@@ -299,7 +299,7 @@ our $cc44="/*success success_mode - if mode=0, success if result==success
 */";
 
 # //debugging
-our $dt_override=0; our $cc45="//Value in (s) to override. \"inf\"=ignore dt_default. 0=no override. (-) time to ignore stability checks";
+our $dt_override=0; our $cc45="//Value in (s). \"inf\"=ignore dt_default. 0=no override. (-) ignore stability checks";
 
 ###############################################################################
 #MT parameters
