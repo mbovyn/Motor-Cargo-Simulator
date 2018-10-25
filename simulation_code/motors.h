@@ -221,6 +221,8 @@ Initial Binding
 */
 
 double MTdist;
+double anchorMTdist[2][NMOTORSMAX][NMTSMAX];
+int within_L[2][NMOTORSMAX][NMTSMAX];
 double MTdistk[NMTSMAX];
 int done;
 double initial_head;

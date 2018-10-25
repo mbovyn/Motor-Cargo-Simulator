@@ -179,8 +179,8 @@ int simulate_cargo()
                 printf("    For MT %d:\n",k+1);
                 for (m=0;m<2;m++){
                     for(n=0;n<N[m];n++){
-                        printf("    type%dmotor%d: bind possible was %d and the rate was %g\n",
-                            m,n,bind_possible[m][n][k],bind_rate[m][n][k]);
+                        printf("    type%dmotor%d: bind possible was %d, within_L was %d and the rate was %g\n",
+                            m,n,bind_possible[m][n][k],within_L[m][n][k],bind_rate[m][n][k]);
                     }
                 }
             }
@@ -227,8 +227,8 @@ int simulate_cargo()
                         //printf("binding possible for type%dmotor%d with rate %f\n",m,n,bind_rate[m][n][k]);
                         //make sure motor has a chance to diffuse away if
                         //dt_max_base is large
-                        if(dt_max>dt_default){
-                            dt_max=dt_default;
+                        if(dt_max>dt_default && !dt_override<0){
+                           dt_max=dt_default;
                         }
                         dtHere = -1/bind_rate[m][n][k]*log(RAND);
                         if (dtHere < gillespie_dt )

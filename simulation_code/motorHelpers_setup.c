@@ -375,12 +375,29 @@ void findMTdist(){
             for(k=0;k<n_MTs;k++){
                 // printf("Calling pointtoMTdist from findMTdist\n");
                 pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
-                if (MTdist<=L[m]) {
-                    bind_possible[m][n][k]=1;
-                }else{
+                anchorMTdist[m][n][k]=MTdist;
+
+                //prevent binding through the cargo
+                //if dot product of vector from anchor to MT and vector from
+                // center to anchor is <0, vector from anchor to MT points inside
+                // the cargo
+                if(cVector[0]*(locs[m][n][0]-center[0])+
+                   cVector[1]*(locs[m][n][1]-center[1])+
+                   cVector[2]*(locs[m][n][2]-center[2]) < 0){
+
                     bind_possible[m][n][k]=0;
+                }else{
+                    bind_possible[m][n][k]=1;
                 }
-                //printf("for type%dmotor%d dist is %f, bind_possible is %d\n",m,n,MTdist,bind_possible[m][n][k]);
+
+
+                //often, only want to bind if MT is closer than motor is long
+                if (anchorMTdist[m][n][k]<=L[m] && bind_possible[m][n][k]==1) {
+                    within_L[m][n][k]=1;
+                }else{
+                    within_L[m][n][k]=0;
+                }
+                //printf("for type%dmotor%d dist is %f, bind_possible is %d\n",m,n,anchorMTdist[m][n][k],bind_possible[m][n][k]);
             }
 
         }else{
@@ -416,7 +433,7 @@ void initialbinding(){
                     for(k=0;k<n_MTs;k++){
                         //set bound to MT number
                         if(!bound[m][n]){
-                            bound[m][n]=(k+1)*bind_possible[m][n][k];
+                            bound[m][n]=(k+1)*within_L[m][n][k];
                         }
                         //Note: this will always bind the motor to the first MT if there are multiple MTs in range
                     }
@@ -436,7 +453,7 @@ void initialbinding(){
                     done=0;
 
                     if(InitialLocations==6){
-                        if(bind_possible[m][most_neighbors][0]){
+                        if(within_L[m][most_neighbors][0]){
                             bound[m][most_neighbors]=1;
                             done=1;
                         }
@@ -449,7 +466,7 @@ void initialbinding(){
                         //loop through motors to assign binding status
                         for(n=0;n<N[m];n++){
                             //of the motors for which capture is possible, attach only one
-                            if(bind_possible[m][n][0]){
+                            if(within_L[m][n][0]){
                                 if(done==0){
                                     bound[m][n]=1;
                                     done=1;
@@ -512,7 +529,7 @@ void initialbinding(){
                     //loop through motors to assign binding status
                     for(n=0;n<N[m];n++){
                         //of the motors for which capture is possible, attach only one
-                        if(bind_possible[m][n][0]){
+                        if(within_L[m][n][0]){
                             if(done==0){
                                 bound[m][n]=1;
                                 done=1;

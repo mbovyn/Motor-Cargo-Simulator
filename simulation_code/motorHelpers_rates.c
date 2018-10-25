@@ -360,7 +360,7 @@ void binding_rates() //sets bind_possible and bind_rate
             findMTdist(); //motorHelpers_setup.c
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
-                    if(bind_possible[m][n][k]){
+                    if(within_L[m][n][0]){
                         bind_rate[m][n][k]=pi_0[m];
                     }
                 }
@@ -381,7 +381,7 @@ void binding_rates() //sets bind_possible and bind_rate
             findMTdist(); //motorHelpers_setup.c
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
-                    if(bind_possible[m][n][k]){
+                    if(within_L[m][n][k]){
                         bind_rate[m][n][k]=INF;
                     }
                 }
@@ -393,7 +393,7 @@ void binding_rates() //sets bind_possible and bind_rate
 
             // findMTdist();
             // for(n=0;n<N[m];n++){
-            //     if(bind_possible[m][n][k] && MT_dist[m][n]>L[m]*innerlimit){
+            //     if(within_L[m][n][k] && MT_dist[m][n]>L[m]*innerlimit){
             //         bind_rate[m][n]=pi_0[m];
             //     }
             // }
@@ -407,7 +407,7 @@ void binding_rates() //sets bind_possible and bind_rate
 
             //stop it from binding if it would be in excluded zone
             //first MT only
-            if(bind_possible[m][n][0]){
+            if(within_L[m][n][0]){
                 closestPointOnMT(locs[m][n][0],locs[m][n][1],locs[m][n][2],0);
                 if(cPoint[0]>-.012 && cPoint[0] <.012){
                     bind_possible[m][n][0]=0;
@@ -421,7 +421,7 @@ void binding_rates() //sets bind_possible and bind_rate
             findMTdist();
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
-                    if(bind_possible[m][n][k]){
+                    if(within_L[m][n][0]){
                         bind_rate[m][n][k]=pi_0[m];
                     }
                 }
@@ -429,31 +429,17 @@ void binding_rates() //sets bind_possible and bind_rate
 
             break;
 
-        case 6: //uniform for MTdist<=L, gaussian tail for MTdist>L
+        case 6: //uniform for anchorMTdist<=L, gaussian tail for anchorMTdist>L
 
+            findMTdist();
             for(n=0;n<N[m];n++){
-                if(bound[m][n]==0){
-
-                    //for each MT
-                    for(k=0;k<n_MTs;k++){
-                        //find the distance from the anchor
-                        pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
-                        //set binding rate if within 3 standard deviations
-                        if (MTdist<=L[m]+3*sqrt(kBT/k_m[m])) {
-                            bind_possible[m][n][k]=1;
-                            if(MTdist<=L[m]){
-                                bind_rate[m][n][k]=pi_0[m];
-                            }else{
-                                bind_rate[m][n][k]=pi_0[m]*exp(-.5*k_m[m]*pow(MTdist-L[m],2)/kBT);
-                            }
+                for(k=0;k<n_MTs;k++){
+                    if(bind_possible[m][n][k]){
+                        if(anchorMTdist[m][n][k]<=L[m]){
+                            bind_rate[m][n][k]=pi_0[m];
                         }else{
-                            bind_possible[m][n][k]=0;
+                            bind_rate[m][n][k]=pi_0[m]*exp(-.5*k_m[m]*pow(anchorMTdist[m][n][k]-L[m],2)/kBT);
                         }
-                    }
-
-                }else{
-                    for(k=0;k<n_MTs;k++){
-                        bind_possible[m][n][k]=0;
                     }
                 }
             }
@@ -463,7 +449,15 @@ void binding_rates() //sets bind_possible and bind_rate
         default:
             printf("\n\nError: Not a valid binding type\n\n");
             exit(4);
+        }//Binding switch
+
+    for(n=0;n<N[m];n++){
+        for(k=0;k<n_MTs;k++){
+            if(!bind_possible[m][n][k]){
+                bind_rate[m][n][k]=NAN;
+            }
         }
+    }
 }
 
 void nucleotide(){
