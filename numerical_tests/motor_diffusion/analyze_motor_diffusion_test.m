@@ -1,3 +1,5 @@
+
+clear
 %% setup for analyzing data
 
 %set names, paths and numbers of runs

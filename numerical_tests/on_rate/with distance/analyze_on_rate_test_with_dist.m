@@ -30,7 +30,7 @@ plot(x1,ones(size(x1))*1./params(1).pi_0(1))
 kBT=.00400388;
 x2=linspace(params(1).L(1),params(1).L(1)+3*sqrt(kBT/params(1).k_m(1)));
 plot(x2,1./(params(1).pi_0(1)*exp(-.5*params(1).k_m(1)*(x2-params(1).L(1)).^2/kBT)))
-legend('Simulated','1/on rate')
+legend('Simulated','1/on rate','location','northwest')
 xlabel('Anchor-MT distance (\mum)')
 ylabel('Mean Binding Time (s)')
 set(gca,'yscale','log')
