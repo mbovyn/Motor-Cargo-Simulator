@@ -227,7 +227,7 @@ int simulate_cargo()
                         //printf("binding possible for type%dmotor%d with rate %f\n",m,n,bind_rate[m][n][k]);
                         //make sure motor has a chance to diffuse away if
                         //dt_max_base is large
-                        if(dt_max>dt_default && !dt_override<0){
+                        if(dt_max>dt_default && !(dt_override<0)){
                            dt_max=dt_default;
                         }
                         dtHere = -1/bind_rate[m][n][k]*log(RAND);
