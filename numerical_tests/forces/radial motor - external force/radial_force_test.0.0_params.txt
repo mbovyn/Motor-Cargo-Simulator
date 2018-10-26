@@ -11,7 +11,7 @@
 //Motor Parameters
 //entry 1 for kinesins, entry 2 for dynein
 
-N      4 1 //number of motors
+N      1 1 //number of motors
 
 //Muller Sim
 F_s    5 5        //stall force (pN)
@@ -202,7 +202,7 @@ ExternalForce 2 -1 0 0
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */
 
-ExternalTorque 1 0 0 100
+ExternalTorque 1   
 /*
 1: no external torque
 2: external torque given by next three values (x y z)

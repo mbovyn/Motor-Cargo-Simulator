@@ -195,14 +195,14 @@ CargoBehavior 1
 10:
 */
 
-ExternalForce 2 -1 0 0
+ExternalForce 2 -3 0 0
 /*
 1: no external forces
 2: external force given by next three values (x y z), pN
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */
 
-ExternalTorque 2 0 0.25 0
+ExternalTorque 2 0 0.75 0
 /*
 1: no external torque
 2: external torque given by next three values (x y z)

@@ -1,5 +1,5 @@
+%analyze cargo translational diffusion
 clear
-
 %% setup for analyzing data
 
 %set names, paths and numbers of runs
@@ -42,8 +42,8 @@ for i=1:nruns{1}(1)
     set(h,'facealpha',.3)
     
 end
-set(gca,'yscale','log')
-ylim([50^-1,50])
+%set(gca,'yscale','log')
+ylim([50^-1,30])
 xlim([0,1])
 
 xlabel('Time (s)')

@@ -1,6 +1,9 @@
+%Analyze test of motor tangential force
+%In this test, a torque is applied to the cargo which rotates the cargo
+%until the motor is stretched. This translates into a
+%tangential force on the motor, which becomes balanced by the force exerted
+%by the motor
 clear
-close all
-
 %% setup for analyzing data
 
 %set names, paths and numbers of runs
@@ -24,6 +27,10 @@ hold on
 plot(omega.t_arr,ones(size(omega.t_arr))*params.T_ext(2)/(8*pi*params.eta*params.R^3),'--')
 %plot(omega.t_arr,ones(size(omega.t_arr))*params.T_ext(2)/(8*pi*params.eta*params.R^3/params.R+params.R^2*kBT/params.D_m(1)))
 %ylim([0 Inf])
+xlim([0 2.5E-4])
+xlabel('Time (s)')
+ylabel('Rotational Velocity (rad/s)')
+legend('Simulated','Free velocity','location','east')
 
 
 %% bead version
@@ -32,4 +39,8 @@ figure
 plot(forces.t_arr,forces.Ftangential{1}(:,1),'o')
 hold on
 plot(forces.t_arr,ones(size(forces.t_arr))*params.T_ext(2)/params.R,'Linewidth',1.5)
-ylim([0,1.1])
+ylim([0,params.T_ext(2)/params.R*1.1])
+xlabel('Time (s)')
+ylabel('Force (pN)')
+xlim([0 2.5E-4])
+legend('Simulated','Torque/Radius','location','southeast')

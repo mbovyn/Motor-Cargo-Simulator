@@ -42,9 +42,10 @@ our $working_dir=$ENV{'PWD'};
 #    );
 
 #our @sweepvars = ();
-our @sweepvars = ("ETy");
+our @sweepvars = ("ETy","EFx");
 our @sweepvals = (
-   [.25*1]
+   [.25*3],
+   [-3]
    );
 #print "\n@{$sweepvals[0]}\n";
 #print "\n@{$sweepvals[1]}\n";
@@ -227,7 +228,7 @@ our $cc28="/*
 10:
 */";
 
-our $ExternalForce=2; our $EFx=-1; our $EFy=0; our $EFz=0;
+our $ExternalForce=2; our $EFx=0; our $EFy=0; our $EFz=0;
 our $cc29="/*
 1: no external forces
 2: external force given by next three values (x y z), pN

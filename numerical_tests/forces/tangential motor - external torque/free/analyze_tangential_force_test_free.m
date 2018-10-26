@@ -1,6 +1,9 @@
+%Analyze test of motor tangential force
+%In this test, a torque is applied to the cargo which rotates the cargo
+%until the motor is stretched and the anchor drags through the membrane.
+%This drag force becomes balanced by the force exerted
+%by the motor
 clear
-close all
-
 %% setup for analyzing data
 
 %set names, paths and numbers of runs
@@ -37,7 +40,8 @@ plot(omega.t_arr,ones(size(omega.t_arr))*...
 
 ylabel('Rotatial Velocity (radians/s)')
 xlabel('Time (s)')
-
+xlim([0,2.5E-4])
+legend('Simulated','Free velocity','Equilibrium velocity','location','east')
 
 %% plot motor tangential force
 
@@ -49,3 +53,5 @@ plot(forces.t_arr(2:end),ones(size(forces.t_arr(2:end)))*...
     kBT/params.D_m(1)*params.R.*wpredicted,'linewidth',1.5)
 ylabel('Tangential force on motor (pN)')
 xlabel('Time (s)')
+xlim([0,2.5E-4])
+legend('Simulated','Drag force','location','southeast')

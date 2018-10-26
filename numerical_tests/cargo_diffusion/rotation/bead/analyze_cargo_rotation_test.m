@@ -1,3 +1,6 @@
+% Analyze diffusional rotation of the cargo
+% bead version
+clear
 %% setup for analyzing data
 
 %set names, paths and numbers of runs

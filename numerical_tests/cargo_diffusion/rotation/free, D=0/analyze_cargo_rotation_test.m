@@ -1,3 +1,6 @@
+% analyze diffusional rotation of the cargo
+% free, D=0 version
+clear
 %% setup for analyzing data
 
 %set names, paths and numbers of runs
