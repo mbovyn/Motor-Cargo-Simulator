@@ -5,4 +5,4 @@ Rates
 
 Off rate
 
-![Bovyn 2018 Off Rate](/off_rate/Bovyn2018 off rate/association time vs force.eps)
+![Bovyn 2018 Off Rate](/off_rate/Bovyn2018 off rate/association time vs force.png)
