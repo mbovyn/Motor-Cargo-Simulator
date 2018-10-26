@@ -381,9 +381,10 @@ void findMTdist(){
                 //if dot product of vector from anchor to MT and vector from
                 // center to anchor is <0, vector from anchor to MT points inside
                 // the cargo
-                if(cVector[0]*(locs[m][n][0]-center[0])+
-                   cVector[1]*(locs[m][n][1]-center[1])+
-                   cVector[2]*(locs[m][n][2]-center[2]) < 0){
+                if(((cVector[0]*(locs[m][n][0]-center[0])+
+                    cVector[1]*(locs[m][n][1]-center[1])+
+                    cVector[2]*(locs[m][n][2]-center[2])) < 0) &&
+                   (mag(cVector)>.001)){
 
                     bind_possible[m][n][k]=0;
                 }else{
@@ -484,13 +485,13 @@ void initialbinding(){
 
                     //stop if one wasn't able to bind
                     if(done==0){
-                        printf("\n\n\n Error: Wasn't able to bind motor as requested\n");
+                        printf("\n\n\nError: Wasn't able to bind motor as requested\n");
                         printf("Center was (%g,%g,%g)\n",center[0],center[1],center[2]);
                         printf("InitialLocations was %d\n",InitialLocations);
-                        printf("Anchor locations were:\n");
+                        printf("Anchor locations and dist to MT0 were:\n");
                         for(m=0;m<2;m++){
                             for(n=0;n<N[m];n++){
-                                printf("type%dmotor%d: (%g,%g,%g)\n",m,n,locs[m][n][0],locs[m][n][1],locs[m][n][2] );
+                                printf("    type%dmotor%d: (%g,%g,%g) and %g, marked %d %d\n",m,n,all3(locs[m][n]),anchorMTdist[m][n][0],within_L[m][n][0],bind_possible[m][n][0] );
                             }
                         }
                         printf("\n\n");
