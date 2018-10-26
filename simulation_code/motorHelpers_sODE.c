@@ -230,9 +230,11 @@ void update_motor_locations(){
                 //magnitude of vector to calculated next anchor position (a1)
                 center_to_a_mag=sqrt(pow(a1[nn][0]-center[0],2)+
                     pow(a1[nn][1]-center[1],2)+pow(a1[nn][2]-center[2],2));
+
                 //check for too large movement
                 if(fabs(center_to_a_mag-R)>.01){
-                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld of repeat %d\n\n\n",m,n,move_to_membrane_dist[m][n],step,j);
+                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld of repeat %d\n\n\n",m,n,center_to_a_mag,step,j);
+                    printf("a1 is (%g,%g,%g), center is (%g,%g,%g)\n",a1[nn][0],a1[nn][1],a1[nn][2],center[0],center[1],center[2]);
                     graceful_exit=1;
                 }
                 //position on surface=R*(unit vector from c to a1)
@@ -546,7 +548,8 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
 
 void split_forces(){
 
-    double dotprod, loc_mag;
+    //double loc_mag;
+    double dotprod;
 
     nn=0;
     for(m=0;m<2;m++){
@@ -555,29 +558,32 @@ void split_forces(){
 
                 //find dot product of motor force with radial vector
                 //(same as unit vector from center to anchor)
-                //gives fraction of motor force in radial direction
-                loc_mag=sqrt(pow(locs[m][n][0]-center[0],2)+
-                    pow(locs[m][n][1]-center[1],2)+pow(locs[m][n][2]-center[2],2));
-                dotprod=F_m_vec[m][n][0]*((locs[m][n][0]-center[0])/loc_mag)+
-                    F_m_vec[m][n][1]*((locs[m][n][1]-center[1])/loc_mag)+
-                    F_m_vec[m][n][2]*((locs[m][n][2]-center[2])/loc_mag);
+                //gives motor force in radial direction
+                //loc_mag=sqrt(pow(locs[m][n][0]-center[0],2)+
+                //    pow(locs[m][n][1]-center[1],2)+pow(locs[m][n][2]-center[2],2));
+                dotprod=F_m_vec[m][n][0]*((locs[m][n][0]-center[0])/R)+
+                    F_m_vec[m][n][1]*((locs[m][n][1]-center[1])/R)+
+                    F_m_vec[m][n][2]*((locs[m][n][2]-center[2])/R);
 
                 //then radial force has magnitude proportion*original magnitude
                 //and is in radial direction
                 //tangential force is difference between the two
                 for(i=0;i<3;i++){
-                    FmRadial[nn][i]=dotprod*F_m_mag[m][n]*((locs[m][n][i]-center[i])/loc_mag);
+                    FmRadial[nn][i]=dotprod*((locs[m][n][i]-center[i])/R);
                     FmTangential[nn][i]=F_m_vec[m][n][i]-FmRadial[nn][i];
                 }
 
                 if(verboseTF>4){
                     printf("On type%dmotor%d\n",m,n);
-                    printf("    force magnitude before solve is %g\n",F_m_mag[0][0]);
-                    printf("    cartesian loc vector is (%g,%g,%g)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                    printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
-                    printf("    cartesian force vector is (%g,%g,%g)\n",F_m_vec[m][n][0],F_m_vec[m][n][1],F_m_vec[m][n][2]);
-                    printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
-                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",FmRadial[nn][0],FmRadial[nn][1],FmRadial[nn][2],FmTangential[nn][0],FmTangential[nn][1],FmTangential[nn][0]);
+                    printf("    head at (%g,%g,%g) and anchor at (%g,%g,%g)\n",all3(head[m][n]),all3(locs[m][n]) );
+                    printf("    stretched by %g\n",magdiff(locs[m][n],head[m][n])-L[m] );
+                    printf("    force magnitude before solve is %g\n",F_m_mag[m][n] );
+                    printf("    cartesian loc vector is (%g,%g,%g)\n",all3(locs[m][n]) );
+                    //printf("    spherical loc vector is (%g,%g)\n",locs_sph[m][n][0],locs_sph[m][n][1]);
+                    printf("    cartesian force vector is (%g,%g,%g)\n",all3(F_m_vec[m][n]) );
+                    //printf("    spherical force vector is (%g,%g,%g)\n",v_sph[0],v_sph[1],v_sph[2]);
+                    printf("    fraction of motor force in radial direction is %g\n",dotprod/F_m_mag[m][n] );
+                    printf("    radial force vector is (%g,%g,%g)\n    tangential force vector is (%g,%g,%g)\n",all3(FmRadial[nn]),all3(FmTangential[nn]) );
                 }
 
             }else{
@@ -847,7 +853,7 @@ void compute_next_locations(){
         printf("After solve, we have:\n");
         for(nn=0;nn<N[0]+N[1];nn++){
             printf("    For motor %ld",nn);
-            printf(" change in motor location is (%g,%g,%g)\n",a1[nn][0],a1[nn][1],a1[nn][2] );
+            printf(" change in motor location is (%g,%g,%g)\n",a1[nn][0]-a[nn][0],a1[nn][1]-a[nn][1],a1[nn][2]-a[nn][2] );
         }
         printf("\n    Change in cargo location is (%g,%g,%g)\n",c1[0]-c[0],c1[1]-c[1],c1[2]-c[2]);
         printf("    Change in cargo angle is (%g,%g,%g)\n",theta1[0]-theta[0],theta1[1]-theta[1],theta1[2]-theta[2]);

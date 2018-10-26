@@ -7,6 +7,10 @@
 #define INF 1e14
 #define pi 3.14159265359
 
+//#define mag(a,b,c) (sqrt(pow(a,2)+pow(b,2)+pow(c,2)))
+#define magdiff(a,b) (sqrt((a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1])+(a[2]-b[2])*(a[2]-b[2])))
+#define all3(a) a[0],a[1],a[2]
+
 /* -------------------------------------------------------------------
 Driving function variables
 */
