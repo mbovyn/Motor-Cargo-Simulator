@@ -21,6 +21,8 @@ in a variety of situations.
 
 ![Velocity with force](https://github.com/mbovyn/Motor_Freedom/blob/master/numerical_tests/stepping_rate/mean%20velocity%20vs%20force.png)
 
+![Step number distributions](https://github.com/mbovyn/Motor_Freedom/blob/master/numerical_tests/stepping_rate/distributions%20of%20numbers%20of%20steps.png)
+
 ## Forces
 
 ### Radial Force
