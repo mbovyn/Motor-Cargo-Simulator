@@ -1,5 +1,6 @@
 %compare simulated association times to off rates input into simulation
-
+%Bovyn2018 piecewise exponential asymmetrical
+clear
 %% setup for analyzing data
 
 %set the name of the run here
@@ -24,7 +25,7 @@ for j=1:length(run_name)
         lbh=summary(i,j).last_bound_head{1}(1,:,1);
         load(k)=(lbh(1)-sign(lbh(1))*params(i,j).R-sign(lbh(1))*params(i,j).L(1))*params(i,j).k_m(1);
         unbind_time(k)=mean(summary(i,j).t_final);
-        unbind_time_sem(k)=std(unbind_time(k))/sqrt(length(summary(i,j).t_final));
+        unbind_time_sem(k)=std(summary(i,j).t_final)/sqrt(length(summary(i,j).t_final));
     end
 end
 
@@ -62,7 +63,7 @@ for j=1:length(run_name)
         if j==2 && load(k)>5 && notrun
             title('Substall')
             xlim([.01,10])
-            xlabel('Binding Time (s)')
+            xlabel('Association Time (s)')
             ylabel('Cumulative Density')
             legend(hh,legendentry,'location','northwest')
             set(gca,'xscale','log')
@@ -97,7 +98,7 @@ for j=1:length(run_name)
     if j==1
         title('Assisting')
         xlim([.001,.5])
-        xlabel('Binding Time (s)')
+        xlabel('Association Time (s)')
         ylabel('Cumulative Density')
         legend(hh,legendentry,'location','northwest')
         set(gca,'xscale','log')
@@ -110,7 +111,7 @@ end
 
 title('Superstall')
 xlim([.001,2])
-xlabel('Binding Time (s)')
+xlabel('Association Time (s)')
 ylabel('Cumulative Density')
 legend(hh,legendentry,'location','northwest')
 set(gca,'xscale','log')

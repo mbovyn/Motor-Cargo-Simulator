@@ -15,15 +15,15 @@ N      1 0 //number of motors
 
 //Muller Sim
 F_s    5 5        //stall force (pN)
-F_d    4 4        //detachment force (pN)
-eps_0  0.7 0.7    //base unbinding rate (1/s)
-pi_0   10 10      //base binding rate (1/s)
-v_f    1 3        //max velocity (microns/s)
+F_d    3.65 4        //detachment force (pN)
+eps_0  0.8 0.7    //base unbinding rate (1/s)
+pi_0   5 10      //base binding rate (1/s)
+v_f    0.8 3        //max velocity (microns/s)
 v_b    -.006 .006 //max backward velocity (microns/s)
 
 //Kunwar Sim
-a         1.07 1.07    //superstall parameter 1
-b         0.186 0.186  //superstall parameter 2
+a         1.56 1.07    //superstall parameter 1
+b         7.58 0.186  //superstall parameter 2
 w         2 2          //force velocity curve exponent
 L         0.08 0.08    //motor length (microns)
 k_m       320 320      //motor spring stiffness (pN/micron)
@@ -36,7 +36,7 @@ D_m       1 3  //motor diffusion coefficiant (micron^2/s)
 
 center  0 0 0 //cargo center (microns)
 R       0.25     //cargo radius (microns)
-eta     0.0089  //surrounding fluid viscosity (Pa s), water=8.9E-4
+eta     0.00089  //surrounding fluid viscosity (Pa s), water=8.9E-4
 
 //Microtubule Parameters
 
@@ -47,7 +47,7 @@ kcMT    40000 //MT-cargo steric spring stiffness (pN/micron)
 
 //Motor Location
 
-InitialLocations 7 0 0
+InitialLocations 7 0 180
 /*
 1:
 2:  Uniform Random on the surface of the sphere
@@ -59,9 +59,9 @@ InitialLocations 7 0 0
 8:  Uniform random, rotate so type0motor0 is on bottom
 9:  All motors at same random spot
 10:
-
 second parameter: 1 - kin at bottom, 2 - dyn at bottom, 3 - kin on top, 4 - dyn on top
-third parameter used to pass in angle (degrees)
+third parameter used to pass in angle (degrees, from -180 to 180)
+north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */
 
 MotorDiffusion 3
@@ -85,7 +85,7 @@ MotorDiffusion 3
 
 //Interaction of motors with MT
 
-InitialBinding 2 0
+InitialBinding 2 -0.08
 /*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -96,17 +96,17 @@ InitialBinding 2 0
 7:
 8:
 9:
-10:
+Set second input to move x position of head of type0motor0 or type1motor0
  */
 
-Binding 1 0.5
+Binding 6 0.5
 /*
 1: set given binding rate if in range
 2: motors don’t bind
 3: always bind if in range
 4: (not implemented) set binding rate if between L and inner limit (fraction*L)
 5: Normal binding, but excluded in region for 0nm MT crossings
-6:
+6: Uniform rate for MTdist<=L with gaussian tail for MTdist>L
 7:
 8:
 9:
@@ -115,11 +115,11 @@ Binding 1 0.5
 
 Unbinding 3
 /*
-1: Ambarish Unbinding
+1: Bergman 2018 (symmetrical, like Kunwar 2011)
 2: unbind at constant rate eps_0
 3: NoUnbinding
-4: different between assisting and hindering
-5:
+4: Bergman2018-like asymmetrical
+5: Bovyn2018 piecewise exponential, asymmetrical
 6:
 7:
 8:
@@ -202,7 +202,7 @@ ExternalForce 2 2 0 0
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */
 
-ExternalTorque 1 0 0 100
+ExternalTorque 1 0 0 0
 /*
 1: no external torque
 2: external torque given by next three values (x y z)
@@ -266,7 +266,7 @@ Success 0 3
 */
 
 //debugging
-dt_override 0 //0=no override. Value in (s) to override. -1 to ignore dt_default
+dt_override 0 //Value in (s). "inf"=ignore dt_default. 0=no override. (-) ignore stability checks
 
 //check for correct read in
 checkbit 732

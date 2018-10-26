@@ -1,5 +1,6 @@
 %compare simulated association times to off rates input into simulation
-
+%bergman 2018 off rate (symmetrical)
+clear
 %% setup for analyzing data
 
 %set the name of the run here
@@ -18,7 +19,7 @@ for i=1:nruns{1}(1)
     lbc=summary(i).last_bound_center(:,1);
     load(i)=(lbc(3)-params(i).R-params(i).L(1))*params(i).k_m(1);
     unbind_time(i)=mean(summary(i).t_final);
-    unbind_time_sem(i)=std(unbind_time(i))/sqrt(length(summary(i).t_final));
+    unbind_time_sem(i)=std(summary(i).t_final)/sqrt(length(summary(i).t_final));
 end
 
 %% plot mean binding time
@@ -46,7 +47,7 @@ for i=1:nruns{1}(1)
     if load(i)>5 && notrun
         title('Substall')
         xlim([.005,10])
-        xlabel('Binding Time (s)')
+        xlabel('Association Time (s)')
         ylabel('Cumulative Density')
         legend(hh,legendentry,'location','northwest')
         set(gca,'xscale','log')
@@ -78,7 +79,7 @@ end
 
 title('Superstall')
 xlim([.005,10])
-xlabel('Binding Time (s)')
+xlabel('Association Time (s)')
 ylabel('Cumulative Density')
 legend(hh,legendentry,'location','northwest')
 set(gca,'xscale','log')

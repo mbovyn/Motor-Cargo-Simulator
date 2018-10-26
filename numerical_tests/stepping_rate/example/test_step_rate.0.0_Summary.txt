@@ -1,0 +1,2 @@
+repeat       step time                   exit_cond success max_dist_x    max_dist_y    max_dist_z    last_bound_center_x     last_bound_center_y     last_bound_center_z     lb_head_type00motor00_x lb_head_type00motor00_y lb_head_type00motor00_z 
+   1           79 1.0071116578737873E-04         5       0 +0.000000E+00 +0.000000E+00 +0.000000E+00 -9.2339641167403494E-02 +0.0000000000000000E+00 +0.0000000000000000E+00 +2.5000000000000000E-01 +0.0000000000000000E+00 +0.0000000000000000E+00 

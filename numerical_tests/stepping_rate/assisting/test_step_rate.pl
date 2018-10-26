@@ -3,6 +3,12 @@ use strict;
 use warnings;
 
 # creates parameter files for sweeps, then launches either locally or on the hpc
+# Note! If comments are too long C will get confused
+
+# if something goes wrong:
+# ps
+# kill PID
+# https://stackoverflow.com/questions/36369136/how-to-kill-a-background-process-created-in-a-script
 
 ###############################################################################
 #Run mode
@@ -15,7 +21,7 @@ our $keep_seed=0;
 
 #if local, set compilation options
 #set compile to yes to compile and copy executable to local folder
-our $compile=0;
+our $compile=1;
 #set compile keyword to correct one for number of motors
 our $compile_keyword='free5';
 
@@ -43,31 +49,32 @@ our $working_dir=$ENV{'PWD'};
 
 our @sweepvars = ("EFx");
 
-our @sweepvals = ( [0,.5,1,1.5,2,2.5,3,3.5,4,4.5,5] );
+our @sweepvals = ( [10,8,6,4,2] );
 #print "\n@{$sweepvals[0]}\n";
+#print "\n@{$sweepvals[1]}\n";
 
 ###############################################################################
 #set parameter values
 
-our $N1=1;     our $N2=0;         our $cc1="//number of motors";
-our $F_s1=5;    our $F_s2=5;      our $cc2="//stall force (pN)";
-our $F_d1=4;    our $F_d2=4;      our $cc3="//detachment force (pN)";
-our $eps_01=.7; our $eps_02=.7;   our $cc4="//base unbinding rate (1/s)";
-our $pi_01=10;  our $pi_02=10;    our $cc5="//base binding rate (1/s)";
-our $v_f1=1;    our $v_f2=3;      our $cc6="//max velocity (microns/s)";
+our $N1=1;      our $N2=0;         our $cc1="//number of motors";
+our $F_s1=5;    our $F_s2=5;       our $cc2="//stall force (pN)";
+our $F_d1=3.65; our $F_d2=4;       our $cc3="//detachment force (pN)";
+our $eps_01=.8; our $eps_02=.7;    our $cc4="//base unbinding rate (1/s)";
+our $pi_01=5;   our $pi_02=10;     our $cc5="//base binding rate (1/s)";
+our $v_f1=.8;   our $v_f2=3;       our $cc6="//max velocity (microns/s)";
 
-our $a1=1.07;   our $a2=1.07;     our $cc7="//superstall parameter 1";
-our $b1=.186;   our $b2=.186;     our $cc8="//superstall parameter 2";
-our $w1=2;      our $w2=2;        our $cc9="//force velocity curve exponent";
-our $L1=.08;    our $L2=.08;      our $cc10="//motor length (microns)";
-our $k_m1=320;  our $k_m2=320;    our $cc11="//motor spring stiffness (pN/micron)";
-our $s1=.008;   our $s2= -.008;   our $cc12="//step size (microns)";
+our $a1=1.56;   our $a2=1.07;      our $cc7="//superstall parameter 1";
+our $b1=7.58;   our $b2=.186;      our $cc8="//superstall parameter 2";
+our $w1=2;      our $w2=2;         our $cc9="//force velocity curve exponent";
+our $L1=.08;    our $L2=.08;       our $cc10="//motor length (microns)";
+our $k_m1=320;  our $k_m2=320;     our $cc11="//motor spring stiffness (pN/micron)";
+our $s1=.008;   our $s2= -.008;    our $cc12="//step size (microns)";
 
-our $D_m1=1;    our $D_m2=3;      our $cc13="//motor diffusion coefficiant (micron^2/s)";
+our $D_m1=1;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
 our $cx=0; our $cy=0; our $cz=0; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";
-our $eta=.0089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
+our $eta=.00089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
 
 our $n_MTs=1;    our $cc17="//number of MTs";
 our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
@@ -76,7 +83,7 @@ our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
 
 #Motor Location
 
-our $InitialLocations=7; our $IL2=0; our $IL3=0;
+our $InitialLocations=7; our $IL2=0; our $IL3=180;
 our $cc19="/*
 1:
 2:  Uniform Random on the surface of the sphere
@@ -88,9 +95,9 @@ our $cc19="/*
 8:  Uniform random, rotate so type0motor0 is on bottom
 9:  All motors at same random spot
 10:
-
 second parameter: 1 - kin at bottom, 2 - dyn at bottom, 3 - kin on top, 4 - dyn on top
-third parameter used to pass in angle (degrees)
+third parameter used to pass in angle (degrees, from -180 to 180)
+north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */";
 
 our $MotorDiffusion=3;
@@ -114,7 +121,7 @@ our $cc20="/*
 
 #Interaction of motors with MT
 
-our $InitialBinding=2; our $IB2=0;
+our $InitialBinding=2; our $IB2=-.08;
 our $cc21="/*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -125,17 +132,17 @@ our $cc21="/*
 7:
 8:
 9:
-10:
+Set second input to move x position of head of type0motor0 or type1motor0
  */";
 
-our $Binding=1; our $B2=.5;
+our $Binding=6; our $B2=.5;
 our $cc22="/*
 1: set given binding rate if in range
 2: motors don’t bind
 3: always bind if in range
 4: (not implemented) set binding rate if between L and inner limit (fraction*L)
 5: Normal binding, but excluded in region for 0nm MT crossings
-6:
+6: Uniform rate for MTdist<=L with gaussian tail for MTdist>L
 7:
 8:
 9:
@@ -144,11 +151,11 @@ our $cc22="/*
 
 our $Unbinding=3;
 our $cc23="/*
-1: Ambarish Unbinding
+1: Bergman 2018 (symmetrical, like Kunwar 2011)
 2: unbind at constant rate eps_0
 3: NoUnbinding
-4: different between assisting and hindering
-5:
+4: Bergman2018-like asymmetrical
+5: Bovyn2018 piecewise exponential, asymmetrical
 6:
 7:
 8:
@@ -231,7 +238,7 @@ our $cc29="/*
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */";
 
-our $ExternalTorque=1; our $ET2=0; our $ET3=0; our $ET4=100;
+our $ExternalTorque=1; our $ETx=0; our $ETy=0; our $ETz=0;
 our $cc30="/*
 1: no external torque
 2: external torque given by next three values (x y z)
@@ -295,7 +302,7 @@ our $cc44="/*success success_mode - if mode=0, success if result==success
 */";
 
 # //debugging
-our $dt_override=0; our $cc45="//0=no override. Value in (s) to override. -1 to ignore dt_default";
+our $dt_override=0; our $cc45="//Value in (s). \"inf\"=ignore dt_default. 0=no override. (-) ignore stability checks";
 
 ###############################################################################
 #MT parameters
@@ -311,7 +318,7 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 #metaparameters
 
 #number of times to repeat
-our $repeats=300;
+our $repeats=100;
 #verbosity (0-5)
 our $verbose=2;
 #set to 1 to append to old files

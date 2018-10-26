@@ -1,5 +1,6 @@
 %compare simulated association times to off rates input into simulation
-
+% Bergman2018-like, asymmetrical
+clear
 %% setup for analyzing data
 
 %set the name of the run here
@@ -24,7 +25,7 @@ for j=1:length(run_name)
         lbh=summary(i,j).last_bound_head{1}(1,:,1);
         load(k)=(lbh(1)-sign(lbh(1))*params(i,j).R-sign(lbh(1))*params(i,j).L(1))*params(i,j).k_m(1);
         unbind_time(k)=mean(summary(i,j).t_final);
-        unbind_time_sem(k)=std(unbind_time(k))/sqrt(length(summary(i,j).t_final));
+        unbind_time_sem(k)=std(summary(i,j).t_final)/sqrt(length(summary(i,j).t_final));
     end
 end
 
@@ -38,7 +39,7 @@ plot(linspace(5,25),1./(params(i).a(1)+params(i).b(1)*linspace(5,25)))
 plot(linspace(-25,0),1./(params(i).eps_0(1)*exp(abs(3*linspace(-25,0)/params(i).F_d(1)))))
 legend('Simulated','1/off rate (substall)','1/off rate (superstall)','1/off rate (assisting)')
 xlabel('Force (pN)')
-ylabel('Association Time (s)')
+ylabel('Mean Association Time (s)')
 %xlim([-1,16])
 
 %% plot binding time distributions
@@ -62,7 +63,7 @@ for j=1:length(run_name)
         if j==2 && load(k)>5 && notrun
             title('Substall')
             xlim([.005,10])
-            xlabel('Binding Time (s)')
+            xlabel('Association Time (s)')
             ylabel('Cumulative Density')
             legend(hh,legendentry,'location','northwest')
             set(gca,'xscale','log')
@@ -97,7 +98,7 @@ for j=1:length(run_name)
     if j==1
         title('Assisting')
         xlim([.0000000001,10])
-        xlabel('Binding Time (s)')
+        xlabel('Association Time (s)')
         ylabel('Cumulative Density')
         legend(hh,legendentry,'location','northwest')
         set(gca,'xscale','log')

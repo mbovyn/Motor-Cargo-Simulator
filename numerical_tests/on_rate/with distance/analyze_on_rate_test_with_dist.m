@@ -1,4 +1,5 @@
 %Compare the simulated binding times to on rates we input into the simulation
+% as we change the distance between the anchor and the MT
 clear
 %% setup for analyzing data
 
@@ -26,9 +27,11 @@ end
 errorbar(dist,bind_time,bind_time_sem,'.')
 hold on
 x1=linspace(0,params(1).L(1));
+%on rate for dist<L is flat
 plot(x1,ones(size(x1))*1./params(1).pi_0(1))
 kBT=.00400388;
 x2=linspace(params(1).L(1),params(1).L(1)+3*sqrt(kBT/params(1).k_m(1)));
+%on rate for dist>L is half of gaussian with standard deviation kBT/k_m
 plot(x2,1./(params(1).pi_0(1)*exp(-.5*params(1).k_m(1)*(x2-params(1).L(1)).^2/kBT)))
 legend('Simulated','1/on rate','location','northwest')
 xlabel('Anchor-MT distance (\mum)')
@@ -47,14 +50,15 @@ clear hh
 for i=5:nruns{1}(1)
     [f,x]=ecdf(summary(i).t_final);
     hh(i-4)=stairs(x,f,'Linewidth',1.5,'Color',cs(i-4,:));
-    %legendentry{2*(i-1)+1}=['dist=' dist(i)];
     hold on
+    %binding times should be exponentially distributed
     plot(x,expcdf(x,1./(params(1).pi_0(1)*exp(-.5*params(1).k_m(1)*(dist(i)-params(1).L(1)).^2/kBT))),'Color',cs(i-4,:))
-    %legendentry{2*(i-1)+2}=['~exp(' num2str(params(i).pi_0(1)) ')'];
 end
 
-xlim([.002,100])
+xlim([.005,50])
 xlabel('Binding Time (s)')
 ylabel('Cumulative Density')
-legend(hh,{'0nm','2nm','4nm','6nm','8nm','10nm'},'location','northwest')
+diststrs=string(dist-params(1).L(1));
+diststrs="anchor-MT dist="+diststrs+"\mum";
+legend(hh,diststrs(5:end),'location','northwest')
 set(gca,'xscale','log')
