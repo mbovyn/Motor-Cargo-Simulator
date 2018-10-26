@@ -34,7 +34,7 @@ x=linspace(0,max(force{2}));
 plot(x,ones(size(x))*params(1,1,1).v_f(1))
 %ylim([0,2])
 xlim([-6,11])
-legend('Simulated','step\_rate*step\_dist*time','location','SouthEast')
+legend('Simulated hindering','Simulated assisting','step\_rate*step\_dist*time','location','SouthEast')
 xlabel('Force (pN)')
 ylabel('Velocity (\mum/s)')
 
