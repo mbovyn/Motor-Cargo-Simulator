@@ -341,6 +341,16 @@ void cargobehavior()
         }
     }
 
+    //check for heads inside cargo
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            if(!graceful_exit && (magdiff(head[m][n],center) < R-.01)){
+                printf("\n\n\nError! Head of type%dmotor%d more than 10nm inside cargo!\nExiting gracefully at step %ld\n\n\n",m,n,step);
+                graceful_exit=1;
+            }
+        }
+    }
+
 } // finished cargobehavior
 
 void setup_solve()
