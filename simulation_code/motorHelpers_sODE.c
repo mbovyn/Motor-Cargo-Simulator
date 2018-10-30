@@ -217,7 +217,32 @@ void diffuse_sph_one_motor(){
 
 void update_motor_locations(){
 
-    if(MotorDiffusion>2 && MotorDiffusion<10){
+    //force anchor back onto cargo surface
+    //legacy version which used spherical conversions
+    if(MotorDiffusion<3){
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                for(i=0;i<3;i++){
+                    prior_locs[m][n][i]=locs[m][n][i];
+                }
+                convert_loc_to_spherical(m,n);
+                convert_loc_sph_to_cart();
+                move_to_membrane_dist[m][n]=sqrt(
+                    pow(prior_locs[m][n][0]-locs[m][n][0],2)+
+                    pow(prior_locs[m][n][1]-locs[m][n][1],2)+
+                    pow(prior_locs[m][n][1]-locs[m][n][1],2));
+                if(move_to_membrane_dist[m][n]>.01){
+                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld of repeat %d\n\n\n",m,n,move_to_membrane_dist[m][n],step,j);
+                    graceful_exit=1;
+                }
+                //printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
+
+                if(verboseTF>4 && MotorDiffusion==8){
+                    printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
+                }
+            }
+        }
+    }else if(MotorDiffusion>=3 && MotorDiffusion<10){
         //set next locations from solver to current locations
         //and put anchor location back on cargo surface
 
@@ -248,7 +273,7 @@ void update_motor_locations(){
                 }
             }
         }
-    } else if(MotorDiffusion>=10){
+    }else if(MotorDiffusion>=10){
 
         nn=0;
         for(m=0;m<2;m++){
@@ -303,33 +328,6 @@ void cargobehavior()
     //transfer motor locations to syntax for rest of program
     //and force motors onto surface for free case
     update_motor_locations();
-
-    //force anchor back onto cargo surface
-    //legacy version which used spherical conversions
-    if(MotorDiffusion<3){
-        for(m=0;m<2;m++){
-            for(n=0;n<N[m];n++){
-                for(i=0;i<3;i++){
-                    prior_locs[m][n][i]=locs[m][n][i];
-                }
-                convert_loc_to_spherical(m,n);
-                convert_loc_sph_to_cart();
-                move_to_membrane_dist[m][n]=sqrt(
-                    pow(prior_locs[m][n][0]-locs[m][n][0],2)+
-                    pow(prior_locs[m][n][1]-locs[m][n][1],2)+
-                    pow(prior_locs[m][n][1]-locs[m][n][1],2));
-                if(move_to_membrane_dist[m][n]>.01){
-                    printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld of repeat %d\n\n\n",m,n,move_to_membrane_dist[m][n],step,j);
-                    graceful_exit=1;
-                }
-                //printf("\n\n\nError! Anchor relocation moved type %dmotor%d it %lf microns on step %ld\n\n\n",m,n,move_to_membrane_dist[m][n],step);
-
-                if(verboseTF>4 && MotorDiffusion==8){
-                    printf("stochastic, locs final is                         (%lf %lf %lf)\n",locs[m][n][0],locs[m][n][1],locs[m][n][2]);
-                }
-            }
-        }
-    }//legacy anchor movement
 
     //check for anchor off surface
     for(m=0;m<2;m++){
