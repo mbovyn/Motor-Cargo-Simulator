@@ -834,7 +834,7 @@ void compute_next_locations(){
 
     //check that sum of forces is close to 0
     if(sumforces()>0){
-        printf("\nError! Sum of forces != 0\nExiting gracefully at step %ld\n\n\n",step);
+        printf("\nError! Sum of forces/torques != 0, code %d\nExiting gracefully at step %ld\n\n\n",sumforces(),step);
         graceful_exit=1;
     }
 
@@ -902,7 +902,7 @@ int sumforces(){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
                 adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
-                    cross((theta1[i]-theta[i])/dt,(theta1[i]-theta[i])/dt,(theta1[i]-theta[i])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
+                    cross((theta1[0]-theta[0])/dt,(theta1[1]-theta[1])/dt,(theta1[2]-theta[2])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
                     -(a1[nn][i]-a[nn][i])/dt);
             }
             nn++;
@@ -982,6 +982,10 @@ int sumforces(){
 
                 //check sum of forces on anchor. Return >0 if don't balance
                 if(fabs(msum)>1E-12){
+                    printf("type%dmotor%d/number %ld, dim %d\n",m,n,nn,i );
+                    printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
+                    printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
+                    printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
                     return 5;
                 }
 
