@@ -20,6 +20,8 @@ void set_brownian_forces_to_0();
 void compute_next_locations();
 void split_forces();
 
+int sumforces();
+double cross(double a0,double a1,double a2,double b0,double b1,double b2,int i);
 
 void generate_rand_normal(){
     //generate random normal number by Box-Muller transform
@@ -830,6 +832,12 @@ void compute_next_locations(){
         graceful_exit=1;
     }
 
+    //check that sum of forces is close to 0
+    if(sumforces()>0){
+        printf("\nError! Sum of forces != 0\nExiting gracefully at step %ld\n\n\n",step);
+        graceful_exit=1;
+    }
+
     if(dt_override>=0){
         //cargo moving too far is a sign of instability
         if(sqrt( (c1[0]-c[0])*(c1[0]-c[0]) + (c1[1]-c[1])*(c1[1]-c[1]) + (c1[2]-c[2])*(c1[2]-c[2]) ) > R){
@@ -868,3 +876,164 @@ void compute_next_locations(){
     }
 
 } //compute_next_locations
+
+
+int sumforces(){
+//Sums all forces and torques, makes sure they balance
+//returns 0 if they balance, >0 if they don't
+
+    //forces, excluding internal forces
+    double fsum;
+    //torques, excluding internal torques
+    double tsum;
+
+    //forces on anchor
+    double msum;
+    //forces on cargo (including internal forces)
+    double cfsum;
+    //torques on cargo (including torques from internal forces)
+    double ctsum;
+
+    //make seperate variable to hold drag on anchor since it's annoying to calculate
+    double adrag[NMOTORSMAX][3];
+    //calculate it here
+    nn=0;
+    for(m=0;m<2;m++){
+        for(n=0;n<N[m];n++){
+            for(i=0;i<3;i++){
+                adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
+                    cross((theta1[i]-theta[i])/dt,(theta1[i]-theta[i])/dt,(theta1[i]-theta[i])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
+                    -(a1[nn][i]-a[nn][i])/dt);
+            }
+            nn++;
+        }
+    }
+
+    //in each dimension, sum forces
+    for(i=0;i<3;i++){
+
+        fsum=0;
+        tsum=0;
+        cfsum=0;
+        ctsum=0;
+
+        //printf("i=%d:\n",i );
+
+        //External force and torque
+        fsum+=Ftrap[i];
+        cfsum+=Ftrap[i];
+        //printf("    Ftrap is %g\n",Ftrap[i] );
+        tsum+=TorqeExt[i];
+        ctsum+=TorqeExt[i];
+        //printf("    TorqueExt is %g\n",TorqeExt[i] );
+
+        //Steric force
+        fsum+=Fsteric[i];
+        cfsum+=Fsteric[i];
+        //printf("    Fsteric is %g\n",Fsteric[i] );
+
+        //cargo drag force and torque
+        fsum+=-(c1[i]-c[i])/dt*(1/muCargoTranslation);
+        cfsum+=-(c1[i]-c[i])/dt*(1/muCargoTranslation);
+        //printf("    Fdrag is %g\n",-(c1[i]-c[i])/dt*(1/muCargoTranslation) );
+        tsum+=-(theta1[i]-theta[i])/dt*(1/muCargoRotation);
+        ctsum+=-(theta1[i]-theta[i])/dt*(1/muCargoRotation);
+        //printf("    Tdrag is %g\n",-(theta1[i]-theta[i])/dt*(1/muCargoRotation) );
+
+        //for each motor
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+
+                //motor force and torque
+                fsum+=F_m_vec[m][n][i];
+                //printf("    F_m_vec[%d][%d] is %g\n",m,n,F_m_vec[m][n][i] );
+                tsum+=cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],all3(F_m_vec[m][n]),i);
+                //printf("    Torque from F_m_vec[%d][%d] is %g\n",m,n,cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],all3(F_m_vec[m][n]),i) );
+
+                //radial force
+                cfsum+=FmRadial[nn][i];
+                //printf("    FmRadial[%ld] is %g\n",nn,FmRadial[nn][i] );
+                //reaction to brownian force on anchor
+                cfsum-=sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i];
+                //reaction to drag force on anchor
+                cfsum-=adrag[nn][i];
+
+                //torque from reaction to brownian force on anchor
+                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(Dba[nn]),i);
+                //torque from reaction to drag force on anchor
+                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i);
+
+
+                //on motor anchor
+
+                msum=0;
+                //motor force
+                msum+=FmTangential[nn][i];
+                //printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
+                //brownian force
+                msum+=sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i];
+                //printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
+                //drag force
+                msum+=adrag[nn][i];
+                //printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
+
+                //printf("    msum is %g\n",msum );
+
+                //check sum of forces on anchor. Return >0 if don't balance
+                if(fabs(msum)>1E-12){
+                    return 5;
+                }
+
+
+                nn++;
+            }
+        }
+
+        //Brownian force and torque
+        fsum+=sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i];
+        cfsum+=sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i];
+        //printf("    Fbrownian is %g\n",sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i] );
+        tsum+=sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i];
+        ctsum+=sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i];
+        //printf("    Tbrownian is %g\n",sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i] );
+
+        //printf("    Fsum is %g\n",fsum );
+        //printf("    Tsum is %g\n",tsum );
+        //printf("    cfsum is %g\n",cfsum );
+        //printf("    ctsum is %g\n",ctsum );
+        //printf("\n");
+
+        //Check sums. Return >0 if forces don't balance
+        if(fabs(fsum)>1E-12){
+            return 1;
+        }
+        if(fabs(tsum)>1E-12){
+            return 2;
+        }
+        if(fabs(cfsum)>1E-12){
+            return 3;
+        }
+        if(fabs(ctsum)>1E-12){
+            return 4;
+        }
+
+    }
+
+    return 0;
+}
+
+double cross(double a0,double a1,double a2,double b0,double b1,double b2,int i){
+
+    if(i==0){
+        return -a2*b1 + a1*b2;
+    }else if(i==1){
+        return a2*b0 - a0*b2;
+    }else if(i==2){
+        return -a1*b0 + a0*b1;
+    }else{
+        printf("\n\n\nError in cross, i is %d when it should be 0, 1, or 2\n\n\n",i);
+        return NAN;
+        graceful_exit=1;
+    }
+}
