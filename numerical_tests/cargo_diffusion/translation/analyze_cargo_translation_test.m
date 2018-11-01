@@ -52,6 +52,10 @@ legend(hh,['R=' num2str(params(1).R)],['R=' num2str(params(2).R)],...
     ['R=' num2str(params(3).R)],['R=' num2str(params(4).R)],...
     'location','northwest')
 
+%%
+
+print('MSD-t','-dpng')
+
 %% location distributions
 titles={'x component','y component','z component'};
 figure
@@ -72,3 +76,7 @@ for j=1:3
         ['R=' num2str(params(3).R)],['R=' num2str(params(4).R)],...
         'location','northwest')
 end
+
+%%
+
+print('location distributions','-dpng')

@@ -61,3 +61,7 @@ end
 xlabel('Number of steps')
 ylabel('Cumulative Density')
 legend(hh,legendentry,'location','southeast')
+
+%%
+
+print('distributions of numbers of steps','-dpng')

@@ -32,6 +32,10 @@ xlabel('Time (s)')
 ylabel('Rotational Velocity (rad/s)')
 legend('Simulated','Free velocity','location','east')
 
+%%
+
+print('rotational velocity vs time','-dpng')
+
 
 %% bead version
 
@@ -44,3 +48,7 @@ xlabel('Time (s)')
 ylabel('Force (pN)')
 xlim([0 2.5E-4])
 legend('Simulated','Torque/Radius','location','southeast')
+
+%%
+
+print('Force vs time','-dpng')

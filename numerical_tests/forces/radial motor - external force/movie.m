@@ -6,7 +6,7 @@
 %set the name of the run here
 run_name={'radial_force_test'};
 localpath={pwd};
-nruns={[2,1]};
+nruns={[1,1]};
 %which repeat to draw
 %repeatno=1;
 

@@ -85,7 +85,7 @@ MotorDiffusion 3
 
 //Interaction of motors with MT
 
-InitialBinding 5 -0.09559375
+InitialBinding 5 -0.158125
 /*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -202,7 +202,7 @@ ExternalForce 1 0 0 0
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */
 
-ExternalTorque 1 0 0 100
+ExternalTorque 1   
 /*
 1: no external torque
 2: external torque given by next three values (x y z)

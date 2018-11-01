@@ -42,7 +42,7 @@ our $working_dir=$ENV{'PWD'};
 #    );
 
 our @sweepvars = ("IB2");
-my @fs=( [0,1,2,3,4,4.99,5.01,7,9,11,13,15,17,19,21,23,25] );
+my @fs=( [0,1,2,3,4,4.99,5.01,10,15,20,25] );
 our @sweepvals = ( [map { $_ / 320 + .08 } @{$fs[0]}] );
 #print "\n@{$sweepvals[0]}\n\n";
 

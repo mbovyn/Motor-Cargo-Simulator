@@ -34,10 +34,16 @@ xlabel('Force (pN)')
 ylabel('Association Time (s)')
 xlim([-1,16])
 
+%%
+
+print('association time with force','-dpng')
+
 %% plot binding time distributions
 %Unbinding is a poisson process, so association times should be exponential
 
 figure
+
+subplot(2,1,1)
 
 cs=lines(nruns{1}(1));
 clearvars hh legendentry
@@ -52,7 +58,7 @@ for i=1:nruns{1}(1)
         legend(hh,legendentry,'location','northwest')
         set(gca,'xscale','log')
 
-        figure
+        subplot(2,1,2)
         clearvars hh legendentry
         notrun=0;
         switchover=i-1;
@@ -83,3 +89,7 @@ xlabel('Association Time (s)')
 ylabel('Cumulative Density')
 legend(hh,legendentry,'location','northwest')
 set(gca,'xscale','log')
+
+%%
+
+print('Association time distributions','-dpng')

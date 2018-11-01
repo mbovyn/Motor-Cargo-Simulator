@@ -42,6 +42,10 @@ ylabel('Position (\mum)')
 legend(hh,{'1pN','5pN','15pN','Free Velocity','Spring Rest Length','Equilibrium Stretch'})
 
 %%
+
+print('position vs time','-dpng')
+
+%%
 figure
 for i=1:nruns{1}(1)
     hhh(i)=plot(forces(i).t_arr,forces(i).Fradial{1}(:,1),'o','color',cs(i,:));
@@ -53,3 +57,7 @@ ylim([0 16])
 xlabel('Time (s)')
 xlim([0 5E-4])
 legend(hhh,'1pN','5pN','15pN','location','east')
+
+%%
+
+print('force vs time','-dpng')

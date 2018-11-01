@@ -50,6 +50,10 @@ ylabel('Mean First Passage Time (s)')
 xlabel('Target Elevation (radians)')
 
 %%
+
+print('Mean First Passage time with elevation','-dpng')
+
+%%
 figure
 cs=lines(nruns{1}(2));
 
@@ -67,3 +71,6 @@ for i=1:nruns{1}(1)
     ylabel('Cumulative Density')
     title(['R=' num2str(r(i,1))])
 end
+%%
+
+print('First passage time distributions','-dpng')

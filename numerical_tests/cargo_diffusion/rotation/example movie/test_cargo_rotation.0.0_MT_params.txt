@@ -1,8 +1,0 @@
-//
-// params for MTs
-//
-
-//point (x y z) unit vector (x y z) R_MT
-(0 0 -0.262) (1 0 0) 0.012
-(0 0 -0.012) (0 1 0) 0.012
-

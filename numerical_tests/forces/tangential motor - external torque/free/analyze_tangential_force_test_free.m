@@ -43,6 +43,10 @@ xlabel('Time (s)')
 xlim([0,2.5E-4])
 legend('Simulated','Free velocity','Equilibrium velocity','location','east')
 
+%%
+
+print('rotational velocity vs time','-dpng')
+
 %% plot motor tangential force
 
 figure
@@ -55,3 +59,7 @@ ylabel('Tangential force on motor (pN)')
 xlabel('Time (s)')
 xlim([0,2.5E-4])
 legend('Simulated','Drag force','location','southeast')
+
+%%
+
+print('force vs time','-dpng')

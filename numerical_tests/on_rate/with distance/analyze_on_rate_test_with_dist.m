@@ -38,6 +38,10 @@ xlabel('Anchor-MT distance (\mum)')
 ylabel('Mean Binding Time (s)')
 set(gca,'yscale','log')
 
+%%
+
+print('mean binding time with anchor-MT distance','-dpng')
+
 %% plot binding time distributions
 %binding is assumed to be a Poisson process, so time to bind should be
 %exponentially distributed
@@ -62,3 +66,7 @@ diststrs=string(dist-params(1).L(1));
 diststrs="anchor-MT dist="+diststrs+"\mum";
 legend(hh,diststrs(5:end),'location','northwest')
 set(gca,'xscale','log')
+
+%%
+
+print('binding time distributions','-dpng')

@@ -32,6 +32,10 @@ legend('Simulated','1/on rate')
 xlabel('Micro On Rate (1/s)')
 ylabel('Mean Binding Time (s)')
 
+%%
+
+print('mean binding time with on rate','-dpng')
+
 %% plot binding time distributions
 %binding is assumed to be a Poisson process, so time to bind should be
 %exponentially distributed
@@ -54,3 +58,7 @@ xlabel('Binding Time (s)')
 ylabel('Cumulative Density')
 legend(legendentry,'location','northwest')
 set(gca,'xscale','log')
+
+%%
+
+print('binding time distributions','-dpng')

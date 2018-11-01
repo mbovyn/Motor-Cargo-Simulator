@@ -202,7 +202,7 @@ ExternalForce 1 0 0 0
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
 */
 
-ExternalTorque 1 0 0 100
+ExternalTorque 1   
 /*
 1: no external torque
 2: external torque given by next three values (x y z)
