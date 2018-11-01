@@ -38,6 +38,10 @@ legend('Simulated hindering','Simulated assisting','step\_rate*step\_dist*time',
 xlabel('Force (pN)')
 ylabel('Velocity (\mum/s)')
 
+%%
+
+print('mean velocity vs force','-dpng')
+
 %% plot velocity distributions
 %stepping is a poisson proccess, so the number of steps in a given time
 %(here 1 second) is poisson distributed
