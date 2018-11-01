@@ -991,7 +991,7 @@ int sumforces(){
                 //printf("    type%dmotor%d/number %ld, msum is %g\n",m,n,nn,msum );
 
                 //check sum of forces on anchor. Return >0 if don't balance
-                if(fabs(msum)>1E-12){
+                if(fabs(msum)>1E-6){
                     printf("type%dmotor%d/number %ld, dim %d\n",m,n,nn,i );
                     printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
                     printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
@@ -1019,22 +1019,22 @@ int sumforces(){
         //printf("\n");
 
         //Check sums. Return >0 if forces don't balance
-        if(fabs(fsum)>1E-12){
+        if(fabs(fsum)>1E-6){
             printf("dim %d\n",i );
             printf("    Fsum is %g\n",fsum );
             return 1;
         }
-        if(fabs(tsum)>1E-12){
+        if(fabs(tsum)>1E-6){
             printf("dim %d\n",i );
             printf("    Tsum is %g\n",tsum );
             return 2;
         }
-        if(fabs(cfsum)>1E-12){
+        if(fabs(cfsum)>1E-6){
             printf("dim %d\n",i );
             printf("    cfsum is %g\n",cfsum );
             return 3;
         }
-        if(fabs(ctsum)>1E-12){
+        if(fabs(ctsum)>1E-6){
             printf("dim %d\n",i );
             printf("    ctsum is %g\n",ctsum );
             return 4;
