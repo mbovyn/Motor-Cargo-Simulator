@@ -67,7 +67,7 @@ our $L1=.08;    our $L2=.08;       our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;     our $cc11="//motor spring stiffness (pN/micron)";
 our $s1=.008;   our $s2= -.008;    our $cc12="//step size (microns)";
 
-our $D_m1=0;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
+our $D_m1=1;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
 our $cx=0; our $cy=0; our $cz=.25; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";

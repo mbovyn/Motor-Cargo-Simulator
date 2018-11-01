@@ -30,7 +30,7 @@ k_m       320 320      //motor spring stiffness (pN/micron)
 step_size 0.008 -0.008 //step size (microns)
 
 //Bovyn Sim
-D_m       0 3  //motor diffusion coefficiant (micron^2/s)
+D_m       1 3  //motor diffusion coefficiant (micron^2/s)
 
 //Cargo Parameters
 

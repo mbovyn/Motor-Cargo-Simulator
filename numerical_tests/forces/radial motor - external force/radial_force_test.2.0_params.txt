@@ -11,7 +11,7 @@
 //Motor Parameters
 //entry 1 for kinesins, entry 2 for dynein
 
-N      1 1 //number of motors
+N      1 0 //number of motors
 
 //Muller Sim
 F_s    5 5        //stall force (pN)

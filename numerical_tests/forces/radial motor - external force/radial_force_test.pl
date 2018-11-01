@@ -51,7 +51,7 @@ our @sweepvals = (
 ###############################################################################
 #set parameter values
 
-our $N1=1;      our $N2=1;         our $cc1="//number of motors";
+our $N1=1;      our $N2=0;         our $cc1="//number of motors";
 our $F_s1=5;    our $F_s2=5;       our $cc2="//stall force (pN)";
 our $F_d1=3.65; our $F_d2=4;       our $cc3="//detachment force (pN)";
 our $eps_01=.8; our $eps_02=.7;    our $cc4="//base unbinding rate (1/s)";

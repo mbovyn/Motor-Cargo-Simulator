@@ -19,6 +19,7 @@ analysispath='~/project_code/Motor_Freedom/analysis and visualization';
 run([analysispath '/import_params_and_results.m'])
 
 %%
+figure
 cs=lines(nruns{1}(1));
 
 for i=1:nruns{1}(1)
@@ -39,3 +40,16 @@ xlim([0,5E-4])
 xlabel('Time (s)')
 ylabel('Position (\mum)')
 legend(hh,{'1pN','5pN','15pN','Free Velocity','Spring Rest Length','Equilibrium Stretch'})
+
+%%
+figure
+for i=1:nruns{1}(1)
+    hhh(i)=plot(forces(i).t_arr,forces(i).Fradial{1}(:,1),'o','color',cs(i,:));
+    hold on
+    plot(forces(i).t_arr,-forces(i).Fext(:,1),'--','color',cs(i,:))
+end
+ylabel('Force (pN)')
+ylim([0 16])
+xlabel('Time (s)')
+xlim([0 5E-4])
+legend(hhh,'1pN','5pN','15pN','location','east')
