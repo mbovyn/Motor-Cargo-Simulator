@@ -901,9 +901,17 @@ int sumforces(){
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
-                adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
-                    cross((theta1[0]-theta[0])/dt,(theta1[1]-theta[1])/dt,(theta1[2]-theta[2])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
-                    -(a1[nn][i]-a[nn][i])/dt);
+                if(!(MotorDiffusion>=10) && (D_m[m]>1E-12)){
+                    adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
+                        cross((theta1[0]-theta[0])/dt,(theta1[1]-theta[1])/dt,(theta1[2]-theta[2])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
+                        -(a1[nn][i]-a[nn][i])/dt);
+                }else{
+                    adrag[nn][i]=NAN;
+                    //if motor aren't free, return nan
+                    //if D=0, return nan (model not well defined for D=0)
+                    //nan fails all checks, so msum, cfsum and ctsum pass
+                }
+                //printf("adrag[%ld][%d]=%g\n",nn,i,adrag[nn][i] );
             }
             nn++;
         }
@@ -961,8 +969,10 @@ int sumforces(){
 
                 //torque from reaction to brownian force on anchor
                 ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(Dba[nn]),i);
+                //printf("    torque from brownian anchor is %g\n",cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(Dba[nn]),i) );
                 //torque from reaction to drag force on anchor
                 ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i);
+                //printf("    torque from anchor drag is %g\n",cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i) );
 
 
                 //on motor anchor
@@ -978,7 +988,7 @@ int sumforces(){
                 msum+=adrag[nn][i];
                 //printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
 
-                //printf("    msum is %g\n",msum );
+                //printf("    type%dmotor%d/number %ld, msum is %g\n",m,n,nn,msum );
 
                 //check sum of forces on anchor. Return >0 if don't balance
                 if(fabs(msum)>1E-12){
@@ -1010,15 +1020,23 @@ int sumforces(){
 
         //Check sums. Return >0 if forces don't balance
         if(fabs(fsum)>1E-12){
+            printf("dim %d\n",i );
+            printf("    Fsum is %g\n",fsum );
             return 1;
         }
         if(fabs(tsum)>1E-12){
+            printf("dim %d\n",i );
+            printf("    Tsum is %g\n",tsum );
             return 2;
         }
         if(fabs(cfsum)>1E-12){
+            printf("dim %d\n",i );
+            printf("    cfsum is %g\n",cfsum );
             return 3;
         }
         if(fabs(ctsum)>1E-12){
+            printf("dim %d\n",i );
+            printf("    ctsum is %g\n",ctsum );
             return 4;
         }
 
