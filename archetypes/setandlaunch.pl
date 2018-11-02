@@ -59,24 +59,24 @@ our @sweepvals = (
 #set parameter values
 
 our $N1=3;      our $N2=0;         our $cc1="//number of motors";
-our $F_s1=5;    our $F_s2=5;       our $cc2="//stall force (pN)";
-our $F_d1=3.65; our $F_d2=4;       our $cc3="//detachment force (pN)";
+our $F_s1=6.1;  our $F_s2=5;       our $cc2="//stall force (pN)";
+our $F_d1=4.1;  our $F_d2=4;       our $cc3="//detachment force (pN)";
 our $eps_01=.8; our $eps_02=.7;    our $cc4="//base unbinding rate (1/s)";
 our $pi_01=5;   our $pi_02=10;     our $cc5="//base binding rate (1/s)";
-our $v_f1=.8;   our $v_f2=3;       our $cc6="//max velocity (microns/s)";
+our $v_f1=.75;  our $v_f2=3;       our $cc6="//max velocity (microns/s)";
 
-our $a1=1.56;   our $a2=1.07;      our $cc7="//superstall parameter 1";
-our $b1=7.58;   our $b2=.186;      our $cc8="//superstall parameter 2";
-our $w1=2;      our $w2=2;         our $cc9="//force velocity curve exponent";
+our $a1=1.6;    our $a2=1.07;      our $cc7="//superstall parameter 1";
+our $b1=7.6;    our $b2=.186;      our $cc8="//superstall parameter 2";
+our $w1=1.8;    our $w2=2;         our $cc9="//force velocity curve exponent";
 our $L1=.08;    our $L2=.08;       our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;     our $cc11="//motor spring stiffness (pN/micron)";
-our $s1=.008;   our $s2= -.008;    our $cc12="//step size (microns)";
+our $s1=.0082;  our $s2= -.008;    our $cc12="//step size (microns)";
 
 our $D_m1=1;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
 our $cx=0; our $cy=0; our $cz=.25; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";
-our $eta=.00089;                   our $cc16="//surrounding fluid viscosity (Pa s), water=8.9E-4";
+our $eta=.00089;                   our $cc16="//surrounding fluid viscosity (s*pN/micron^2), water=8.9E-4";
 
 our $n_MTs=1;    our $cc17="//number of MTs";
 our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";

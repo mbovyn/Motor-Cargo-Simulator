@@ -2,7 +2,7 @@
 // Macros
 #define NMOTORSMAX 101
 #define NMTSMAX 10
-#define kBT .00400388
+#define kBT .00414195
 #define RAND genrand_real3()
 #define INF 1e14
 #define pi 3.14159265359

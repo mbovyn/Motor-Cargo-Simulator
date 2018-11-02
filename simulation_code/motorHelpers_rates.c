@@ -321,7 +321,7 @@ void unbinding_rates()
 
                     }else if(force_in_MT_direction()){
 
-                        unbind_rate[m][n] = 7.4 * exp(F_m_mag[m][n]*.00032/kBT);
+                        unbind_rate[m][n] = 7.4 * exp(F_m_mag[m][n]*.08);
 
                     }else{
                         printf("Error finding out if load was forward or backward\n");
