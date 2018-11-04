@@ -968,11 +968,11 @@ int sumforces(){
                 cfsum-=adrag[nn][i];
 
                 //torque from reaction to brownian force on anchor
-                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(Dba[nn]),i);
-                //printf("    torque from brownian anchor is %g\n",cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(Dba[nn]),i) );
+                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][0],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][1],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][2],i);
+                //printf("    torque from brownian anchor is %g\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][0],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][1],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][2],i) );
                 //torque from reaction to drag force on anchor
                 ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i);
-                //printf("    torque from anchor drag is %g\n",cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i) );
+                //printf("    torque from anchor drag is %g\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i) );
 
 
                 //on motor anchor
