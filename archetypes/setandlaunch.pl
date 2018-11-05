@@ -38,22 +38,38 @@ our $run_name = "test";
 our $code_dir = glob("~/project_code/Motor_Freedom");
 our $working_dir=$ENV{'PWD'};
 
+#include linspace and logspace subroutines
+require "$code_dir/launching_scripts/spaces.pl";
+
 ###############################################################################
 #define variables to loop over and the values to use in Perl arrays
 #Ex:
 #our @sweepvars = ("D_m1","N1");
 #our @sweepvals = (
-#    [.05, .5],
-#    [1, 2, 3],
+#    [.1,1,10],
+#    [1, 2, 3]
+#    );
+#
+#can also call linspace(a,b,n) or logspace(a,b,n) to get values
+#Ex:
+#our @sweepvars = ("D_m1","N1");
+#our @sweepvals = (
+#    logspace(.1,10,3),
+#    linspace(1,3,3)
 #    );
 
 our @sweepvars = ("D_m1","N1");
 our @sweepvals = (
-   [.05, .5],
-   [1, 2, 3],
+    [.1,1,10],
+    [1, 2, 3]
    );
-#print "\n@{$sweepvals[0]}\n";
-#print "\n@{$sweepvals[1]}\n";
+
+#print "\n";
+#print "Values for $sweepvars[0] are:\n";
+#print "@{$sweepvals[0]}\n";
+#print "Values for $sweepvars[1] are:\n";
+#print "@{$sweepvals[1]}\n";
+#print "\n";
 
 ###############################################################################
 #set parameter values
