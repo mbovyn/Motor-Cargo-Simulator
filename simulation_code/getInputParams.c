@@ -593,7 +593,7 @@ void getInputParams( void )
         dt_max_base=dt_default;
     }
 
-    if(dt_max_Diffusion<dt_max_base){
+    if(MotorDiffusion<10 && dt_max_Diffusion<dt_max_base){
         dt_max_base=dt_max_Diffusion;
         if(verboseTF>0){
             printf("Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
