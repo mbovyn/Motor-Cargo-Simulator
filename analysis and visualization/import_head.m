@@ -77,14 +77,14 @@ if max(N)>0
             for n=1:N(m)
 
                 ind=4+(m-1)*N(1)*3+(n-1)*3;
-                heads.head_rec{m,i}(:,:,n)=[dataArray{ind} ...
-                    dataArray{ind+1} ...
-                    dataArray{ind+2}];
+                heads.head_rec{m,i}(:,:,n)=[dataArray{ind}(repeat==i) ...
+                    dataArray{ind+1}(repeat==i) ...
+                    dataArray{ind+2}(repeat==i)];
 
             end
         end
     end
-    
+
 else
     %no motors
 end

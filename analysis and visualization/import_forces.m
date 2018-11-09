@@ -67,7 +67,7 @@ forces.Fradial=cell(2,max(repeat));
 forces.Ftangential=cell(2,max(repeat));
 
 if max(N)>0
-    
+
     for i=1:max(repeat)
         for m=1:2
             for n=1:N(m)
@@ -81,7 +81,7 @@ if max(N)>0
             end
         end
     end
-    
+
 else
     %no motors
     forces.Fradial=[];
