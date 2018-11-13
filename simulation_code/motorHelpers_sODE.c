@@ -996,6 +996,7 @@ int sumforces(){
                     printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
                     printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
                     printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
+                    printf("    msum is %g\n",msum );
                     return 5;
                 }
 
