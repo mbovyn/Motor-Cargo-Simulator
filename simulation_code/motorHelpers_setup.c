@@ -387,6 +387,18 @@ void findMTdist(){
                    (mag(cVector)>.001)){
 
                     bind_possible[m][n][k]=0;
+
+                    //printf("\ndist is %g, line dist is %g, step %ld of repeat %d\n",((pi - 2*acos((center[0]*cVector[0] + center[1]*cVector[1] + center[2]*cVector[2] - cVector[0]*locs[m][n][0] - cVector[1]*locs[m][n][1] - cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))) - 2*acos((-(center[0]*cVector[0]) + pow(cVector[0],2) - center[1]*cVector[1] + pow(cVector[1],2) - center[2]*cVector[2] + pow(cVector[2],2) + cVector[0]*locs[m][n][0] + cVector[1]*locs[m][n][1] + cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))) + 2*asin(sqrt((pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2))/(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))))*sqrt(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))/2. + sqrt(-2*center[0]*cVector[0] + pow(cVector[0],2) - 2*center[1]*cVector[1] + pow(cVector[1],2) - 2*center[2]*cVector[2] + pow(cVector[2],2) + 2*cVector[0]*locs[m][n][0] + 2*cVector[1]*locs[m][n][1] + 2*cVector[2]*locs[m][n][2]),anchorMTdist[m][n][k],step,j);
+
+                    //unless the rest length is long enough to go around the surface of the sphere and reach that point
+                    //(see find distance along surface.nb)
+                    if(((pi - 2*acos((center[0]*cVector[0] + center[1]*cVector[1] + center[2]*cVector[2] - cVector[0]*locs[m][n][0] - cVector[1]*locs[m][n][1] - cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))) - 2*acos((-(center[0]*cVector[0]) + pow(cVector[0],2) - center[1]*cVector[1] + pow(cVector[1],2) - center[2]*cVector[2] + pow(cVector[2],2) + cVector[0]*locs[m][n][0] + cVector[1]*locs[m][n][1] + cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))) + 2*asin(sqrt((pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2))/(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))))*sqrt(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))/2. + sqrt(-2*center[0]*cVector[0] + pow(cVector[0],2) - 2*center[1]*cVector[1] + pow(cVector[1],2) - 2*center[2]*cVector[2] + pow(cVector[2],2) + 2*cVector[0]*locs[m][n][0] + 2*cVector[1]*locs[m][n][1] + 2*cVector[2]*locs[m][n][2]) < L[m]){
+
+                        bind_possible[m][n][k]=1;
+
+                    }
+
+
                 }else{
                     bind_possible[m][n][k]=1;
                 }

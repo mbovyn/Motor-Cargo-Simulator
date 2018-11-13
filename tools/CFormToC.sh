@@ -3,7 +3,7 @@
 #fnames=(forwardequations.c stochasticequations.c)
 #echo ${fnames[1]}
 
-for fname in pointToMT_formulae.txt stochasticequations.c beadequations.c rotateToVec_formulae.txt quaternion_formulae.txt
+for fname in pointToMT_formulae.txt stochasticequations.c beadequations.c rotateToVec_formulae.txt quaternion_formulae.txt spheredist.txt
 do
     if [ -e $fname ] ; then
 
@@ -30,6 +30,8 @@ do
         sed -i '' 's/Sin/sin/g' $fname
         sed -i '' 's/Cos/cos/g' $fname
         sed -i '' 's/Arccos/acos/g' $fname
+        sed -i '' 's/Arcsin/asin/g' $fname
+        sed -i '' 's/Pi/pi/g' $fname
 
         #replace miscapitalized Sqrt with correct sqrt
         sed -i '' 's/Sqrt/sqrt/g' $fname
