@@ -897,7 +897,7 @@ int sumforces(){
     double ctsum;
 
     //Tolerance for how far away from 0 is ok
-    double tol=1E-16;
+    double tol=1E-12;
 
     //make seperate variable to hold drag on anchor since it's annoying to calculate
     double adrag[NMOTORSMAX][3];
