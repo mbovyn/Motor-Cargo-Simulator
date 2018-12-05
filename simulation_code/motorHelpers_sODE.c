@@ -882,6 +882,8 @@ int sumforces(){
 //Sums all forces and torques, makes sure they balance
 //returns 0 if they balance, >0 if they don't
 
+//now acutally calculates F/dt, as divisions by dt were causing floating point issues
+
     //forces, excluding internal forces
     double fsum;
     //torques, excluding internal torques
@@ -894,17 +896,24 @@ int sumforces(){
     //torques on cargo (including torques from internal forces)
     double ctsum;
 
+    //Tolerance for how far away from 0 is ok
+    double tol=1E-16;
+
     //make seperate variable to hold drag on anchor since it's annoying to calculate
     double adrag[NMOTORSMAX][3];
+    double abrownian[NMOTORSMAX][3];
     //calculate it here
     nn=0;
     for(m=0;m<2;m++){
         for(n=0;n<N[m];n++){
             for(i=0;i<3;i++){
                 if(!(MotorDiffusion>=10) && (D_m[m]>1E-12)){
-                    adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
-                        cross((theta1[0]-theta[0])/dt,(theta1[1]-theta[1])/dt,(theta1[2]-theta[2])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
-                        -(a1[nn][i]-a[nn][i])/dt);
+                    // adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])/dt+
+                    //     cross((theta1[0]-theta[0])/dt,(theta1[1]-theta[1])/dt,(theta1[2]-theta[2])/dt,a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
+                    //     -(a1[nn][i]-a[nn][i])/dt);
+                    adrag[nn][i]=(1/mu_m[m])*((c1[i]-c[i])+
+                        cross((theta1[0]-theta[0]),(theta1[1]-theta[1]),(theta1[2]-theta[2]),a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],i)
+                        -(a1[nn][i]-a[nn][i]));
                 }else{
                     adrag[nn][i]=NAN;
                     //if motor aren't free, return nan
@@ -912,6 +921,9 @@ int sumforces(){
                     //nan fails all checks, so msum, cfsum and ctsum pass
                 }
                 //printf("adrag[%ld][%d]=%g\n",nn,i,adrag[nn][i] );
+
+
+                abrownian[nn][i]=sqrt(2*kBT*(1/mu_m[m])*dt)*Dba[nn][i];
             }
             nn++;
         }
@@ -928,25 +940,25 @@ int sumforces(){
         //printf("i=%d:\n",i );
 
         //External force and torque
-        fsum+=Ftrap[i];
-        cfsum+=Ftrap[i];
-        //printf("    Ftrap is %g\n",Ftrap[i] );
-        tsum+=TorqeExt[i];
-        ctsum+=TorqeExt[i];
-        //printf("    TorqueExt is %g\n",TorqeExt[i] );
+        fsum+=Ftrap[i]*dt;
+        cfsum+=Ftrap[i]*dt;
+        //printf("    Ftrap is %g/dt\n",Ftrap[i]*dt );
+        tsum+=TorqeExt[i]*dt;
+        ctsum+=TorqeExt[i]*dt;
+        //printf("    TorqueExt is %g/dt\n",TorqeExt[i]*dt );
 
         //Steric force
-        fsum+=Fsteric[i];
-        cfsum+=Fsteric[i];
-        //printf("    Fsteric is %g\n",Fsteric[i] );
+        fsum+=Fsteric[i]*dt;
+        cfsum+=Fsteric[i]*dt;
+        //printf("    Fsteric is %g/dt\n",Fsteric[i]*dt );
 
         //cargo drag force and torque
-        fsum+=-(c1[i]-c[i])/dt*(1/muCargoTranslation);
-        cfsum+=-(c1[i]-c[i])/dt*(1/muCargoTranslation);
-        //printf("    Fdrag is %g\n",-(c1[i]-c[i])/dt*(1/muCargoTranslation) );
-        tsum+=-(theta1[i]-theta[i])/dt*(1/muCargoRotation);
-        ctsum+=-(theta1[i]-theta[i])/dt*(1/muCargoRotation);
-        //printf("    Tdrag is %g\n",-(theta1[i]-theta[i])/dt*(1/muCargoRotation) );
+        fsum+=-(c1[i]-c[i])*(1/muCargoTranslation);
+        cfsum+=-(c1[i]-c[i])*(1/muCargoTranslation);
+        //printf("    Fdrag is %g/dt\n",-(c1[i]-c[i])*(1/muCargoTranslation) );
+        tsum+=-(theta1[i]-theta[i])*(1/muCargoRotation);
+        ctsum+=-(theta1[i]-theta[i])*(1/muCargoRotation);
+        //printf("    Tdrag is %g/dt\n",-(theta1[i]-theta[i])*(1/muCargoRotation) );
 
         //for each motor
         nn=0;
@@ -954,49 +966,51 @@ int sumforces(){
             for(n=0;n<N[m];n++){
 
                 //motor force and torque
-                fsum+=F_m_vec[m][n][i];
-                //printf("    F_m_vec[%d][%d] is %g\n",m,n,F_m_vec[m][n][i] );
-                tsum+=cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],all3(F_m_vec[m][n]),i);
-                //printf("    Torque from F_m_vec[%d][%d] is %g\n",m,n,cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],all3(F_m_vec[m][n]),i) );
+                fsum+=F_m_vec[m][n][i]*dt;
+                //printf("    F_m_vec[%d][%d] is %g/dt\n",m,n,F_m_vec[m][n][i]*dt );
+                tsum+=cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],F_m_vec[m][n][0]*dt,F_m_vec[m][n][1]*dt,F_m_vec[m][n][2]*dt,i);
+                //printf("    Torque from F_m_vec[%d][%d] is %g/dt\n",m,n,cross(locs[m][n][0]-center[0],locs[m][n][1]-center[1],locs[m][n][2]-center[2],F_m_vec[m][n][0]*dt,F_m_vec[m][n][1]*dt,F_m_vec[m][n][2]*dt,i) );
 
                 //radial force
-                cfsum+=FmRadial[nn][i];
-                //printf("    FmRadial[%ld] is %g\n",nn,FmRadial[nn][i] );
+                cfsum+=FmRadial[nn][i]*dt;
+                //printf("    FmRadial[%ld] is %g/dt\n",nn,FmRadial[nn][i]*dt );
                 //reaction to brownian force on anchor
-                cfsum-=sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i];
+                cfsum-=sqrt(2*kBT*(1/mu_m[m])*dt)*Dba[nn][i];
                 //reaction to drag force on anchor
                 cfsum-=adrag[nn][i];
 
                 //torque from reaction to brownian force on anchor
-                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][0],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][1],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][2],i);
-                //printf("    torque from brownian anchor is %g\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][0],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][1],sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][2],i) );
+                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],abrownian[nn][0],abrownian[nn][1],abrownian[nn][2],i);
+                //printf("    torque from brownian anchor is %g/dt\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],abrownian[nn][0],abrownian[nn][1],abrownian[nn][2],i) );
                 //torque from reaction to drag force on anchor
-                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i);
-                //printf("    torque from anchor drag is %g\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i) );
+                ctsum-=cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],adrag[nn][0],adrag[nn][1],adrag[nn][2],i);
+                //printf("    torque from anchor drag is %g/dt\n",-cross(a[nn][0]-c[0],a[nn][1]-c[1],a[nn][2]-c[2],all3(adrag[nn]),i) );
 
 
                 //on motor anchor
 
                 msum=0;
                 //motor force
-                msum+=FmTangential[nn][i];
-                //printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
+                msum+=FmTangential[nn][i]*dt;
+                //printf("    FmTangential[%ld] is %g/dt\n",nn,FmTangential[nn][i]*dt );
                 //brownian force
-                msum+=sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i];
-                //printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
+                msum+=abrownian[nn][i];
+                //printf("    brownian force on motor [%ld] is %g/dt\n",nn,abrownian[nn][i] );
                 //drag force
                 msum+=adrag[nn][i];
-                //printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
+                //printf("    Drag on motor [%ld] is %g/dt\n",nn,adrag[nn][i] );
 
                 //printf("    type%dmotor%d/number %ld, msum is %g\n",m,n,nn,msum );
 
                 //check sum of forces on anchor. Return >0 if don't balance
-                if(fabs(msum)>1E-6){
+                if(fabs(msum)>tol){
                     printf("type%dmotor%d/number %ld, dim %d\n",m,n,nn,i );
-                    printf("    FmTangential[%ld] is %g\n",nn,FmTangential[nn][i] );
-                    printf("    brownian force on motor [%ld] is %g\n",nn,sqrt(2*kBT*(1/mu_m[m])/dt)*Dba[nn][i] );
-                    printf("    Drag on motor [%ld] is %g\n",nn,adrag[nn][i] );
-                    printf("    msum is %g\n",msum );
+                    printf("    FmTangential[%ld] is %g/dt\n",nn,FmTangential[nn][i]*dt );
+                    printf("    brownian force on motor [%ld] is %g/dt\n",nn,abrownian[nn][i] );
+                    printf("    Drag on motor [%ld] is %g/dt\n",nn,adrag[nn][i] );
+                    //printf("    added %g\n",(adrag[nn][i]+abrownian[nn][i]));
+                    //printf("    dt is %g\n",dt);
+                    printf("    msum is %g/dt\n",msum );
                     return 5;
                 }
 
@@ -1006,38 +1020,38 @@ int sumforces(){
         }
 
         //Brownian force and torque
-        fsum+=sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i];
-        cfsum+=sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i];
-        //printf("    Fbrownian is %g\n",sqrt(2*kBT*(1/muCargoTranslation)/dt)*Dbc[i] );
-        tsum+=sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i];
-        ctsum+=sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i];
-        //printf("    Tbrownian is %g\n",sqrt(2*kBT*(1/muCargoRotation)/dt)*Rbc[i] );
+        fsum+=sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i];
+        cfsum+=sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i];
+        //printf("    Fbrownian is %g/dt\n",sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i] );
+        tsum+=sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i];
+        ctsum+=sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i];
+        //printf("    Tbrownian is %g/dt\n",sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i] );
 
-        //printf("    Fsum is %g\n",fsum );
-        //printf("    Tsum is %g\n",tsum );
-        //printf("    cfsum is %g\n",cfsum );
-        //printf("    ctsum is %g\n",ctsum );
+        //printf("    Fsum is %g/dt\n",fsum );
+        //printf("    Tsum is %g/dt\n",tsum );
+        //printf("    cfsum is %g/dt\n",cfsum );
+        //printf("    ctsum is %g/dt\n",ctsum );
         //printf("\n");
 
         //Check sums. Return >0 if forces don't balance
-        if(fabs(fsum)>1E-6){
+        if(fabs(fsum)>tol){
             printf("dim %d\n",i );
-            printf("    Fsum is %g\n",fsum );
+            printf("    Fsum is %g/dt\n",fsum );
             return 1;
         }
-        if(fabs(tsum)>1E-6){
+        if(fabs(tsum)>tol){
             printf("dim %d\n",i );
-            printf("    Tsum is %g\n",tsum );
+            printf("    Tsum is %g/dt\n",tsum );
             return 2;
         }
-        if(fabs(cfsum)>1E-6){
+        if(fabs(cfsum)>tol){
             printf("dim %d\n",i );
-            printf("    cfsum is %g\n",cfsum );
+            printf("    cfsum is %g/dt\n",cfsum );
             return 3;
         }
-        if(fabs(ctsum)>1E-6){
+        if(fabs(ctsum)>tol){
             printf("dim %d\n",i );
-            printf("    ctsum is %g\n",ctsum );
+            printf("    ctsum is %g/dt\n",ctsum );
             return 4;
         }
 
