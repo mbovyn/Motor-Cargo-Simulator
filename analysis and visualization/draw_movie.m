@@ -1,6 +1,7 @@
 %% draws movie from data created by simulation
 
-%want a white background behind the figure so it blends in with slide
+%want a white background behind the figure so it blends in with
+%slides/posters
 set(0,'defaultfigurecolor','w')
 
 %% import parameters and data
@@ -228,8 +229,12 @@ for t=loop_ts
         h.BackFaceLighting = 'unlit';
 
     else
-
-        h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',.3);
+        
+        if exist('cargospec','var')
+            h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',cargospec(4));
+        else
+            h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',.3);
+        end
 
     end
 
