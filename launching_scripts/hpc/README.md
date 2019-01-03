@@ -3,10 +3,9 @@
 From scratch. Locally:
 
 * create a folder (remember name)
-* copy prepHPC.sh into the folder and run it
+* copy makeandlaunch.pl and ISEED into folder
 * edit makeandlaunch.pl to reflect the parameters you want to use, hpc and folder name
 * run makeandlaunch.pl - this will create parameter files and pub files
-* Add an ISEED
 * copy that folder onto the hpc via filezilla or whatever
     * sftp://mbovyn@hpc.oit.uci.edu
     * want /pub/mbovyn instead of default home of /data/users/mbovyn
