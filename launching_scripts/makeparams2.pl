@@ -12,11 +12,13 @@ our @namelist = ();
 for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
     our $param1=$sweepvals[0][$ctr1];
     #print "param1 is $param1\n";
+    our $follow1=$followvals[0][$ctr1];
 
     #for values in array for second parameter
     for my $ctr2 ( 0 .. $#{ $sweepvals[1] } ) {
         our $param2=$sweepvals[1][$ctr2];
         #print "param2 is $param2\n";
+        #our $follow2=$followvals[1][$ctr2];
 
         #specific name for each instance that will run]
         my $id1=$ctr1+$ctr1start;
