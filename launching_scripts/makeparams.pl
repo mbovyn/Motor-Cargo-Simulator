@@ -26,7 +26,7 @@ if(scalar(@sweepvars)<1){
     our $name1="none1name";
 } else {
     our $name1=$sweepvars[0] . "name";
-    print "$name1\n";
+    #print "$name1\n";
 }
 
 if(scalar(@sweepvars)<2){
@@ -45,15 +45,15 @@ if(scalar(@sweepvars)<2){
 if(@followvars){
     our $followname1=$followvars[0] . "name";
     #our $followname2=$followvars[1] . "name";
-    print "$followname1\n";
+    #print "$followname1\n";
 }
 
 $$name1="param1";
 $$name2="param2";
-print "$$name1, $$name2\n";
+#print "$$name1, $$name2\n";
 $$followname1="follow1";
 #$$followname2="follow2";
-print "$$followname1\n";
+#print "$$followname1\n";
 
 #call second half of script
 do "$code_dir/launching_scripts/makeparams2.pl" or die "$@ from call";
