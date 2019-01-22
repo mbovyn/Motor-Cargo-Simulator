@@ -12,7 +12,7 @@ working_dir="$2"
 #copy code to current folder
 cp -r $code_dir/simulation_code "$working_dir"
 #copy the pub submitter
-cp $code_dir/launching_scripts/hpc/submit_pubs.sh "$working_dir"
+cp -p $code_dir/launching_scripts/hpc/submit_pubs.sh "$working_dir"
 #copy the param file generator if it don't already exist
 #cp -n $code_dir/archetypes/setandlaunch.pl .
 
