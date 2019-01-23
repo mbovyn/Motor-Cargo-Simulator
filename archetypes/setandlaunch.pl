@@ -127,7 +127,7 @@ our $cc20="/*
 5:  free motors - cargo diffusion (rot and trans) set to 0
 6:  free motors - cargo rot and anchor diffusion set to 0
 7:  free motors - cargo trans and anchor diffusion set to 0
-8:  free motors - debugging case
+8:  free motors - diffusing cluster for binding only
 9:  free motors - cargo translational diffusion to 0
 10: bead motors
 11: bead motors - deterministic (cargo trans and rot, motor diffusion set to 0)

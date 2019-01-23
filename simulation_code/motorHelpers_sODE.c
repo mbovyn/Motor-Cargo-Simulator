@@ -730,37 +730,34 @@ void compute_next_locations(){
             stochastic_equations();
             break;
 
-        case 8: //testing for anchor diffusion
+        case 8: //diffusing cluster
 
-            //printf("At beginning, locs is (%lf %lf %lf)\n",locs[0][0][0],locs[0][0][1],locs[0][0][2] );
+            //kinda hackey, will only work for binding
+            //rotational diffusion only
 
-
+            nn=0;
+            //only generate one set of displacements
+            generate_brownian_displacement_anchor();
             for(m=0;m<2;m++){
                 for(n=0;n<N[m];n++){
-                    diffuse_sph_one_motor();
+                    for(i=0;i<3;i++){
+                        Dba[nn][i]=brownian_displacement[i];
+                    }
+                    nn++;
                 }
             }
 
+            //generate_brownian_displacement_cargo();
+            //for(i=0;i<3;i++){
+            //    Dbc[i]=brownian_displacement[i];
+            //}
 
-
-            for(nn=0;nn<N[0]+N[1];nn++){
-                //generate_brownian_displacement_anchor();
-                for(i=0;i<3;i++){
-                    Dba[nn][i]=brownian_displacement[i];
-                    // if(verboseTF>4){
-                    //     printf("%lf ",Dba[nn][i]);
-                    // }
-
-                }
-                printf("brownian displacements generated for motor are (%lf %lf %lf)\n",Dba[nn][0],Dba[nn][1],Dba[nn][2]);
+            generate_brownian_displacement_rotation();
+            for(i=0;i<3;i++){
+                Rbc[i]=brownian_displacement[i];
             }
 
             stochastic_equations();
-
-            if(verboseTF>3){
-                printf("stochastic, locs update is (%lf %lf %lf)\n",a1[0][0],a1[0][1],a1[0][2] );
-            }
-
             break;
 
         case 9: //no cargo translational diffusion
