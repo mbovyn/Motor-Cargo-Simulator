@@ -121,6 +121,11 @@ int main( int argc, char *argv[] )
     }
     RanInit(keep_seed); //twister.c
 
+    rpt_start=0;
+    if(argv[5]){
+        rpt_start=atoi(argv[5]);
+    }
+
     if (verboseTF>2){
         printf("\n-------------------------------------------------\n");
         printf("\nBeginning new run\n\n");

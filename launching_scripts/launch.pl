@@ -17,7 +17,7 @@ if ($launch_mode eq 'local') { #launch simulations
     exec("'$code_dir'/launching_scripts/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $verbose $keep_seed $keep_old $dont_wait");
 } elsif ($launch_mode eq 'hpc') { #make parameter files only
     system("'$code_dir'/launching_scripts/hpc/prepHPC.sh '$code_dir' '$working_dir'") == 0 or die "prep_hpc failed";
-    do "$code_dir/launching_scripts/hpc/make_pubs.pl" or die "$@ from call";
+    do "$code_dir/launching_scripts/hpc/make_pubs_array.pl" or die "$@ from call";
 } else {
     die "Invalid launch mode: should be 'local' or 'hpc'";
 }

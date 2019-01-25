@@ -110,6 +110,12 @@ void initializeDataCollection()
 
     //create file name, open file and write header if file is new
 
+    if(rpt_start){
+        char buffer[30];
+        sprintf(buffer, ".%d", rpt_start);
+        strcat(runName,buffer);
+    }
+
     //summary file
     strcpy(summaryName,runName);
     strcat(summaryName,"_Summary");
@@ -207,7 +213,7 @@ void initializeDataCollection()
 //if it doesn't, open and return 1 so we know to write the header
 int open_exist(char fName[100]){
     //printf("%s\n",fName);
-    if( access( fName, F_OK ) != -1 ) {
+    if( access( fName, F_OK ) != -1 || rpt_start>1) {
         //file exists
         fInUse = fopen(fName, "a");
         return 0;
@@ -219,7 +225,11 @@ int open_exist(char fName[100]){
 }
 
 void writeBase(){
-    fprintf(fInUse, "%4d   %10ld %.16E ",j+1,step,t_inst);
+    if(rpt_start){
+        fprintf(fInUse, "%4d   %10ld %.16E ",j+rpt_start,step,t_inst);
+    }else{
+        fprintf(fInUse, "%4d   %10ld %.16E ",j+1,step,t_inst);
+    }
 }
 
 void writeCenterLocs(){

@@ -15,6 +15,7 @@
 Driving function variables
 */
 
+int rpt_start;
 int keep_seed;
 
 int n_lines;

@@ -13,6 +13,8 @@ working_dir="$2"
 cp -r $code_dir/simulation_code "$working_dir"
 #copy the pub submitter
 cp -p $code_dir/launching_scripts/hpc/submit_pubs.sh "$working_dir"
+#copy the file concatinator
+cp -p $code_dir/launching_scripts/hpc/cat_files.sh "$working_dir"
 #copy the param file generator if it don't already exist
 #cp -n $code_dir/archetypes/setandlaunch.pl .
 

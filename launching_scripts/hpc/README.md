@@ -23,3 +23,9 @@ Monitoring
 * see queues: ```q```
 * see my jobs: ```qstat -u mbovyn```
 * kill jobs: ```qdel 'runid'``` or ```qdel -u mbovyn```
+
+Other useful things:
+
+* see number of lines in file: ```wc -l filename```
+* find and display lines: ```grep -E "find this" *.log```
+* open with no wrapping: ```vi -c 'set nowrap' filename```
