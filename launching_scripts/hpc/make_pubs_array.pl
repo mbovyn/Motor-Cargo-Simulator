@@ -3,6 +3,8 @@ use warnings;
 
 # create pub files to submit jobs to pbs
 
+#todo: add grouping number
+
 # make pubs ###########################################################
 
 #check ISEED exists
@@ -43,7 +45,7 @@ foreach $instance_name (@namelist) {
 #\$ -N $hpc_instance_name
 #\$ -t 1-$repeats
 #\$ -q bio,abio,abio128,free64,pub64
-#\$ -ckpt blcr
+#\$ -ckpt restart
 #\$ -e logs/
 #\$ -o logs/
 

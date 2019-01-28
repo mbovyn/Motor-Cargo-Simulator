@@ -1,3 +1,5 @@
+#still need: figure out logs (should probably cat them too)
+
 
 #minimal example:
 #cp sweepNR.0.0.1_Summary.txt sweepNR.0.0_Summary.txt
@@ -43,5 +45,6 @@ done
 # remove .bk: for file in *.bk; do mv $file ${file%.bk};  done;
 # delete all two number summaries: rm sweepNR.?.?_Summary.txt
 
-#rm *.bk
-#rm *.*.*.*_Summary.txt
+rm *.bk
+rm *.*.*.*_Summary.txt
+rm -r logs
