@@ -14,8 +14,6 @@ To the HPC
 
 * SSH in: ```ssh mbovyn@hpc.oit.uci.edu```
 * navigate to correct folder: ```cd /pub/mbovyn/folder_you_transferred```
-* ```cd code``` and ```make free5``` or whatever the correct version version to compile is
-* return to folder ```cd ..```
 * launch ```./submit_pubs.sh```
 
 Monitoring
@@ -26,6 +24,17 @@ Monitoring
 
 Other useful things:
 
+* change current directory to
+    * any folder: ```cd /the/absolute/file/path```
+    * subfolder: ```cd foldername```
+    * up on folder ```cd ..```
+    * up two folders ```cd ../..```
+    * to last folder ```cd -```
 * see number of lines in file: ```wc -l filename```
 * find and display lines: ```grep -E "find this" *.log```
 * open with no wrapping: ```vi -c 'set nowrap' filename```
+* delete folder ```rm -r foldername```
+* hpc website: https://hpc.oit.uci.edu/
+    * checkpoint and continue: https://hpc.oit.uci.edu/checkpoint
+    * restart: https://hpc.oit.uci.edu/restart
+    * location of checkpoint files: /checkpoint/mbovyn
