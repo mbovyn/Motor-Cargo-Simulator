@@ -104,6 +104,13 @@ switch plot_box
         yends=[min(locs.center(:,2))-params.R(1) max(locs.center(:,2))+params.R(1)];
         zends=[min(locs.center(:,3))-params.R(1) max(locs.center(:,3))+params.R(1)];
 
+    case 7 %set all 3 in calling script
+
+    case 8 %like 5 but larger bounds
+
+        yends=[min(locs.center(:,2))-params.R(1)-max_length max(locs.center(:,2))+params.R(1)+max_length];
+        zends=[min(locs.center(:,3))-params.R(1)-max_length max(locs.center(:,3))+params.R(1)+max_length];
+
     otherwise
 
         error('Unusable key for plot bounds specified in plot_box')
@@ -150,7 +157,7 @@ if ~exist('tan_scaling','var')
     if draw_forces==true
 
         disp('Creating force scaling')
-        
+
         %Fext=forces.Fext;
         %Fsteric=forces.Fsteric;
         %Ftangential=forces.Ftangential;
@@ -163,10 +170,10 @@ if ~exist('tan_scaling','var')
         steric_scaling=params.R(1)/max(mags_steric);
 
         if max(params.N)>0
-            
+
             mags_tan=cell(2,1);
             mags_rad=cell(2,1);
-            
+
             for m=1:2
                 if params.N(m)>0
                     mags_tan{m}=sqrt(sum(forces.Ftangential{m,1}.*forces.Ftangential{m,1},2));
@@ -191,7 +198,7 @@ if ~exist('tan_scaling','var')
 
         clear mags_ext mags_steric mags_tan mags_rad ...
             ext_scaling steric_scaling rad_scaling
-        
+
         disp('Drawing')
     end
 
@@ -229,7 +236,7 @@ for t=loop_ts
         h.BackFaceLighting = 'unlit';
 
     else
-        
+
         if exist('cargospec','var')
             h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',cargospec(4));
         else
@@ -247,7 +254,7 @@ for t=loop_ts
     hold on
 
     %% motor anchors and heads
-    
+
     for m=1:2
         if params.N(m)>0
 
@@ -408,11 +415,11 @@ for t=loop_ts
     else
         titlestringhere=titlestring;
     end
-    
+
     if draw_forces==true
         titlestringhere=sprintf([titlestringhere '\n F=' num2str(params.R*cargo_scaling) 'pN at cargo radius']);
     end
-    
+
     title(titlestringhere)
 
     xlabel('x (\mum)')
@@ -469,7 +476,7 @@ for t=loop_ts
             [ h_cyl,h_cap1,h_cap2 ] = draw_MT( ...
                 xends,yends,zends,params.MTpt(:,i)',params.MTvec(:,i)',params.R_MT(i) );
         end
-        
+
     end
 
     if exist('draw_sep_dist_line','var')
