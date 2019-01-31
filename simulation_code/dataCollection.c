@@ -467,7 +467,7 @@ void simulationEndDataCollection(){
         fprintf(fToW, "\n");
     }
 
-    write_all();
+    //write_all();
 }
 
 void write_error(){

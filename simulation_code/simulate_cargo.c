@@ -426,6 +426,7 @@ int simulate_cargo()
                 || (ReturnDetails==2 && hit_action)
                 || (ReturnDetails==3 && (step-1)%1000==0)
                 || (ReturnDetails==4 && t_inst>t_rec) )){
+            //printf("normal writing, step is %ld\n",step );
             inLoopDataCollection();
             if(ReturnDetails==4){
                 t_rec+=dt_rec;
@@ -434,6 +435,7 @@ int simulate_cargo()
 
         if(ReturnDetails && (prematureReturn || graceful_exit) ){
             inLoopDataCollection();
+            //printf("end writing, step is %ld\n",step );
         }
 
     } // of time loop=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -445,6 +447,7 @@ int simulate_cargo()
     if(graceful_exit){
 
         write_error();
+        printf("error writing, step is %ld\n",step );
         printf("\n");
         return 0;
 
