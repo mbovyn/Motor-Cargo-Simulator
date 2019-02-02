@@ -337,6 +337,7 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 
 #number of times to repeat
 our $repeats=1;
+our $groups=1;
 #verbosity (0-5)
 our $verbose=0;
 #set to 1 to append to old files

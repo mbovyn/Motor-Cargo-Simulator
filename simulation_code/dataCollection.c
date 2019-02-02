@@ -93,7 +93,7 @@ void writeToWHeader(){
 
 void initializeDataCollection()
 {
-    if(verboseTF>0){
+    if(verboseTF>0 && rpt_start<2){
         printf("Writing details ");
         if(ReturnDetails==1){
             printf("every step\n");
@@ -226,7 +226,7 @@ int open_exist(char fName[100]){
 
 void writeBase(){
     if(rpt_start){
-        fprintf(fInUse, "%4d   %10ld %.16E ",j+rpt_start,step,t_inst);
+        fprintf(fInUse, "%4d   %10ld %.16E ",j+(rpt_start-1)*repeats+1,step,t_inst);
     }else{
         fprintf(fInUse, "%4d   %10ld %.16E ",j+1,step,t_inst);
     }

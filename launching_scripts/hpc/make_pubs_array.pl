@@ -43,7 +43,7 @@ foreach $instance_name (@namelist) {
     print FOOD << "EOF";
 #!/bin/bash
 #\$ -N $hpc_instance_name
-#\$ -t 1-$repeats
+#\$ -t 1-$groups
 #\$ -q bio,abio,abio128,free64,pub64
 #\$ -ckpt restart
 #\$ -e logs/
@@ -62,7 +62,7 @@ echo Directory is `pwd`
 # Run executable
 #motors.x instance_name repeat verbose keep_seed
 #sleep \$(printf %.10f "\$((\$SGE_TASK_ID))e-2")
-./motors.x $instance_name 1 2 0 \$SGE_TASK_ID
+./motors.x $instance_name $repeats 2 0 \$SGE_TASK_ID
 
 echo Finished at `date`
 

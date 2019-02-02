@@ -126,6 +126,7 @@ int main( int argc, char *argv[] )
     if(argv[5]){
         rpt_start=atoi(argv[5]);
     }
+
     //if on hpc in job array, make sure the repeats aren't on the rand stream by
     // generating rpt_start random variables before starting code
     if(rpt_start){
@@ -143,7 +144,7 @@ int main( int argc, char *argv[] )
         printf("\nBeginning new run\n\n");
         printf("-------------------------------------------------\n");
     }
-    if(verboseTF>0)
+    if(verboseTF>0 && rpt_start<2)
         printf("\nStarting %s\n",runName);
 
     // load parameters
@@ -155,7 +156,7 @@ int main( int argc, char *argv[] )
         printf("Done with reading in Parameters\n\n");
 
     //print number of motors and parameters we're running
-    if(verboseTF>0){
+    if(verboseTF>0 && rpt_start<2){
         //printf("%s:\n",runName);
         if(keep_seed){
             printf("Random Seed won't be updated\n");
@@ -189,7 +190,7 @@ int main( int argc, char *argv[] )
             printf("     External force parameters are: %g %g %g\n",TorqeExt[0],TorqeExt[1],TorqeExt[2] );
         }
 
-        printf("Running %d repeats\n",repeats );
+        printf("Running %d repeats in group %d\n",repeats,rpt_start );
     }else{
         RAND; //need this to keep number of RAND calls the same
     }
@@ -199,7 +200,7 @@ int main( int argc, char *argv[] )
         printf("\nInitializing data collection\n");
     initializeDataCollection(); //dataCollection.c
 
-    if(verboseTF>0)
+    if(verboseTF>0 && rpt_start<2)
         printf("\n");
 
     //call simulation function for each repeat
@@ -238,8 +239,8 @@ int main( int argc, char *argv[] )
     //     }
     // }
 
-    if(verboseTF>0){
-        printf("\n%s: Finished all %d repeats\n\n",runName,repeats);
+    if(verboseTF>0 && rpt_start<1){
+        printf("\n%s: Finished all %d repeats in group %d\n\n",runName,repeats,rpt_start+1);
     }
 
     return 0;

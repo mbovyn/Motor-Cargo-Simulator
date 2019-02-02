@@ -460,7 +460,7 @@ void getInputParams( void )
     }
 
     //print out what we have
-    if(verboseTF>0){
+    if(verboseTF>0 && rpt_start<1){
         printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
         for(i=0;i<n_MTs;i++){
             printf("     (%g,%g,%g) (%g,%g,%g) %g\n",
@@ -473,39 +473,41 @@ void getInputParams( void )
     fclose(fMTParams);
 
     //Print end conditions
-    if(verboseTF>0){
+    if(verboseTF>0 && rpt_start<2){
         printf("Stopping on:\n");
+
+        if(Requirebound){
+            printf("    All motors unbound\n");
+        }
+        if(StopOnMotor2Attach){
+            printf("    type0motor1 attach\n");
+        }
+        if(StopOnAllbound){
+            printf("    All motors bound\n");
+        }
+        if(StopOnStep){
+            printf("    Step %ld\n",StopOnStep);
+        }
+        if(StopOnTime){
+            printf("    After %g seconds\n",StopOnTime);
+        }
+        if(StopOnDistance){
+            printf("    Cargo x location > %g microns\n",StopOnDistance);
+        }
+        if(StopBelowThetaC){
+            printf("    Motor below critical angle of %g\n",theta_c);
+        }
+        if(MultiMTassay){
+            printf("    MT assay conditions\n");
+        }
+        if(StopOnBeadDissociation){
+            printf("    Bead > .5 microns from all MTs\n");
+        }
+        if(StopOnCargoBinding){
+            printf("    Cargo binding\n");
+        }
     }
-    if(Requirebound && verboseTF>0){
-        printf("    All motors unbound\n");
-    }
-    if(StopOnMotor2Attach && verboseTF>0){
-        printf("    type0motor1 attach\n");
-    }
-    if(StopOnAllbound && verboseTF>0){
-        printf("    All motors bound\n");
-    }
-    if(StopOnStep && verboseTF>0){
-        printf("    Step %ld\n",StopOnStep);
-    }
-    if(StopOnTime && verboseTF>0){
-        printf("    After %g seconds\n",StopOnTime);
-    }
-    if(StopOnDistance && verboseTF>0){
-        printf("    Cargo x location > %g microns\n",StopOnDistance);
-    }
-    if(StopBelowThetaC && verboseTF>0){
-        printf("    Motor below critical angle of %g\n",theta_c);
-    }
-    if(MultiMTassay && verboseTF>0){
-        printf("    MT assay conditions\n");
-    }
-    if(StopOnBeadDissociation && verboseTF>0){
-        printf("    Bead > .5 microns from all MTs\n");
-    }
-    if(StopOnCargoBinding && verboseTF>0){
-        printf("    Cargo binding\n");
-    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     // Consequent parameters

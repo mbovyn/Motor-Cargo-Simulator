@@ -50,5 +50,24 @@ do
             fi
 
         fi
+
+        if [$(find . -name "*.*.*.*$ending" | wc -l) -gt 0 ] ; then
+            echo "--->deleted $(ls -l *.*.*.*$ending | wc -l) of individual $ending"
+            rm *.*.*.*$ending
+        fi
     done
 done
+
+if [$(find . -name "motors*.*.*.*.x" | wc -l) -gt 0 ] ; then
+    for stale_executable in motors*.*.*.*.x; do
+        rm $stale_executable
+        echo "--->delted old executable $stale_executable"
+    done
+fi
+
+if [$(find . -name "motors*.*.*.x" | wc -l) -gt 0 ] ; then
+    for stale_executable in motors*.*.*.x; do
+        rm $stale_executable
+        echo "--->delted old executable $stale_executable"
+    done
+fi
