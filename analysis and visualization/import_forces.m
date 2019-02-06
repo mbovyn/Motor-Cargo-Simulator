@@ -63,6 +63,8 @@ forces = transform_vars(forces,repeat);
 %%
 
 %forces.F_______{motor_type,repeat}(timestep,dimension,motor number)
+forces.Fmag=cell(2,max(repeat));
+forces.Fcart=cell(2,max(repeat));
 forces.Fradial=cell(2,max(repeat));
 forces.Ftangential=cell(2,max(repeat));
 
@@ -76,6 +78,8 @@ if max(N)>0
                 else
                     column=14+N(1)*10+(n-1)*10;
                 end
+                forces.Fmag{m,i}(:,n)=[dataArray{:,column-4}];
+                forces.Fcart{m,i}(:,:,n)=[dataArray{:,column-3:column-1}];
                 forces.Fradial{m,i}(:,:,n)=[dataArray{:,column:column+2}];
                 forces.Ftangential{m,i}(:,:,n)=[dataArray{:,column+3:column+5}];
             end
