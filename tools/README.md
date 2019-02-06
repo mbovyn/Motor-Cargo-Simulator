@@ -3,7 +3,7 @@
 ## Contents:
 
 * generateEquations.nb: algorithmically writes out model equations
-    * generates
+    * generated beadequations*.c and stochasticequations*.c
 * findDistanceSphere.nb: equation to find shortest distance along sphere surface and through empty space to the MT
     * generates spheredist.txt, which holds an equation used in the function findMTdist, [defined in motorHelpers_setup.c](https://github.com/mbovyn/Motor_Freedom/blob/b3c23df1b85995bf6ca94763a3e3098d953ae4c3/simulation_code/motorHelpers_setup.c#L368)
 * pointToMT.nb: finds the shortest line from a point to the MT
@@ -11,7 +11,7 @@
         * function vecToClosestPointOnMT, [defined in motorHelpers_setup.c](https://github.com/mbovyn/Motor_Freedom/blob/b3c23df1b85995bf6ca94763a3e3098d953ae4c3/simulation_code/motorHelpers_setup.c#L350)
         * function pointToMTdist, [defined in motorHelpers_setup.c](https://github.com/mbovyn/Motor_Freedom/blob/b3c23df1b85995bf6ca94763a3e3098d953ae4c3/simulation_code/motorHelpers_setup.c#L360)
         * function closestPointOnMT, [defined in motorHelpers_setup.c](https://github.com/mbovyn/Motor_Freedom/blob/b3c23df1b85995bf6ca94763a3e3098d953ae4c3/simulation_code/motorHelpers_setup.c#L645)
-* anchorDiffusionTimestep: finds timestep which limits error of motor movement
+* anchorDiffusionTimestep.nb: finds timestep which limits error of motor movement
     * used to set max timestep [in getInputParams.c](https://github.com/mbovyn/Motor_Freedom/blob/b3c23df1b85995bf6ca94763a3e3098d953ae4c3/simulation_code/getInputParams.c#L560)
 * quaternions.nb: equations to save rotation record as quaternions and convert to Euler vectors
     * generates quaternion_formulae.txt, used in:
