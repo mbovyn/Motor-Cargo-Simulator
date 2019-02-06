@@ -460,7 +460,7 @@ void getInputParams( void )
     }
 
     //print out what we have
-    if(verboseTF>0 && rpt_start<1){
+    if(verboseTF>0 && rpt_start<2){
         printf("Running with %d MTs, with locations, unit vectors and radii:\n",n_MTs);
         for(i=0;i<n_MTs;i++){
             printf("     (%g,%g,%g) (%g,%g,%g) %g\n",

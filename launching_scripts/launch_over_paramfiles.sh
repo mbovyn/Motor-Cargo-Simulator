@@ -42,7 +42,7 @@ for instance in ${param_files[*]}; do
 
     echo "****Starting $ctr of ${#param_files[@]}, $instance at $(date +"%r on %F")"
 
-    for r in $(eval echo {0..$((groups-1))}); do
+    for r in $(eval echo {1..$groups}); do
 
         #echo "${instance%*_MT_params.txt}"
         param_name="${instance%*_MT_params.txt}"
@@ -68,7 +68,11 @@ for instance in ${param_files[*]}; do
         mv "$working_dir"/"$oldname" "$working_dir"/"$newname"
         #motors.x   run_name            repeats       verbose
         #./$newname  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
-        ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} $((r+1)) &
+        if [ "$groups" -eq "1" ]; then
+            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} 0 &
+        else
+            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} $r &
+        fi
         oldname=$newname
 
         #sleep so as not to go before the ISEED is updated

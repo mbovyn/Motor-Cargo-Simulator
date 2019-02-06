@@ -239,8 +239,8 @@ int main( int argc, char *argv[] )
     //     }
     // }
 
-    if(verboseTF>0 && rpt_start<1){
-        printf("\n%s: Finished all %d repeats in group %d\n\n",runName,repeats,rpt_start+1);
+    if(verboseTF>0){
+        printf("\n%s: Finished all %d repeats in group %d\n\n",runName,repeats,rpt_start);
     }
 
     return 0;

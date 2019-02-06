@@ -213,14 +213,18 @@ void initializeDataCollection()
 //if it doesn't, open and return 1 so we know to write the header
 int open_exist(char fName[100]){
     //printf("%s\n",fName);
-    if( access( fName, F_OK ) != -1 || rpt_start>1) {
+    if( access( fName, F_OK ) != -1) {
         //file exists
         fInUse = fopen(fName, "a");
         return 0;
     } else {
         // file doesn't exist
         fInUse = fopen(fName, "w");
-        return 1;
+        if(rpt_start<2){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
 
