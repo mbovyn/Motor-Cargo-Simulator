@@ -25,15 +25,20 @@ Monitoring
 Other useful things:
 
 * change current directory to
-    * any folder: ```cd /the/absolute/file/path```
+    * any folder: ```cd /the/absolute/file/path``` or ```~/file/path``` where ```~``` means home folder
     * subfolder: ```cd foldername```
-    * up on folder ```cd ..```
+    * up one folder ```cd ..```
     * up two folders ```cd ../..```
     * to last folder ```cd -```
 * see number of lines in file: ```wc -l filename```
 * find and display lines: ```grep -E "find this" *.log```
 * open with no wrapping: ```vi -c 'set nowrap' filename```
 * delete folder ```rm -r foldername```
+* work on a different screen which can be put in the background
+    * to open: ```screen``` or ```screen submit_pubs.sh```
+    * to terminate: ctrl+d (not command+d)
+    * to detach and leave running: ctrl+a ctrl+d
+    * to return: ```screen -r```
 * hpc website: https://hpc.oit.uci.edu/
     * checkpoint and continue: https://hpc.oit.uci.edu/checkpoint
     * restart: https://hpc.oit.uci.edu/restart
