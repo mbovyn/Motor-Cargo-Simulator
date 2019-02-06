@@ -19,6 +19,9 @@ cp -n $code_dir/archetypes/ISEED "$working_dir"
 
 #make the folders to hold the pubs and logs
 cd "$working_dir"
+if [ -f motors.x ]; then
+    rm motors.x
+fi
 mkdir pubs
 mkdir logs
 
