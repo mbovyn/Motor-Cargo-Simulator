@@ -555,7 +555,7 @@ void getInputParams( void )
     }
 
     //find max time step for diffusion of the motors
-    //set to satisfy calcuation in anchor diffusion time step.nb
+    //set to satisfy calcuation in anchorDiffusionTimestep.nb
     //knocked down by a factor of 10 because motors were still going too far
     if(N[0]>0){
         dt_max_Diffusion=.1*(pow(R,2)/D_m[0])*pow(tan(pow(3*.005/R,1/3.)),2)/72;
