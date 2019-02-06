@@ -44,7 +44,7 @@ foreach $instance_name (@namelist) {
 #!/bin/bash
 #\$ -N $hpc_instance_name
 #\$ -t 1-$groups
-#\$ -q bio,abio,abio128,free64,pub64
+#\$ -q bio,abio,abio128,free64,pub64,free128
 #\$ -ckpt restart
 #\$ -e logs/
 #\$ -o logs/
@@ -78,7 +78,7 @@ open(FOOD, ">submit_pubs_$hpc_name.sh" ) or die "couldn't make submit_pubs_$hpc_
 print FOOD << "EOF";
 #!/bin/bash
 
-if [ "\$PWD" != "dfs3/pub/mbovyn/$folder_name" ]; then
+if [ "\$PWD" != "/pub/mbovyn/$folder_name" ]; then
   echo "something is wrong with folder name"
   exit 3
 fi
