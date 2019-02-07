@@ -20,7 +20,7 @@ fi
 #deal with the executable
 cd "$working_dir"
 #if it doesn't exist or we want to recompile
-if [ ! -f motors.x ] || [ $force_recompile -gt 0 ] ; then
+if [ ! -f motors*.x ] || [ $force_recompile -gt 0 ] ; then
 
     # generate and save a file that tells the hash of the git commit used to generate the data
     cd $code_dir
@@ -35,4 +35,16 @@ if [ ! -f motors.x ] || [ $force_recompile -gt 0 ] ; then
 
 else
     echo "--->Using current executable"
+    if [ -f motors.x ]; then
+        echo "--->Using current motors.x"
+    else
+        for file in motors_*.x; do
+            if [ -f $file ]; then
+                echo "--->renaming $file to motors.x"
+                mv "$file" "motors.x"
+            fi
+        done
+    fi
 fi
+
+exit 0

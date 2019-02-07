@@ -71,7 +71,7 @@ for instance in ${param_files[*]}; do
         if [ "$groups" -eq "1" ]; then
             ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} 0 &
         else
-            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} $r &
+            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-1} ${keep_seed:-0} $r &
         fi
         oldname=$newname
 
