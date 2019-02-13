@@ -10,6 +10,9 @@ bead10:
 bead20:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dbead20
 
+bead30:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dbead20
+
 bead50:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dbead50
 
@@ -27,3 +30,6 @@ free10:
 
 free20:
 	gcc -O3 driveMotors.c -o motors.x -lm -Dfree20
+
+free30:
+	gcc -O3 driveMotors.c -o motors.x -lm -Dfree30

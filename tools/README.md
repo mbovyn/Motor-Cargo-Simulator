@@ -29,7 +29,7 @@
 * Set nmax and nmaxbead in and run the notebook generateEquations.nb
     * Will take a long time (hours) for >10 free or >30 rigid motors
     * Quick for <=5, so if you're trying to make more free set bead to 5, or vice versa
-    * generates
+    * generates beadequations.c, stochasticequations.c
 * Run the conversion script: ```./CFormToC.sh```
 * Copy the file you wanted to ```../simulation_code```
 * Add cases to Makefile and driveMotors.c

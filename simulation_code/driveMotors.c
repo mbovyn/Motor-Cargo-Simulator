@@ -44,6 +44,9 @@
 #elif defined(bead20) //Any number of motors between 0 and 20
     #include "beadequations20.c"
     int available_motors_bead=20;
+#elif defined(bead30) //Any number of motors between 0 and 30
+    #include "beadequations30.c"
+    int available_motors_bead=30;
 #elif defined(bead50) //Any number of motors between 0 and 50
     #include "beadequations50.c"
     int available_motors_bead=50;
@@ -67,6 +70,9 @@
 #elif defined(free20) //Any number of motors between 0 and 20
     #include "stochasticequations20.c"
     int available_motors_free=20;
+#elif defined(free30) //Any number of motors between 0 and 30
+    #include "stochasticequations30.c"
+    int available_motors_free=30;
 #else
     void stochastic_equations(){};
     int available_motors_free=0;
