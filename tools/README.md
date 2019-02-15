@@ -1,6 +1,6 @@
-# Tools for deriving equations and generating C code
+## Tools for deriving equations and generating C code
 
-## Contents:
+### Contents:
 
 * generateEquations.nb: algorithmically writes out model equations
     * generated beadequations*.c and stochasticequations*.c
