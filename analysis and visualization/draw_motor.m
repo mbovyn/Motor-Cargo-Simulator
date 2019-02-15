@@ -1,6 +1,10 @@
 function [ h_motor,h_head,h_stalk ] = draw_motor( m,att,R_motor,loc,loc_head,varargin )
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%draw_motor Draws reach for unbound, heads and anchor for bound
+%   For an unbound motor, draws a sphere at the motor reach length from the
+%   anchor.
+%   For a bound motor, draws spheres at the center of mass of the heads and
+%   at the location the motor is anchored into the cargo. These are then
+%   connected by a line representing the stalk.
 
 %plot motor
 [xm,ym,zm]=sphere;

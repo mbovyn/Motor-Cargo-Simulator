@@ -55,6 +55,8 @@ function OUTPUT=SpinCalc(CONVERSION,INPUT,tol,ichk)
 %OUTPUT - matrix or vector corresponding to the second entry in the
 %         CONVERSION input string, formatted as shown above.
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%source: https://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors
+% edited by Matt Bovyn
 
 %Pre-processer to determine type of conversion from CONVERSION string input
 %Types are numbered as follows:

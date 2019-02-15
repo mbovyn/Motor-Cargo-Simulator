@@ -26,6 +26,12 @@
 % 
 % NOTE: There is a MATLAB function "cylinder" to revolve a curve about an
 % axis. This "Cylinder" provides more customization like direction and etc
+%
+% Source: https://www.mathworks.com/matlabcentral/fileexchange/13995-cylinder
+%
+% Edited by Matt Bovyn
+% Now takes in face and edge alpha values
+
 
 
 % Calculating the length of the cylinder

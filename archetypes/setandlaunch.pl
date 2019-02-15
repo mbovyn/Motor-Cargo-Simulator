@@ -35,7 +35,7 @@ our $run_name = "test";
 
 ###############################################################################
 #set code and working directories
-our $code_dir = glob("~/project_code/Motor_Freedom");
+our $code_dir = glob("~/project_code/Motor-Cargo-Simulator");
 our $working_dir=$ENV{'PWD'};
 
 #include linspace and logspace subroutines

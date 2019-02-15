@@ -11,7 +11,7 @@ nruns={[1,1]};
 %(so nruns should always be {[1,1]})
 
 %analysis file path
-analysispath='~/project_code/Motor_Freedom/analysis and visualization';
+analysispath='~/project_code/Motor-Cargo-Simulator/analysis and visualization';
 
 %% Movie setup
 

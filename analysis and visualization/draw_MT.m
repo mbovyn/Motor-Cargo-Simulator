@@ -1,6 +1,8 @@
 function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT,varargin )
-%draw_MT Draw Microtubule for movie
-%   Detailed explanation goes here
+%draw_MT Draw microtubule cylinder
+%   Draws a cylinder for the microtubule. First calculates the locations of
+%   the edged of the plot box, then draws cylinder between them. Adds + and
+%   - labels to correct ends of microtubule
 
     %vector from MTpt to pass each plane defining the cube
     v1=[max(xends) max(yends) max(zends)]-MTpt;

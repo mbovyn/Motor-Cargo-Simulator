@@ -1,6 +1,7 @@
 function [ h ] = draw_cargo( center_x,center_y,center_z,R,n_points,varargin )
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%draw_cargo Draws a spherical cargo
+%   Uses the input number of points, center and radius
+%   can change opacity by inputting alpha value
 
 %plot vesicle
 [xp,yp,zp]=ellipsoid(center_x,center_y,center_z,R,R,R,n_points);

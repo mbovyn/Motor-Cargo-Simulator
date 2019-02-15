@@ -1,4 +1,6 @@
 function struct_out = transform_vars(struct_in,repeat)
+%transform_vars Chooses a structure based on the dimensions of the
+%data.
 
 if sum(size(unique(repeat))~=size(repeat))
     
