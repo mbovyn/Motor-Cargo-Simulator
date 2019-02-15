@@ -58,6 +58,26 @@ do
     done
 done
 
+folders=( logs pubs simulation_code )
+for folder_name in ${folders[*]}; do
+
+    if [ -d $folder_name ]; then
+        rm -r $folder_name
+        echo "--->deleted $folder_name"
+    fi
+
+done
+
+others=( submit_pubs*.sh cat_files.sh CommitHash.txt )
+for other_name in ${others[*]}; do
+
+    if [ -f $other_name ]; then
+        rm -r $other_name
+        echo "--->deleted $other_name"
+    fi
+
+done
+
 # if [$(find . -name "motors*.*.*.*.x" | wc -l) -gt 0 ] ; then
 #     for stale_executable in motors*.*.*.*.x; do
 #         rm $stale_executable
@@ -71,3 +91,5 @@ done
 #         echo "--->delted old executable $stale_executable"
 #     done
 # fi
+
+exit 0

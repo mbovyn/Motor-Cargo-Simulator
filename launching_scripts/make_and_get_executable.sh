@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+#shopt -s failglob
 
 #This script generates a file with the commit hash of the current code and makes
 #an executable, then copies both to the working folder

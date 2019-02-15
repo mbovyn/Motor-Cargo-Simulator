@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+#shopt -s failglob
 
 #This script takes the files written out by each repeat during an hpc job array
 #run and concatinates them into one file per parameter set
@@ -53,6 +54,7 @@ for ending in ${file_endings[*]}; do
     done
 
     for file in *.bk; do
+        #echo $file
         if [ ! -f $file ]; then
             #echo "$file does not exist"
             break
