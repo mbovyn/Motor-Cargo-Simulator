@@ -11,6 +11,9 @@
 #define magdiff(a,b) (sqrt((a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1])+(a[2]-b[2])*(a[2]-b[2])))
 #define all3(a) a[0],a[1],a[2]
 
+// Error checking options
+int track_force_balance=0; //enable to track that sum of forces=0
+
 /* -------------------------------------------------------------------
 Driving function variables
 */

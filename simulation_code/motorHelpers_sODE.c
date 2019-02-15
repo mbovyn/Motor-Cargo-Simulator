@@ -830,7 +830,7 @@ void compute_next_locations(){
     }
 
     //check that sum of forces is close to 0
-    if(sumforces()>0){
+    if(track_force_balance & sumforces()>0){
         printf("\nError! Sum of forces/torques != 0, code %d\nExiting gracefully at step %ld\n\n\n",sumforces(),step);
         graceful_exit=1;
     }
