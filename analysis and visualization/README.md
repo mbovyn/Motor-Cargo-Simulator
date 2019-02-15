@@ -5,11 +5,10 @@ Main functions:
     * import_params.m
     * import_MT_params.m
     * import_summary.m
-    * import_locs.m
-    * import_head.m
-    * import_forces.m
-    * import_omega.m
-    * (each import calls transform_vars.m)
+    * import_locs.m, which calls transform_vars.m
+    * import_head.m, which calls transform_vars.m
+    * import_forces.m, which calls transform_vars.m
+    * import_omega.m, which calls transform_vars.m
 * draw_movie.m: makes of movie of cargo and motor dynamics. Calls:
     * import_params_and_results.m
     * SpinCalc.m
