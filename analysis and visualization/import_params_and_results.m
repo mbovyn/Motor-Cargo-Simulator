@@ -30,7 +30,7 @@ function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,
     differentsizes=0;
     for j=1:length(nruns)-1
         if ~isequal(nruns{j},nruns{j+1})
-            differentsizes=1;         
+            differentsizes=1;
         end
     end
 
@@ -38,17 +38,17 @@ function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,
     %of runs is the same between conditions, use simplified form
     %ex. params(runs,condition)
     if (sum([nruns{:}]==1)==length([nruns{:}])/2) && ~differentsizes
-        
+
         for i=length(localpath):-1:1
             [params(:,i),summary(:,i),locs(:,i),heads(:,i),forces(:,i),omega(:,i)]= ...
                 import_all(run_name{i},nruns{i},localpath{i});
         end
-        
+
     %otherwise stack conditions in third dimension
     %(nruns is nxm or have different numbers of runs between conditions)
     %ex. params(runs(1),runs(2),condition)
     else
-        
+
         %check that structure will be created with a large enough size in
         %each dimension to hold all conditions
         %right now this will happen if the larger one is input first
@@ -60,7 +60,7 @@ function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,
             error(['Please order conditions with highest number of runs first', newline,...
                 'This code needs to be rewritten for mismatched numbers of runs (ex. 6x4 and 7x5)'] );
         end
-        
+
         for i=length(localpath):-1:1
 
             [params(1:nruns{i}(1),1:nruns{i}(2),i),...
@@ -72,7 +72,7 @@ function [params,summary,locs,heads,forces,omega]=import_all_all(run_name,nruns,
                 import_all(run_name{i},nruns{i},localpath{i});
 
         end
-        
+
     end
 
 end
@@ -121,7 +121,10 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
             params(runno1,runno2)=import_MT_params(params(runno1,runno2),localpath,run_name);
 
             %import summary
-            summary(runno1,runno2)=import_summary(params(runno1,runno2),localpath,run_name);
+            [summary(runno1,runno2),status]=import_summary(params(runno1,runno2),localpath,run_name);
+            if status>0
+                disp('for '+string(runno1)+', '+string(runno2)+' of '+run_name)
+            end
 
             %import locs
             if exist([localpath '/' run_name '_Center_and_Anchors.txt'],'file')
