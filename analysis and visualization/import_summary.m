@@ -62,6 +62,9 @@ summary.exit_cond = dataArray{:, 4};
 if any(summary.exit_cond==-1)
     disp('Warning, some runs resulted in errors (exit_cond=-1)')
     status=1;
+elseif any(summary.exit_cond==10)
+    disp('Warning, some runs hit step limit (exit_cond=10)')
+    status=2;
 else
     status=0;
 end
