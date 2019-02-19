@@ -200,7 +200,7 @@ void evaluate_stop_conditions(){
 
     }
 
-    if(step>100000000 && prematureReturn==0){
+    if(step>1000000000 && prematureReturn==0){
         prematureReturn=10;
         printf("\n\nExit by step limit!\n\n");
     }
