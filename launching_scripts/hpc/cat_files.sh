@@ -26,7 +26,7 @@ shopt -s nullglob
 #echo running
 file_endings=( _Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
 for ending in ${file_endings[*]}; do
-    echo "---- $ending ----"
+    #echo "---- $ending ----"
     for file in *.*.*.1$ending; do
         #if [ ! -f $file ]; then
         #    #echo "$file does not exist"
@@ -38,37 +38,49 @@ for ending in ${file_endings[*]}; do
         #create pattern to find them, e.g. sweepNR.0.0.*_Summary.txt
 
         #first change the name of the first repeat file so the pattern won't find it again
-        echo "moving"
+        # if test -n "$(find . -maxdepth 1 -name '${file/.?_/*}' -print -quit)"
+        # then
+        #     echo "found glob of ${file/.?_/*}"
+        # else
+        #     echo "didn't find glob of ${file/.?_/*}"
+        #     exit 2
+        # fi
+        #echo "moving"
         mv $file $file.bk
+
         #generate, e.g. sweepNR.0.0.*_Summary.txt with parameter substitution
         #save the list of files which match the pattern in an array
-        echo "making list"
+        #echo "making list from glob of ${file/.?_/*}"
         lst=(${file/.?_/*})
+        #echo "list is"
         #echo "${lst[@]}"
+        if [ ${#lst[@]} -eq 0 ]; then
+            echo "Oops, ${#lst[@]} entries in lst from glob of ${file/.?_/*}"
+            echo "probably a Google Drive Stream issue. Run cat_files again."
+            mv $file.bk $file
+            exit 1
+        #else
+            #echo "${#lst[@]} entries in lst, ok"
+        fi
+
         #sort the filenames so 10 comes after 9
         #https://stackoverflow.com/questions/7442417/how-to-sort-an-array-in-bash
-        echo "sorting"
+        #echo "sorting"
         IFS=$'\n'
         lst=($(sort -V <<<"${lst[*]}"))
         unset IFS
+        #echo "sorted list is"
+        #echo "${lst[@]}"
         #copy first repeat (has header) to start concatinated file
-        echo "starting file"
+        #echo "starting file"
         cp $file.bk ${file/.1_/_}
         #append the contents of the other files onto cat'd file
-        echo "cat'ing"
+        #echo "cat'ing to ${file/.1_/_} this list:"
+        #echo "${lst[@]}"
+        #echo
         cat "${lst[@]}" >> ${file/.1_/_}
-    done
-
-    for file in *.bk; do
-        #echo $file
-        #if [ ! -f $file ]; then
-        #    #echo "$file does not exist"
-        #    break
-        #else
-            echo "found $file, rm'ing *.bk"
-            rm *.bk
-            break
-        #fi
+        #return file
+        mv $file.bk $file
     done
 
     for file in *.*.*.*$ending; do
@@ -76,7 +88,7 @@ for ending in ${file_endings[*]}; do
         #    #echo "$file does not exist"
         #    break
         #else
-            echo "found $file rm'ing *.*.*.*$ending"
+            echo "rm'ing *.*.*.*$ending"
             rm *.*.*.*$ending
             break
         #fi
@@ -113,36 +125,24 @@ if [ -d "logs" ]; then
         rm ${file/%.1/bk}
 
     done
+
+    # for the error files
+    for file in *.*.e*; do
+        if [ ! -f ${file/%.e*/.err} ]; then
+            echo "working on ${file/%.e*/.err}"
+        fi
+
+        echo "$file" >> ${file/%.e*/.err}
+        cat "$file" >> ${file/%.e*/.err}
+        echo >> ${file/%.e*/.err}
+        echo "---------------------------------------" >> ${file/%.e*/.err}
+        echo >> ${file/%.e*/.err}
+        rm $file
+
+    done
     cd ..
 fi
 
 # to undo:
 # remove .bk: for file in *bk; do mv $file ${file/%bk/.1};  done;
 # to remove cat'd files: rm *.log
-
-
-# for the error files
-if [ -d "logs" ]; then
-    cd logs
-    for file in *.*.e*.1; do
-        echo "working on ${file/%.e*/.log}"
-
-        mv $file ${file/%.1/bk}
-        lst=(${file/%.1/.*})
-        #echo "${lst[@]}"
-
-        IFS=$'\n'
-        lst=($(sort -V <<<"${lst[*]}"))
-        unset IFS
-        #copy first repeat (has header) to start concatinated file
-        cp ${file/%.1/bk} ${file/%.e*/.log}
-        #append the contents of the other files onto cat'd file
-        #echo "${lst[@]}"
-        cat "${lst[@]}" >> ${file/%.e*/.log}
-
-        rm "${lst[@]}"
-        rm ${file/%.1/bk}
-
-    done
-    cd ..
-fi
