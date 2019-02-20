@@ -23,6 +23,9 @@ our $keep_seed=0;
 #set compile to yes to compile and copy executable to local folder
 our $compile=0;
 #set compile keyword to correct one for number of motors
+#options: all numbers up to (ex: bead5 has 1, 2, 3, 4, and 5) except bead101
+#bead0, bead5, bead10, bead20, bead30, bead50, bead101 (1-101 by 10s)
+#free0, free5, free10, free20, free30
 our $compile_keyword='free5';
 
 #if hpc, also set a short hpc run name
