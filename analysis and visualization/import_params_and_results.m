@@ -123,7 +123,6 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
             %import summary
             [summary(runno1,runno2),status]=import_summary(params(runno1,runno2),localpath,run_name);
             if status>0
-                disp(run_name)
                 disp(['in ' run_name])
             end
 
