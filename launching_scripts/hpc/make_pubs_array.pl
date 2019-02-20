@@ -12,6 +12,8 @@ if (! -f "ISEED"){
     print "No ISEED\n";
 }
 
+my $shft=0;
+
 #loop over instance names, generated in makeparams2.pl
 foreach $instance_name (@namelist) {
 
@@ -62,13 +64,14 @@ echo Directory is `pwd`
 # Run executable
 #motors.x instance_name repeat verbose keep_seed
 #sleep \$(printf %.10f "\$((\$SGE_TASK_ID))e-2")
-./motors.x $instance_name $repeats 2 0 \$SGE_TASK_ID
+./motors.x $instance_name $repeats 2 1 \$SGE_TASK_ID $shft
 
 echo Finished at `date`
 
 EOF
     close FOOD;
     #done writing
+    $shft=$shft+$groups;
 }
 
 

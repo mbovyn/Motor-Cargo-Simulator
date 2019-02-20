@@ -133,16 +133,19 @@ int main( int argc, char *argv[] )
         rpt_start=atoi(argv[5]);
     }
 
+    shft=0;
+    if(argv[6]){
+        shft=atoi(argv[6]);
+    }
+
     //if on hpc in job array, make sure the repeats aren't on the rand stream by
     // generating rpt_start random variables before starting code
     if(rpt_start){
-        RanInit(1); //twister.c
-        for(i=0;i<rpt_start;i++){
-            RAND;
-        }
+        RanInit(keep_seed, rpt_start+shft);
+        //printf("test rand is %f\n",RAND );
     }else{
         //initialize normally
-        RanInit(keep_seed); //twister.c
+        RanInit(keep_seed, 0); //twister.c
     }
 
     if (verboseTF>2){

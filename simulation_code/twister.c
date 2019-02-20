@@ -59,7 +59,7 @@ static int left = 1;
 static int initf = 0;
 static unsigned long *next;
 
-void RanInit(int repeatable);
+void RanInit(int repeatable, int parseed);
 double genrand_real3(void);
 void printState(char *stateFile);
 void loadState( char *stateFile);
@@ -230,10 +230,11 @@ double genrand_res53(void)
 
 /* Initialization added by Jun 2007 */
 //modified output last ISEED before updating by Matt Bovyn 2017
-void RanInit(int repeatable)
+void RanInit(int repeatable, int parseed)
 {
   FILE *ip, *ip2; // ISEED files
   long iseed;
+  int i,j;
 
   //check if iseed exists MB
   if( access( "ISEED", F_OK ) != -1 ) {
@@ -253,7 +254,22 @@ void RanInit(int repeatable)
   fclose(ip2);
 
   if (iseed>0) iseed*= -1;
-  init_genrand(iseed); //initialize
+  //if launching many simulations, can run into race conditions w/ updating ISEED.
+  //also don't want to use consecutive seeds (1, 2, 3, ...)
+  //instead, use iseed to seed a random number stream, then use consecutive draws from it
+  //added by MB 2018
+  if(parseed){
+      srand(iseed);
+      for(i=0;i<parseed-1;i++){
+          //printf("%d ",rand());
+          rand();
+      }
+      j=rand();
+      //printf("passing %d \n",j);
+      init_genrand(j);
+  }else{
+      init_genrand(iseed); //initialize
+  }
 
   /* printf("ISEED=%lx\n",iseed); */
 

@@ -37,6 +37,7 @@ oldname=motors.x
 echo "****Running ${#param_files[@]} instances, $(date +"started at %r on %F")"
 
 ctr=1
+shft=0
 
 for instance in ${param_files[*]}; do
 
@@ -70,8 +71,10 @@ for instance in ${param_files[*]}; do
         #./$newname  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
         if [ "$groups" -eq "1" ]; then
             ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} 0 &
+        elif [ $r -eq $groups ] && [ $ctr -eq ${#param_files[@]} ]; then
+            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-1} ${keep_seed} $r $shft &
         else
-            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-1} ${keep_seed:-0} $r &
+            ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-1} 1 $r $shft &
         fi
         oldname=$newname
 
@@ -85,6 +88,7 @@ for instance in ${param_files[*]}; do
 
     echo "****finished $ctr of ${#param_files[@]}, $instance at $(date +"%r on %F")"
     let ctr++
+    shft=$((shft+groups))
 
 done
 
