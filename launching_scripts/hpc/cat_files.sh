@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 #shopt -s failglob
+shopt -s nullglob
 
 #This script takes the files written out by each repeat during an hpc job array
 #run and concatinates them into one file per parameter set
@@ -25,55 +26,60 @@ set -e
 #echo running
 file_endings=( _Summary.txt _Center_and_Anchors.txt _Heads.txt _Forces.txt _Omega.txt _ToW.txt)
 for ending in ${file_endings[*]}; do
-    #echo $ending
+    echo "---- $ending ----"
     for file in *.*.*.1$ending; do
-        if [ ! -f $file ]; then
-            #echo "$file does not exist"
-            break
-        fi
+        #if [ ! -f $file ]; then
+        #    #echo "$file does not exist"
+        #    break
+        #fi
 
         echo "cat'ing ${file/.1_/_}"
         #want to find everything that has the same filename except with different repeat number
         #create pattern to find them, e.g. sweepNR.0.0.*_Summary.txt
 
         #first change the name of the first repeat file so the pattern won't find it again
+        echo "moving"
         mv $file $file.bk
         #generate, e.g. sweepNR.0.0.*_Summary.txt with parameter substitution
         #save the list of files which match the pattern in an array
+        echo "making list"
         lst=(${file/.?_/*})
         #echo "${lst[@]}"
         #sort the filenames so 10 comes after 9
         #https://stackoverflow.com/questions/7442417/how-to-sort-an-array-in-bash
+        echo "sorting"
         IFS=$'\n'
         lst=($(sort -V <<<"${lst[*]}"))
         unset IFS
         #copy first repeat (has header) to start concatinated file
+        echo "starting file"
         cp $file.bk ${file/.1_/_}
         #append the contents of the other files onto cat'd file
+        echo "cat'ing"
         cat "${lst[@]}" >> ${file/.1_/_}
     done
 
     for file in *.bk; do
         #echo $file
-        if [ ! -f $file ]; then
-            #echo "$file does not exist"
-            break
-        else
-            #echo "removing $file"
+        #if [ ! -f $file ]; then
+        #    #echo "$file does not exist"
+        #    break
+        #else
+            echo "found $file, rm'ing *.bk"
             rm *.bk
             break
-        fi
+        #fi
     done
 
     for file in *.*.*.*$ending; do
-        if [ ! -f $file ]; then
-            #echo "$file does not exist"
-            break
-        else
-            #echo "removing $file"
+        #if [ ! -f $file ]; then
+        #    #echo "$file does not exist"
+        #    break
+        #else
+            echo "found $file rm'ing *.*.*.*$ending"
             rm *.*.*.*$ending
             break
-        fi
+        #fi
     done
 
 done
@@ -113,3 +119,30 @@ fi
 # to undo:
 # remove .bk: for file in *bk; do mv $file ${file/%bk/.1};  done;
 # to remove cat'd files: rm *.log
+
+
+# for the error files
+if [ -d "logs" ]; then
+    cd logs
+    for file in *.*.e*.1; do
+        echo "working on ${file/%.e*/.log}"
+
+        mv $file ${file/%.1/bk}
+        lst=(${file/%.1/.*})
+        #echo "${lst[@]}"
+
+        IFS=$'\n'
+        lst=($(sort -V <<<"${lst[*]}"))
+        unset IFS
+        #copy first repeat (has header) to start concatinated file
+        cp ${file/%.1/bk} ${file/%.e*/.log}
+        #append the contents of the other files onto cat'd file
+        #echo "${lst[@]}"
+        cat "${lst[@]}" >> ${file/%.e*/.log}
+
+        rm "${lst[@]}"
+        rm ${file/%.1/bk}
+
+    done
+    cd ..
+fi
