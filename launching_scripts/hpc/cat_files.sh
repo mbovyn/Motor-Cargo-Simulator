@@ -63,6 +63,13 @@ for ending in ${file_endings[*]}; do
             #echo "${#lst[@]} entries in lst, ok"
         fi
 
+        for item in ${lst[*]}; do
+            if [ "$item" =  ${file/.1_/_} ]; then
+                echo "found $item in lst. Would make infinite loop."
+                exit 2
+            fi
+        done
+
         #sort the filenames so 10 comes after 9
         #https://stackoverflow.com/questions/7442417/how-to-sort-an-array-in-bash
         #echo "sorting"
@@ -111,6 +118,13 @@ if [ -d "logs" ]; then
         mv $file ${file/%.1/bk}
         lst=(${file/%.1/.*})
         #echo "${lst[@]}"
+
+        for item in ${lst[*]}; do
+            if [ "$item" =  ${file/%.o*/.log} ]; then
+                echo "found $item in lst. Would make infinite loop."
+                exit 2
+            fi
+        done
 
         IFS=$'\n'
         lst=($(sort -V <<<"${lst[*]}"))
