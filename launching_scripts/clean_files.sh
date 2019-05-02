@@ -51,7 +51,7 @@ do
 
         fi
 
-        if [$(find . -name "*.*.*.*$ending" | wc -l) -gt 0 ] ; then
+        if [ $(find . -name "*.*.*.*$ending" | wc -l) -gt 0 ] ; then
             echo "--->deleted $(ls -l *.*.*.*$ending | wc -l) of individual $ending"
             rm *.*.*.*$ending
         fi
