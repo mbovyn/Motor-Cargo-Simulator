@@ -14,6 +14,7 @@ do "$code_dir/launching_scripts/makeparams.pl" or die "$@ from call";
 if ($launch_mode eq 'local') { #launch simulations
     system("'$code_dir'/launching_scripts/make_and_get_executable.sh '$code_dir' '$working_dir' $compile_keyword $compile") == 0
         or die "compilation failed";
+    $groups //= 1; #set number of groups to 1 if variable isn't set
     system("'$code_dir'/launching_scripts/launch_over_paramfiles.sh '$run_name' '$code_dir' '$working_dir' $repeats $groups $verbose $keep_seed $keep_old $dont_wait") == 0
         or die "launching failed";
     if ($groups gt 1) {

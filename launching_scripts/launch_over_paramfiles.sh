@@ -141,5 +141,7 @@ then
 
     date +"****done at: %r on %F"
     #create a notification
-    osascript -e 'display notification "Simulation Complete" with title "Done!"'
+    if [ "$(uname)" == "Darwin" ]; then
+        osascript -e 'display notification "Simulation Complete" with title "Done!"'
+    fi
 fi
