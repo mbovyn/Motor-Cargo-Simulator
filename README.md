@@ -20,4 +20,5 @@ Getting started on Windows 10:
 * in Ubuntu
   * sudo apt-get update
   * sudo apt-get install build-essential
+  
 Good to go! Can clone in the code and launch. If you want to edit code in Windows, clone to mnt/c/some_folder
