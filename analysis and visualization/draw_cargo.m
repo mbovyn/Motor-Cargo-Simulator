@@ -19,5 +19,9 @@ else
     set(h,'FaceAlpha',.4);
 end
 
+if any(strcmp('Edgealpha',varargin))
+    set(h,'Edgealpha',varargin{find(strcmp('Edgealpha',varargin))+1});
+else
+
 end
 
