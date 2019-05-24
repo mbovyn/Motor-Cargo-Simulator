@@ -77,7 +77,7 @@ num=5+3+3;
 
 summary.last_bound_center = [dataArray{:, num-2} ...
     dataArray{:, num-1} ...
-    dataArray{:, num}]';
+    dataArray{:, num}];
 
 summary.last_bound_head=cell(2,1);
 summary.last_bound_head{1}=zeros(N(1),size(summary.repeat,1),3);
