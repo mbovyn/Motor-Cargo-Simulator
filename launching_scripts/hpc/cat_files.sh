@@ -160,3 +160,5 @@ fi
 # to undo:
 # remove .bk: for file in *bk; do mv $file ${file/%bk/.1};  done;
 # to remove cat'd files: rm *.log
+
+echo "Done cat'ing"
