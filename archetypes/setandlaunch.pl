@@ -342,7 +342,15 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 our $repeats=1;
 our $groups=1;
 #verbosity (0-5)
-our $verbose=0;
+our $verbose=0; #controls amount of info printed
+#Verbosity
+# IF verbose = 0, will not output anything
+# IF verbose = 1, will output general things, nothing inside repeat loop
+# if =2, will say more and additionally output a few lines per repeat
+# if =3, will additionally output important events but not every time step
+#       will also output lines to follow what's going on
+# if =4, will output every time step
+# if =5, will output every time certain functions are called
 #set to 1 to append to old files
 our $keep_old=0;
 #set to 1 to override wait for open thread
