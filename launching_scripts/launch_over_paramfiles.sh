@@ -41,7 +41,7 @@ shft=0
 
 for instance in ${param_files[*]}; do
 
-    echo "****Starting $ctr of ${#param_files[@]}, $instance at $(date +"%r on %F")"
+    echo "****Starting $ctr of ${#param_files[@]}, ${instance/_*/} at $(date +"%r on %F")"
 
     for r in $(eval echo {1..$groups}); do
 
@@ -86,7 +86,7 @@ for instance in ${param_files[*]}; do
 
     done
 
-    echo "****finished $ctr of ${#param_files[@]}, $instance at $(date +"%r on %F")"
+    echo "****launched $ctr of ${#param_files[@]}, ${instance/_*/} at $(date +"%r on %F")"
     let ctr++
     shft=$((shft+groups))
 
