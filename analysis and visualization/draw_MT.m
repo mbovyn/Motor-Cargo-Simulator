@@ -30,7 +30,7 @@ function [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,MTpt,MTvec,R_MT,va
     if any(strcmp('FaceAlpha',varargin))
         fa=varargin{find(strcmp('FaceAlpha',varargin))+1};
     else
-        fa=.5;
+        fa=1;
     end
 
     if any(strcmp('EdgeAlpha',varargin))
