@@ -238,7 +238,7 @@ for t=loop_ts
     else
 
         if exist('cargospec','var')
-            h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',cargospec(4));
+            h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',cargospec(4),'Color',cargospec(1:3));
         else
             h = draw_cargo(locs.center(t,1),locs.center(t,2),locs.center(t,3),params.R(1),n_cargo_surf,'Alpha',.3);
         end
@@ -470,6 +470,15 @@ for t=loop_ts
         [ h_cyl,h_cap1,h_cap2 ] = draw_MT( xends,yends,zends,...
             params.MTpt{2},params.MTvec{2},params.R_MT(2),...
             'Color',[.6 0 0],'FaceAlpha',1,'EdgeAlpha',0,'EndLabelsOff');
+        
+    elseif exist('noplusminus','var')
+            
+        for i=1:params.n_MTs
+            [ h_cyl,h_cap1,h_cap2 ] = draw_MT(xends,yends,zends,...
+                params.MTpt(:,i)',params.MTvec(:,i)',params.R_MT(i),...
+                'EndLabelsOff');
+        end
+            
     else
 
         for i=1:params.n_MTs
