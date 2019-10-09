@@ -312,6 +312,8 @@ int simulate_cargo()
         // to move anchors and cargo--------------------------------------------
         setup_solve(); //sets total_pulling_motors, forward equation variables
         calculate_forces(); //motorHelpers_sODE.c
+        if(UseSteric)
+            calculate_steric(); //motorHelpers_sODE.c
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 
         //keep track of ToW forces

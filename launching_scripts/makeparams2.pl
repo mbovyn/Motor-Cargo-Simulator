@@ -136,11 +136,14 @@ $cc27
 CargoBehavior $CargoBehavior
 $cc28
 
-ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname
+ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $TCx $TCy $TCz
 $cc29
 
 ExternalTorque $ExternalTorque $$ETxname $$ETyname $$ETzname
 $cc30
+
+Surface $Surface
+$ccSurface
 
 UseSteric $UseSteric
 $cc31

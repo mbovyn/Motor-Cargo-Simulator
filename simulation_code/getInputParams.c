@@ -235,10 +235,10 @@ void getInputParams( void )
     //External Force
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d %lf %lf %lf",blah,&external_force,&Fin[0],&Fin[1],&Fin[2]);
+    sscanf(tmpString,"%s %d %lf %lf %lf %lf %lf %lf",blah,&external_force,&Fin[0],&Fin[1],&Fin[2],&trap_center[0],&trap_center[1],&trap_center[2]);
     //printf("\n\n\nFtrap[0] is %lf\n\n\n",Ftrap[0]);
 
-    for(n_lines=1;n_lines<=6;n_lines++)
+    for(n_lines=1;n_lines<=7;n_lines++)
         fgets(tmpString, 100, fParams);
 
     //ExternalTorque
@@ -252,6 +252,14 @@ void getInputParams( void )
     if(verboseTF>4){
       printf("Read in external torque as %d %g %g %g\n",external_torque,TorqeExt[0],TorqeExt[1],TorqeExt[2]);
     }
+
+    //Surface
+
+    fgets(tmpString, 100, fParams);
+    sscanf(tmpString,"%s %d",blah,&Surface);
+
+    for(n_lines=1;n_lines<=7;n_lines++)
+        fgets(tmpString, 100, fParams);
 
     //Use Steric
 

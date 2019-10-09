@@ -12,7 +12,7 @@
 #define all3(a) a[0],a[1],a[2]
 
 // Error checking options
-int track_force_balance=0; //enable to track that sum of forces=0
+int track_force_balance=1; //enable to track that sum of forces=0
 
 /* -------------------------------------------------------------------
 Driving function variables
@@ -292,6 +292,9 @@ double muAnchor[NMOTORSMAX];
 int external_force;
 int external_torque;
 
+int Surface;
+double Fsteric_surf[3];
+
 //next step
 double c1[3];
 double a1[NMOTORSMAX][3];
@@ -305,6 +308,7 @@ double FmTangential[NMOTORSMAX][3];
 double FmRadial[NMOTORSMAX][3];
 double Ftrap[3];
 double Fin[3];
+double trap_center[3];
 double Fsteric[3];
 double Fsterick[NMTSMAX][3];
 double TorqeExt[3];

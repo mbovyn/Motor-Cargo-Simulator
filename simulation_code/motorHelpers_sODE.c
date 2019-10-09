@@ -16,6 +16,7 @@ void cargobehavior();
 void setup_solve();
 void evaluate_steric();
 void calculate_forces();
+void calculate_steric();
 void set_brownian_forces_to_0();
 void compute_next_locations();
 void split_forces();
@@ -284,6 +285,10 @@ void update_motor_locations(){
                 for(i=0;i<3;i++){
                     locs[m][n][i]=a1[nn][i];
                 }
+
+                if(c1[2]-R<0)
+                    locs[m][n][2]=a1[nn][2]+(center[2]-c1[2]);
+
                 nn++;
 
             }
@@ -301,6 +306,9 @@ void cargobehavior()
             for(i=0;i<3;i++){
                 center[i]=c1[i];
             }
+
+            if(c1[2]-R<0)
+                center[2]=R;
 
             break;
 
@@ -385,10 +393,21 @@ void setup_solve()
 }
 
 void evaluate_steric(){
-    //set value of steric force
-    //set if we need the steric spring timestep
 
     need_steric=0;
+
+    for(k=0;k<n_MTs;k++){
+        pointToMTdist(center[0],center[1],center[2],k);
+        if(MTdist<R){
+            //set that we need the steric spring so we know to use the smaller timestep
+            need_steric=1;
+        }
+    }
+}
+
+void calculate_steric(){
+    //set value of steric force
+    //set if we need the steric spring timestep
 
     //initially set to 0
     for(i=0;i<3;i++){
@@ -411,8 +430,6 @@ void evaluate_steric(){
             Fsterick[k][0]=-kcMT*(R*cVector[0]/MTdist - cVector[0]);
             Fsterick[k][1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
             Fsterick[k][2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
-            //set that we need the steric spring so we know to use the smaller timestep
-            need_steric=1;
 
             if(MTdist < R-.005){
 
@@ -451,6 +468,21 @@ void evaluate_steric(){
 
     }// loop over MTs
 
+    //Steric force from surface
+    //only pushes up, engages when the lowest point on the bead is below 0 in z
+
+    if(Surface==1 && center[2]<R){
+        Fsteric_surf[0]=0;
+        Fsteric_surf[1]=0;
+        Fsteric_surf[2]=-(6*pi*eta*R)/dt*(center[2]-R)-Ftrap[2];
+        printf("surface force is (%g, %g, %g)\n", Fsteric_surf[0],Fsteric_surf[1],Fsteric_surf[2]);
+
+        //Total steric force
+        for(i=0;i<3;i++){
+            Fsteric[i]+=Fsteric_surf[i];
+        }
+    }
+
     if(verboseTF>3){
         printf("    Total: (%g,%g,%g)\n",
             Fsteric[0],Fsteric[1],Fsteric[2]);
@@ -477,8 +509,9 @@ void calculate_forces() //finds force values for trap, steric, and splits motor 
         case 3:
             //implement something here for an optical trap
             for(i=0;i<3;i++){
-                Ftrap[i]=-Fin[i]*center[i];
+                Ftrap[i]=-Fin[i]*(center[i]-trap_center[i]);
             }
+            //printf("Trap force is (%g,%g,%g)\n",Ftrap[0],Ftrap[1],Ftrap[2] );
             break;
         default:
             printf("\n\nError: Bad value for external_force\n\n");
@@ -1020,6 +1053,8 @@ int sumforces(){
         fsum+=sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i];
         cfsum+=sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i];
         //printf("    Fbrownian is %g/dt\n",sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i] );
+        //if(i==2)
+        //    printf("    Fbrownian is %g\n",sqrt(2*kBT*(1/muCargoTranslation)*dt)*Dbc[i]/dt );
         tsum+=sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i];
         ctsum+=sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i];
         //printf("    Tbrownian is %g/dt\n",sqrt(2*kBT*(1/muCargoRotation)*dt)*Rbc[i] );

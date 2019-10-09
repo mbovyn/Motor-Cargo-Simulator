@@ -252,11 +252,12 @@ our $cc28="/*
 10:
 */";
 
-our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=0;
+our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=0; our $TCx=0; our $TCy=0; our $TCz=0;
 our $cc29="/*
 1: no external forces
 2: external force given by next three values (x y z), pN
 3: force given by optical trap, linear with stiffness next three values (pN/micron)
+   * Trap center at next 3 values
 */";
 
 our $ExternalTorque=1; our $ETx=0; our $ETy=0; our $ETz=0;
@@ -264,6 +265,14 @@ our $cc30="/*
 1: no external torque
 2: external torque given by next three values (x y z)
 #
+*/";
+
+our $Surface=0;
+our $ccSurface="/*
+Surface which prevents cargo moving through
+Uses same spring constant as MT
+0: No surface
+1: Surface plane in x-y at z=0
 */";
 
 our $UseSteric=1;
