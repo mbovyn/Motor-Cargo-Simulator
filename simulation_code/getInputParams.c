@@ -227,7 +227,7 @@ void getInputParams( void )
     //CargoBehavior
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&CargoBehavior);
+    sscanf(tmpString,"%s %d %d",blah,&CargoBehavior,&PerfectSterics);
 
     for(n_lines=1;n_lines<=13;n_lines++)
     fgets(tmpString, 100, fParams);
@@ -253,18 +253,10 @@ void getInputParams( void )
       printf("Read in external torque as %d %g %g %g\n",external_torque,TorqeExt[0],TorqeExt[1],TorqeExt[2]);
     }
 
-    //Surface
-
-    fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&Surface);
-
-    for(n_lines=1;n_lines<=7;n_lines++)
-        fgets(tmpString, 100, fParams);
-
     //Use Steric
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d",blah,&UseSteric);
+    sscanf(tmpString,"%s %d %d",blah,&UseStericSpring,&Surface);
 
     for(n_lines=1;n_lines<=9;n_lines++)
         fgets(tmpString, 100, fParams);
@@ -632,6 +624,18 @@ void getInputParams( void )
               printf("!!!dt_override negative, ignoring stability tests!!!\n");
             }
         }
+    }
+
+    //Checks for conflicting inputs
+
+    if(PerfectSterics && UseStericSpring){
+      printf("\n\nError: can't use both perfect sterics and steric springs.\n\n");
+      exit(4);
+    }
+
+    if(PerfectSterics && n_MTs>1){
+      printf("\n\nError: PerfectSterics for multiple MTs more complicated, not implemented.\nUse spring instead.\n\n" );
+      exit(4);
     }
 
 }

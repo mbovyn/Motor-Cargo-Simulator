@@ -61,10 +61,8 @@ require "$code_dir/launching_scripts/spaces.pl";
 #    linspace(1,3,3)
 #    );
 
-our @sweepvars = ("D_m1","N1");
+our @sweepvars = ();
 our @sweepvals = (
-    [.1,1,10],
-    [1, 2, 3]
    );
 
 #print "\n";
@@ -238,18 +236,18 @@ our $cc27="/*
 
 #Cargo Behavior
 
-our $CargoBehavior=1;
+our $CargoBehavior=1; our $PerfectSterics=1;
 our $cc28="/*
 1: Cargo moves normally
-2: On rail - cargo moves only in x
-3: stuck - cargo can’t move at all
+2: Perfect sterics for hard surface at z=0
+3:
 4:
 5:
 6:
 7:
 8:
-9:
-10:
+Set second option to 1 to use perfect sterics for MT
+Note: can't use both steric springs and perfect sterics
 */";
 
 our $ExternalForce=1; our $EFx=0; our $EFy=0; our $EFz=0; our $TCx=0; our $TCy=0; our $TCz=0;
@@ -267,19 +265,11 @@ our $cc30="/*
 #
 */";
 
-our $Surface=0;
-our $ccSurface="/*
-Surface which prevents cargo moving through
-Uses same spring constant as MT
-0: No surface
-1: Surface plane in x-y at z=0
-*/";
-
-our $UseSteric=1;
+our $UseStericSpring=0; our $Surface=0;
 our $cc31="/*
-1: Use steric force
-0: Don’t use steric force
-#
+0: Don’t use steric springs
+1: Use steric spring to keep cargo out of MT
+Set second value to 1 for spring enforcing a x-y plane at z=0. 0 for no surface.
 Note: steric force spring constant specified in kcMT
 /*";
 
@@ -351,7 +341,7 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 our $repeats=1;
 our $groups=1;
 #verbosity (0-5)
-our $verbose=0; #controls amount of info printed
+our $verbose=1; #controls amount of info printed
 #Verbosity
 # IF verbose = 0, will not output anything
 # IF verbose = 1, will output general things, nothing inside repeat loop

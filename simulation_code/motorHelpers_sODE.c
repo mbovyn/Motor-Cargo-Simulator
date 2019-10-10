@@ -308,29 +308,7 @@ void cargobehavior()
 
             break;
 
-        case 2: //on rails - only move in x direction
-
-            //transfer cargo center
-            center[0]=c1[0];
-            //center[1]=c1[1];
-            //center[2]=c1[2];
-
-            update_motor_locations();
-
-            break;
-
-        case 3: //stuck - cargo can't move at all
-
-            //transfer cargo center
-            //center[0]=c1[0];
-            //center[1]=c1[1];
-            //center[2]=c1[2];
-
-            update_motor_locations();
-
-            break;
-
-        case 4: //implement hard wall at z=0
+        case 2: //implement hard wall at z=0 with perfect sterics
 
             //transfer cargo center
             for(i=0;i<3;i++){
@@ -357,6 +335,11 @@ void cargobehavior()
 
                     }
                 }
+
+                if(magdiff(c1,center)>.01){
+                    printf("\n\nError: Surface sterics moved cargo more than 10nm\n" );
+                    exit(4);
+                }
             }
 
             break;
@@ -373,31 +356,55 @@ void cargobehavior()
     //Sterics for MT
     if(PerfectSterics){
 
-      if(n_MTs>1){
-        printf("\n\nError: PerfectSterics for multiple MTs more complicated, not implemented.\nUse spring instead.\n\n" );
-        exit(4);
-      }
+      //checked for conflicts with multiple MTs in getInputParams
 
       //If cargo is inside MT, move the edge up to the MT surface
       pointToMTdist(center[0],center[1],center[2],0);
+
+
+
       if(MTdist<R){
+
+          //unless the overlap is huge
+          if(R-MTdist>.01){
+              printf("Error: Cargo more than 10nm inside MT\n");
+          }
+
+        //move the cargo out of the MT by exactly the right amount
+        //printf("center z moved from (%g,%g,%g)",all3(center));
         for(i=0;i<3;i++){
-          center[i]=center[i]-cVector[i]*(R-MTdist);
+          center[i]=center[i]-cVector[i]/MTdist*(R-MTdist);
         }
+        //printf(" to (%g,%g,%g)\n",all3(center));
+        //printf("cVector is (%g,%g,%g). Overlap is %g\n",all3(cVector),R-MTdist );
+
 
         //move motors too
         nn=0;
         for(m=0;m<2;m++){
             for(n=0;n<N[m];n++){
+                //printf("motor z moved from %g",locs[m][n][2]);
                 for(i=0;i<3;i++){
-                  locs[m][n][i]=locs[m][n][i]-cVector[i]*(R-MTdist);
+                  locs[m][n][i]=locs[m][n][i]-cVector[i]/MTdist*(R-MTdist);
                 }
-                //printf("center z moved from %g to %g (%g), motor moved from %g to %g (%g)\n",c1[2],center[2],-c1[2]+center[2],a1[nn][2],locs[m][n][2],-a1[nn][2]+locs[m][n][2] );
+                //printf(" to %g\n",locs[m][n][2]);
                 nn++;
             }
         }
       }
+
+      pointToMTdist(center[0],center[1],center[2],0);
+      if(R-MTdist>1E-12){
+          printf("Remaining overlap detected of %g\n",MTdist-R);
+      }
+
+      if(magdiff(c1,center)>.01){
+          printf("\n\nError: Sterics moved cargo more than 10nm\n" );
+          exit(4);
+      }
     }
+
+
 
 
     //check for anchor off surface
@@ -464,6 +471,11 @@ void evaluate_steric(){
             need_steric=1;
         }
     }
+
+    if(Surface && center[2]<R){
+        need_steric=1;
+    }
+
 }
 
 void calculate_steric(){
@@ -535,8 +547,8 @@ void calculate_steric(){
     if(Surface==1 && center[2]<R){
         Fsteric_surf[0]=0;
         Fsteric_surf[1]=0;
-        Fsteric_surf[2]=-(6*pi*eta*R)/dt*(center[2]-R)-Ftrap[2];
-        printf("surface force is (%g, %g, %g)\n", Fsteric_surf[0],Fsteric_surf[1],Fsteric_surf[2]);
+        Fsteric_surf[2]=-kcMT*(center[2]-R);
+        //printf("surface force is (%g, %g, %g)\n", Fsteric_surf[0],Fsteric_surf[1],Fsteric_surf[2]);
 
         //Total steric force
         for(i=0;i<3;i++){

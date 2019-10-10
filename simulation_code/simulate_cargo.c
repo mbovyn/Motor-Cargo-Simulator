@@ -289,10 +289,10 @@ int simulate_cargo()
         //if have determined we need steric spring between MT and cargo
         //use the dt determined for that spring
         //need_steric initially set to 0
-        if(UseSteric)
+        if(UseStericSpring)
             evaluate_steric();
 
-        if(need_steric && dt_max>dt_max_Steric){
+        if(UseStericSpring && need_steric && dt_max>dt_max_Steric){
             dt_max=dt_max_Steric;
         }
 
@@ -312,7 +312,7 @@ int simulate_cargo()
         // to move anchors and cargo--------------------------------------------
         setup_solve(); //sets total_pulling_motors, forward equation variables
         calculate_forces(); //motorHelpers_sODE.c
-        if(UseSteric)
+        if(UseStericSpring)
             calculate_steric(); //motorHelpers_sODE.c
         compute_next_locations(); //uses eqs from mathematica to find next locations of cargo and motors
 

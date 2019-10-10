@@ -133,7 +133,7 @@ $cc27
 
 //Cargo Behavior
 
-CargoBehavior $CargoBehavior
+CargoBehavior $CargoBehavior $PerfectSterics
 $cc28
 
 ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $TCx $TCy $TCz
@@ -142,10 +142,7 @@ $cc29
 ExternalTorque $ExternalTorque $$ETxname $$ETyname $$ETzname
 $cc30
 
-Surface $Surface
-$ccSurface
-
-UseSteric $UseSteric
+UseStericSpring $UseStericSpring $Surface
 $cc31
 
 //Output

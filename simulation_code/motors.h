@@ -143,9 +143,9 @@ int ReturnHeads;
 int ReturnFinalState;
 int ReturnForces;
 int ReturnOmega;
-int UseSteric;
+int UseStericSpring;
 int CargoBehavior;
-int PerfectSterics=1;
+int PerfectSterics;
 
 /* -------------------------------------------------------------------
 Simulation dynamic variables
