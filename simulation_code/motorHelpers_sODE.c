@@ -286,9 +286,6 @@ void update_motor_locations(){
                     locs[m][n][i]=a1[nn][i];
                 }
 
-                if(c1[2]-R<0)
-                    locs[m][n][2]=a1[nn][2]+(center[2]-c1[2]);
-
                 nn++;
 
             }
@@ -307,8 +304,7 @@ void cargobehavior()
                 center[i]=c1[i];
             }
 
-            if(c1[2]-R<0)
-                center[2]=R;
+            update_motor_locations();
 
             break;
 
@@ -319,6 +315,8 @@ void cargobehavior()
             //center[1]=c1[1];
             //center[2]=c1[2];
 
+            update_motor_locations();
+
             break;
 
         case 3: //stuck - cargo can't move at all
@@ -327,6 +325,39 @@ void cargobehavior()
             //center[0]=c1[0];
             //center[1]=c1[1];
             //center[2]=c1[2];
+
+            update_motor_locations();
+
+            break;
+
+        case 4: //implement hard wall at z=0
+
+            //transfer cargo center
+            for(i=0;i<3;i++){
+                center[i]=c1[i];
+            }
+
+            update_motor_locations();
+
+            //if cargo is inside the wall
+            if(c1[2]-R<0){
+
+                //move cargo center so cargo is outside of surface
+                center[2]=R;
+
+                //move motors too
+                nn=0;
+                for(m=0;m<2;m++){
+                    for(n=0;n<N[m];n++){
+
+                        locs[m][n][2]=a1[nn][2]+(center[2]-c1[2]);
+                        //printf("center z moved from %g to %g (%g), motor moved from %g to %g (%g)\n",c1[2],center[2],-c1[2]+center[2],a1[nn][2],locs[m][n][2],-a1[nn][2]+locs[m][n][2] );
+
+                        nn++;
+
+                    }
+                }
+            }
 
             break;
 
@@ -337,7 +368,37 @@ void cargobehavior()
 
     //transfer motor locations to syntax for rest of program
     //and force motors onto surface for free case
-    update_motor_locations();
+    //update_motor_locations();
+
+    //Sterics for MT
+    if(PerfectSterics){
+
+      if(n_MTs>1){
+        printf("\n\nError: PerfectSterics for multiple MTs more complicated, not implemented.\nUse spring instead.\n\n" );
+        exit(4);
+      }
+
+      //If cargo is inside MT, move the edge up to the MT surface
+      pointToMTdist(center[0],center[1],center[2],0);
+      if(MTdist<R){
+        for(i=0;i<3;i++){
+          center[i]=center[i]-cVector[i]*(R-MTdist);
+        }
+
+        //move motors too
+        nn=0;
+        for(m=0;m<2;m++){
+            for(n=0;n<N[m];n++){
+                for(i=0;i<3;i++){
+                  locs[m][n][i]=locs[m][n][i]-cVector[i]*(R-MTdist);
+                }
+                //printf("center z moved from %g to %g (%g), motor moved from %g to %g (%g)\n",c1[2],center[2],-c1[2]+center[2],a1[nn][2],locs[m][n][2],-a1[nn][2]+locs[m][n][2] );
+                nn++;
+            }
+        }
+      }
+    }
+
 
     //check for anchor off surface
     for(m=0;m<2;m++){
