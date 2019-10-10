@@ -30,7 +30,7 @@ function out=transform_var(var,repeat)
     end
 
 
-    if range(numts)==0
+    if max(numts)-min(numts)==0
 
         %if repeats have equal numbers of timesteps, output in 3D array
         out=reshape(var,[],size(var,2),max(repeat));
