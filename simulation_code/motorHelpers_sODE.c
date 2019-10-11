@@ -366,9 +366,9 @@ void cargobehavior()
       if(MTdist<R){
 
           //unless the overlap is huge
-          if(R-MTdist>.01){
-              printf("Error: Cargo more than 10nm inside MT\n");
-          }
+          //if(R-MTdist>.01){
+              //printf("Error: Cargo more than 10nm inside MT\n");
+          //}
 
         //move the cargo out of the MT by exactly the right amount
         //printf("center z moved from (%g,%g,%g)",all3(center));
@@ -393,14 +393,14 @@ void cargobehavior()
         }
       }
 
-      pointToMTdist(center[0],center[1],center[2],0);
-      if(R-MTdist>1E-12){
-          printf("Remaining overlap detected of %g\n",MTdist-R);
-      }
+      //pointToMTdist(center[0],center[1],center[2],0);
+      //if(R-MTdist>1E-12){
+        //printf("Remaining overlap detected of %g\n",MTdist-R);
+      //}
 
       if(magdiff(c1,center)>.01){
-          printf("\n\nError: Sterics moved cargo more than 10nm\n" );
-          exit(4);
+          printf("\n\nError: Sterics moved cargo by %g microns (>10nm).\nExiting gracefully at step %ld\n",magdiff(c1,center),step );
+          graceful_exit=1;
       }
     }
 
