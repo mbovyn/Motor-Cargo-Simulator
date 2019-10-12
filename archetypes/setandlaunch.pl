@@ -6,9 +6,12 @@ use warnings;
 # Note! If comments are too long C will get confused
 
 # if something goes wrong:
+# stop script with ctrl+c
 # ps
 # kill PID
 # https://stackoverflow.com/questions/36369136/how-to-kill-a-background-process-created-in-a-script
+# or to kill all of them at once
+# pkill motors
 
 ###############################################################################
 #Run mode
