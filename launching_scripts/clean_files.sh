@@ -51,8 +51,8 @@ do
 
         fi
 
-        if [ $(find . -name "*.*.*.*$ending" | wc -l) -gt 0 ] ; then
-            echo "--->deleted $(ls -l *.*.*.*$ending | wc -l) of individual $ending"
+        if [ $(find . -maxdepth 1 -name "*.*.*.*$ending" | wc -l) -gt 0 ] ; then
+            echo "--->deleting $(ls -l *.*.*.*$ending | wc -l) of individual $ending"
             rm *.*.*.*$ending
         fi
     done
