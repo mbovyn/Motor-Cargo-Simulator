@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Cwd;
 
 # creates parameter files for sweeps, then launches either locally or on the hpc
 # Note! If comments are too long C will get confused
@@ -42,7 +43,7 @@ our $run_name = "test";
 ###############################################################################
 #set code and working directories
 our $code_dir = glob("~/project_code/Motor-Cargo-Simulator");
-our $working_dir=$ENV{'PWD'};
+our $working_dir=getcwd;
 
 #include linspace and logspace subroutines
 require "$code_dir/launching_scripts/spaces.pl";
