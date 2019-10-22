@@ -32,6 +32,17 @@ ncoresfound=$(getconf _NPROCESSORS_ONLN)
 numCores=${ncoresfound:-4}
 oldname=motors.x
 
+#Encountered problem on MacOS Catalina where launching line didn't work
+#when launching in background with &. Error is "Killed: 9", with dmesg
+#
+#build_userspace_exit_reason: illegal flags passed from userspace (some masked off) 0x141, ns: 9, code 0x8
+#Waking up reference: 4544Thread waiting on reference 4544 woke upSleep interrupted, signal 0x100
+#Security policy would not allow process: 80072, /Users/Matt/asdf/motors_rebind.0.0.1.x
+#
+#Work around by launching not in background, after which launching in background works
+#This execution of the program errors out, so trash output and overwrite error return
+./$oldname > /dev/null || true
+
 . "$code_dir/launching_scripts/get_param_file_list.sh"
 
 echo "****Running ${#param_files[@]} instances, $(date +"started at %r on %F")"
@@ -70,6 +81,7 @@ for instance in ${param_files[*]}; do
         #motors.x   run_name            repeats       verbose
         #./$newname  "${instance_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} &
         if [ "$groups" -eq "1" ]; then
+            #echo $newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} 0
             ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-2} ${keep_seed:-0} 0 &
         elif [ $r -eq $groups ] && [ $ctr -eq ${#param_files[@]} ]; then
             ./$newname  "${param_name}"  ${repeats:-1} ${verbose:-1} ${keep_seed} $r $shft &
