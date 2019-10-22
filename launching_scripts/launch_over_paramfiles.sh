@@ -69,7 +69,7 @@ for instance in ${param_files[*]}; do
             while [ "$numInstances" -ge "$numCores" ]
             do
                 #echo sleeping
-            	sleep .1s
+            	sleep .5s
                 #numInstances=$( jobs -r | wc -l )
                 numInstances=$( pgrep motors | wc -l )
             done
@@ -142,13 +142,13 @@ then
         fi
 
         #sleep so as not to go before the ISEED is updated
-        if [ "$repeats" -gt "1" ]
-        then
+        #if [ "$repeats" -gt "1" ]
+        #then
             #echo "sleeping"
             sleep .1s
         #else
         #    echo "not sleeping"
-        fi
+        #fi
     done
 
     date +"****done at: %r on %F"
