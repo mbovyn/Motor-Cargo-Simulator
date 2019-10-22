@@ -427,10 +427,10 @@ int simulate_cargo()
             &&( ReturnDetails==1
                 || (ReturnDetails==2 && hit_action)
                 || (ReturnDetails==3 && (step-1)%1000==0)
-                || (ReturnDetails==4 && t_inst>t_rec) )){
+                || ((ReturnDetails==4 || ReturnDetails==5) && t_inst>t_rec) )){
             //printf("normal writing, step is %ld\n",step );
             inLoopDataCollection();
-            if(ReturnDetails==4){
+            if(ReturnDetails==4 || ReturnDetails==5){
                 t_rec+=dt_rec;
             }
         }

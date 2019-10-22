@@ -381,7 +381,7 @@ FILE *fToW;
 double LastBoundLocation[3];
 
 double t_rec;
-double dt_rec=.001;
+double dt_rec;
 
 //quaternians for keeping track of rotation
 double quat[4],quat1[4];

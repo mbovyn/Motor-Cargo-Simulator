@@ -638,4 +638,11 @@ void getInputParams( void )
       exit(4);
     }
 
+    //Set the correct recording interval
+    if(ReturnDetails==4){
+      dt_rec=.001;
+    }
+    if(ReturnDetails==5){
+      dt_rec=1./3000;
+    }
 }
