@@ -12,6 +12,7 @@ void generate_brownian_displacement_rotation();
 void diffuse_sph_one_motor();
 
 void cargobehavior();
+void countMTviolations(double MTviolationDist);
 
 void setup_solve();
 void evaluate_steric();
@@ -398,14 +399,8 @@ void cargobehavior()
         //printf("Remaining overlap detected of %g\n",MTdist-R);
       //}
 
-      if(magdiff(c1,center)>.01){
-          printf("\n\nError: Sterics moved cargo by %g microns (>10nm).\nExiting gracefully at step %ld\n",magdiff(c1,center),step );
-          graceful_exit=1;
-      }
+      countMTviolations(magdiff(c1,center));
     }
-
-
-
 
     //check for anchor off surface
     for(m=0;m<2;m++){
@@ -478,6 +473,23 @@ void evaluate_steric(){
 
 }
 
+void countMTviolations(double MTviolationDist){
+
+    if(MTviolationDist>.005){
+
+        MTviolationCounter[k]++;
+        if(verboseTF>4){
+            printf("MT %d violation by %g at step %ld. Total violations: %d\n",k,MTviolationDist,step,MTviolationCounter[k]);
+        }
+        if(MTviolationCounter[k]>5){
+            printf("\n\n\nError! MT %d more than 5nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",k,step);
+            graceful_exit=1;
+        }
+    }else{
+        MTviolationCounter[k]=0;
+    }
+}
+
 void calculate_steric(){
     //set value of steric force
     //set if we need the steric spring timestep
@@ -504,19 +516,7 @@ void calculate_steric(){
             Fsterick[k][1]=-kcMT*(R*cVector[1]/MTdist - cVector[1]);
             Fsterick[k][2]=-kcMT*(R*cVector[2]/MTdist - cVector[2]);
 
-            if(MTdist < R-.005){
-
-                MTviolationCounter[k]++;
-                if(verboseTF>4){
-                    printf("MT %d violation at step %ld. Total violations: %d\n",k,step,MTviolationCounter[k]);
-                }
-                if(MTviolationCounter[k]>5){
-                    printf("\n\n\nError! MT %d more than 5nm inside cargo for 5 steps!\nExiting gracefully at step %ld\n\n\n",k,step);
-                    graceful_exit=1;
-                }
-            }else{
-                MTviolationCounter[k]=0;
-            }
+            countMTviolations(R-MTdist);
 
             MTdistk[k]=R-MTdist;
 
