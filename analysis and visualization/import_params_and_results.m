@@ -1,8 +1,8 @@
 %bring in parameters and outputs for multiple runs
 
 %take in the summary the simulation writes if we haven't yet
-
 if exist('params','var')
+    warning('Some data is alreday loaded, skipping load. ''clear'' to force load')
     return
 end
 
