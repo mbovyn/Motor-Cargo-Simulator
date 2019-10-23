@@ -3,7 +3,7 @@ function struct_out = transform_vars(struct_in,repeat)
 %data.
 
 if sum(size(unique(repeat))~=size(repeat))
-    
+
     fields=fieldnames(struct_in);
     for i=1:length(fields)
         if iscell(struct_in.(fields{i}))
@@ -14,7 +14,7 @@ if sum(size(unique(repeat))~=size(repeat))
             struct_in.(fields{i})=transform_var(struct_in.(fields{i}),repeat);
         end
     end
-    
+
 end
 
 struct_out=struct_in;
@@ -33,7 +33,8 @@ function out=transform_var(var,repeat)
     if max(numts)-min(numts)==0
 
         %if repeats have equal numbers of timesteps, output in 3D array
-        out=reshape(var,[],size(var,2),max(repeat));
+        out=reshape(var',size(var,2),numts(1),max(repeat));
+        out=permute(out,[2 1 3]);
 
     else
 
