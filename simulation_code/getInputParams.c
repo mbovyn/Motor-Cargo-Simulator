@@ -588,7 +588,7 @@ void getInputParams( void )
     //the default max is the smallest of the restrictions, or the base time step
     if(isinf(dt_override)){
         dt_max_base=INF;
-        if(verboseTF>0){
+        if(verboseTF>2){
             printf("dt_override is INF, default timestep ignored\n");
         }
     } else {
@@ -597,7 +597,7 @@ void getInputParams( void )
 
     if(MotorDiffusion<10 && dt_max_Diffusion<dt_max_base){
         dt_max_base=dt_max_Diffusion;
-        if(verboseTF>0){
+        if(verboseTF>2){
             printf("Lowering base time step based on motor diffusion, dt=%g\n",dt_max_base);
         }
     }
@@ -611,14 +611,14 @@ void getInputParams( void )
     // }
     if(dt_max_rotation<dt_max_base){
         dt_max_base=dt_max_rotation;
-        if(verboseTF>0){
+        if(verboseTF>2){
             printf("Lowering base time step based on cargo rotation, dt=%g\n",dt_max_base);
         }
     }
 
     if((dt_override>0 || dt_override<0) && !isinf(dt_override)){
         dt_max_base=fabs(dt_override);
-        if(verboseTF>0){
+        if(verboseTF>2){
             printf("Overriding dt. Now %g\n",dt_max_base);
             if(dt_override<0){
               printf("!!!dt_override negative, ignoring stability tests!!!\n");
