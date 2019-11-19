@@ -360,8 +360,10 @@ void binding_rates() //sets bind_possible and bind_rate
             findMTdist(); //motorHelpers_setup.c
             for(k=0;k<n_MTs;k++){
                 for(n=0;n<N[m];n++){
-                    if(within_L[m][n][0]){
+                    if(within_L[m][n][k]){
                         bind_rate[m][n][k]=pi_0[m];
+                    }else{
+                        bind_rate[m][n][k]=0;
                     }
                 }
             }
@@ -383,6 +385,8 @@ void binding_rates() //sets bind_possible and bind_rate
                 for(n=0;n<N[m];n++){
                     if(within_L[m][n][k]){
                         bind_rate[m][n][k]=INF;
+                    }else{
+                        bind_rate[m][n][k]=0;
                     }
                 }
             }
@@ -423,6 +427,8 @@ void binding_rates() //sets bind_possible and bind_rate
                 for(n=0;n<N[m];n++){
                     if(within_L[m][n][0]){
                         bind_rate[m][n][k]=pi_0[m];
+                    }else{
+                        bind_rate[m][n][k]=0;
                     }
                 }
             }
@@ -456,6 +462,7 @@ void binding_rates() //sets bind_possible and bind_rate
             if(!bind_possible[m][n][k]){
                 bind_rate[m][n][k]=NAN;
             }
+            //printf("at step %ld, bind_rate of type%dmotor%d is %g,bind_poss %d, withL %d\n",step,m,n,bind_rate[m][n][k],bind_possible[m][n][k],within_L[m][n][k] );
         }
     }
 }

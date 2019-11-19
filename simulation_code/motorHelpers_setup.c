@@ -375,7 +375,6 @@ void findMTdist(){
             for(k=0;k<n_MTs;k++){
                 // printf("Calling pointtoMTdist from findMTdist\n");
                 pointToMTdist(locs[m][n][0],locs[m][n][1],locs[m][n][2],k);
-                anchorMTdist[m][n][k]=MTdist;
 
                 //prevent binding through the cargo
                 //if dot product of vector from anchor to MT and vector from
@@ -386,21 +385,24 @@ void findMTdist(){
                     cVector[2]*(locs[m][n][2]-center[2])) < 0) &&
                    (mag(cVector)>.001)){
 
-                    bind_possible[m][n][k]=0;
-
                     //printf("\ndist is %g, line dist is %g, step %ld of repeat %d\n",((pi - 2*acos((center[0]*cVector[0] + center[1]*cVector[1] + center[2]*cVector[2] - cVector[0]*locs[m][n][0] - cVector[1]*locs[m][n][1] - cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))) - 2*acos((-(center[0]*cVector[0]) + pow(cVector[0],2) - center[1]*cVector[1] + pow(cVector[1],2) - center[2]*cVector[2] + pow(cVector[2],2) + cVector[0]*locs[m][n][0] + cVector[1]*locs[m][n][1] + cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))) + 2*asin(sqrt((pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2))/(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))))*sqrt(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))/2. + sqrt(-2*center[0]*cVector[0] + pow(cVector[0],2) - 2*center[1]*cVector[1] + pow(cVector[1],2) - 2*center[2]*cVector[2] + pow(cVector[2],2) + 2*cVector[0]*locs[m][n][0] + 2*cVector[1]*locs[m][n][1] + 2*cVector[2]*locs[m][n][2]),anchorMTdist[m][n][k],step,j);
 
                     //unless the rest length is long enough to go around the surface of the sphere and reach that point
                     //(see findDistanceSphere.nb)
-                    if(((pi - 2*acos((center[0]*cVector[0] + center[1]*cVector[1] + center[2]*cVector[2] - cVector[0]*locs[m][n][0] - cVector[1]*locs[m][n][1] - cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))) - 2*acos((-(center[0]*cVector[0]) + pow(cVector[0],2) - center[1]*cVector[1] + pow(cVector[1],2) - center[2]*cVector[2] + pow(cVector[2],2) + cVector[0]*locs[m][n][0] + cVector[1]*locs[m][n][1] + cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))) + 2*asin(sqrt((pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2))/(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))))*sqrt(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))/2. + sqrt(-2*center[0]*cVector[0] + pow(cVector[0],2) - 2*center[1]*cVector[1] + pow(cVector[1],2) - 2*center[2]*cVector[2] + pow(cVector[2],2) + 2*cVector[0]*locs[m][n][0] + 2*cVector[1]*locs[m][n][1] + 2*cVector[2]*locs[m][n][2]) < L[m]){
+                    dist_around_cargo=((pi - 2*acos((center[0]*cVector[0] + center[1]*cVector[1] + center[2]*cVector[2] - cVector[0]*locs[m][n][0] - cVector[1]*locs[m][n][1] - cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))) - 2*acos((-(center[0]*cVector[0]) + pow(cVector[0],2) - center[1]*cVector[1] + pow(cVector[1],2) - center[2]*cVector[2] + pow(cVector[2],2) + cVector[0]*locs[m][n][0] + cVector[1]*locs[m][n][1] + cVector[2]*locs[m][n][2])/sqrt((pow(cVector[0],2) + pow(cVector[1],2) + pow(cVector[2],2))*(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))) + 2*asin(sqrt((pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2))/(pow(-center[0] + cVector[0] + locs[m][n][0],2) + pow(-center[1] + cVector[1] + locs[m][n][1],2) + pow(-center[2] + cVector[2] + locs[m][n][2],2)))))*sqrt(pow(center[0] - locs[m][n][0],2) + pow(center[1] - locs[m][n][1],2) + pow(center[2] - locs[m][n][2],2)))/2. + sqrt(-2*center[0]*cVector[0] + pow(cVector[0],2) - 2*center[1]*cVector[1] + pow(cVector[1],2) - 2*center[2]*cVector[2] + pow(cVector[2],2) + 2*cVector[0]*locs[m][n][0] + 2*cVector[1]*locs[m][n][1] + 2*cVector[2]*locs[m][n][2]);
 
+                    if(dist_around_cargo < max_motor_reach[m]){
                         bind_possible[m][n][k]=1;
-
+                        //printf("Bind possible is %d at step %ld\n",bind_possible[m][n][k],step);
+                    }else{
+                        bind_possible[m][n][k]=0;
                     }
 
+                    anchorMTdist[m][n][k]=dist_around_cargo;
 
                 }else{
                     bind_possible[m][n][k]=1;
+                    anchorMTdist[m][n][k]=MTdist;
                 }
 
 

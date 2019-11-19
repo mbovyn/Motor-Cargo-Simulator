@@ -231,6 +231,8 @@ Initial Binding
 */
 
 double MTdist;
+double dist_around_cargo;
+double max_motor_reach[2];
 double anchorMTdist[2][NMOTORSMAX][NMTSMAX];
 int within_L[2][NMOTORSMAX][NMTSMAX];
 double MTdistk[NMTSMAX];

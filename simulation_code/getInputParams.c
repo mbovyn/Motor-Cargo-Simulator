@@ -626,6 +626,11 @@ void getInputParams( void )
         }
     }
 
+    //
+    for(m=0;m<2;m++){
+      max_motor_reach[m]=L[m]+2*sqrt(kBT/k_m[m]);
+    }
+
     //Checks for conflicting inputs
 
     if(PerfectSterics && UseStericSpring){
