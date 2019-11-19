@@ -98,7 +98,7 @@ int main( int argc, char *argv[] )
     if(argv[1]){
         strcpy(runName, argv[1]);
     }else{
-        printf("No run name\n");
+        printf("Error: No run name. Exiting.\n");
         exit(-1);
     }
 

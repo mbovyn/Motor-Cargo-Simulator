@@ -41,7 +41,12 @@ oldname=motors.x
 #
 #Work around by launching not in background, after which launching in background works
 #This execution of the program errors out, so trash output and overwrite error return
-./$oldname > /dev/null || true
+echo "Running workaround for a quirk of MacOS Catalina."
+echo "See launch_over_paramfiles for more info."
+echo "It should exit in no run name error."
+echo "Start foreground run output:"
+./$oldname || true
+echo "End foreground run output. Continuing with launch."
 
 . "$code_dir/launching_scripts/get_param_file_list.sh"
 
