@@ -130,28 +130,29 @@ function [params,summary,locs,heads,forces,omega]=import_all(run_name,nruns,loca
             if exist([localpath '/' run_name '_Center_and_Anchors.txt'],'file')
                 locs(runno1,runno2)=import_locs(params(runno1,runno2),localpath,run_name);
             else
-                locs(runno1,runno2)=struct;
+                locs(runno1,runno2)=struct('step',[],'t_arr',[],'center',[],'loc_rec',[]);
             end
 
             %import heads
             if exist([localpath '/' run_name '_Heads.txt'],'file')
                 heads(runno1,runno2)=import_head(params(runno1,runno2),localpath,run_name);
             else
-                heads(runno1,runno2)=struct;
+                heads(runno1,runno2)=struct('step',[],'t_arr',[],'bound',[],'head_rec',[]);
             end
 
             %import forces
             if exist([localpath '/' run_name '_Forces.txt'],'file')
                 forces(runno1,runno2)=import_forces(params(runno1,runno2),localpath,run_name);
             else
-                forces(runno1,runno2)=struct;
+                forces(runno1,runno2)=struct('step',[],'t_arr',[],...
+                    'Fext',[],'Fsteric',[],'Fmag',[],'Fcart',[],'Fradial',[],'Ftangential',[]);
             end
 
             %import omega
             if exist([localpath '/' run_name '_Omega.txt'],'file')
                 omega(runno1,runno2)=import_omega(localpath,run_name);
             else
-                omega(runno1,runno2)=struct;
+                omega(runno1,runno2)=struct('step',[],'t_arr',[],'vector',[]);
             end
 
 
