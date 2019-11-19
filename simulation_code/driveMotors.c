@@ -95,8 +95,12 @@
 int main( int argc, char *argv[] )
 {
     // runName string, label of parameter and output files
-    if(argv[1])
+    if(argv[1]){
         strcpy(runName, argv[1]);
+    }else{
+        printf("No run name\n");
+        exit(-1);
+    }
 
     //number of times to repeat simulation - default to 1
     repeats=1;
