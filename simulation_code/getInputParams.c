@@ -514,6 +514,14 @@ void getInputParams( void )
 
     muCargoTranslation=1/(6*pi*eta*R);    //Sphere mobility from Stokes-Einstein-Southerland
     muCargoRotation=1/(8*pi*eta*pow(R,3)); //eta in Pa*s is the same as pN/micron^2*seconds
+
+    //if(CargoBehavior==2 || Surface==1){
+    //  muCargoTranslation=muCargoTranslation/3;
+    //  if(verboseTF>2){
+    //      printf("    Surface present, tripling translation viscosity\n");
+    //  }
+    //}
+
     for(m=0;m<2;m++){
       mu_m[m]=D_m[m]/kBT;
     }
