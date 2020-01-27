@@ -18,6 +18,8 @@ int track_force_balance=1; //enable to track that sum of forces=0
 Driving function variables
 */
 
+double dp;
+
 int rpt_start;
 int shft;
 int keep_seed;

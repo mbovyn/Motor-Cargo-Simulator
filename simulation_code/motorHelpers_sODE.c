@@ -296,6 +296,62 @@ void update_motor_locations(){
 
 void cargobehavior()
 {
+    if(verboseTF>3){
+        printf("Cargo center at %g,%g,%g\n",center[0],center[1],center[2]);
+        printf("Want to move center to %g,%g,%g\n",c1[0],c1[1],c1[2]);
+        //for(i=0;i<2;i++){
+        //    c1[i]=center[i];
+        //}
+        //printf("Want to move center to %g,%g,%g\n",c1[0],c1[1],c1[2]);
+        //printf("Result should be 0,0,%g\n",center[2]-c1[2]);
+    }
+
+    //Sterics for MT
+    if(PerfectSterics==2){
+
+      //checked for conflicts with multiple MTs in getInputParams
+
+      //If cargo is inside MT, move the edge up to the MT surface
+      //pointToMTdist(center[0],center[1],center[2],0);
+      //printf("\nold MTdist is %g\n", MTdist);
+      pointToMTdist(c1[0],c1[1],c1[2],0);
+      //printf("new MTdist-R is %g\n", MTdist-R);
+      //printf("cVector is (%g,%g,%g), with mag %g\n",all3(cVector),mag(cVector) );
+
+      if(MTdist<R){
+
+          //Remove part of movement that is towards the MT
+
+          dp=0;
+          for(i=0;i<3;i++){
+              dp+=(c1[i]-center[i])*cVector[i];
+          }
+
+          for(i=0;i<3;i++){
+              c1[i]=c1[i]-(dp/mag(cVector))*(cVector[i]/(mag(cVector)));
+              //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
+          }
+          nn=0;
+          for(m=0;m<2;m++){
+              for(n=0;n<N[m];n++){
+                  for(i=0;i<3;i++){
+                      a1[nn][i]=a1[nn][i]-(dp/mag(cVector))*(cVector[i]/(mag(cVector)));
+                      //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
+                  }
+                  nn++;
+              }
+          }
+
+      }
+
+      //pointToMTdist(center[0],center[1],center[2],0);
+      //if(R-MTdist>1E-12){
+        //printf("Remaining overlap detected of %g\n",MTdist-R);
+      //}
+
+      //countMTviolations(magdiff(c1,center));
+    }
+
     switch(CargoBehavior){
 
         case 1: //transfer all values
@@ -350,12 +406,16 @@ void cargobehavior()
             exit(4);
     }//finished CargoBehavior switch
 
+    if(verboseTF>3){
+        printf("Cargo center moved to %g,%g,%g\n",center[0],center[1],center[2]);
+    }
+
     //transfer motor locations to syntax for rest of program
     //and force motors onto surface for free case
     //update_motor_locations();
 
     //Sterics for MT
-    if(PerfectSterics){
+    if(PerfectSterics==1){
 
       //checked for conflicts with multiple MTs in getInputParams
 
@@ -478,7 +538,7 @@ void countMTviolations(double MTviolationDist){
     if(MTviolationDist>.005){
 
         MTviolationCounter[k]++;
-        if(verboseTF>4){
+        if(verboseTF>2){
             printf("MT %d violation by %g at step %ld. Total violations: %d\n",k,MTviolationDist,step,MTviolationCounter[k]);
         }
         if(MTviolationCounter[k]>5){
