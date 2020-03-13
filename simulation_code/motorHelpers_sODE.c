@@ -324,18 +324,22 @@ void cargobehavior()
 
           dp=0;
           for(i=0;i<3;i++){
-              dp+=(c1[i]-center[i])*cVector[i];
+              dp+=(c1[i]-center[i])*cVector[i]/mag(cVector);
           }
+          //printf("center is (%g,%g,%g)\n", all3(center));
+          //printf("c1 is (%g,%g,%g)\n", all3(c1));
+          //printf("cVector is (%g,%g,%g)\n", all3(cVector));
+          //printf("dp is %g\n\n", dp);
 
           for(i=0;i<3;i++){
-              c1[i]=c1[i]-(dp/mag(cVector))*(cVector[i]/(mag(cVector)));
+              c1[i]=c1[i]-dp*(cVector[i]/(mag(cVector)));
               //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
           }
           nn=0;
           for(m=0;m<2;m++){
               for(n=0;n<N[m];n++){
                   for(i=0;i<3;i++){
-                      a1[nn][i]=a1[nn][i]-(dp/mag(cVector))*(cVector[i]/(mag(cVector)));
+                      a1[nn][i]=a1[nn][i]-dp*(cVector[i]/(mag(cVector)));
                       //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
                   }
                   nn++;
@@ -344,12 +348,12 @@ void cargobehavior()
 
       }
 
-      //pointToMTdist(center[0],center[1],center[2],0);
-      //if(R-MTdist>1E-12){
-        //printf("Remaining overlap detected of %g\n",MTdist-R);
-      //}
+      pointToMTdist(c1[0],c1[1],c1[2],0);
+      if(MTdist-R<0){
+        printf("Remaining overlap detected of %g at step %ld\n",MTdist-R,step);
+      }
 
-      //countMTviolations(magdiff(c1,center));
+      countMTviolations(-(MTdist-R));
     }
 
     switch(CargoBehavior){
