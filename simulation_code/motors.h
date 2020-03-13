@@ -19,6 +19,8 @@ Driving function variables
 */
 
 double dp;
+double c1prop[3];
+double mv[3];
 
 int rpt_start;
 int shft;

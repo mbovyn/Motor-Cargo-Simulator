@@ -326,20 +326,41 @@ void cargobehavior()
           for(i=0;i<3;i++){
               dp+=(c1[i]-center[i])*cVector[i]/mag(cVector);
           }
-          //printf("center is (%g,%g,%g)\n", all3(center));
-          //printf("c1 is (%g,%g,%g)\n", all3(c1));
+          //printf("c1 - center is (%g,%g,%g)\n", c1[0]-center[0],c1[1]-center[1],c1[2]-center[2]);
           //printf("cVector is (%g,%g,%g)\n", all3(cVector));
+          //printf("cVector mag is %g\n",mag(cVector));
           //printf("dp is %g\n\n", dp);
 
           for(i=0;i<3;i++){
-              c1[i]=c1[i]-dp*(cVector[i]/(mag(cVector)));
+              mv[i]=-dp*(cVector[i]/(mag(cVector)));
+              c1prop[i]=c1[i]+mv[i];
               //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
           }
+
+          pointToMTdist(c1prop[0],c1prop[1],c1prop[2],0);
+          if(MTdist-R<0){
+            if(MTdist-R<-.001){
+                printf("Error! PerfectSterics=2 needed to correct too much residual.\nExiting\n\n\n");
+                exit(-1);
+            }
+            //printf("Remaining overlap detected of %g at step %ld\n",MTdist-R,step);
+            for(i=0;i<3;i++){
+                mv[i]+=(MTdist-R)*cVector[i]/mag(cVector);
+                c1prop[i]=c1[i]+mv[i];
+            }
+            //pointToMTdist(c1prop[0],c1prop[1],c1prop[2],0);
+            //printf("Fixed? Now %g\n",MTdist-R);
+          }
+
+          for(i=0;i<3;i++){
+              c1[i]=c1prop[i];
+          }
+
           nn=0;
           for(m=0;m<2;m++){
               for(n=0;n<N[m];n++){
                   for(i=0;i<3;i++){
-                      a1[nn][i]=a1[nn][i]-dp*(cVector[i]/(mag(cVector)));
+                      a1[nn][i]=a1[nn][i]+mv[i];
                       //printf("add to c1 is %g\n", -(dp/mag(cVector))*(cVector[i]/(mag(cVector))));
                   }
                   nn++;
@@ -349,10 +370,9 @@ void cargobehavior()
       }
 
       pointToMTdist(c1[0],c1[1],c1[2],0);
-      if(MTdist-R<0){
-        printf("Remaining overlap detected of %g at step %ld\n",MTdist-R,step);
-      }
-
+      //if(MTdist-R<0){
+        //printf("Remaining overlap detected of %g at step %ld\n",MTdist-R,step);
+      //}
       countMTviolations(-(MTdist-R));
     }
 

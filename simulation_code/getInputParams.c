@@ -641,7 +641,7 @@ void getInputParams( void )
 
     //Checks for conflicting inputs
 
-    if(PerfectSterics==1 && UseStericSpring){
+    if(PerfectSterics && UseStericSpring){
       printf("\n\nError: can't use both perfect sterics and steric springs.\n\n");
       exit(4);
     }
