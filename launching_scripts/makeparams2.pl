@@ -13,6 +13,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
     our $param1=$sweepvals[0][$ctr1];
     #print "param1 is $param1\n";
     our $follow1=$followvals[0][$ctr1];
+    #print "follow1 is $follow1\n";
 
     #for values in array for second parameter
     for my $ctr2 ( 0 .. $#{ $sweepvals[1] } ) {
@@ -136,7 +137,7 @@ $cc27
 CargoBehavior $CargoBehavior $PerfectSterics
 $cc28
 
-ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $TCx $TCy $TCz
+ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $$TCxname $$TCyname $$TCzname
 $cc29
 
 ExternalTorque $ExternalTorque $$ETxname $$ETyname $$ETzname
