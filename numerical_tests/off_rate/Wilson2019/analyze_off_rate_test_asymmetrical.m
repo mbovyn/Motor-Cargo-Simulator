@@ -44,7 +44,7 @@ ylabel('Association Time (s)')
 
 %%
 
-print('association time vs force','-dpng')
+print('association time vs force','-dpng') 
 
 %% plot binding time distributions
 %Unbinding is a poisson process, so association times should be exponential
