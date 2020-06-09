@@ -13,12 +13,18 @@ code parameters and running sweeps, etc.
 * analysis and visualization: Matlab code which reads in simulation output and
 makes movies
 
-Getting started on Windows 10:
+## Getting started
 
+This simulation uses scripts in bash and perl, and the c code is compiled with gcc by default.
+These tools are included with macOS by default as far as I can gather.
+They are part of the build-essential package in Debian/Ubuntu.
+I don't know much about the Windows command line, but I know this works:
+
+Windows 10:
 * Turn Windows features on or off -> check Windows Subsystem for Linux
 * Windows store -> get and install ubuntu
 * in Ubuntu
-  * sudo apt-get update
-  * sudo apt-get install build-essential
+  * sudo apt update
+  * sudo apt install build-essential
   
 Good to go! Can clone in the code and launch. If you want to edit code in Windows, clone to mnt/c/some_folder
