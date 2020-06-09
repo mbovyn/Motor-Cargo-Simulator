@@ -345,6 +345,15 @@ void cargobehavior()
 
             break;
 
+        case 3: //stuck - cargo can't move at all
+
+            //transfer cargo center
+            //center[0]=c1[0];
+            //center[1]=c1[1];
+            //center[2]=c1[2];
+
+            break;
+
         default:
             printf("\n\nError: Bad value for CargoBehavior\n\n" );
             exit(4);

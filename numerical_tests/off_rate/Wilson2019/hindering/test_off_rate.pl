@@ -25,7 +25,7 @@ our $keep_seed=0;
 
 #if local, set compilation options
 #set compile to yes to compile and copy executable to local folder
-our $compile=0;
+our $compile=1;
 #set compile keyword to correct one for number of motors
 #options: all numbers up to (ex: bead5 has 1, 2, 3, 4, and 5) except bead101
 #bead0, bead5, bead10, bead20, bead30, bead50, bead101 (1-101 by 10s)
@@ -38,7 +38,7 @@ our $folder_name='motors_sweep';
 
 ###############################################################################
 #define run name to label files
-our $run_name = "test";
+our $run_name = "test_off_rate";
 
 ###############################################################################
 #set code and working directories
@@ -65,9 +65,10 @@ require "$code_dir/launching_scripts/spaces.pl";
 #    linspace(1,3,3)
 #    );
 
-our @sweepvars = ();
-our @sweepvals = (
-   );
+our @sweepvars = ("IB2");
+my @fs=( [0,1,2.5,5,10,15,20,25] );
+our @sweepvals = ( [map { $_ / 320 + .08 } @{$fs[0]}] );
+print "\n@{$sweepvals[0]}\n\n";
 
 #print "\n";
 #print "Values for $sweepvars[0] are:\n";
@@ -79,25 +80,25 @@ our @sweepvals = (
 ###############################################################################
 #set parameter values
 
-our $N1=3;      our $N2=0;         our $cc1="//number of motors";
-our $F_s1=6.1;  our $F_s2=5;       our $cc2="//stall force (pN)";
-our $F_d1=4.1;  our $F_d2=4;       our $cc3="//detachment force (pN)";
-our $eps_01=.8; our $eps_02=.7;    our $cc4="//base unbinding rate (1/s)";
+our $N1=1;      our $N2=0;         our $cc1="//number of motors";
+our $F_s1=7;  our $F_s2=5;       our $cc2="//stall force (pN)";
+our $F_d1=6.85;  our $F_d2=4;       our $cc3="//detachment force (pN)";
+our $eps_01=.666; our $eps_02=.7;    our $cc4="//base unbinding rate (1/s)";
 our $pi_01=5;   our $pi_02=10;     our $cc5="//base binding rate (1/s)";
-our $v_f1=.75;  our $v_f2=3;       our $cc6="//max velocity (microns/s)";
+our $v_f1=.8;  our $v_f2=3;       our $cc6="//max velocity (microns/s)";
 
-our $a1=1.6;    our $a2=1.07;      our $cc7="//superstall parameter 1";
-our $b1=7.6;    our $b2=.186;      our $cc8="//superstall parameter 2";
-our $w1=1.8;    our $w2=2;         our $cc9="//force velocity curve exponent";
+our $a1=1.56307;    our $a2=1.07;      our $cc7="//superstall parameter 1";
+our $b1=7.57772;    our $b2=.186;      our $cc8="//superstall parameter 2";
+our $w1=2;    our $w2=2;         our $cc9="//force velocity curve exponent";
 our $L1=.08;    our $L2=.08;       our $cc10="//motor length (microns)";
 our $k_m1=320;  our $k_m2=320;     our $cc11="//motor spring stiffness (pN/micron)";
-our $s1=.0082;  our $s2= -.008;    our $cc12="//step size (microns)";
+our $s1=.008;  our $s2= -.008;    our $cc12="//step size (microns)";
 
 our $D_m1=.1;    our $D_m2=3;       our $cc13="//motor diffusion coefficiant (micron^2/s)";
 
-our $cx=0; our $cy=0; our $cz=.25; our $cc14="//cargo center (microns)";
+our $cx=0; our $cy=0; our $cz=0; our $cc14="//cargo center (microns)";
 our $R=.25;                        our $cc15="//cargo radius (microns)";
-our $eta=.4;                   our $cc16="//surrounding viscosity (s*pN/micron^2)";
+our $eta=.0089;                   our $cc16="//surrounding viscosity (s*pN/micron^2)";
 
 our $n_MTs=1;    our $cc17="//number of MTs";
 our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
@@ -106,7 +107,7 @@ our $kcMT=40000; our $cc18="//MT-cargo steric spring stiffness (pN/micron)";
 
 #Motor Location
 
-our $InitialLocations=8; our $IL2=0; our $IL3=0;
+our $InitialLocations=7; our $IL2=0; our $IL3=0;
 our $cc19="/*
 1:
 2:  Uniform Random on the surface of the sphere
@@ -123,7 +124,7 @@ third parameter used to pass in angle (degrees, from -180 to 180)
 north pole=90, +x equator=0, south pole=-90, -x equator=180/-180
 */";
 
-our $MotorDiffusion=4;
+our $MotorDiffusion=3;
 our $cc20="/*
 1:  no drag - Diffuse all motors by legacy function
 2:  no drag - Only diffuse non-attached motors by legacy function
@@ -144,7 +145,7 @@ our $cc20="/*
 
 #Interaction of motors with MT
 
-our $InitialBinding=2; our $IB2=0;
+our $InitialBinding=5; our $IB2=0;
 our $cc21="/*
 1: Bind all in range
 2: Bind only 1 Kin
@@ -172,21 +173,21 @@ our $cc22="/*
 10:
 */";
 
-our $Unbinding=5;
+our $Unbinding=6;
 our $cc23="/*
 1: Bergman 2018 (symmetrical, like Kunwar 2011)
 2: unbind at constant rate eps_0
 3: NoUnbinding
 4: Bergman2018-like asymmetrical
 5: Bovyn2018 piecewise exponential, asymmetrical
-6: Wilson2019 asymmetrical
+6:
 7:
 8:
 9:
 10:
 */";
 
-our $Stepping=2; our $S2=999999999;
+our $Stepping=3; our $S2=999999999;
 our $cc24="/*
 1: Step at rate determined by unloaded velocity
 2: Stepping rate depends on force (Ambarish)
@@ -240,7 +241,7 @@ our $cc27="/*
 
 #Cargo Behavior
 
-our $CargoBehavior=1; our $PerfectSterics=1;
+our $CargoBehavior=3; our $PerfectSterics=0;
 our $cc28="/*
 1: Cargo moves normally
 2: Perfect sterics for hard surface at z=0
@@ -299,11 +300,11 @@ Not implemented
 */";
 
 #Simulation end conditions (1=yes,0=no)
-our $RequireAttached=0;             our $cc34="//Stop when all motors in unbound state";
+our $RequireAttached=1;             our $cc34="//Stop when all motors in unbound state";
 our $StopOnMotor2Attach=0;          our $cc35="//Stop when second motor binds";
 our $StopOnAllAttached=0;           our $cc36="//Stop when all motors bound";
 our $StopOnStep=0;                  our $cc37="//0 for don’t stop, otherwise enter step";
-our $StopOnTime=.1;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
+our $StopOnTime=0;                 our $cc38="//0 for don’t stop, otherwise enter time (s)";
 our $StopOnDistance=0;              our $cc39="//0 no stop, otherwise distance (microns)";
 our $StopBelowThetaC=0; our $SB=-1; our $cc40="//2nd value elevation radians -pi/2 to pi/2";
 our $multiMT_assay=0;               our $cc41="//1 for switch, 2 for ToW";
@@ -342,10 +343,10 @@ our $vx2=0; our $vy2=1; our $vz2=0; our $R_MT2=.012;
 #metaparameters
 
 #number of times to repeat
-our $repeats=1;
+our $repeats=300;
 our $groups=1;
 #verbosity (0-5)
-our $verbose=1; #controls amount of info printed
+our $verbose=2; #controls amount of info printed
 #Verbosity
 # IF verbose = 0, will not output anything
 # IF verbose = 1, will output general things, nothing inside repeat loop
