@@ -18,7 +18,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
     for my $ctr2 ( 0 .. $#{ $sweepvals[1] } ) {
         our $param2=$sweepvals[1][$ctr2];
         #print "param2 is $param2\n";
-        #our $follow2=$followvals[1][$ctr2];
+        our $follow2=$followvals[1][$ctr2];
 
         #specific name for each instance that will run]
         my $id1=$ctr1+$ctr1start;
@@ -136,7 +136,7 @@ $cc27
 CargoBehavior $CargoBehavior $PerfectSterics
 $cc28
 
-ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $TCx $TCy $TCz
+ExternalForce $ExternalForce $$EFxname $$EFyname $$EFzname $$TCxname $$TCyname $$TCzname
 $cc29
 
 ExternalTorque $ExternalTorque $$ETxname $$ETyname $$ETzname

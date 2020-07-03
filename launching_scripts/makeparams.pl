@@ -44,7 +44,7 @@ if(scalar(@sweepvars)<2){
 
 if(@followvars){
     our $followname1=$followvars[0] . "name";
-    #our $followname2=$followvars[1] . "name";
+    our $followname2=$followvars[1] . "name";
     #print "$followname1\n";
 }
 
@@ -52,7 +52,7 @@ $$name1="param1";
 $$name2="param2";
 #print "$$name1, $$name2\n";
 $$followname1="follow1";
-#$$followname2="follow2";
+$$followname2="follow2";
 #print "$$followname1\n";
 
 #call second half of script
