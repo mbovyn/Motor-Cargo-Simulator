@@ -17,7 +17,23 @@ end
 import_params_and_results
 
 if size(locs.loc_rec,2)>1
-    error('draw_movie won''t work for a run with more than one repeat')
+    %error('draw_movie won''t work for a run with more than one repeat')
+    warning('More than one repeat detected. Using data from first one only')
+    
+    locs.center=locs.center(:,:,1);
+    mot1tmp=locs.loc_rec{1,1};
+    mot2tmp=locs.loc_rec{2,1};
+    locs.loc_rec=cell(2,1);
+    locs.loc_rec{1}=mot1tmp;
+    locs.loc_rec{2}=mot2tmp;
+    heads.bound{1}=heads.bound{1}(:,:,1);
+    heads.bound{2}=heads.bound{2}(:,:,1);
+    mot1tmp=heads.head_rec{1,1};
+    mot2tmp=heads.head_rec{2,1};
+    heads.head_rec=cell(2,1);
+    heads.head_rec{1}=mot1tmp;
+    heads.head_rec{2}=mot2tmp;
+    omega.vector=omega.vector(:,:,1);
 end
 
 %take in the data on the orientation change of the cargo
