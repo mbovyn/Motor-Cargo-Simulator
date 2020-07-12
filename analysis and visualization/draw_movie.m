@@ -523,6 +523,8 @@ for t=loop_ts
 
     %% draw and save, prepare for next frame
 
+    set(findall(gcf,'-property','FontSize'),'FontSize',24)
+    
     drawnow
 
     [az,el]=view;
