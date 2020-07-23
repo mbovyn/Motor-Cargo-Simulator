@@ -24,7 +24,9 @@ Windows 10:
 * Turn Windows features on or off -> check Windows Subsystem for Linux
 * Windows store -> get and install ubuntu
 * in Ubuntu
-  * sudo apt update
-  * sudo apt install build-essential
+  * `sudo apt update`
+  * `sudo apt upgrade`
+  * `sudo apt install build-essential`
+  * `sudo apt install git`
   
 Good to go! Can clone in the code and launch. If you want to edit code in Windows, clone to mnt/c/some_folder
