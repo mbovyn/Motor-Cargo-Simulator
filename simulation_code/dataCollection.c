@@ -102,7 +102,7 @@ void initializeDataCollection()
         }else if(ReturnDetails==3){
             printf("every 1000 steps\n");
         }else if(ReturnDetails==4){
-            printf("every .001s\n");
+            printf("every %g s\n",dt_rec);
         }else{
             printf("never");
         }

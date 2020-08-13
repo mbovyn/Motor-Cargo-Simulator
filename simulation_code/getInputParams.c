@@ -264,7 +264,7 @@ void getInputParams( void )
     //ReturnDetails
 
     fgets(tmpString, 100, fParams);
-    sscanf(tmpString,"%s %d %d %d %d %d",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega,&ReturnCenterLocs);
+    sscanf(tmpString,"%s %d %d %d %d %d %lf",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega,&ReturnCenterLocs,&dt_rec);
 
     for(n_lines=1;n_lines<=12;n_lines++)
         fgets(tmpString, 100, fParams);
@@ -650,12 +650,5 @@ void getInputParams( void )
       printf("\n\nError: PerfectSterics for multiple MTs more complicated, not implemented.\nUse spring instead.\n\n" );
       exit(4);
     }
-
-    //Set the correct recording interval
-    if(ReturnDetails==4){
-      dt_rec=.001;
-    }
-    if(ReturnDetails==5){
-      dt_rec=1./3000;
-    }
+    
 }

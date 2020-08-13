@@ -279,13 +279,13 @@ Note: steric force spring constant specified in kcMT
 
 #Output
 
-our $ReturnDetails=0; our $RD2=0; our $RD3=0; our $RD4=0; our $RD5=0;
+our $ReturnDetails=0; our $RD2=0; our $RD3=0; our $RD4=0; our $RD5=0; our $RD6=.001;
 our $cc32="/* create text files with records
 0: Only return end state
 1: Return details every step
 2: Return details only when something important happens (step, attachment, etc.)
 3: Return details every 100 steps
-4: Return details every .001 seconds
+4: Return details every x seconds, where x is sixth arguement
 set second value to 1 to return file with head locations, 0 for no
 set third value to 1 to return file with forces, 0 for no
 set fourth value to 1 to return file with rotation of cargo

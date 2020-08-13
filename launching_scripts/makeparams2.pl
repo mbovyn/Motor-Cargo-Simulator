@@ -147,7 +147,7 @@ $cc31
 
 //Output
 
-ReturnDetails $ReturnDetails $RD2 $RD3 $RD4 $RD5
+ReturnDetails $ReturnDetails $RD2 $RD3 $RD4 $RD5 $RD6
 $cc32
 
 ReturnFinalState $ReturnFinalState
