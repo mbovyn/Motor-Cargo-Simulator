@@ -511,6 +511,13 @@ for t=loop_ts
             [params.MTpt{1}(3) params.MTpt{2}(3)],'k-.','LineWidth',2)
 
     end
+    
+    %% surface
+    
+    if exist('draw_surf','var')
+        hslide=patch([xends,flip(xends)],[yends(1),yends,yends(2)],[0,0,0,0],[0 0 1]);
+        hslide.FaceAlpha=.2;
+    end
 
     %% lighting
     if exist('makeFig','var')
