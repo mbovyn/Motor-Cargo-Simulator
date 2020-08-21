@@ -624,6 +624,13 @@ void getInputParams( void )
         }
     }
 
+    if(dt_max_base>1E-6 && (PerfectSterics || Surface) ){
+        dt_max_base=1E-6;
+        if(verboseTF>2){
+            printf("Lowering base time step for surface, dt=%g\n",dt_max_base);
+        }
+    }
+
     if((dt_override>0 || dt_override<0) && !isinf(dt_override)){
         dt_max_base=fabs(dt_override);
         if(verboseTF>2){
@@ -650,5 +657,5 @@ void getInputParams( void )
       printf("\n\nError: PerfectSterics for multiple MTs more complicated, not implemented.\nUse spring instead.\n\n" );
       exit(4);
     }
-    
+
 }

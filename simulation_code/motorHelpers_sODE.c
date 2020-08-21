@@ -338,7 +338,7 @@ void cargobehavior()
                 }
 
                 if(magdiff(c1,center)>.01){
-                    printf("\n\nError: Surface sterics moved cargo more than 10nm\n" );
+                    printf("\n\nError: Surface sterics moved cargo more than 10nm\n    Step %ld\n",step );
                     exit(4);
                 }
             }
