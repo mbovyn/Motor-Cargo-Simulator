@@ -265,6 +265,10 @@ void getInputParams( void )
 
     fgets(tmpString, 100, fParams);
     sscanf(tmpString,"%s %d %d %d %d %d %lf",blah,&ReturnDetails,&ReturnHeads,&ReturnForces,&ReturnOmega,&ReturnCenterLocs,&dt_rec);
+    if(ReturnDetails>4){
+      printf("ReturnDetails invalid.\nIf you put in 5, did you mean 4 and set the sixth argument to 1/3000?\n");
+      exit(1);
+    }
 
     for(n_lines=1;n_lines<=12;n_lines++)
         fgets(tmpString, 100, fParams);
