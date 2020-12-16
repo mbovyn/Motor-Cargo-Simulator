@@ -1,4 +1,4 @@
-# 3D mathematical model of intracellular cargo transport by molecular motors
+# 3D computational model of intracellular cargo transport by molecular motors
 
 This code performs simulation of a mathematical model of the motion of
 intracellular cargos driven by molecular motors.
@@ -13,20 +13,31 @@ code parameters and running sweeps, etc.
 * analysis and visualization: Matlab code which reads in simulation output and
 makes movies
 
+## Documentation
+
+Each of the folders listed above has a readme which gives more information.
+
+The [numerical tests](/numerical_tests) folder includes tests of many aspects of the simulation which show they recapitulate expected results.
+
 ## Getting started
 
-This simulation uses scripts in bash and perl, and the c code is compiled with gcc by default.
-These tools are included with macOS by default as far as I can gather.
-They are part of the build-essential package in Debian/Ubuntu.
-I don't know much about the Windows command line, but I know this works:
+#### Running a simulation
+This repo contains the C source code for the simulation. Compiliation of this code is one of the steps included in the launching scripts, so don't worry about compiling before you get started.
 
-Windows 10:
-* Turn Windows features on or off -> check Windows Subsystem for Linux
-* Windows store -> get and install ubuntu
-* in Ubuntu
-  * `sudo apt update`
-  * `sudo apt upgrade`
-  * `sudo apt install build-essential`
-  * `sudo apt install git`
-  
-Good to go! Can clone in the code and launch. If you want to edit code in Windows, clone to mnt/c/some_folder
+To run a simulaton, start with [setandlaunch.pl](archetypes/setandlaunch.pl). This Perl code sets up everything for a simulation and starts it. For it to run, you need
+* Perl
+* Bash
+* GCC
+* make
+Everything you need should come with the build-essential package in Debian/Ubuntu, or xcode / xcode command line tools in macOS.
+The code is not Windows friendly, but can be run through the Windows Subsystem for Linux.
+
+It has been tested on modern MacOS up to Catalina, Ubuntu 18.04 and 20.04, and those distributions of Ubuntu installed through Windows Subsystem for Linux on Windows 10.
+
+#### Analyzing a simulation
+
+Code for reading in simulation results and making movies of them is included, written in Matlab. Start with [analysis.m](archetypes/analysis.m) and [movie.m](archetypes/movie.m).
+
+## Other tools
+
+Also included are some scripts which generate C code (Mathematica + command line tools). These tools were used to go from the mathematical model to the simulation implementation, and could be helpful if changes to the model are desired.
