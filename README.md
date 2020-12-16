@@ -1,4 +1,4 @@
-# 3D computational model of intracellular cargo transport by molecular motors
+# 3D computational model of intracellular cargo transport by molecular motors [![DOI](https://zenodo.org/badge/68874025.svg)](https://zenodo.org/badge/latestdoi/68874025)
 
 This code performs simulation of a mathematical model of the motion of
 intracellular cargos driven by molecular motors.
