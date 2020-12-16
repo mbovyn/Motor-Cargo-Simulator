@@ -25,10 +25,12 @@ The [numerical tests](/numerical_tests) folder includes tests of many aspects of
 This repo contains the C source code for the simulation. Compiliation of this code is one of the steps included in the launching scripts, so don't worry about compiling before you get started.
 
 To run a simulaton, start with [setandlaunch.pl](archetypes/setandlaunch.pl). This Perl code sets up everything for a simulation and starts it. For it to run, you need
+
 * Perl
 * Bash
 * GCC
 * make
+
 Everything you need should come with the build-essential package in Debian/Ubuntu, or xcode / xcode command line tools in macOS.
 The code is not Windows friendly, but can be run through the Windows Subsystem for Linux.
 
