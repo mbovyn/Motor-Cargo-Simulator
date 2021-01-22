@@ -13,6 +13,7 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
     our $param1=$sweepvals[0][$ctr1];
     #print "param1 is $param1\n";
     our $follow1=$followvals[0][$ctr1];
+    #our $follow2=$followvals[1][$ctr1];
 
     #for values in array for second parameter
     for my $ctr2 ( 0 .. $#{ $sweepvals[1] } ) {
@@ -46,6 +47,11 @@ for my $ctr1 ( 0 .. $#{ $sweepvals[0] } ) {
                 $cz = $pz1 + $R_MT1 + $setCargoMT_dist + $$Rname;
                 print " to cz=$cz\n";
             # }
+        }
+        if($setTrapMT_dist_to_R) {
+                print "!!!!moving trap from TCz=$TCz";
+                $TCz = $pz1 + $R_MT1 + $$Rname;
+                print " to TCz=$TCz\n";
         }
 
         #open file for writing and print the following
